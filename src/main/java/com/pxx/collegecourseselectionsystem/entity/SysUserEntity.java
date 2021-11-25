@@ -170,9 +170,11 @@ public class SysUserEntity implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        //添加角色
         for (SysRoleEntity role : roleEntityList) {
             authorities.add(new SimpleGrantedAuthority("ROLE_"+role.getRoleName()));
         }
+        //添加权限
         return authorities;
     }
 

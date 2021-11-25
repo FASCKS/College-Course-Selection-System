@@ -32,14 +32,13 @@ public class MyWebSecurityConfig  extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 //        http.csrf().disable().authorizeRequests().anyRequest().permitAll().and().logout().permitAll();
-        http.formLogin().and().authorizeRequests()
-
+        http.formLogin()
+                .and()
+                .authorizeRequests()
                 // 设置不需要授权的请求
                 .antMatchers("/js/*","/static/", "/login").permitAll()
-
                 // 其它任何请求都需要验证权限
                 .anyRequest().authenticated()
-
 //                // 设置自定义表单登录页面
 //                .and().formLogin().loginPage("/login")
 //
@@ -48,18 +47,16 @@ public class MyWebSecurityConfig  extends WebSecurityConfigurerAdapter {
 //
 //                // 设置默认登录成功跳转页面
 //                .defaultSuccessUrl("/main.html")
-
                 // 添加记住我功能
                 .and().rememberMe().tokenRepository(tokenRepository)
-
                 // 有效期为两周
                 .tokenValiditySeconds(3600 * 24 * 14)
-
                 // 设置UserDetailsService
                 .userDetailsService(sysUserService)
-
                 // 暂时停用csrf，否则会影响验证
                 .and().csrf().disable();
+        //注销
+        http.logout().logoutUrl("/logout").logoutSuccessUrl("/index").permitAll();
     }
 
 }
