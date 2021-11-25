@@ -1,0 +1,425 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pxx.collegecourseselectionsystem.mapper.SysUserMapper">
+    <resultMap id="BaseResultMap" type="com.pxx.collegecourseselectionsystem.entity.SysUserEntity">
+        <!--@mbg.generated-->
+        <!--@Table sys_user-->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="number" jdbcType="VARCHAR" property="number"/>
+        <result column="age" jdbcType="INTEGER" property="age"/>
+        <result column="salt" jdbcType="VARCHAR" property="salt"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="type" jdbcType="INTEGER" property="type"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="avatar" jdbcType="VARCHAR" property="avatar"/>
+        <result column="state" jdbcType="INTEGER" property="state"/>
+        <result column="revision" jdbcType="INTEGER" property="revision"/>
+        <result column="lock_time" jdbcType="TIMESTAMP" property="lockTime"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+        <result column="created_by" jdbcType="INTEGER" property="createdBy"/>
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime"/>
+        <result column="updated_by" jdbcType="INTEGER" property="updatedBy"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id, `name`, `number`, age, salt, `password`, `type`, email, address, avatar, `state`,
+        revision, lock_time, created_time, created_by, updated_time, updated_by
+    </sql>
+    <update id="updateBatch" parameterType="java.util.List">
+        <!--@mbg.generated-->
+        update sys_user
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="`name` = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.name,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="`number` = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.number,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="age = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.age,jdbcType=INTEGER}
+                </foreach>
+            </trim>
+            <trim prefix="salt = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.salt,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="`password` = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.password,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="`type` = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.type,jdbcType=INTEGER}
+                </foreach>
+            </trim>
+            <trim prefix="email = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.email,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="address = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.address,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="avatar = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.avatar,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="`state` = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.state,jdbcType=INTEGER}
+                </foreach>
+            </trim>
+            <trim prefix="revision = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.revision,jdbcType=INTEGER}
+                </foreach>
+            </trim>
+            <trim prefix="lock_time = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.lockTime,jdbcType=TIMESTAMP}
+                </foreach>
+            </trim>
+            <trim prefix="created_time = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.createdTime,jdbcType=TIMESTAMP}
+                </foreach>
+            </trim>
+            <trim prefix="created_by = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.createdBy,jdbcType=INTEGER}
+                </foreach>
+            </trim>
+            <trim prefix="updated_time = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.updatedTime,jdbcType=TIMESTAMP}
+                </foreach>
+            </trim>
+            <trim prefix="updated_by = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.updatedBy,jdbcType=INTEGER}
+                </foreach>
+            </trim>
+        </trim>
+        where id in
+        <foreach close=")" collection="list" item="item" open="(" separator=", ">
+            #{item.id,jdbcType=INTEGER}
+        </foreach>
+    </update>
+    <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into sys_user
+                (`name`, `number`, age, salt, `password`, `type`, email, address, avatar, `state`,
+                 revision, lock_time, created_time, created_by, updated_time, updated_by)
+                values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.name,jdbcType=VARCHAR}, #{item.number,jdbcType=VARCHAR}, #{item.age,jdbcType=INTEGER},
+             #{item.salt,jdbcType=VARCHAR}, #{item.password,jdbcType=VARCHAR}, #{item.type,jdbcType=INTEGER},
+             #{item.email,jdbcType=VARCHAR}, #{item.address,jdbcType=VARCHAR}, #{item.avatar,jdbcType=VARCHAR},
+             #{item.state,jdbcType=INTEGER}, #{item.revision,jdbcType=INTEGER}, #{item.lockTime,jdbcType=TIMESTAMP},
+             #{item.createdTime,jdbcType=TIMESTAMP}, #{item.createdBy,jdbcType=INTEGER},
+             #{item.updatedTime,jdbcType=TIMESTAMP},
+             #{item.updatedBy,jdbcType=INTEGER})
+        </foreach>
+    </insert>
+    <insert id="insertOrUpdate" keyColumn="id" keyProperty="id"
+            parameterType="com.pxx.collegecourseselectionsystem.entity.SysUserEntity" useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into sys_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            `name`,
+            `number`,
+            age,
+            salt,
+            `password`,
+            `type`,
+            email,
+            address,
+            avatar,
+            `state`,
+            revision,
+            lock_time,
+            created_time,
+            created_by,
+            updated_time,
+            updated_by,
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            #{name,jdbcType=VARCHAR},
+            #{number,jdbcType=VARCHAR},
+            #{age,jdbcType=INTEGER},
+            #{salt,jdbcType=VARCHAR},
+            #{password,jdbcType=VARCHAR},
+            #{type,jdbcType=INTEGER},
+            #{email,jdbcType=VARCHAR},
+            #{address,jdbcType=VARCHAR},
+            #{avatar,jdbcType=VARCHAR},
+            #{state,jdbcType=INTEGER},
+            #{revision,jdbcType=INTEGER},
+            #{lockTime,jdbcType=TIMESTAMP},
+            #{createdTime,jdbcType=TIMESTAMP},
+            #{createdBy,jdbcType=INTEGER},
+            #{updatedTime,jdbcType=TIMESTAMP},
+            #{updatedBy,jdbcType=INTEGER},
+        </trim>
+        on duplicate key update
+        <trim suffixOverrides=",">
+            <if test="id != null">
+                id = #{id,jdbcType=INTEGER},
+            </if>
+            `name`       = #{name,jdbcType=VARCHAR},
+            `number`     = #{number,jdbcType=VARCHAR},
+            age          = #{age,jdbcType=INTEGER},
+            salt         = #{salt,jdbcType=VARCHAR},
+            `password`   = #{password,jdbcType=VARCHAR},
+            `type`       = #{type,jdbcType=INTEGER},
+            email        = #{email,jdbcType=VARCHAR},
+            address      = #{address,jdbcType=VARCHAR},
+            avatar       = #{avatar,jdbcType=VARCHAR},
+            `state`      = #{state,jdbcType=INTEGER},
+            revision     = #{revision,jdbcType=INTEGER},
+            lock_time    = #{lockTime,jdbcType=TIMESTAMP},
+            created_time = #{createdTime,jdbcType=TIMESTAMP},
+            created_by   = #{createdBy,jdbcType=INTEGER},
+            updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+            updated_by   = #{updatedBy,jdbcType=INTEGER},
+        </trim>
+    </insert>
+    <insert id="insertOrUpdateSelective" keyColumn="id" keyProperty="id"
+            parameterType="com.pxx.collegecourseselectionsystem.entity.SysUserEntity" useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into sys_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="name != null">
+                `name`,
+            </if>
+            <if test="number != null">
+                `number`,
+            </if>
+            <if test="age != null">
+                age,
+            </if>
+            <if test="salt != null">
+                salt,
+            </if>
+            <if test="password != null">
+                `password`,
+            </if>
+            <if test="type != null">
+                `type`,
+            </if>
+            <if test="email != null">
+                email,
+            </if>
+            <if test="address != null">
+                address,
+            </if>
+            <if test="avatar != null">
+                avatar,
+            </if>
+            <if test="state != null">
+                `state`,
+            </if>
+            <if test="revision != null">
+                revision,
+            </if>
+            <if test="lockTime != null">
+                lock_time,
+            </if>
+            <if test="createdTime != null">
+                created_time,
+            </if>
+            <if test="createdBy != null">
+                created_by,
+            </if>
+            <if test="updatedTime != null">
+                updated_time,
+            </if>
+            <if test="updatedBy != null">
+                updated_by,
+            </if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="number != null">
+                #{number,jdbcType=VARCHAR},
+            </if>
+            <if test="age != null">
+                #{age,jdbcType=INTEGER},
+            </if>
+            <if test="salt != null">
+                #{salt,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
+            </if>
+            <if test="email != null">
+                #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null">
+                #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="avatar != null">
+                #{avatar,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null">
+                #{state,jdbcType=INTEGER},
+            </if>
+            <if test="revision != null">
+                #{revision,jdbcType=INTEGER},
+            </if>
+            <if test="lockTime != null">
+                #{lockTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createdTime != null">
+                #{createdTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createdBy != null">
+                #{createdBy,jdbcType=INTEGER},
+            </if>
+            <if test="updatedTime != null">
+                #{updatedTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedBy != null">
+                #{updatedBy,jdbcType=INTEGER},
+            </if>
+        </trim>
+        on duplicate key update
+        <trim suffixOverrides=",">
+            <if test="id != null">
+                id = #{id,jdbcType=INTEGER},
+            </if>
+            <if test="name != null">
+                `name` = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="number != null">
+                `number` = #{number,jdbcType=VARCHAR},
+            </if>
+            <if test="age != null">
+                age = #{age,jdbcType=INTEGER},
+            </if>
+            <if test="salt != null">
+                salt = #{salt,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                `password` = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                `type` = #{type,jdbcType=INTEGER},
+            </if>
+            <if test="email != null">
+                email = #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null">
+                address = #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="avatar != null">
+                avatar = #{avatar,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null">
+                `state` = #{state,jdbcType=INTEGER},
+            </if>
+            <if test="revision != null">
+                revision = #{revision,jdbcType=INTEGER},
+            </if>
+            <if test="lockTime != null">
+                lock_time = #{lockTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createdTime != null">
+                created_time = #{createdTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createdBy != null">
+                created_by = #{createdBy,jdbcType=INTEGER},
+            </if>
+            <if test="updatedTime != null">
+                updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedBy != null">
+                updated_by = #{updatedBy,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <resultMap id="FindUserAndRoleMap" type="com.pxx.collegecourseselectionsystem.entity.SysUserEntity">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="number" jdbcType="VARCHAR" property="number"/>
+        <result column="age" jdbcType="INTEGER" property="age"/>
+        <result column="salt" jdbcType="VARCHAR" property="salt"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="type" jdbcType="INTEGER" property="type"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="avatar" jdbcType="VARCHAR" property="avatar"/>
+        <result column="state" jdbcType="INTEGER" property="state"/>
+        <result column="revision" jdbcType="INTEGER" property="revision"/>
+        <result column="lock_time" jdbcType="TIMESTAMP" property="lockTime"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+        <result column="created_by" jdbcType="INTEGER" property="createdBy"/>
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime"/>
+        <result column="updated_by" jdbcType="INTEGER" property="updatedBy"/>
+        <collection property="roleEntityList" ofType="com.pxx.collegecourseselectionsystem.entity.SysRoleEntity">
+            <id column="role_id" jdbcType="INTEGER" property="roleId"/>
+            <result column="role_name" property="roleName"/>
+            <result column="remark" property="remark"/>
+            <result column="REVISION" property="revision"/>
+        </collection>
+    </resultMap>
+
+    <select id="findUserAndRoleMap" resultMap="FindUserAndRoleMap">
+        select su.*,
+               sr.role_id,
+               sr.role_name,
+               sr.remark,
+               sr.REVISION
+        from sys_user su
+                     left join sys_user_role sur on su.id = sur.user_id
+                     left join sys_role sr on sur.role_id = sr.role_id
+    </select>
+
+    <!--auto generated by MybatisCodeHelper on 2021-11-25-->
+    <select id="findOneByNumber" resultMap="FindUserAndRoleMap">
+        select su.*,
+               sr.role_id,
+               sr.role_name,
+               sr.remark,
+               sr.REVISION
+        from sys_user su
+                     left join sys_user_role sur on su.id = sur.user_id
+                     left join sys_role sr on sur.role_id = sr.role_id
+        <where>
+            <if test="number != null">
+                and `number` = #{number,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+</mapper>
