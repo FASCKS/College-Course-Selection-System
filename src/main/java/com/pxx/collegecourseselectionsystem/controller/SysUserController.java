@@ -17,9 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class SysUserController {
     @Autowired
     private SysUserService sysUserService;
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @PostMapping("/insert")
     public R insertUser(@RequestBody SysUserEntity sysUserEntity) {
+        String password = sysUserEntity.getPassword();
+        sysUserEntity.setPassword(passwordEncoder.encode(password));
         boolean save = sysUserService.save(sysUserEntity);
         return R.ok().put("data", save);
     }

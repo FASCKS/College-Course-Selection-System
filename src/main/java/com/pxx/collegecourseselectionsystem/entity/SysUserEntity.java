@@ -49,6 +49,7 @@ public class SysUserEntity implements UserDetails {
     /**
      * 盐
      */
+    @Deprecated
     @TableField(value = "salt")
     private String salt;
 
@@ -177,7 +178,7 @@ public class SysUserEntity implements UserDetails {
 
     @Override
     public String getPassword() {
-        return null;
+        return password;
     }
 
     @Override
