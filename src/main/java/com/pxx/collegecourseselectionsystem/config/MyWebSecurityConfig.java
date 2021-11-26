@@ -1,5 +1,8 @@
 package com.pxx.collegecourseselectionsystem.config;
 
+import cn.hutool.core.convert.Convert;
+import com.pxx.collegecourseselectionsystem.entity.SysRoleEntity;
+import com.pxx.collegecourseselectionsystem.entity.SysUserEntity;
 import com.pxx.collegecourseselectionsystem.service.impl.SysUserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +15,8 @@ import org.springframework.security.web.authentication.rememberme.JdbcTokenRepos
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
 import javax.sql.DataSource;
+import java.util.ArrayList;
+import java.util.List;
 
 @Configuration
 public class MyWebSecurityConfig  extends WebSecurityConfigurerAdapter {
@@ -19,6 +24,7 @@ public class MyWebSecurityConfig  extends WebSecurityConfigurerAdapter {
     private SysUserServiceImpl sysUserService;
     @Autowired
     private PersistentTokenRepository tokenRepository;
+
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -27,16 +33,24 @@ public class MyWebSecurityConfig  extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(sysUserService).passwordEncoder(passwordEncoder());
+
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 //        http.csrf().disable().authorizeRequests().anyRequest().permitAll().and().logout().permitAll();
-        http.formLogin()
+        http
+                .formLogin()
                 .and()
                 .authorizeRequests()
+                //管理员都可以访问
                 // 设置不需要授权的请求
-                .antMatchers("/js/*","/static/", "/login").permitAll()
+                .antMatchers("/js/*",
+                        "/static/",
+                        "/login",
+                        "/sys/users/insert"
+                ).permitAll()
+
                 // 其它任何请求都需要验证权限
                 .anyRequest().authenticated()
 //                // 设置自定义表单登录页面

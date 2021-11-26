@@ -4,7 +4,7 @@
     <resultMap id="BaseResultMap" type="com.pxx.collegecourseselectionsystem.entity.SysUserEntity">
         <!--@mbg.generated-->
         <!--@Table sys_user-->
-        <id column="id" jdbcType="INTEGER" property="id"/>
+        <id column="user_id" jdbcType="BIGINT" property="userId"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="number" jdbcType="VARCHAR" property="number"/>
         <result column="age" jdbcType="INTEGER" property="age"/>
@@ -24,8 +24,8 @@
     </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
-        id, `name`, `number`, age, salt, `password`, `type`, email, address, avatar, `state`,
-        revision, lock_time, created_time, created_by, updated_time, updated_by
+        user_id, `name`, `number`, age, salt, `password`, `type`, email, address, avatar,
+        `state`, revision, lock_time, created_time, created_by, updated_time, updated_by
     </sql>
     <update id="updateBatch" parameterType="java.util.List">
         <!--@mbg.generated-->
@@ -33,183 +33,141 @@
         <trim prefix="set" suffixOverrides=",">
             <trim prefix="`name` = case" suffix="end,">
                 <foreach collection="list" index="index" item="item">
-                    when id = #{item.id,jdbcType=INTEGER} then #{item.name,jdbcType=VARCHAR}
+                    when user_id = #{item.userId,jdbcType=BIGINT} then #{item.name,jdbcType=VARCHAR}
                 </foreach>
             </trim>
             <trim prefix="`number` = case" suffix="end,">
                 <foreach collection="list" index="index" item="item">
-                    when id = #{item.id,jdbcType=INTEGER} then #{item.number,jdbcType=VARCHAR}
+                    when user_id = #{item.userId,jdbcType=BIGINT} then #{item.number,jdbcType=VARCHAR}
                 </foreach>
             </trim>
             <trim prefix="age = case" suffix="end,">
                 <foreach collection="list" index="index" item="item">
-                    when id = #{item.id,jdbcType=INTEGER} then #{item.age,jdbcType=INTEGER}
+                    when user_id = #{item.userId,jdbcType=BIGINT} then #{item.age,jdbcType=INTEGER}
                 </foreach>
             </trim>
             <trim prefix="salt = case" suffix="end,">
                 <foreach collection="list" index="index" item="item">
-                    when id = #{item.id,jdbcType=INTEGER} then #{item.salt,jdbcType=VARCHAR}
+                    when user_id = #{item.userId,jdbcType=BIGINT} then #{item.salt,jdbcType=VARCHAR}
                 </foreach>
             </trim>
             <trim prefix="`password` = case" suffix="end,">
                 <foreach collection="list" index="index" item="item">
-                    when id = #{item.id,jdbcType=INTEGER} then #{item.password,jdbcType=VARCHAR}
+                    when user_id = #{item.userId,jdbcType=BIGINT} then #{item.password,jdbcType=VARCHAR}
                 </foreach>
             </trim>
             <trim prefix="`type` = case" suffix="end,">
                 <foreach collection="list" index="index" item="item">
-                    when id = #{item.id,jdbcType=INTEGER} then #{item.type,jdbcType=INTEGER}
+                    when user_id = #{item.userId,jdbcType=BIGINT} then #{item.type,jdbcType=INTEGER}
                 </foreach>
             </trim>
             <trim prefix="email = case" suffix="end,">
                 <foreach collection="list" index="index" item="item">
-                    when id = #{item.id,jdbcType=INTEGER} then #{item.email,jdbcType=VARCHAR}
+                    when user_id = #{item.userId,jdbcType=BIGINT} then #{item.email,jdbcType=VARCHAR}
                 </foreach>
             </trim>
             <trim prefix="address = case" suffix="end,">
                 <foreach collection="list" index="index" item="item">
-                    when id = #{item.id,jdbcType=INTEGER} then #{item.address,jdbcType=VARCHAR}
+                    when user_id = #{item.userId,jdbcType=BIGINT} then #{item.address,jdbcType=VARCHAR}
                 </foreach>
             </trim>
             <trim prefix="avatar = case" suffix="end,">
                 <foreach collection="list" index="index" item="item">
-                    when id = #{item.id,jdbcType=INTEGER} then #{item.avatar,jdbcType=VARCHAR}
+                    when user_id = #{item.userId,jdbcType=BIGINT} then #{item.avatar,jdbcType=VARCHAR}
                 </foreach>
             </trim>
             <trim prefix="`state` = case" suffix="end,">
                 <foreach collection="list" index="index" item="item">
-                    when id = #{item.id,jdbcType=INTEGER} then #{item.state,jdbcType=INTEGER}
+                    when user_id = #{item.userId,jdbcType=BIGINT} then #{item.state,jdbcType=INTEGER}
                 </foreach>
             </trim>
             <trim prefix="revision = case" suffix="end,">
                 <foreach collection="list" index="index" item="item">
-                    when id = #{item.id,jdbcType=INTEGER} then #{item.revision,jdbcType=INTEGER}
+                    when user_id = #{item.userId,jdbcType=BIGINT} then #{item.revision,jdbcType=INTEGER}
                 </foreach>
             </trim>
             <trim prefix="lock_time = case" suffix="end,">
                 <foreach collection="list" index="index" item="item">
-                    when id = #{item.id,jdbcType=INTEGER} then #{item.lockTime,jdbcType=TIMESTAMP}
+                    when user_id = #{item.userId,jdbcType=BIGINT} then #{item.lockTime,jdbcType=TIMESTAMP}
                 </foreach>
             </trim>
             <trim prefix="created_time = case" suffix="end,">
                 <foreach collection="list" index="index" item="item">
-                    when id = #{item.id,jdbcType=INTEGER} then #{item.createdTime,jdbcType=TIMESTAMP}
+                    when user_id = #{item.userId,jdbcType=BIGINT} then #{item.createdTime,jdbcType=TIMESTAMP}
                 </foreach>
             </trim>
             <trim prefix="created_by = case" suffix="end,">
                 <foreach collection="list" index="index" item="item">
-                    when id = #{item.id,jdbcType=INTEGER} then #{item.createdBy,jdbcType=INTEGER}
+                    when user_id = #{item.userId,jdbcType=BIGINT} then #{item.createdBy,jdbcType=INTEGER}
                 </foreach>
             </trim>
             <trim prefix="updated_time = case" suffix="end,">
                 <foreach collection="list" index="index" item="item">
-                    when id = #{item.id,jdbcType=INTEGER} then #{item.updatedTime,jdbcType=TIMESTAMP}
+                    when user_id = #{item.userId,jdbcType=BIGINT} then #{item.updatedTime,jdbcType=TIMESTAMP}
                 </foreach>
             </trim>
             <trim prefix="updated_by = case" suffix="end,">
                 <foreach collection="list" index="index" item="item">
-                    when id = #{item.id,jdbcType=INTEGER} then #{item.updatedBy,jdbcType=INTEGER}
+                    when user_id = #{item.userId,jdbcType=BIGINT} then #{item.updatedBy,jdbcType=INTEGER}
                 </foreach>
             </trim>
         </trim>
-        where id in
+        where user_id in
         <foreach close=")" collection="list" item="item" open="(" separator=", ">
-            #{item.id,jdbcType=INTEGER}
+            #{item.userId,jdbcType=BIGINT}
         </foreach>
     </update>
-    <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
+    <insert id="batchInsert" parameterType="map">
         <!--@mbg.generated-->
         insert into sys_user
-                (`name`, `number`, age, salt, `password`, `type`, email, address, avatar, `state`,
-                 revision, lock_time, created_time, created_by, updated_time, updated_by)
+                (user_id, `name`, `number`, age, salt, `password`, `type`, email, address, avatar,
+                 `state`, revision, lock_time, created_time, created_by, updated_time, updated_by)
                 values
         <foreach collection="list" item="item" separator=",">
-            (#{item.name,jdbcType=VARCHAR}, #{item.number,jdbcType=VARCHAR}, #{item.age,jdbcType=INTEGER},
-             #{item.salt,jdbcType=VARCHAR}, #{item.password,jdbcType=VARCHAR}, #{item.type,jdbcType=INTEGER},
-             #{item.email,jdbcType=VARCHAR}, #{item.address,jdbcType=VARCHAR}, #{item.avatar,jdbcType=VARCHAR},
-             #{item.state,jdbcType=INTEGER}, #{item.revision,jdbcType=INTEGER}, #{item.lockTime,jdbcType=TIMESTAMP},
-             #{item.createdTime,jdbcType=TIMESTAMP}, #{item.createdBy,jdbcType=INTEGER},
-             #{item.updatedTime,jdbcType=TIMESTAMP},
-             #{item.updatedBy,jdbcType=INTEGER})
+            (#{item.userId,jdbcType=BIGINT}, #{item.name,jdbcType=VARCHAR}, #{item.number,jdbcType=VARCHAR},
+             #{item.age,jdbcType=INTEGER}, #{item.salt,jdbcType=VARCHAR}, #{item.password,jdbcType=VARCHAR},
+             #{item.type,jdbcType=INTEGER}, #{item.email,jdbcType=VARCHAR}, #{item.address,jdbcType=VARCHAR},
+             #{item.avatar,jdbcType=VARCHAR}, #{item.state,jdbcType=INTEGER}, #{item.revision,jdbcType=INTEGER},
+             #{item.lockTime,jdbcType=TIMESTAMP}, #{item.createdTime,jdbcType=TIMESTAMP},
+             #{item.createdBy,jdbcType=INTEGER},
+             #{item.updatedTime,jdbcType=TIMESTAMP}, #{item.updatedBy,jdbcType=INTEGER})
         </foreach>
     </insert>
-    <insert id="insertOrUpdate" keyColumn="id" keyProperty="id"
-            parameterType="com.pxx.collegecourseselectionsystem.entity.SysUserEntity" useGeneratedKeys="true">
+    <insert id="insertOrUpdate" parameterType="com.pxx.collegecourseselectionsystem.entity.SysUserEntity">
         <!--@mbg.generated-->
         insert into sys_user
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="id != null">
-                id,
-            </if>
-            `name`,
-            `number`,
-            age,
-            salt,
-            `password`,
-            `type`,
-            email,
-            address,
-            avatar,
-            `state`,
-            revision,
-            lock_time,
-            created_time,
-            created_by,
-            updated_time,
-            updated_by,
-        </trim>
-        values
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="id != null">
-                #{id,jdbcType=INTEGER},
-            </if>
-            #{name,jdbcType=VARCHAR},
-            #{number,jdbcType=VARCHAR},
-            #{age,jdbcType=INTEGER},
-            #{salt,jdbcType=VARCHAR},
-            #{password,jdbcType=VARCHAR},
-            #{type,jdbcType=INTEGER},
-            #{email,jdbcType=VARCHAR},
-            #{address,jdbcType=VARCHAR},
-            #{avatar,jdbcType=VARCHAR},
-            #{state,jdbcType=INTEGER},
-            #{revision,jdbcType=INTEGER},
-            #{lockTime,jdbcType=TIMESTAMP},
-            #{createdTime,jdbcType=TIMESTAMP},
-            #{createdBy,jdbcType=INTEGER},
-            #{updatedTime,jdbcType=TIMESTAMP},
-            #{updatedBy,jdbcType=INTEGER},
-        </trim>
-        on duplicate key update
-        <trim suffixOverrides=",">
-            <if test="id != null">
-                id = #{id,jdbcType=INTEGER},
-            </if>
-            `name`       = #{name,jdbcType=VARCHAR},
-            `number`     = #{number,jdbcType=VARCHAR},
-            age          = #{age,jdbcType=INTEGER},
-            salt         = #{salt,jdbcType=VARCHAR},
-            `password`   = #{password,jdbcType=VARCHAR},
-            `type`       = #{type,jdbcType=INTEGER},
-            email        = #{email,jdbcType=VARCHAR},
-            address      = #{address,jdbcType=VARCHAR},
-            avatar       = #{avatar,jdbcType=VARCHAR},
-            `state`      = #{state,jdbcType=INTEGER},
-            revision     = #{revision,jdbcType=INTEGER},
-            lock_time    = #{lockTime,jdbcType=TIMESTAMP},
-            created_time = #{createdTime,jdbcType=TIMESTAMP},
-            created_by   = #{createdBy,jdbcType=INTEGER},
-            updated_time = #{updatedTime,jdbcType=TIMESTAMP},
-            updated_by   = #{updatedBy,jdbcType=INTEGER},
-        </trim>
+                (user_id, `name`, `number`, age, salt, `password`, `type`, email, address, avatar,
+                 `state`, revision, lock_time, created_time, created_by, updated_time, updated_by)
+        values (#{userId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{number,jdbcType=VARCHAR},
+                #{age,jdbcType=INTEGER}, #{salt,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
+                #{type,jdbcType=INTEGER}, #{email,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR},
+                #{avatar,jdbcType=VARCHAR}, #{state,jdbcType=INTEGER}, #{revision,jdbcType=INTEGER},
+                #{lockTime,jdbcType=TIMESTAMP}, #{createdTime,jdbcType=TIMESTAMP}, #{createdBy,jdbcType=INTEGER},
+                #{updatedTime,jdbcType=TIMESTAMP}, #{updatedBy,jdbcType=INTEGER})
+        on duplicate key update user_id      = #{userId,jdbcType=BIGINT},
+                                `name`       = #{name,jdbcType=VARCHAR},
+                                `number`     = #{number,jdbcType=VARCHAR},
+                                age          = #{age,jdbcType=INTEGER},
+                                salt         = #{salt,jdbcType=VARCHAR},
+                                `password`   = #{password,jdbcType=VARCHAR},
+                                `type`       = #{type,jdbcType=INTEGER},
+                                email        = #{email,jdbcType=VARCHAR},
+                                address      = #{address,jdbcType=VARCHAR},
+                                avatar       = #{avatar,jdbcType=VARCHAR},
+                                `state`      = #{state,jdbcType=INTEGER},
+                                revision     = #{revision,jdbcType=INTEGER},
+                                lock_time    = #{lockTime,jdbcType=TIMESTAMP},
+                                created_time = #{createdTime,jdbcType=TIMESTAMP},
+                                created_by   = #{createdBy,jdbcType=INTEGER},
+                                updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+                                updated_by   = #{updatedBy,jdbcType=INTEGER}
     </insert>
-    <insert id="insertOrUpdateSelective" keyColumn="id" keyProperty="id"
-            parameterType="com.pxx.collegecourseselectionsystem.entity.SysUserEntity" useGeneratedKeys="true">
+    <insert id="insertOrUpdateSelective" parameterType="com.pxx.collegecourseselectionsystem.entity.SysUserEntity">
         <!--@mbg.generated-->
         insert into sys_user
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="id != null">
-                id,
+            <if test="userId != null">
+                user_id,
             </if>
             <if test="name != null">
                 `name`,
@@ -262,8 +220,8 @@
         </trim>
         values
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="id != null">
-                #{id,jdbcType=INTEGER},
+            <if test="userId != null">
+                #{userId,jdbcType=BIGINT},
             </if>
             <if test="name != null">
                 #{name,jdbcType=VARCHAR},
@@ -316,8 +274,8 @@
         </trim>
         on duplicate key update
         <trim suffixOverrides=",">
-            <if test="id != null">
-                id = #{id,jdbcType=INTEGER},
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=BIGINT},
             </if>
             <if test="name != null">
                 `name` = #{name,jdbcType=VARCHAR},
@@ -370,7 +328,7 @@
         </trim>
     </insert>
     <resultMap id="FindUserAndRoleMap" type="com.pxx.collegecourseselectionsystem.entity.SysUserEntity">
-        <id column="id" jdbcType="INTEGER" property="id"/>
+        <id column="user_id" jdbcType="INTEGER" property="userId"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="number" jdbcType="VARCHAR" property="number"/>
         <result column="age" jdbcType="INTEGER" property="age"/>
@@ -387,11 +345,15 @@
         <result column="created_by" jdbcType="INTEGER" property="createdBy"/>
         <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime"/>
         <result column="updated_by" jdbcType="INTEGER" property="updatedBy"/>
-        <collection property="roleEntityList" ofType="com.pxx.collegecourseselectionsystem.entity.SysRoleEntity">
+        <collection ofType="com.pxx.collegecourseselectionsystem.entity.SysRoleEntity" property="roleEntityList">
             <id column="role_id" jdbcType="INTEGER" property="roleId"/>
             <result column="role_name" property="roleName"/>
             <result column="remark" property="remark"/>
             <result column="REVISION" property="revision"/>
+        </collection>
+        <collection property="menuEntityList" ofType="com.pxx.collegecourseselectionsystem.entity.SysMenuEntity">
+            <id column="menu_id" property="menuId"/>
+            <result column="perms" property="perms"/>
         </collection>
     </resultMap>
 
@@ -402,7 +364,7 @@
                sr.remark,
                sr.REVISION
         from sys_user su
-                     left join sys_user_role sur on su.id = sur.user_id
+                     left join sys_user_role sur on su.user_id = sur.user_id
                      left join sys_role sr on sur.role_id = sr.role_id
     </select>
 
@@ -412,12 +374,17 @@
                sr.role_id,
                sr.role_name,
                sr.remark,
-               sr.REVISION
+               sr.REVISION,
+               sm.menu_id,
+               sm.name,
+               sm.perms
         from sys_user su
-                     left join sys_user_role sur on su.id = sur.user_id
+                     left join sys_user_role sur on su.user_id = sur.user_id
                      left join sys_role sr on sur.role_id = sr.role_id
+                     left join sys_role_menu srm on sr.role_id = srm.role_id
+                     left join sys_menu sm on srm.menu_id = sm.menu_id
         <where>
-            <if test="number != null">
+            <if test="number != null and number!=''">
                 and `number` = #{number,jdbcType=VARCHAR}
             </if>
         </where>

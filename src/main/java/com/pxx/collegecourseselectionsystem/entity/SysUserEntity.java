@@ -25,8 +25,8 @@ public class SysUserEntity implements UserDetails {
     /**
      * 用户id
      */
-    @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
+    @TableId(value = "user_id", type = IdType.AUTO)
+    private Long userId;
 
     /**
      * 用户名称
@@ -133,6 +133,11 @@ public class SysUserEntity implements UserDetails {
      */
     @TableField(exist = false)
     private List<SysRoleEntity> roleEntityList;
+    /**
+     * 用户权限集合
+     */
+    @TableField(exist = false)
+    private List<SysMenuEntity> menuEntityList;
 
     public static final String COL_ID = "id";
 
@@ -171,10 +176,19 @@ public class SysUserEntity implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
         //添加角色
-        for (SysRoleEntity role : roleEntityList) {
-            authorities.add(new SimpleGrantedAuthority("ROLE_"+role.getRoleName()));
+        if (roleEntityList!=null){
+            for (SysRoleEntity role : roleEntityList) {
+                authorities.add(new SimpleGrantedAuthority("ROLE_"+role.getRoleName()));
+            }
         }
+
         //添加权限
+        if (menuEntityList!=null){
+            for (SysMenuEntity sysMenuEntity : menuEntityList) {
+                authorities.add(new SimpleGrantedAuthority(sysMenuEntity.getPerms()));
+            }
+        }
+
         return authorities;
     }
 

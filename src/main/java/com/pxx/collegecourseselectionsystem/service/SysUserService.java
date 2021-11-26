@@ -18,11 +18,14 @@ public interface SysUserService extends IService<SysUserEntity> {
 
     /**
      * 添加一个用户
+     *
      * @param sysUserEntity 用户实体
      * @return 是否添加成功
      */
+    @Deprecated
     boolean insertOneUser(SysUserEntity sysUserEntity);
 }
+
 
 
 

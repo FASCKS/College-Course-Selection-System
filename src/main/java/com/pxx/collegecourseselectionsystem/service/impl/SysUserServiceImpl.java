@@ -1,6 +1,11 @@
 package com.pxx.collegecourseselectionsystem.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.pxx.collegecourseselectionsystem.entity.SysMenuEntity;
+import com.pxx.collegecourseselectionsystem.entity.SysRoleEntity;
 import com.pxx.collegecourseselectionsystem.entity.SysUserEntity;
+import com.pxx.collegecourseselectionsystem.service.SysMenuService;
+import com.pxx.collegecourseselectionsystem.service.SysRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,6 +22,10 @@ import com.pxx.collegecourseselectionsystem.service.SysUserService;
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity> implements SysUserService, UserDetailsService {
     @Autowired
     private SysUserMapper sysUserMapper;
+    @Autowired
+    private SysRoleService sysRoleService;
+    @Autowired
+    private SysMenuService sysMenuService;
 
     @Override
     public int updateBatch(List<SysUserEntity> list) {
@@ -46,9 +55,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
      */
     @Override
     public boolean insertOneUser(SysUserEntity sysUserEntity) {
-        //生成盐
-
-
         return false;
     }
 
@@ -59,9 +65,23 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
         if (sysUserEntity == null) {
             throw new UsernameNotFoundException("账号不存在");
         }
+        //如果是超级管理员
+        if (sysUserEntity.getNumber().equals("admin")) {
+            //所有角色
+            List<SysRoleEntity> roleEntityList = sysRoleService.list();
+            sysUserEntity.setRoleEntityList(roleEntityList);
+            //菜单对应的权限
+            QueryWrapper<SysMenuEntity> sysMenuEntityQueryWrapper=new QueryWrapper<>();
+            sysMenuEntityQueryWrapper.select("perms");
+            List<SysMenuEntity> sysMenuEntityList = sysMenuService.list(sysMenuEntityQueryWrapper);
+            sysUserEntity.setMenuEntityList(sysMenuEntityList);
+        }
+
+
         return sysUserEntity;
     }
 }
+
 
 
 

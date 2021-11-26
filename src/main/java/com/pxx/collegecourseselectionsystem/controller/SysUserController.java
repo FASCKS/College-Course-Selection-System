@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Slf4j
 @RequestMapping("/sys/users")
 @RestController
 public class SysUserController {
@@ -20,6 +19,11 @@ public class SysUserController {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
+    /**
+     * 添加用户
+     * @param sysUserEntity 用户实体
+     * @return true 成功 false 失败
+     */
     @PostMapping("/insert")
     public R insertUser(@RequestBody SysUserEntity sysUserEntity) {
         String password = sysUserEntity.getPassword();
