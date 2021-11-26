@@ -53,8 +53,8 @@ public class MyWebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // 设置不需要授权的请求
                 .antMatchers("/js/*",
                         "/static/",
-                        "/login",
-                        "/sys/users/insert"
+                        "/login"
+//                        , "/sys/users/insert"
                 ).permitAll()
 
                 // 其它任何请求都需要验证权限

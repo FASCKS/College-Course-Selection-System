@@ -384,7 +384,7 @@
                      left join sys_role_menu srm on sr.role_id = srm.role_id
                      left join sys_menu sm on srm.menu_id = sm.menu_id
         <where>
-            <if test="number != null and number!=''">
+            <if test="number != null">
                 and `number` = #{number,jdbcType=VARCHAR}
             </if>
         </where>

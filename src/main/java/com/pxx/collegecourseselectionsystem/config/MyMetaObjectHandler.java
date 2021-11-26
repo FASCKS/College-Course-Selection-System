@@ -2,8 +2,14 @@ package com.pxx.collegecourseselectionsystem.config;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 
+import com.pxx.collegecourseselectionsystem.entity.SysUserEntity;
 import org.apache.ibatis.reflection.MetaObject;
 
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -32,7 +38,9 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         this.setFieldValByName(updateTime, new Date(), metaObject);
     }
 
-    private Integer getName() {
+    private Long getName() {
+        SysUserEntity userDetails = (SysUserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
 /*        Object principal = SecurityUtils.getSubject().getPrincipal();
         if (principal instanceof User) {
             String userName = ((User) principal).getUserName();
@@ -43,7 +51,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
             return personnel.getName();
         }*/
 
-        return 1;
+        return userDetails.getUserId();
     }
 
 
