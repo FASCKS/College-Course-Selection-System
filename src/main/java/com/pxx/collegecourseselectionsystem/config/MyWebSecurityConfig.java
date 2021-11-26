@@ -1,6 +1,7 @@
 package com.pxx.collegecourseselectionsystem.config;
 
 import cn.hutool.core.convert.Convert;
+import com.pxx.collegecourseselectionsystem.config.authorize.MyAuthenticationSuccessHandler;
 import com.pxx.collegecourseselectionsystem.entity.SysRoleEntity;
 import com.pxx.collegecourseselectionsystem.entity.SysUserEntity;
 import com.pxx.collegecourseselectionsystem.service.impl.SysUserServiceImpl;
@@ -19,16 +20,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
-public class MyWebSecurityConfig  extends WebSecurityConfigurerAdapter {
+public class MyWebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private SysUserServiceImpl sysUserService;
     @Autowired
     private PersistentTokenRepository tokenRepository;
+    @Autowired
+    private MyAuthenticationSuccessHandler myAuthenticationSuccessHandler;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
     //认证用户的来源
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -41,6 +45,8 @@ public class MyWebSecurityConfig  extends WebSecurityConfigurerAdapter {
 //        http.csrf().disable().authorizeRequests().anyRequest().permitAll().and().logout().permitAll();
         http
                 .formLogin()
+                //登录成功处理器
+                .successHandler(myAuthenticationSuccessHandler)
                 .and()
                 .authorizeRequests()
                 //管理员都可以访问
@@ -62,7 +68,9 @@ public class MyWebSecurityConfig  extends WebSecurityConfigurerAdapter {
 //                // 设置默认登录成功跳转页面
 //                .defaultSuccessUrl("/main.html")
                 // 添加记住我功能
-                .and().rememberMe().tokenRepository(tokenRepository)
+                .and()
+                .rememberMe()
+                .tokenRepository(tokenRepository)
                 // 有效期为两周
                 .tokenValiditySeconds(3600 * 24 * 14)
                 // 设置UserDetailsService
