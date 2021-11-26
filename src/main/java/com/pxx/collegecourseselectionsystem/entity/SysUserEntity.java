@@ -8,14 +8,21 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.apache.catalina.User;
+import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
 
 @Getter
 @Setter
@@ -25,17 +32,18 @@ public class SysUserEntity implements UserDetails {
     /**
      * 用户id
      */
+    @Positive
     @TableId(value = "user_id", type = IdType.AUTO)
     private Long userId;
-
     /**
      * 用户名称
      */
+    @NotBlank(message = "用户名不能为空")
     @TableField(value = "`name`")
     private String name;
 
     /**
-     * 工号或学号
+     * 工号或学号 账号
      */
     @TableField(value = "`number`")
     private String number;
@@ -43,12 +51,14 @@ public class SysUserEntity implements UserDetails {
     /**
      * 年龄
      */
+    @Range(min = 16,max = 120,message = "年龄最小不能小于 16 ,最大不能大于120")
     @TableField(value = "age")
     private Integer age;
 
     /**
      * 盐
      */
+    @JsonIgnore
     @Deprecated
     @TableField(value = "salt")
     private String salt;
@@ -62,12 +72,15 @@ public class SysUserEntity implements UserDetails {
     /**
      * 账号类型 1 学生 2 老师 3其它人员
      */
+    @Deprecated
+    @JsonIgnore
     @TableField(value = "`type`")
     private Integer type;
 
     /**
      * 邮箱
      */
+    @Email
     @TableField(value = "email")
     private String email;
 
@@ -131,11 +144,13 @@ public class SysUserEntity implements UserDetails {
     /**
      * 用户角色名称合集
      */
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @TableField(exist = false)
     private List<SysRoleEntity> roleEntityList;
     /**
      * 用户权限集合
      */
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @TableField(exist = false)
     private List<SysMenuEntity> menuEntityList;
 
