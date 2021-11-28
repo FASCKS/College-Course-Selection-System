@@ -14,4 +14,9 @@ public interface SysMenuService extends IService<SysMenuEntity>{
 
     int insertOrUpdateSelective(SysMenuEntity record);
 
+    /**
+     * 返回所有菜单
+     * @return
+     */
+    List<SysMenuEntity> findMenuByType();
 }

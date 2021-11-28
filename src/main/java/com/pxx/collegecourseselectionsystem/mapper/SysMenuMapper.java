@@ -15,4 +15,11 @@ public interface SysMenuMapper extends BaseMapper<SysMenuEntity> {
     int insertOrUpdate(SysMenuEntity record);
 
     int insertOrUpdateSelective(SysMenuEntity record);
+
+    /**
+     * 返回所有菜单
+     * @param type 1
+     * @return
+     */
+    List<SysMenuEntity> findMenuByType(int type);
 }

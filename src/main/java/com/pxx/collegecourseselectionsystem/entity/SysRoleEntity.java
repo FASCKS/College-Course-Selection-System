@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.util.Date;
+import java.util.List;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -61,6 +63,11 @@ public class SysRoleEntity {
      */
     @TableField(value = "updated_time")
     private Date updatedTime;
+    /**
+     * 权限集合
+     */
+    @TableField(exist = false)
+    private List<SysMenuEntity> sysMenuEntities;
 
     public static final String COL_ROLE_ID = "role_id";
 

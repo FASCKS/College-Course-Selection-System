@@ -10,8 +10,8 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-@EnableWebSecurity
-@Configuration
+//@EnableWebSecurity
+//@Configuration
 public class TokenWebSecurityConfig extends WebSecurityConfigurerAdapter {
     //自定义查询数据库用户名密码和权限信息
     @Autowired

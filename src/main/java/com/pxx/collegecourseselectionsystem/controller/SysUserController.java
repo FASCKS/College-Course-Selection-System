@@ -31,4 +31,5 @@ public class SysUserController {
         boolean save = sysUserService.save(sysUserEntity);
         return R.ok().put("data", save);
     }
+
 }

@@ -14,4 +14,10 @@ public interface SysRoleService extends IService<SysRoleEntity>{
 
     int insertOrUpdateSelective(SysRoleEntity record);
 
+    /**
+     * 通过角色id查询角色详情
+     * @param roleId 角色id
+     * @return
+     */
+    SysRoleEntity findRoleInfoByRoleId(Long roleId);
 }

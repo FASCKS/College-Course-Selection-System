@@ -22,4 +22,12 @@ public interface SysRoleMapper extends BaseMapper<SysRoleEntity> {
      * 通过用户id查找角色
      */
     List<SysRoleEntity> findRoleByUserId(@Param("userId") Long userId);
+
+    /**
+     * 通过角色id查询角色详情
+     *
+     * @param roleId 角色id
+     * @return
+     */
+    SysRoleEntity findRoleInfoByRoleId(@Param("roleId") Long roleId);
 }

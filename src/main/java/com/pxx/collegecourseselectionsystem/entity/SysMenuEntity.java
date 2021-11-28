@@ -4,9 +4,12 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.util.List;
 
 /**
     * 菜单管理
@@ -46,23 +49,31 @@ public class SysMenuEntity {
     /**
      * 类型   0：目录   1：菜单   2：按钮
      */
+    @JsonIgnore
     @TableField(value = "`type`")
     private Integer type;
 
     /**
      * 菜单图标
      */
+    @JsonIgnore
     @TableField(value = "icon")
     private String icon;
 
     /**
      * 排序
      */
+    @JsonIgnore
     @TableField(value = "order_num")
     private Integer orderNum;
-
+    @JsonIgnore
     @TableField(value = "`status`")
     private Integer status;
+    /**
+     * 子菜单
+     */
+    @TableField(exist = false)
+    private List<SysMenuEntity> menuEntities;
 
     public static final String COL_MENU_ID = "menu_id";
 

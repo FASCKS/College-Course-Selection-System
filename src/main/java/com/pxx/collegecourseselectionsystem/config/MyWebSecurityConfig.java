@@ -19,7 +19,7 @@ import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
 
-//@Configuration
+@Configuration
 public class MyWebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private SysUserServiceImpl sysUserService;
@@ -43,20 +43,27 @@ public class MyWebSecurityConfig extends WebSecurityConfigurerAdapter {
 //        http.csrf().disable().authorizeRequests().anyRequest().permitAll().and().logout().permitAll();
         http
                 .formLogin()
+                .loginPage("/login")
                 //登录成功处理器
                 .successHandler(myAuthenticationSuccessHandler)
                 .and()
                 .authorizeRequests()
                 //管理员都可以访问
                 // 设置不需要授权的请求
-                .antMatchers("/js/*",
+                .antMatchers(
+                        "/swagger-ui.html"
+                        , "/webjars/**"
+                        , "/v2/**"
+                        , "/swagger-resources/**",
+                        "/js/*",
                         "/static/",
                         "/login"
-//                        , "/sys/users/insert"
+                        , "/sys/users/insert"
+                        ,"/sys/menu/list"
                 ).permitAll()
 
                 // 其它任何请求都需要验证权限
-                .anyRequest().authenticated()
+//                .anyRequest().authenticated()
 //                // 设置自定义表单登录页面
 //                .and().formLogin().loginPage("/login")
 //

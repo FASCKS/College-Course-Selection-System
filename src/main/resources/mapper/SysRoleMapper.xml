@@ -12,6 +12,11 @@
         <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
         <result column="updated_by" jdbcType="VARCHAR" property="updatedBy"/>
         <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime"/>
+        <collection property="sysMenuEntities" ofType="com.pxx.collegecourseselectionsystem.entity.SysMenuEntity">
+        <id column="menu_id" jdbcType="INTEGER" property="menuId"/>
+            <result column="name" jdbcType="VARCHAR" property="name"/>
+            <result column="perms" jdbcType="VARCHAR" property="perms"/>
+        </collection>
     </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
@@ -204,10 +209,17 @@
     </insert>
 
     <select id="findRoleByUserId" resultMap="BaseResultMap">
-        select sr.role_id,sr.role_name
+        select sr.role_id, sr.role_name
         from sys_role sr
                      left join sys_user_role sur on sr.role_id = sur.role_id
-                     left join sys_user su on sur.user_id = su.id
-        where su.id=#{userId,jdbcType=BIGINT}
+                     left join sys_user su on sur.user_id = su.user_id
+        where su.user_id = #{userId,jdbcType=BIGINT}
+    </select>
+
+    <select id="findRoleInfoByRoleId" resultMap="BaseResultMap">
+        select sr.role_id, sr.role_name, sr.remark, sr.REVISION,sm.menu_id, sm.name, sm.perms
+        from sys_role sr
+                     left join sys_role_menu srm on sr.role_id = srm.role_id
+                     left join sys_menu sm on srm.menu_id = sm.menu_id
     </select>
 </mapper>
