@@ -1,19 +1,14 @@
 package com.pxx.collegecourseselectionsystem.entity;
 
 import cn.hutool.core.date.DatePattern;
+import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.annotation.*;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.pxx.collegecourseselectionsystem.annotation.Telephone;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.apache.catalina.User;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
@@ -23,6 +18,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -55,13 +54,7 @@ public class SysUserEntity implements UserDetails {
     @TableField(value = "age")
     private Integer age;
 
-    /**
-     * 盐
-     */
-    @JsonIgnore
-    @Deprecated
-    @TableField(value = "salt")
-    private String salt;
+
 
     /**
      * 密码
@@ -83,6 +76,12 @@ public class SysUserEntity implements UserDetails {
     @Email
     @TableField(value = "email")
     private String email;
+    /**
+     * 电话号码
+     */
+    @Telephone
+    @TableField("tel")
+    private String tel;
 
     /**
      * 家庭地址
@@ -101,6 +100,12 @@ public class SysUserEntity implements UserDetails {
      */
     @TableField(value = "`state`")
     private Integer state;
+    /**
+     * 账号是否可用
+     */
+    @TableField(value = "enable")
+    private Integer enable;
+
 
     /**
      * 乐观锁
@@ -169,12 +174,14 @@ public class SysUserEntity implements UserDetails {
     public static final String COL_TYPE = "type";
 
     public static final String COL_EMAIL = "email";
+    public static final String COL_TEL = "tel";
 
     public static final String COL_ADDRESS = "address";
 
     public static final String COL_AVATAR = "avatar";
 
     public static final String COL_STATE = "state";
+    public static final String COL_ENABLE = "enable";
 
     public static final String COL_REVISION = "revision";
 
@@ -196,6 +203,7 @@ public class SysUserEntity implements UserDetails {
                 authorities.add(new SimpleGrantedAuthority("ROLE_"+role.getRoleName()));
             }
         }
+        this.roleEntityList=null;
 
         //添加权限
         if (menuEntityList!=null){
@@ -203,6 +211,7 @@ public class SysUserEntity implements UserDetails {
                 authorities.add(new SimpleGrantedAuthority(sysMenuEntity.getPerms()));
             }
         }
+        this.menuEntityList=null;
 
         return authorities;
     }
@@ -224,7 +233,7 @@ public class SysUserEntity implements UserDetails {
      */
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        return this.lockTime.compareTo(DateUtil.date())<0;
     }
 
     /**
@@ -254,7 +263,7 @@ public class SysUserEntity implements UserDetails {
      */
     @Override
     public boolean isEnabled() {
-        return true;
+        return this.enable>0;
     }
 
 }

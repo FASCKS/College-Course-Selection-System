@@ -1,11 +1,14 @@
 package com.pxx.collegecourseselectionsystem.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.pxx.collegecourseselectionsystem.entity.SysMenuEntity;
 import com.pxx.collegecourseselectionsystem.entity.SysRoleEntity;
 import com.pxx.collegecourseselectionsystem.entity.SysUserEntity;
+import com.pxx.collegecourseselectionsystem.mapper.SysUserMapper;
 import com.pxx.collegecourseselectionsystem.service.SysMenuService;
 import com.pxx.collegecourseselectionsystem.service.SysRoleService;
+import com.pxx.collegecourseselectionsystem.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -13,10 +16,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.pxx.collegecourseselectionsystem.mapper.SysUserMapper;
-import com.pxx.collegecourseselectionsystem.service.SysUserService;
 
 @Service
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity> implements SysUserService, UserDetailsService {
@@ -63,7 +62,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
         SysUserEntity sysUserEntity = sysUserMapper.findOneByNumber(username);
 
         if (sysUserEntity == null) {
-            throw new UsernameNotFoundException("账号不存在");
+            throw new UsernameNotFoundException("密码或用户名错误!");
         }
         //如果是超级管理员
         if (sysUserEntity.getNumber().equals("admin")) {

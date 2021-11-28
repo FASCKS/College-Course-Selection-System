@@ -3,8 +3,8 @@ package com.pxx.collegecourseselectionsystem.controller;
 import com.pxx.collegecourseselectionsystem.common.utils.R;
 import com.pxx.collegecourseselectionsystem.entity.SysUserEntity;
 import com.pxx.collegecourseselectionsystem.service.SysUserService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,6 +24,7 @@ public class SysUserController {
      * @param sysUserEntity 用户实体
      * @return true 成功 false 失败
      */
+    @PreAuthorize("hasAnyAuthority('sys:user:insert')")
     @PostMapping("/insert")
     public R insertUser(@RequestBody SysUserEntity sysUserEntity) {
         String password = sysUserEntity.getPassword();

@@ -8,9 +8,11 @@
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="number" jdbcType="VARCHAR" property="number"/>
         <result column="age" jdbcType="INTEGER" property="age"/>
-        <result column="salt" jdbcType="VARCHAR" property="salt"/>
         <result column="password" jdbcType="VARCHAR" property="password"/>
         <result column="type" jdbcType="INTEGER" property="type"/>
+        <result column="tel" jdbcType="VARCHAR" property="tel"/>
+        <result column="enable" jdbcType="INTEGER" property="enable"/>
+
         <result column="email" jdbcType="VARCHAR" property="email"/>
         <result column="address" jdbcType="VARCHAR" property="address"/>
         <result column="avatar" jdbcType="VARCHAR" property="avatar"/>
@@ -24,9 +26,10 @@
     </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
-        user_id, `name`, `number`, age, salt, `password`, `type`, email, address, avatar,
+        user_id, `name`, `number`, age, tel,enable, `password`, `type`, email, address, avatar,
         `state`, revision, lock_time, created_time, created_by, updated_time, updated_by
     </sql>
+
     <update id="updateBatch" parameterType="java.util.List">
         <!--@mbg.generated-->
         update sys_user
@@ -327,14 +330,16 @@
             </if>
         </trim>
     </insert>
+
     <resultMap id="FindUserAndRoleMap" type="com.pxx.collegecourseselectionsystem.entity.SysUserEntity">
         <id column="user_id" jdbcType="INTEGER" property="userId"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="number" jdbcType="VARCHAR" property="number"/>
         <result column="age" jdbcType="INTEGER" property="age"/>
-        <result column="salt" jdbcType="VARCHAR" property="salt"/>
         <result column="password" jdbcType="VARCHAR" property="password"/>
         <result column="type" jdbcType="INTEGER" property="type"/>
+        <result column="tel" jdbcType="VARCHAR" property="tel"/>
+        <result column="enable" jdbcType="INTEGER" property="enable"/>
         <result column="email" jdbcType="VARCHAR" property="email"/>
         <result column="address" jdbcType="VARCHAR" property="address"/>
         <result column="avatar" jdbcType="VARCHAR" property="avatar"/>

@@ -1,19 +1,21 @@
 package com.pxx.collegecourseselectionsystem.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.pxx.collegecourseselectionsystem.entity.SysUserEntity;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-import com.pxx.collegecourseselectionsystem.entity.SysUserEntity;import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface SysUserMapper extends BaseMapper<SysUserEntity> {
+    @Deprecated
     int updateBatch(List<SysUserEntity> list);
-
+    @Deprecated
     int batchInsert(@Param("list") List<SysUserEntity> list);
-
+    @Deprecated
     int insertOrUpdate(SysUserEntity record);
-
+    @Deprecated
     int insertOrUpdateSelective(SysUserEntity record);
 
     /**

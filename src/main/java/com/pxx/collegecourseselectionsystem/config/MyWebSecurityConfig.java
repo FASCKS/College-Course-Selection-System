@@ -1,23 +1,14 @@
 package com.pxx.collegecourseselectionsystem.config;
 
-import cn.hutool.core.convert.Convert;
 import com.pxx.collegecourseselectionsystem.config.authorize.MyAuthenticationSuccessHandler;
-import com.pxx.collegecourseselectionsystem.entity.SysRoleEntity;
-import com.pxx.collegecourseselectionsystem.entity.SysUserEntity;
 import com.pxx.collegecourseselectionsystem.service.impl.SysUserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
-
-import javax.sql.DataSource;
-import java.util.ArrayList;
-import java.util.List;
 
 @Configuration
 public class MyWebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -31,10 +22,15 @@ public class MyWebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+@Autowired
+private LoginValidateAuthenticationProvider loginValidateAuthenticationProvider;
     //认证用户的来源
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(sysUserService).passwordEncoder(bCryptPasswordEncoder);
+        auth
+                .authenticationProvider(loginValidateAuthenticationProvider)
+                .userDetailsService(sysUserService)
+                .passwordEncoder(bCryptPasswordEncoder);
 
     }
 
@@ -43,13 +39,10 @@ public class MyWebSecurityConfig extends WebSecurityConfigurerAdapter {
 //        http.csrf().disable().authorizeRequests().anyRequest().permitAll().and().logout().permitAll();
         http
                 .formLogin()
-                .loginPage("/login")
                 //登录成功处理器
                 .successHandler(myAuthenticationSuccessHandler)
                 .and()
                 .authorizeRequests()
-                //管理员都可以访问
-                // 设置不需要授权的请求
                 .antMatchers(
                         "/swagger-ui.html"
                         , "/webjars/**"
@@ -61,24 +54,11 @@ public class MyWebSecurityConfig extends WebSecurityConfigurerAdapter {
                         , "/sys/users/insert"
                         ,"/sys/menu/list"
                 ).permitAll()
-
-                // 其它任何请求都需要验证权限
-//                .anyRequest().authenticated()
-//                // 设置自定义表单登录页面
-//                .and().formLogin().loginPage("/login")
-//
-//                // 设置登录验证请求地址为自定义登录页配置action （"/login/form"）
-//                .loginProcessingUrl("/login/form")
-//
-//                // 设置默认登录成功跳转页面
-//                .defaultSuccessUrl("/main.html")
-                // 添加记住我功能
+                // 记住我
                 .and()
                 .rememberMe()
                 .tokenRepository(tokenRepository)
-                // 有效期为两周
                 .tokenValiditySeconds(3600 * 24 * 14)
-                // 设置UserDetailsService
                 .userDetailsService(sysUserService)
                 // 暂时停用csrf，否则会影响验证
                 .and().csrf().disable();
