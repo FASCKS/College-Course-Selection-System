@@ -1,7 +1,5 @@
 package com.pxx.collegecourseselectionsystem.config.authorize;
 
-import com.pxx.collegecourseselectionsystem.common.utils.R;
-import com.pxx.collegecourseselectionsystem.common.utils.ResponseUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -13,6 +11,7 @@ import java.io.IOException;
 
 /**
  * 未授权统一处理  //WebSecurity
+ * 处理认证异常
  */
 @Slf4j
 public class UnauthorizedEntryPoint implements AuthenticationEntryPoint {

@@ -2,7 +2,6 @@ package com.pxx.collegecourseselectionsystem.controller;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -33,4 +32,5 @@ public class PathController {
     public @ResponseBody void test3() {
         System.out.println("3333333");
     }
+
 }
