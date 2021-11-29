@@ -1,30 +1,21 @@
 package com.pxx.collegecourseselectionsystem.config.authorize;
 
-import cn.hutool.Hutool;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.db.nosql.redis.RedisDS;
 import com.pxx.collegecourseselectionsystem.common.utils.R;
 import com.pxx.collegecourseselectionsystem.common.utils.ResponseUtil;
 import com.pxx.collegecourseselectionsystem.config.UserGrantedAuthority;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-import org.springframework.util.StringUtils;
-import redis.clients.jedis.Jedis;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -52,6 +43,7 @@ public class TokenAuthenticationFilter extends BasicAuthenticationFilter {
             ResponseUtil.write(response, R.error());
         }
         if (authentication != null) {
+            // 将认证信息存入 Spring 安全上下文中
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } else {
             ResponseUtil.write(response, R.error());

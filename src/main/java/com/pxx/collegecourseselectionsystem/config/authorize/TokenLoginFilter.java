@@ -31,7 +31,6 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
     private RedisTemplate<String, Object> redisTemplate;
     public static final String SPRING_SECURITY_FORM_USERNAME_KEY = "username";
     public static final String SPRING_SECURITY_FORM_PASSWORD_KEY = "password";
-    private static final AntPathRequestMatcher DEFAULT_ANT_PATH_REQUEST_MATCHER = new AntPathRequestMatcher("/login", "POST");
 
 
     public TokenLoginFilter(AuthenticationManager authenticationManager, TokenManager tokenManager, RedisTemplate redisTemplate) {
