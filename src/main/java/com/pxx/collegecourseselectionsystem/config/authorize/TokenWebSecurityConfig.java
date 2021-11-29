@@ -3,6 +3,7 @@ package com.pxx.collegecourseselectionsystem.config.authorize;
 import com.pxx.collegecourseselectionsystem.config.LoginValidateAuthenticationProvider;
 import com.pxx.collegecourseselectionsystem.service.impl.SysUserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpMethod;
@@ -11,8 +12,21 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.CorsUtils;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
+
+
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 //@EnableWebSecurity
 @Configuration
@@ -36,6 +50,8 @@ public class TokenWebSecurityConfig extends WebSecurityConfigurerAdapter {
     private SysUserServiceImpl sysUserService;
     @Autowired
     private PersistentTokenRepository tokenRepository;
+    @Autowired
+    private TokenLogoutHandler tokenLogoutHandler;
     /**
      * 配置设置
      */
@@ -44,31 +60,57 @@ public class TokenWebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.exceptionHandling()
                 .authenticationEntryPoint(new UnauthorizedEntryPoint())
+                .and().cors()
+                .configurationSource(corsConfigurationSource())
                 .and().csrf().disable()
                 .authorizeRequests()
                 .anyRequest().authenticated()
                 .and().logout().logoutUrl("/admin/acl/index/logout")
-                .addLogoutHandler(new TokenLogoutHandler(tokenManager,redisTemplate)).and()
+                .addLogoutHandler(tokenLogoutHandler)
+                .and()
                 .addFilter(new TokenLoginFilter(authenticationManager(), tokenManager, redisTemplate))
-                .addFilter(new TokenAuthenticationFilter(authenticationManager(), tokenManager, redisTemplate)).httpBasic()
+                .addFilter(new TokenAuthenticationFilter(authenticationManager(), tokenManager, redisTemplate)).httpBasic();
 
-        ;
+
     }
     @Override
     public void configure(AuthenticationManagerBuilder auth)  throws Exception
     {
         auth.authenticationProvider(loginValidateAuthenticationProvider).userDetailsService( userDetailsService).passwordEncoder(defaultPasswordEncoder);
     }
+
     /**
      * 此方法配置的资源路径不会进入 Spring Security 机制进行验证
      */
     @Override
     public void configure(WebSecurity web)  throws Exception {
         web.ignoring().antMatchers(
-                "/swagger-resources/**",
-                "/webjars/**",
-                "/v2/**",
-                "/swagger-ui.html/**"
-               ).antMatchers(HttpMethod.GET,"/login");
+                        "/swagger-resources/**",
+                        "/webjars/**",
+                        "/v2/**",
+                        "/swagger-ui.html/**"
+                )
+                .antMatchers(HttpMethod.GET,"/login");
     }
+
+    /**
+     * 跨域支持
+     * @return
+     */
+    @Bean
+
+    public CorsConfigurationSource corsConfigurationSource() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowCredentials(true);
+        configuration.setAllowedOriginPatterns(Collections.singletonList("*"));
+        configuration.setAllowedMethods(Collections.singletonList("*"));
+        configuration.setAllowedHeaders(Collections.singletonList("*"));
+        configuration.setMaxAge(Duration.ofHours(1));
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+
+    }
+
 }
+

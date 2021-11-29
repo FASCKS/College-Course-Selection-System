@@ -64,9 +64,6 @@ public class TokenAuthenticationFilter extends BasicAuthenticationFilter {
         String token = request.getHeader("token");
         if (token != null && !"".equals(token.trim())) {
             String userName = tokenManager.getUserFromToken(token);
-
-
-
             Collection<UserGrantedAuthority> authorities  = (List<UserGrantedAuthority>) redisTemplate.opsForValue().get(userName);
             if (!StrUtil.isEmpty(userName)) {
                 return new UsernamePasswordAuthenticationToken(userName, token, authorities);

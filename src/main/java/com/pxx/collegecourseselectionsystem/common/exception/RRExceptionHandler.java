@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -209,6 +210,16 @@ public class RRExceptionHandler {
         return R.error(sb.substring(0, sb.length() - 3));
     }
 
+    /***
+     * 密码错误
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(BadCredentialsException.class)
+public R handBadCredentialsException(Exception e){
+        logger.error(e.getMessage(), e);
+        return R.error(403, e.getMessage());
+}
     @ExceptionHandler(NoHandlerFoundException.class)
     public R handlerNoFoundException(Exception e) {
         logger.error(e.getMessage(), e);

@@ -1,11 +1,16 @@
 package com.pxx.collegecourseselectionsystem.config.authorize;
 
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.extra.spring.SpringUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pxx.collegecourseselectionsystem.common.utils.R;
 import com.pxx.collegecourseselectionsystem.common.utils.ResponseUtil;
+import com.pxx.collegecourseselectionsystem.entity.SysLogEntity;
 import com.pxx.collegecourseselectionsystem.entity.SysUserEntity;
+import com.pxx.collegecourseselectionsystem.service.impl.SysLogServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationServiceException;
@@ -14,6 +19,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.stereotype.Component;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -21,8 +30,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
-
 @Slf4j
 public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
     private AuthenticationManager authenticationManager;
@@ -54,7 +63,6 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
             e.printStackTrace();
         }
 
-
         username = (username != null) ? username : "";
         username = username.trim();
         password = (password != null) ? password : "";
@@ -79,6 +87,17 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
         String token = tokenManager.createToken(user.getUsername());
 
         redisTemplate.opsForValue().set(user.getUsername(),user.getAuthorities());
+
+        SysLogServiceImpl sysLogService = SpringUtil.getBean(SysLogServiceImpl.class);
+
+        log.info("用户  {}  于  {}  登录成功",user.getUsername(), DateUtil.date());
+        SysLogEntity sysLogEntity=new SysLogEntity();
+        sysLogEntity.setUsername(user.getUsername());
+        sysLogEntity.setOperation("登录平台");
+        sysLogEntity.setTime(0L);
+        sysLogEntity.setCreateDate(DateUtil.date());
+        sysLogService.save(sysLogEntity);
+
         ResponseUtil.write(res, R.ok().put("token", token));
     }
 
@@ -89,8 +108,10 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
     protected void unsuccessfulAuthentication(HttpServletRequest request,
                                               HttpServletResponse response,
                                               AuthenticationException e) throws IOException, ServletException {
-        log.info(e.getMessage());
+        String username = request.getParameter("username");
+        log.info("用户名为 {} 的用户在 {} 登录失败",username,DateUtil.date());
         ResponseUtil.write(response, R.error(403,e.getMessage()));
+
     }
 
 
