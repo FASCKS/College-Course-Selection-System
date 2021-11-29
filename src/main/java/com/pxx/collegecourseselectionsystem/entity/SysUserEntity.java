@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.pxx.collegecourseselectionsystem.annotation.Telephone;
+import com.pxx.collegecourseselectionsystem.config.UserGrantedAuthority;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -50,10 +51,9 @@ public class SysUserEntity implements UserDetails {
     /**
      * 年龄
      */
-    @Range(min = 16,max = 120,message = "年龄最小不能小于 16 ,最大不能大于120")
+    @Range(min = 16, max = 120, message = "年龄最小不能小于 16 ,最大不能大于120")
     @TableField(value = "age")
     private Integer age;
-
 
 
     /**
@@ -196,22 +196,26 @@ public class SysUserEntity implements UserDetails {
     public static final String COL_UPDATED_BY = "updated_by";
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        List<UserGrantedAuthority> authorities = new ArrayList<>();
         //添加角色
-        if (roleEntityList!=null){
+        if (roleEntityList != null) {
             for (SysRoleEntity role : roleEntityList) {
-                authorities.add(new SimpleGrantedAuthority("ROLE_"+role.getRoleName()));
+                if (role != null) {
+                    authorities.add(new UserGrantedAuthority("ROLE_" + role.getRoleName()));
+                }
             }
         }
-        this.roleEntityList=null;
+//        this.roleEntityList=null;
 
         //添加权限
-        if (menuEntityList!=null){
+        if (menuEntityList != null) {
             for (SysMenuEntity sysMenuEntity : menuEntityList) {
-                authorities.add(new SimpleGrantedAuthority(sysMenuEntity.getPerms()));
+                if (sysMenuEntity != null) {
+                    authorities.add(new UserGrantedAuthority(sysMenuEntity.getPerms()));
+                }
             }
         }
-        this.menuEntityList=null;
+//        this.menuEntityList=null;
 
         return authorities;
     }
@@ -233,7 +237,7 @@ public class SysUserEntity implements UserDetails {
      */
     @Override
     public boolean isAccountNonExpired() {
-        return this.lockTime.compareTo(DateUtil.date())<0;
+        return this.lockTime.compareTo(DateUtil.date()) < 0;
     }
 
     /**
@@ -263,7 +267,7 @@ public class SysUserEntity implements UserDetails {
      */
     @Override
     public boolean isEnabled() {
-        return this.enable>0;
+        return this.enable > 0;
     }
 
 }

@@ -12,14 +12,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * 未授权统一处理
+ * 未授权统一处理  //WebSecurity
  */
 @Slf4j
 public class UnauthorizedEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-       log.info("未授权统一处理");
-        ResponseUtil.write(response, R.error());
+       log.info("未授权---> {}",request.getRequestURI());
+//        ResponseUtil.write(response, R.error());
     }
 
 }

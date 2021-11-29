@@ -1,99 +1,74 @@
-
-<!DOCTYPE HTML>
-<html>
+﻿<!DOCTYPE html>
+<html lang="en">
 <head>
-<!--	<base href="/static/">-->
-<title>温科院奖学金管理系统</title>
-<link rel="icon" href="assets\img\favicon.ico" type="image/x-icon">
-<meta http-equiv=Content-Type content="text/html; charset=utf-8">
-<script src=
-       "assets\js\jquery-3.5.1.min.js">
-</script>
-<meta content="MSHTML 6.00.2600.0" name=GENERATOR>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,500;0,600;0,700;1,400&display=swap">
-<!-- Bootstrap CSS -->
-<link rel="stylesheet" href="assets\plugins\bootstrap\css\bootstrap.min.css">
-<!-- Fontawesome CSS -->
-<link rel="stylesheet" href="assets\plugins\fontawesome\css\fontawesome.min.css">
-<link rel="stylesheet" href="assets\plugins\fontawesome\css\all.min.css">
-<!-- Main CSS -->
-<link rel="stylesheet" href="assets\css\style.css">
-<script>
-// 判断是登录账号和密码是否为空
-function check(){
-    var usercode = $("#username").val();
-    var password = $("#password").val();
-    if(usercode=="" || password==""){
-		alert('账号或密码不能为空！')
-    	// $("#message").text("账号或密码不能为空！");
-        return false;
-    }  
-    return true;
-}
-</script>
+<meta charset="UTF-8">
+<title>CodePen - Log In / Sign Up - pure css - #12</title>
+
+<link rel='stylesheet' href='css\bootstrap.min.css'>
+
+<!---图标库--->
+<link rel='stylesheet' href='https://unicons.iconscout.com/release/v2.1.9/css/unicons.css'>
+
+<link rel="stylesheet" href="css\style.css">
+
 </head>
-<body ondragstart="window.event.returnValue=false;return false;" oncontextmenu="window.event.returnValue=false;return false;" onselectstart="event.returnValue=false;return false;">
-	
-		<!-- Main Wrapper -->
-        <div class="main-wrapper login-body">
-            <div class="login-wrapper">
-            	<div class="container">
-                	<div class="loginbox">
-                    	<div class="login-left">
-							<img class="img-fluid" src="assets\img\logo-white.png" height="800" width="1600" alt="Logo">
-                        </div>
-                        <div class="login-right">
-							<div class="login-right-wrap">
-							<br>
-								<h1>奖学金管理系统</h1>
-										</br>	<br>
-								<!-- 表单 -->
-<!--								<%&#45;&#45; 提交后的位置：/WEB-INF/jsp/main.jsp&#45;&#45;%>-->
-								<form action="/login" method="post" onsubmit="return check()">
-									<div class="form-group">
-										<input class="form-control" id="usercode" type="text" name="username" placeholder="账号">
-									</div>
-									<div class="form-group">
-										<input class="form-control"  id="password" type="password" name="password" placeholder="密码">
-									</div>
-									<div class="form-group">
-										<button class="btn btn-primary btn-block" type="submit">登录</button>
-									</div>
+<body>
 
-<!--										<p id="message" style="color:red;" align="center">qeasd</p>-->
-								</form>
-								<!-- /表单 -->
-								<!-- 温馨提示 -->
-								<div class="login-or">
-									<span class="or-line"></span>
-									<span class="span-or">&nbsp;温馨提示&nbsp;</span>
-								</div>
-								<div class="text-center dont-have" style="color:black;">初始账号为学号</br>初始密码为身份证后8位
-								</br>
-								<p>若遗忘密码请联系管理员</p>
-								</div>
-							</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-		<!-- /Main Wrapper -->
-		
-		<!-- jQuery -->
-        <script src="/assets/js/jquery-3.5.1.min.js"></script>
-		
-		<!-- Bootstrap Core JS -->
-        <script src="/assets/js/popper.min.js"></script>
-        <script src="/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
-		
-		<!-- Custom JS -->
-		<script src="/assets/js/script.js"></script>
+	<div class="section">
+		<div class="container">
+			<div class="row full-height justify-content-center">
+				<div class="col-12 text-center align-self-center py-5">
+					<div class="section pb-5 pt-5 pt-sm-2 text-center">
+						<h6 class="mb-0 pb-3"><span>登录</span><span>注册</span></h6>
+			          	<input class="checkbox" type="checkbox" id="reg-log" name="reg-log">
+			          	<label for="reg-log"></label>
+						<div class="card-3d-wrap mx-auto">
+							<div class="card-3d-wrapper">
+								<div class="card-front">
+									<div class="center-wrap">
+										<div class="section text-center">
+											<h4 class="mb-4 pb-3">登录</h4>
+											<div class="form-group">
+												<input type="email" name="logemail" class="form-style" placeholder="邮箱" id="logemail" autocomplete="off">
+												<i class="input-icon uil uil-at"></i>
+											</div>	
+											<div class="form-group mt-2">
+												<input type="password" name="logpass" class="form-style" placeholder="密码" id="logpass" autocomplete="off">
+												<i class="input-icon uil uil-lock-alt"></i>
+											</div>
+											<a href="#" class="btn mt-4">提交</a>
+                            				<p class="mb-0 mt-4 text-center"><a href="#0" class="link">忘记密码?</a></p>
+				      					</div>
+			      					</div>
+			      				</div>
+								<div class="card-back">
+									<div class="center-wrap">
+										<div class="section text-center">
+											<h4 class="mb-4 pb-3">注册</h4>
+											<div class="form-group">
+												<input type="text" name="logname" class="form-style" placeholder="名称" id="logname" autocomplete="off">
+												<i class="input-icon uil uil-user"></i>
+											</div>	
+											<div class="form-group mt-2">
+												<input type="email" name="logemail" class="form-style" placeholder="邮箱" id="logemail" autocomplete="off">
+												<i class="input-icon uil uil-at"></i>
+											</div>	
+											<div class="form-group mt-2">
+												<input type="password" name="logpass" class="form-style" placeholder="密码" id="logpass" autocomplete="off">
+												<i class="input-icon uil uil-lock-alt"></i>
+											</div>
+											<a href="#" class="btn mt-4">提交</a>
+				      					</div>
+			      					</div>
+			      				</div>
+			      			</div>
+			      		</div>
+			      	</div>
+		      	</div>
+	      	</div>
+	    </div>
+	</div>
 
-    </body>
-<footer style="background:#353b47;color:#FFF;">
-	<p align="center" >浙ICP备2021028128号</p>
-	<p align="center">Copyright&nbsp;&nbsp;©&nbsp;&nbsp;2021 &nbsp;张如强 版权所有  仅供温州科技职业学院使用&nbsp;&nbsp;<a href="http://dingtian.site" >个人Blog链接</a></p>
-</footer>
+</body>
 </html>

@@ -1,17 +1,21 @@
 package com.pxx.collegecourseselectionsystem.config.authorize;
 
+import com.pxx.collegecourseselectionsystem.config.LoginValidateAuthenticationProvider;
 import com.pxx.collegecourseselectionsystem.service.impl.SysUserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+
 //@EnableWebSecurity
-//@Configuration
+@Configuration
 public class TokenWebSecurityConfig extends WebSecurityConfigurerAdapter {
     //自定义查询数据库用户名密码和权限信息
     @Autowired
@@ -24,8 +28,14 @@ public class TokenWebSecurityConfig extends WebSecurityConfigurerAdapter {
     private BCryptPasswordEncoder defaultPasswordEncoder;
     //redis 操作工具类
     @Autowired
-    private RedisTemplate redisTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
+    @Autowired
+    private LoginValidateAuthenticationProvider loginValidateAuthenticationProvider;
 
+    @Autowired
+    private SysUserServiceImpl sysUserService;
+    @Autowired
+    private PersistentTokenRepository tokenRepository;
     /**
      * 配置设置
      */
@@ -33,29 +43,32 @@ public class TokenWebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.exceptionHandling()
-//                .authenticationEntryPoint(new UnauthorizedEntryPoint())
+                .authenticationEntryPoint(new UnauthorizedEntryPoint())
                 .and().csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/login","/favicon.ico").permitAll()
                 .anyRequest().authenticated()
-                .and().formLogin().loginPage("/login")
-                .and().logout().logoutUrl("/logout")
-                .addLogoutHandler(new TokenLogoutHandler(tokenManager, redisTemplate))
-                .and()
+                .and().logout().logoutUrl("/admin/acl/index/logout")
+                .addLogoutHandler(new TokenLogoutHandler(tokenManager,redisTemplate)).and()
                 .addFilter(new TokenLoginFilter(authenticationManager(), tokenManager, redisTemplate))
-                .addFilter(new TokenAuthenticationFilter(authenticationManager(), tokenManager, redisTemplate))
-                .httpBasic();
+                .addFilter(new TokenAuthenticationFilter(authenticationManager(), tokenManager, redisTemplate)).httpBasic()
+
+        ;
     }
     @Override
     public void configure(AuthenticationManagerBuilder auth)  throws Exception
     {
-        auth.userDetailsService( userDetailsService).passwordEncoder(defaultPasswordEncoder);
+        auth.authenticationProvider(loginValidateAuthenticationProvider).userDetailsService( userDetailsService).passwordEncoder(defaultPasswordEncoder);
     }
     /**
-     * 配置哪些请求不拦截
+     * 此方法配置的资源路径不会进入 Spring Security 机制进行验证
      */
     @Override
     public void configure(WebSecurity web)  throws Exception {
-        web.ignoring().antMatchers( "/api/**","/login");
+        web.ignoring().antMatchers(
+                "/swagger-resources/**",
+                "/webjars/**",
+                "/v2/**",
+                "/swagger-ui.html/**"
+               ).antMatchers(HttpMethod.GET,"/login");
     }
 }

@@ -1,8 +1,11 @@
 package com.pxx.collegecourseselectionsystem.config.authorize;
 
+import cn.hutool.Hutool;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.db.nosql.redis.RedisDS;
 import com.pxx.collegecourseselectionsystem.common.utils.R;
 import com.pxx.collegecourseselectionsystem.common.utils.ResponseUtil;
+import com.pxx.collegecourseselectionsystem.config.UserGrantedAuthority;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -14,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.util.StringUtils;
+import redis.clients.jedis.Jedis;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -30,7 +34,7 @@ import java.util.List;
 @Slf4j
 public class TokenAuthenticationFilter extends BasicAuthenticationFilter {
     private TokenManager tokenManager;
-    private RedisTemplate redisTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
 
     public TokenAuthenticationFilter(AuthenticationManager authManager, TokenManager tokenManager, RedisTemplate redisTemplate) {
         super(authManager);
@@ -40,16 +44,11 @@ public class TokenAuthenticationFilter extends BasicAuthenticationFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-        logger.info("= ================" + request.getRequestURI());
-        log.info("进入授权 ");
-        if(!request.getRequestURI().contains("admin")) {
-            chain.doFilter(request, response);
-            return;
-        }
         UsernamePasswordAuthenticationToken authentication = null;
         try {
             authentication = getAuthentication(request);
         } catch (Exception e) {
+            log.error(e.getMessage(),e);
             ResponseUtil.write(response, R.error());
         }
         if (authentication != null) {
@@ -65,13 +64,10 @@ public class TokenAuthenticationFilter extends BasicAuthenticationFilter {
         String token = request.getHeader("token");
         if (token != null && !"".equals(token.trim())) {
             String userName = tokenManager.getUserFromToken(token);
-            List<String> permissionValueList = (List<String>) redisTemplate.opsForValue().get(userName);
-            Collection<GrantedAuthority> authorities = new ArrayList<>();
-            for (String permissionValue : permissionValueList) {
-                if (StrUtil.isEmpty(permissionValue)) continue;
-                SimpleGrantedAuthority authority = new SimpleGrantedAuthority(permissionValue);
-                authorities.add(authority);
-            }
+
+
+
+            Collection<UserGrantedAuthority> authorities  = (List<UserGrantedAuthority>) redisTemplate.opsForValue().get(userName);
             if (!StrUtil.isEmpty(userName)) {
                 return new UsernamePasswordAuthenticationToken(userName, token, authorities);
             }

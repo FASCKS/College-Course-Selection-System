@@ -1,8 +1,11 @@
 package com.pxx.collegecourseselectionsystem.config;
 
+import cn.hutool.core.date.DatePattern;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import com.pxx.collegecourseselectionsystem.entity.SysUserEntity;
 import com.pxx.collegecourseselectionsystem.service.impl.SysUserServiceImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
@@ -10,9 +13,12 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
+
 /**
  * 登录流程
  */
+@Slf4j
 @Component
 public class LoginValidateAuthenticationProvider implements AuthenticationProvider {
     @Autowired
@@ -33,7 +39,8 @@ public class LoginValidateAuthenticationProvider implements AuthenticationProvid
         } else if (!userEntity.isAccountNonLocked()) {
             throw new LockedException("该账号已被锁定");
         } else if (!userEntity.isAccountNonExpired()) {
-            throw new AccountExpiredException(StrUtil.format("该账号被封禁至 {} ，请联系管理员", userEntity.getLockTime()));
+            Date lockTime = userEntity.getLockTime();
+            throw new AccountExpiredException(StrUtil.format("该账号被封禁至 {} ，请联系管理员", DateUtil.format(lockTime, DatePattern.NORM_DATETIME_PATTERN)));
         } else if (!userEntity.isCredentialsNonExpired()) {
             throw new CredentialsExpiredException("该账户的登录凭证已过期，请重新登录");
         }
@@ -43,7 +50,7 @@ public class LoginValidateAuthenticationProvider implements AuthenticationProvid
             throw new BadCredentialsException("密码或用户名错误!");
         }
 
-        return new UsernamePasswordAuthenticationToken(userEntity, rawPassword);
+        return new UsernamePasswordAuthenticationToken(userEntity, rawPassword,userEntity.getAuthorities());
 
     }
 

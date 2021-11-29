@@ -7,7 +7,9 @@ import org.springframework.security.web.authentication.rememberme.PersistentToke
 
 import javax.sql.DataSource;
 
-
+/**
+ * 记住我
+ */
 @Configuration
 public class RepositoryConfig {
     @Bean
