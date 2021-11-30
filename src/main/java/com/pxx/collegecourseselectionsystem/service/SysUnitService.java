@@ -15,4 +15,5 @@ public interface SysUnitService extends IService<SysUnitEntity>{
 
     int insertOrUpdateSelective(SysUnitEntity record);
 
+    List<SysUnitEntity> createTree(List<SysUnitEntity> unitEntityList,int pid);
 }

@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.pxx.collegecourseselectionsystem.annotation.Telephone;
 import com.pxx.collegecourseselectionsystem.config.UserGrantedAuthority;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -24,17 +26,20 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
+@ApiModel("用户类")
 @TableName(value = "sys_user")
 public class SysUserEntity implements UserDetails {
     /**
      * 用户id
      */
     @Positive
+    @ApiModelProperty(value = "用户id")
     @TableId(value = "user_id", type = IdType.AUTO)
     private Long userId;
     /**
      * 用户名称
      */
+    @ApiModelProperty(value = "用户姓名")
     @NotBlank(message = "用户名不能为空")
     @TableField(value = "`name`")
     private String name;
@@ -42,12 +47,14 @@ public class SysUserEntity implements UserDetails {
     /**
      * 工号或学号 账号
      */
+    @ApiModelProperty(value = "账号/用户名")
     @TableField(value = "`number`")
     private String number;
 
     /**
      * 年龄
      */
+    @ApiModelProperty(value = "年龄")
     @Range(min = 16, max = 120, message = "年龄最小不能小于 16 ,最大不能大于120")
     @TableField(value = "age")
     private Integer age;
@@ -56,6 +63,7 @@ public class SysUserEntity implements UserDetails {
     /**
      * 密码
      */
+    @ApiModelProperty(value = "密码")
     @TableField(value = "`password`")
     private String password;
 
@@ -64,6 +72,7 @@ public class SysUserEntity implements UserDetails {
      */
     @Deprecated
     @JsonIgnore
+    @ApiModelProperty(value = "账号类型")
     @TableField(value = "`type`")
     private Integer type;
 
@@ -71,35 +80,41 @@ public class SysUserEntity implements UserDetails {
      * 邮箱
      */
     @Email
+    @ApiModelProperty(value = "邮箱")
     @TableField(value = "email")
     private String email;
     /**
      * 电话号码
      */
     @Telephone
+    @ApiModelProperty(value = "电话号码")
     @TableField("tel")
     private String tel;
 
     /**
      * 家庭地址
      */
+    @ApiModelProperty(value = "家庭地址")
     @TableField(value = "address")
     private String address;
 
     /**
      * 头像地址
      */
+    @ApiModelProperty(value = "头像路径")
     @TableField(value = "avatar")
     private String avatar;
 
     /**
      * 用户状态 1 开 0 关
      */
+    @ApiModelProperty(value = "用户状态 1 开 0 关")
     @TableField(value = "`state`")
     private Integer state;
     /**
      * 账号是否可用
      */
+    @ApiModelProperty(value = "账号状态 1 开 0 关")
     @TableField(value = "enable")
     private Integer enable;
 
@@ -107,6 +122,7 @@ public class SysUserEntity implements UserDetails {
     /**
      * 乐观锁
      */
+    @ApiModelProperty(value = "乐观锁")
     @Version
     @TableField(value = "revision", fill = FieldFill.INSERT)
     private Integer revision;
@@ -114,40 +130,47 @@ public class SysUserEntity implements UserDetails {
     /**
      * 锁定时间
      */
+    @ApiModelProperty(value = "账号封禁的时间")
     @TableField(value = "lock_time")
     private Date lockTime;
 
     /**
      * 创建时间
      */
+    @ApiModelProperty(value = "创建时间")
     @TableField(value = "created_time", fill = FieldFill.INSERT)
     private Date createdTime;
 
     /**
      * 创建人
      */
+    @ApiModelProperty(value = "创建人id")
     @TableField(value = "created_by", fill = FieldFill.INSERT)
     private Integer createdBy;
 
     /**
      * 更新时间
      */
+    @ApiModelProperty(value = "更新时间")
     @TableField(value = "updated_time", fill = FieldFill.INSERT_UPDATE)
     private Date updatedTime;
     /**
      * 登录
      */
+    @ApiModelProperty(value = "登录时间")
     @TableField(value = "last_login_time", fill = FieldFill.INSERT_UPDATE)
     private Date lastLoginTime;
 
     /**
      * 更新人
      */
+    @ApiModelProperty(value = "更新人id")
     @TableField(value = "updated_by", fill = FieldFill.INSERT_UPDATE)
     private Integer updatedBy;
     /**
      * 用户部门
      */
+    @ApiModelProperty(value = "部门id")
     @TableField(value = "unit_id")
     private Integer unitId;
     /**
@@ -165,6 +188,7 @@ public class SysUserEntity implements UserDetails {
     /**
      * 部门名称
      */
+    @ApiModelProperty(value = "部门名称")
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @TableField(exist = false)
     private String unitName;

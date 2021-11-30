@@ -1,9 +1,11 @@
 package com.pxx.collegecourseselectionsystem.service;
 
-import java.util.List;
-
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.pxx.collegecourseselectionsystem.common.utils.PageUtils;
 import com.pxx.collegecourseselectionsystem.entity.SysUserEntity;
+
+import java.util.List;
 
 public interface SysUserService extends IService<SysUserEntity> {
 
@@ -24,6 +26,11 @@ public interface SysUserService extends IService<SysUserEntity> {
      */
     @Deprecated
     boolean insertOneUser(SysUserEntity sysUserEntity);
+    /**
+     * 查询所有用户
+     * @return
+     */
+    PageUtils findAllUser(IPage<SysUserEntity> iPage);
 }
 
 

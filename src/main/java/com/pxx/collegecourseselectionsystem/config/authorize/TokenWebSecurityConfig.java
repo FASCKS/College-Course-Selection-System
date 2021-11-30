@@ -44,6 +44,8 @@ public class TokenWebSecurityConfig extends WebSecurityConfigurerAdapter {
     private PersistentTokenRepository tokenRepository;
     @Autowired
     private TokenLogoutHandler tokenLogoutHandler;
+    @Autowired
+    private SimpleAccessDeniedHandler simpleAccessDeniedHandler;
     /**
      * 配置设置
      */
@@ -52,6 +54,7 @@ public class TokenWebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.exceptionHandling()
                 .authenticationEntryPoint(new UnauthorizedEntryPoint())
+                .accessDeniedHandler(simpleAccessDeniedHandler)
                 .and().cors()
                 .configurationSource(corsConfigurationSource())
                 .and().csrf().disable()
@@ -68,7 +71,9 @@ public class TokenWebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(AuthenticationManagerBuilder auth)  throws Exception
     {
-        auth.authenticationProvider(loginValidateAuthenticationProvider).userDetailsService( userDetailsService).passwordEncoder(defaultPasswordEncoder);
+        auth.authenticationProvider(loginValidateAuthenticationProvider)
+                .userDetailsService( userDetailsService)
+                .passwordEncoder(defaultPasswordEncoder);
     }
 
     /**
@@ -80,9 +85,11 @@ public class TokenWebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/swagger-resources/**",
                         "/webjars/**",
                         "/v2/**",
-                        "/swagger-ui.html/**"
+                        "/swagger-ui/**"
                 )
-                .antMatchers(HttpMethod.GET,"/login");
+                .antMatchers(HttpMethod.GET,
+                        "/login"
+                );
     }
 
     /**

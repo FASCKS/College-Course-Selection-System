@@ -1,6 +1,7 @@
 package com.pxx.collegecourseselectionsystem.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.pxx.collegecourseselectionsystem.entity.SysUserEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -25,5 +26,16 @@ public interface SysUserMapper extends BaseMapper<SysUserEntity> {
      */
     List<SysUserEntity> findUserAndRoleMap();
 
+    /**
+     * 通过用户名查询用户
+     * @param username
+     * @return
+     */
     SysUserEntity findOneByNumber(@Param("number") String username);
+
+    /**
+     * 查询所有用户
+     * @return
+     */
+   IPage<SysUserEntity> findAllUser(IPage<SysUserEntity> iPage);
 }

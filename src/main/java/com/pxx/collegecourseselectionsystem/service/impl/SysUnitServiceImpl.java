@@ -6,7 +6,10 @@ import com.pxx.collegecourseselectionsystem.mapper.SysUnitMapper;
 import com.pxx.collegecourseselectionsystem.service.SysUnitService;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
 @Service
 public class SysUnitServiceImpl extends ServiceImpl<SysUnitMapper, SysUnitEntity> implements SysUnitService{
 
@@ -25,5 +28,18 @@ public class SysUnitServiceImpl extends ServiceImpl<SysUnitMapper, SysUnitEntity
     @Override
     public int insertOrUpdateSelective(SysUnitEntity record) {
         return baseMapper.insertOrUpdateSelective(record);
+    }
+
+    @Override
+    public List<SysUnitEntity> createTree(List<SysUnitEntity> unitEntityList, int pid) {
+        List<SysUnitEntity> newTree = new ArrayList<>();
+        for (SysUnitEntity sysUnitEntity : unitEntityList) {
+            Integer menuId = sysUnitEntity.getPid();
+            if (Objects.equals(menuId, pid)) {
+                newTree.add(sysUnitEntity);
+                sysUnitEntity.setUnitEntityList(createTree(unitEntityList, sysUnitEntity.getUnitId()));
+            }
+        }
+        return newTree;
     }
 }

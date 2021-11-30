@@ -1,7 +1,9 @@
 package com.pxx.collegecourseselectionsystem.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.pxx.collegecourseselectionsystem.common.utils.PageUtils;
 import com.pxx.collegecourseselectionsystem.entity.SysMenuEntity;
 import com.pxx.collegecourseselectionsystem.entity.SysRoleEntity;
 import com.pxx.collegecourseselectionsystem.entity.SysUserEntity;
@@ -56,6 +58,20 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
     public boolean insertOneUser(SysUserEntity sysUserEntity) {
         return false;
     }
+
+    /**
+     * 查询所有用户
+     *
+     * @param iPage
+     * @return
+     */
+    @Override
+    public PageUtils findAllUser(IPage<SysUserEntity> iPage) {
+        IPage<SysUserEntity> allUser = sysUserMapper.findAllUser(iPage);
+        PageUtils pageUtils=new PageUtils(allUser);
+        return pageUtils;
+    }
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

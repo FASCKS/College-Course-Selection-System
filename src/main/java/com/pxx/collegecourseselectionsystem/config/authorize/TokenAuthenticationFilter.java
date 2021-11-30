@@ -8,6 +8,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.SignatureException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -44,7 +45,10 @@ public class TokenAuthenticationFilter extends BasicAuthenticationFilter {
             ResponseUtil.write(response,R.error(403,"access_token expired"));
         }catch (SignatureException e){
             ResponseUtil.write(response,R.error(403,"access_token not match locally computed signature."));
-        } catch (Exception e) {
+        }catch (AccessDeniedException e){
+            ResponseUtil.write(response,R.error(403,"Access is denied"));
+        }
+        catch (Exception e) {
             log.error(e.getMessage(), e);
             ResponseUtil.write(response, R.error());
         }
@@ -59,7 +63,7 @@ public class TokenAuthenticationFilter extends BasicAuthenticationFilter {
 
     private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
 // token 置于 header 里
-        String token = request.getHeader("token");
+        String token = request.getHeader("access_token");
         if (token != null && !"".equals(token.trim())) {
             String userName = tokenManager.getUserFromToken(token);
             Collection<UserGrantedAuthority> authorities  = (List<UserGrantedAuthority>) redisTemplate.opsForValue().get(userName);

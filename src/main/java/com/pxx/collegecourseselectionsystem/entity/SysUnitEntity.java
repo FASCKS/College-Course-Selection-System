@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.List;
+
 @Getter
 @Setter
 @ToString
@@ -36,6 +38,11 @@ public class SysUnitEntity {
      */
     @TableField(value = "code")
     private String code;
+    /**
+     * 子部门
+     */
+    @TableField(exist = false)
+    private List<SysUnitEntity> unitEntityList;
 
     public static final String COL_UNIT_ID = "unit_id";
 

@@ -12,7 +12,7 @@
         <result column="type" jdbcType="INTEGER" property="type"/>
         <result column="tel" jdbcType="VARCHAR" property="tel"/>
         <result column="enable" jdbcType="INTEGER" property="enable"/>
-
+        <result column="unit_name" jdbcType="VARCHAR" property="unitName"/>
         <result column="email" jdbcType="VARCHAR" property="email"/>
         <result column="address" jdbcType="VARCHAR" property="address"/>
         <result column="avatar" jdbcType="VARCHAR" property="avatar"/>
@@ -393,5 +393,24 @@
                 and `number` = #{number,jdbcType=VARCHAR}
             </if>
         </where>
+    </select>
+
+    <select id="findAllUser" resultMap="BaseResultMap">
+        select su.user_id,
+               su.name,
+               su.number,
+               su.age,
+               su.tel,
+               su.type,
+               su.email,
+               su.address,
+               su.avatar,
+               su.state,
+               su.revision,
+               su.lock_time,
+               su.enable,
+            s.name as unit_name
+        from sys_user su
+                     left join sys_unit s on su.unit_id = s.unit_id
     </select>
 </mapper>
