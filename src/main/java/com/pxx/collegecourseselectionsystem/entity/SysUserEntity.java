@@ -1,6 +1,5 @@
 package com.pxx.collegecourseselectionsystem.entity;
 
-import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -11,9 +10,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.validator.constraints.Range;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.validation.constraints.Email;
@@ -117,14 +114,12 @@ public class SysUserEntity implements UserDetails {
     /**
      * 锁定时间
      */
-    @DateTimeFormat(pattern = DatePattern.NORM_DATETIME_PATTERN)
     @TableField(value = "lock_time")
     private Date lockTime;
 
     /**
      * 创建时间
      */
-    @DateTimeFormat(pattern = DatePattern.NORM_DATETIME_PATTERN)
     @TableField(value = "created_time", fill = FieldFill.INSERT)
     private Date createdTime;
 
@@ -137,15 +132,24 @@ public class SysUserEntity implements UserDetails {
     /**
      * 更新时间
      */
-    @DateTimeFormat(pattern = DatePattern.NORM_DATETIME_PATTERN)
     @TableField(value = "updated_time", fill = FieldFill.INSERT_UPDATE)
     private Date updatedTime;
+    /**
+     * 登录
+     */
+    @TableField(value = "last_login_time", fill = FieldFill.INSERT_UPDATE)
+    private Date lastLoginTime;
 
     /**
      * 更新人
      */
     @TableField(value = "updated_by", fill = FieldFill.INSERT_UPDATE)
     private Integer updatedBy;
+    /**
+     * 用户部门
+     */
+    @TableField(value = "unit_id")
+    private Integer unitId;
     /**
      * 用户角色名称合集
      */
@@ -158,10 +162,19 @@ public class SysUserEntity implements UserDetails {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @TableField(exist = false)
     private List<SysMenuEntity> menuEntityList;
+    /**
+     * 部门名称
+     */
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @TableField(exist = false)
+    private String unitName;
+
+
 
     public static final String COL_ID = "id";
 
     public static final String COL_NAME = "name";
+    public static final String COL_UNIT_ID = "unit_id";
 
     public static final String COL_NUMBER = "number";
 
@@ -200,7 +213,7 @@ public class SysUserEntity implements UserDetails {
         //添加角色
         if (roleEntityList != null) {
             for (SysRoleEntity role : roleEntityList) {
-                if (role != null) {
+                if (role.getRoleName() != null) {
                     authorities.add(new UserGrantedAuthority("ROLE_" + role.getRoleName()));
                 }
             }
@@ -210,7 +223,7 @@ public class SysUserEntity implements UserDetails {
         //添加权限
         if (menuEntityList != null) {
             for (SysMenuEntity sysMenuEntity : menuEntityList) {
-                if (sysMenuEntity != null) {
+                if (sysMenuEntity.getPerms() != null) {
                     authorities.add(new UserGrantedAuthority(sysMenuEntity.getPerms()));
                 }
             }
@@ -222,7 +235,7 @@ public class SysUserEntity implements UserDetails {
 
     @Override
     public String getPassword() {
-        return password;
+        return this.password;
     }
 
     @Override

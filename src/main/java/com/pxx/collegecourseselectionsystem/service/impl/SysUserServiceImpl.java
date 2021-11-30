@@ -71,7 +71,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
             sysUserEntity.setRoleEntityList(roleEntityList);
             //菜单对应的权限
             QueryWrapper<SysMenuEntity> sysMenuEntityQueryWrapper=new QueryWrapper<>();
-            sysMenuEntityQueryWrapper.select("perms");
+            sysMenuEntityQueryWrapper.select("perms").isNotNull(SysMenuEntity.COL_PERMS);
             List<SysMenuEntity> sysMenuEntityList = sysMenuService.list(sysMenuEntityQueryWrapper);
             sysUserEntity.setMenuEntityList(sysMenuEntityList);
         }

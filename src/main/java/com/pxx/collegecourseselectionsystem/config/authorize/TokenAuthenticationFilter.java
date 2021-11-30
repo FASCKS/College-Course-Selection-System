@@ -4,6 +4,8 @@ import cn.hutool.core.util.StrUtil;
 import com.pxx.collegecourseselectionsystem.common.utils.R;
 import com.pxx.collegecourseselectionsystem.common.utils.ResponseUtil;
 import com.pxx.collegecourseselectionsystem.config.UserGrantedAuthority;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.SignatureException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -38,8 +40,12 @@ public class TokenAuthenticationFilter extends BasicAuthenticationFilter {
         UsernamePasswordAuthenticationToken authentication = null;
         try {
             authentication = getAuthentication(request);
+        }catch (ExpiredJwtException e){
+            ResponseUtil.write(response,R.error(403,"access_token expired"));
+        }catch (SignatureException e){
+            ResponseUtil.write(response,R.error(403,"access_token not match locally computed signature."));
         } catch (Exception e) {
-            log.error(e.getMessage(),e);
+            log.error(e.getMessage(), e);
             ResponseUtil.write(response, R.error());
         }
         if (authentication != null) {

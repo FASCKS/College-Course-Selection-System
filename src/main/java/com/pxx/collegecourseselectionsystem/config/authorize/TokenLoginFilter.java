@@ -5,10 +5,12 @@ import cn.hutool.extra.spring.SpringUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pxx.collegecourseselectionsystem.common.utils.IPUtils;
 import com.pxx.collegecourseselectionsystem.common.utils.R;
+import com.pxx.collegecourseselectionsystem.common.utils.RedisUtil;
 import com.pxx.collegecourseselectionsystem.common.utils.ResponseUtil;
 import com.pxx.collegecourseselectionsystem.entity.SysLogEntity;
 import com.pxx.collegecourseselectionsystem.entity.SysUserEntity;
 import com.pxx.collegecourseselectionsystem.service.impl.SysLogServiceImpl;
+import com.pxx.collegecourseselectionsystem.service.impl.SysUserServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -74,13 +76,24 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
     protected void successfulAuthentication(HttpServletRequest req,
                                             HttpServletResponse res, FilterChain chain,
                                             Authentication auth) throws IOException, ServletException {
+        RedisUtil cache = SpringUtil.getBean(RedisUtil.class);//redis工具
+
+
         SysUserEntity user = (SysUserEntity) auth.getPrincipal();
-        String token = tokenManager.createToken(user.getUsername());
+        String accessIdToken = tokenManager.createAccessIdToken(user.getUsername());
+//        String refreshToken = tokenManager.createRefreshIdToken(user.getUsername());
 
+
+
+        //缓存用户权限
         redisTemplate.opsForValue().set(user.getUsername(),user.getAuthorities());
+//        缓存当前登录用户 refreshToken 创建的起始时间，这个会在刷新accessToken方法中 判断是否要重新生成(刷新)refreshToken时用到
+//        cache.set("id_refreshTokenStartTime"+user.getUsername(),System.currentTimeMillis(),(int)tokenManager.refreshTokenExpirationTime);
 
+
+
+        //记录日志
         SysLogServiceImpl sysLogService = SpringUtil.getBean(SysLogServiceImpl.class);
-
         log.info("用户  {}  于  {}  登录成功",user.getUsername(), DateUtil.date());
         SysLogEntity sysLogEntity=new SysLogEntity();
         sysLogEntity.setUsername(user.getUsername());
@@ -89,8 +102,20 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
         sysLogEntity.setCreateDate(DateUtil.date());
         sysLogEntity.setIp(IPUtils.getIpAddr(req));
         sysLogService.save(sysLogEntity);
+        //记录登录时间
+        SysUserServiceImpl sysUserService = SpringUtil.getBean(SysUserServiceImpl.class);
+        user.setLastLoginTime(DateUtil.date());
+        sysUserService.updateById(user);
 
-        ResponseUtil.write(res, R.ok().put("token", token));
+
+
+
+
+
+        ResponseUtil.write(res, R.ok()
+                .put("access_token", accessIdToken)
+//                .put("refresh_token",refreshToken)
+        );
     }
 
     /**
