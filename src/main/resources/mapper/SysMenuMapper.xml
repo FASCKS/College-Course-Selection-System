@@ -225,6 +225,10 @@
                `name`,
                url,
                perms
-        from sys_menu where type =1
+        from sys_menu where type  in (
+                <foreach collection="type" item="item" index="index" separator=",">
+                    #{item}
+                </foreach>
+                )
     </select>
 </mapper>

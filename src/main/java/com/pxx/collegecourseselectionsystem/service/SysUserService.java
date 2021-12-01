@@ -31,6 +31,13 @@ public interface SysUserService extends IService<SysUserEntity> {
      * @return
      */
     PageUtils findAllUser(IPage<SysUserEntity> iPage);
+
+    /**
+     * 通过用户名查找用户
+     * @param username 用户名
+     * @return
+     */
+    SysUserEntity findOneByUserName(String username);
 }
 
 

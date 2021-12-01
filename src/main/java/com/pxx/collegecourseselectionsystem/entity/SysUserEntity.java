@@ -137,21 +137,22 @@ public class SysUserEntity implements UserDetails {
     /**
      * 创建时间
      */
-    @ApiModelProperty(value = "创建时间")
+    @ApiModelProperty(value = "创建时间",hidden = true)
     @TableField(value = "created_time", fill = FieldFill.INSERT)
     private Date createdTime;
 
     /**
      * 创建人
      */
-    @ApiModelProperty(value = "创建人id")
+    @ApiModelProperty(value = "创建人id",hidden = true)
     @TableField(value = "created_by", fill = FieldFill.INSERT)
     private Integer createdBy;
 
     /**
      * 更新时间
      */
-    @ApiModelProperty(value = "更新时间")
+
+    @ApiModelProperty(value = "更新时间",hidden = true)
     @TableField(value = "updated_time", fill = FieldFill.INSERT_UPDATE)
     private Date updatedTime;
     /**
@@ -164,7 +165,7 @@ public class SysUserEntity implements UserDetails {
     /**
      * 更新人
      */
-    @ApiModelProperty(value = "更新人id")
+    @ApiModelProperty(value = "更新人id",hidden = true)
     @TableField(value = "updated_by", fill = FieldFill.INSERT_UPDATE)
     private Integer updatedBy;
     /**
@@ -176,12 +177,14 @@ public class SysUserEntity implements UserDetails {
     /**
      * 用户角色名称合集
      */
+    @ApiModelProperty(value = "用户角色名称合集",hidden = true)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @TableField(exist = false)
     private List<SysRoleEntity> roleEntityList;
     /**
      * 用户权限集合
      */
+    @ApiModelProperty(value = "用户权限集合",hidden = true)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @TableField(exist = false)
     private List<SysMenuEntity> menuEntityList;
@@ -237,7 +240,7 @@ public class SysUserEntity implements UserDetails {
         //添加角色
         if (roleEntityList != null) {
             for (SysRoleEntity role : roleEntityList) {
-                if (role.getRoleName() != null) {
+                if (role.getRoleName() != null && !role.getRoleName().equals("")) {
                     authorities.add(new UserGrantedAuthority("ROLE_" + role.getRoleName()));
                 }
             }
@@ -247,7 +250,7 @@ public class SysUserEntity implements UserDetails {
         //添加权限
         if (menuEntityList != null) {
             for (SysMenuEntity sysMenuEntity : menuEntityList) {
-                if (sysMenuEntity.getPerms() != null) {
+                if (sysMenuEntity.getPerms() != null && !sysMenuEntity.getPerms().equals("")) {
                     authorities.add(new UserGrantedAuthority(sysMenuEntity.getPerms()));
                 }
             }

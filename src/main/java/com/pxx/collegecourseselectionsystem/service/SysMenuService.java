@@ -1,8 +1,10 @@
 package com.pxx.collegecourseselectionsystem.service;
 
-import java.util.List;
-import com.pxx.collegecourseselectionsystem.entity.SysMenuEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.pxx.collegecourseselectionsystem.entity.SysMenuEntity;
+
+import java.util.List;
+
 public interface SysMenuService extends IService<SysMenuEntity>{
 
 
@@ -19,4 +21,5 @@ public interface SysMenuService extends IService<SysMenuEntity>{
      * @return
      */
     List<SysMenuEntity> findMenuByType();
+    List<SysMenuEntity> createTree(List<SysMenuEntity> menuEntityList, int pid);
 }

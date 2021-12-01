@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.pxx.collegecourseselectionsystem.entity.SysUnitEntity;
 import com.pxx.collegecourseselectionsystem.mapper.SysUnitMapper;
 import com.pxx.collegecourseselectionsystem.service.SysUnitService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -12,7 +13,8 @@ import java.util.Objects;
 
 @Service
 public class SysUnitServiceImpl extends ServiceImpl<SysUnitMapper, SysUnitEntity> implements SysUnitService{
-
+@Autowired
+private SysUnitMapper sysUnitMapper;
     @Override
     public int updateBatch(List<SysUnitEntity> list) {
         return baseMapper.updateBatch(list);
@@ -41,5 +43,17 @@ public class SysUnitServiceImpl extends ServiceImpl<SysUnitMapper, SysUnitEntity
             }
         }
         return newTree;
+    }
+
+    /**
+     * 所有部门
+     *
+     * @return
+     */
+    @Override
+    public List<SysUnitEntity> findAllUnit() {
+        List<SysUnitEntity> list = this.list();
+        List<SysUnitEntity> tree = createTree(list, 0);
+        return tree;
     }
 }

@@ -7,9 +7,12 @@ import com.pxx.collegecourseselectionsystem.common.utils.R;
 import com.pxx.collegecourseselectionsystem.entity.SysUserEntity;
 import com.pxx.collegecourseselectionsystem.service.SysUserService;
 import io.swagger.annotations.Api;
-import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +22,7 @@ import javax.validation.constraints.Positive;
 @Validated
 @RequestMapping("/sys/users")
 @RestController
-@Api(tags = "用户管理")
+@Api(tags = "用户模块",value = "用户UserController")
 public class SysUserController {
     @Autowired
     private SysUserService sysUserService;
@@ -31,7 +34,7 @@ public class SysUserController {
      * @param pagination 分页对象
      * @return
      */
-    @Operation(summary ="查询所有用户")
+    @ApiOperation("分页用户列表")
     @PreAuthorize("hasAnyAuthority('sys:user:list')")
     @GetMapping("/list")
     public R list(Pagination pagination){
@@ -43,6 +46,7 @@ public class SysUserController {
      * @param sysUserEntity 用户实体
      * @return true 成功 false 失败
      */
+    @ApiOperation("用户新增")
     @PreAuthorize("hasAnyAuthority('sys:user:insert')")
     @PostMapping("/insert")
     public R insertUser(@RequestBody SysUserEntity sysUserEntity) {
@@ -57,9 +61,14 @@ public class SysUserController {
      * @param userId 用户id
      * @return
      */
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userId",value = "用户id",dataTypeClass = Long.class,required = true,paramType = "query")
+    })
+    @ApiOperation("用户删除")
     @PreAuthorize("hasAnyAuthority('sys:user:delete')")
     @PostMapping("/delete")
     public R delete(@RequestParam("userId") @Positive Long userId){
+
         boolean removeById = sysUserService.removeById(userId);
         return R.ok().put("data",removeById);
     }
@@ -69,6 +78,7 @@ public class SysUserController {
      * @param sysUserEntity 用户实体
      * @return
      */
+    @ApiOperation("用户编辑")
     @PreAuthorize("hasAnyAuthority('sys:user:update')")
     @PostMapping("/update")
     public R update(@RequestBody SysUserEntity sysUserEntity){
@@ -81,10 +91,27 @@ public class SysUserController {
      * @param userId 用户id
      * @return
      */
+    @ApiImplicitParam(name = "userId",value = "用户id",dataTypeClass = Long.class,required = true,paramType = "query")
+    @ApiOperation("用户详情")
     @PreAuthorize("hasAnyAuthority('sys:user:info')")
     @PostMapping("/info")
     public R info(@RequestParam("userId") @Positive Long userId){
         boolean removeById = sysUserService.removeById(userId);
         return R.ok().put("data",removeById);
     }
+
+    /**
+     * 获得当前登录用户信息
+     * @return
+     */
+    @ApiOperation("当前登录用户信息")
+    @GetMapping("/my")
+    public R my(){
+        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+       SysUserEntity sysUserEntity= sysUserService.findOneByUserName(username);
+        sysUserEntity.setPassword(null);
+        return R.ok().put("data",sysUserEntity);
+
+    }
+
 }

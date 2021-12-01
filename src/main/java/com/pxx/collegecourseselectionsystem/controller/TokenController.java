@@ -6,7 +6,6 @@ import com.pxx.collegecourseselectionsystem.config.authorize.TokenManager;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,7 +25,7 @@ public class TokenController {
      * @param refreshToken refreshToken
      * @return
      */
-    @PreAuthorize("hasAnyRole('ROLE_Administrator')")
+//    @PreAuthorize("hasAnyRole('ROLE_Administrator')")
     @GetMapping("/accessToken/refresh")
     public R accessTokenRefresh(@RequestParam("refreshToken") String refreshToken){
         //刷新accessToken:生成新的accessToken
@@ -36,7 +35,10 @@ public class TokenController {
         }catch (ExpiredJwtException e){
                 return R.error(1,"refresh_token expired");
         }
-
+        String refresh_token =(String) cache.get(account + "_refresh_token");
+        if (!refresh_token.equals(refresh_token)){
+            return R.error(1,"refresh_token expired");
+        }
         //创建新的accessToken
         String accessToken = authorizationService.createAccessIdToken(account);
 

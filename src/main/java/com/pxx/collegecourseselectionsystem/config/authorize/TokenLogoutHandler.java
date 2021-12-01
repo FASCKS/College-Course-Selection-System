@@ -34,12 +34,15 @@ public class TokenLogoutHandler implements LogoutHandler {
     @SneakyThrows
     @Override
     public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-        String token = request.getHeader("token");
+        String token = request.getHeader("access_token");
         if (token != null) {
             tokenManager.removeToken(token);
+
             //清空当前用户缓存中的权限数据
             String userName = tokenManager.getUserFromToken(token);
             redisTemplate.delete(userName);
+            redisTemplate.delete(userName+"_access_token");
+            redisTemplate.delete(userName+"_refresh_token");
         }
         SysUserEntity sysUserEntity =(SysUserEntity) authentication.getPrincipal();
         log.info("用户  {}  于  {}  注销成功",sysUserEntity.getUsername(), DateUtil.date());

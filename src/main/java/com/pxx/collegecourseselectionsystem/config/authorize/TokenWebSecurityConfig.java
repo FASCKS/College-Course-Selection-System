@@ -88,7 +88,8 @@ public class TokenWebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/swagger-ui/**"
                 )
                 .antMatchers(HttpMethod.GET,
-                        "/login"
+                        "/login",
+                        "/sys/token/accessToken/refresh"
                 );
     }
 

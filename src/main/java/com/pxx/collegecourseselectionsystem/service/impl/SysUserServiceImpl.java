@@ -72,6 +72,18 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
         return pageUtils;
     }
 
+    /**
+     * 通过用户名查找用户
+     *
+     * @param username 用户名
+     * @return
+     */
+    @Override
+    public SysUserEntity findOneByUserName(String username) {
+        SysUserEntity oneByNumber = sysUserMapper.findOneByNumber(username);
+        return oneByNumber;
+    }
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

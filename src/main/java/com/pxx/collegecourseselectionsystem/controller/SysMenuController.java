@@ -8,9 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("sys/menu")
@@ -26,25 +24,11 @@ public class SysMenuController {
     @GetMapping("/list")
     public R list() {
         List<SysMenuEntity> list = sysMenuService.findMenuByType();
-        List<SysMenuEntity> tree = createTree(list, 0);
-        return R.ok().put("data", tree);
-
+        return R.ok().put("data", list);
     }
-
     /**
-     * 改成树
+     * 当前用户权限
      */
-    private List<SysMenuEntity> createTree(List<SysMenuEntity> src, Integer pid) {
-        List<SysMenuEntity> newTree = new ArrayList<>();
-        for (SysMenuEntity sysMenuEntity : src) {
-            Integer menuId = sysMenuEntity.getParentId();
-            if (Objects.equals(menuId, pid)) {
-                newTree.add(sysMenuEntity);
-                sysMenuEntity.setMenuEntities(createTree(src, sysMenuEntity.getMenuId()));
-            }
-        }
-        return newTree;
-    }
 
 
 }
