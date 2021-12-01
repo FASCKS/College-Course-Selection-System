@@ -2,9 +2,10 @@ package com.pxx.collegecourseselectionsystem;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import springfox.documentation.oas.annotations.EnableOpenApi;
 
+@EnableOpenApi
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @SpringBootApplication
 public class CollegeCourseSelectionSystemApplication {

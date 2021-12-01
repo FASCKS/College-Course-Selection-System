@@ -42,13 +42,12 @@ public class TokenAuthenticationFilter extends BasicAuthenticationFilter {
         try {
             authentication = getAuthentication(request);
         }catch (ExpiredJwtException e){
-            ResponseUtil.write(response,R.error(403,"access_token expired"));
+            ResponseUtil.write(response,R.error(401,"access_token expired"));
         }catch (SignatureException e){
             ResponseUtil.write(response,R.error(403,"access_token not match locally computed signature."));
         }catch (AccessDeniedException e){
-            ResponseUtil.write(response,R.error(403,"Access is denied"));
-        }
-        catch (Exception e) {
+            ResponseUtil.write(response,R.error(401,"Access is denied"));
+        } catch (Exception e) {
             log.error(e.getMessage(), e);
             ResponseUtil.write(response, R.error());
         }
@@ -56,7 +55,7 @@ public class TokenAuthenticationFilter extends BasicAuthenticationFilter {
             // 将认证信息存入 Spring 安全上下文中
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } else {
-            ResponseUtil.write(response, R.error());
+            ResponseUtil.write(response,R.error(403,"Token invalidation"));
         }
         chain.doFilter(request, response);
     }

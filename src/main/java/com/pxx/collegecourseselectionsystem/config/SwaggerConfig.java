@@ -13,13 +13,13 @@ import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
  * http://localhost:8080/swagger-ui/index.html
  */
 @Configuration
-//@EnableSwagger2
 @EnableWebMvc
 @ConditionalOnExpression("${swagger.enable}") //开启访问接口文档的权限  **swagger.enable是在yml配置文件中配置为true**
 public class SwaggerConfig {
@@ -31,29 +31,17 @@ public class SwaggerConfig {
                 .apis(RequestHandlerSelectors.basePackage("com.pxx.collegecourseselectionsystem.controller"))
                 .paths(PathSelectors.any())
                 .build()
-                .securitySchemes(securitySchemes())
-//                .securityContexts(securityContexts())
+                .securitySchemes(Arrays.asList(new ApiKey("access_token", "access_token", "header")))
+                .securityContexts(Arrays.asList(SecurityContext.builder()
+                        .securityReferences(Arrays.asList(SecurityReference.builder()
+                                .reference("access_token")
+                                .scopes(new AuthorizationScope[]{new AuthorizationScope("global", "accessEverything")})
+                                .build()))
+                        .build()))
+
                 ;
     }
-    /**
-     * 认证的安全上下文
-     */
-    private List<SecurityScheme> securitySchemes() {
-        List<SecurityScheme> securitySchemes = new ArrayList<>();
-        securitySchemes.add(new ApiKey("access_token", "access_token", "header"));
-        return securitySchemes;
-    }
 
-    /**
-     * 授权信息全局应用
-     */
-    private List<SecurityContext> securityContexts() {
-        List<SecurityContext> securityContexts = new ArrayList<>();
-        securityContexts.add(SecurityContext.builder()
-                .securityReferences(defaultAuth())
-                .forPaths(PathSelectors.any()).build());
-        return securityContexts;
-    }
 
     private List<SecurityReference> defaultAuth() {
         AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
