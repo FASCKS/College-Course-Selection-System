@@ -61,10 +61,13 @@ public class TokenAuthenticationFilter extends BasicAuthenticationFilter {
     }
 
     private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
-// token 置于 header 里
         String token = request.getHeader("access_token");
         if (token != null && !"".equals(token.trim())) {
             String userName = tokenManager.getUserFromToken(token);
+            String user_access_token =(String) redisTemplate.opsForValue().get(userName + "_access_token");
+            if (user_access_token ==null || !user_access_token.equals(token)){
+                return null;
+            }
             Collection<UserGrantedAuthority> authorities  = (List<UserGrantedAuthority>) redisTemplate.opsForValue().get(userName);
             if (!StrUtil.isEmpty(userName)) {
                 return new UsernamePasswordAuthenticationToken(userName, token, authorities);

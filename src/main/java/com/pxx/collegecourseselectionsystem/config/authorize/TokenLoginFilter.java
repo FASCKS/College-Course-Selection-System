@@ -61,7 +61,6 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
         password = (password != null) ? password : "";
         username = username.trim();
 
-
         UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(username, password);
         setDetails(req, authRequest);
 
@@ -83,14 +82,14 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
         String accessIdToken = tokenManager.createAccessIdToken(user.getUsername());
 //        String refreshToken = tokenManager.createRefreshIdToken(user.getUsername());
 
-
-
         //缓存用户权限
         redisTemplate.opsForValue().set(user.getUsername(),user.getAuthorities());
+        //缓存用户当前的token
+        redisTemplate.opsForValue().set(user.getUsername()+"_access_token",accessIdToken);
+
+
 //        缓存当前登录用户 refreshToken 创建的起始时间，这个会在刷新accessToken方法中 判断是否要重新生成(刷新)refreshToken时用到
 //        cache.set("id_refreshTokenStartTime"+user.getUsername(),System.currentTimeMillis(),(int)tokenManager.refreshTokenExpirationTime);
-
-
 
         //记录日志
         SysLogServiceImpl sysLogService = SpringUtil.getBean(SysLogServiceImpl.class);
@@ -106,11 +105,6 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
         SysUserServiceImpl sysUserService = SpringUtil.getBean(SysUserServiceImpl.class);
         user.setLastLoginTime(DateUtil.date());
         sysUserService.updateById(user);
-
-
-
-
-
 
         ResponseUtil.write(res, R.ok()
                 .put("access_token", accessIdToken)
