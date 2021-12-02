@@ -52,7 +52,7 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
             username = map.get(SPRING_SECURITY_FORM_USERNAME_KEY);
             password = map.get(SPRING_SECURITY_FORM_PASSWORD_KEY);
         } catch (IOException e) {
-            log.error("json解析错误,传入的用户名 {} ，密码 {} ",SPRING_SECURITY_FORM_USERNAME_KEY,SPRING_SECURITY_FORM_PASSWORD_KEY);
+            log.error("json解析错误.");
             e.printStackTrace();
         }
 
