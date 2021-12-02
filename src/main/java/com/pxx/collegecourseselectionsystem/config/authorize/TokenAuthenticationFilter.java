@@ -1,14 +1,11 @@
 package com.pxx.collegecourseselectionsystem.config.authorize;
 
 import cn.hutool.core.util.StrUtil;
-import com.pxx.collegecourseselectionsystem.common.utils.R;
-import com.pxx.collegecourseselectionsystem.common.utils.ResponseUtil;
 import com.pxx.collegecourseselectionsystem.config.UserGrantedAuthority;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.SignatureException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -41,22 +38,12 @@ public class TokenAuthenticationFilter extends BasicAuthenticationFilter {
         UsernamePasswordAuthenticationToken authentication = null;
         try {
             authentication = getAuthentication(request);
-        }catch (ExpiredJwtException e){
-            ResponseUtil.write(response,R.error(401,"access_token expired"));
-        }catch (SignatureException e){
-            ResponseUtil.write(response,R.error(403,"access_token not match locally computed signature."));
-        }catch (AccessDeniedException e){
-            ResponseUtil.write(response,R.error(401,"Access is denied"));
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            ResponseUtil.write(response, R.error());
+        }catch (ExpiredJwtException | SignatureException e){
+            //token过期 或 token签名不匹配
+            logger.error(request.getRequestURI()+"----->"+e.getMessage());
         }
-        if (authentication != null) {
-            // 将认证信息存入 Spring 安全上下文中
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-        } else {
-            ResponseUtil.write(response,R.error(403,"Token invalidation"));
-        }
+        // 将认证信息存入 Spring 安全上下文中
+        SecurityContextHolder.getContext().setAuthentication(authentication);
         chain.doFilter(request, response);
     }
 

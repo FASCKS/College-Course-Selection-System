@@ -27,7 +27,7 @@ public class PathController {
     public @ResponseBody void test2() {
         System.out.println("2222222222222");
     }
-    @PreAuthorize("hasAnyAuthority('sys:imdex:111111')")
+    @PreAuthorize("hasAnyAuthority('sys:imdex:111111111111111111111')")
     @GetMapping("/test3")
     public @ResponseBody void test3() {
         System.out.println("3333333");

@@ -3,19 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <title>CodePen - Log In / Sign Up - pure css - #12</title>
-
+<base href="/static/">
 <link rel='stylesheet' href='css\bootstrap.min.css'>
 
 <!---图标库--->
 <link rel='stylesheet' href='https://unicons.iconscout.com/release/v2.1.9/css/unicons.css'>
 
 <link rel="stylesheet" href="css\style.css">
+<script src="js/vue.js"></script>
+<script src="js/axios.js"></script>
 
 </head>
 <body>
-
-
-	<div class="section">
+	<div class="section" id='index'>
 		<div class="container">
 			<div class="row full-height justify-content-center">
 				<div class="col-12 text-center align-self-center py-5">
@@ -30,16 +30,16 @@
 										<div class="section text-center">
 											<h4 class="mb-4 pb-3">登录</h4>
 											<div class="form-group">
-												<input type="email" name="logemail" class="form-style" placeholder="邮箱" id="logemail" autocomplete="off">
+												<input type="text" :value="username" class="form-style" placeholder="邮箱" id="logemail" autocomplete="off">
 												<i class="input-icon uil uil-at"></i>
 											</div>	
 											<div class="form-group mt-2">
-												<input type="password" name="logpass" class="form-style" placeholder="密码" id="logpass" autocomplete="off">
+												<input type="password" :value="password" class="form-style" placeholder="密码" id="logpass" autocomplete="off">
 												<i class="input-icon uil uil-lock-alt"></i>
 											</div>
-											<a href="#" class="btn mt-4">提交</a>
+											<div class="btn mt-4" @click="login()">提交</div>
                             				<p class="mb-0 mt-4 text-center"><a href="#0" class="link">忘记密码?</a></p>
-				      					</div>
+										</div>
 			      					</div>
 			      				</div>
 								<div class="card-back">
@@ -71,4 +71,25 @@
 	</div>
 
 </body>
+<script>
+	new Vue({
+		el: '#index',
+		data: {
+			username:"",
+			password:""
+		},
+		methods: {
+			login(){
+				axios.post('http://192.168.6.44:8080/login',{
+					username:this.username,
+					password:this.password
+				}).then(function(res){
+					console.log(res)
+				})
+			}
+		}
+	})
+</script>
 </html>
+
+

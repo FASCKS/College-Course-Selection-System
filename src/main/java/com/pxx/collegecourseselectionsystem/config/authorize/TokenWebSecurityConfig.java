@@ -12,7 +12,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -37,11 +36,6 @@ public class TokenWebSecurityConfig extends WebSecurityConfigurerAdapter {
     private RedisTemplate<String, Object> redisTemplate;
     @Autowired
     private LoginValidateAuthenticationProvider loginValidateAuthenticationProvider;
-
-    @Autowired
-    private SysUserServiceImpl sysUserService;
-    @Autowired
-    private PersistentTokenRepository tokenRepository;
     @Autowired
     private TokenLogoutHandler tokenLogoutHandler;
     @Autowired
@@ -85,14 +79,16 @@ public class TokenWebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/swagger-resources/**",
                         "/webjars/**",
                         "/v2/**",
-                        "/swagger-ui/**"
+                        "/swagger-ui/**",
+                        "/favicon.ico",
+                        "/static/**"
                 )
                 .antMatchers(HttpMethod.GET,
                         "/login",
                         "/sys/token/accessToken/refresh"
+
                 );
     }
-
     /**
      * 跨域支持
      * @return

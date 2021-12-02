@@ -9,11 +9,13 @@
 package com.pxx.collegecourseselectionsystem.common.exception;
 
 import cn.hutool.core.exceptions.ValidateException;
+import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.pxx.collegecourseselectionsystem.common.utils.R;
+import com.pxx.collegecourseselectionsystem.common.utils.SpringSecurityUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DuplicateKeyException;
@@ -224,8 +226,8 @@ public class RRExceptionHandler {
 
     @ExceptionHandler(AccessDeniedException.class)
     public R handleAccessDeniedException(AccessDeniedException e) {
-        logger.error(e.getMessage(), e);
-        return R.error(403,"没有权限，请联系管理员授权");
+        String username = SpringSecurityUtil.getUsername();
+        return R.error(403, StrUtil.format("用户 {} 没有权限, {} ,请联系管理员授权",username,e.getMessage()));
     }
 
     @ExceptionHandler(Exception.class)
