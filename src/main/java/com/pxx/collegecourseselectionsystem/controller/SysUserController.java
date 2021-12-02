@@ -93,7 +93,7 @@ public class SysUserController {
      */
     @ApiImplicitParam(name = "userId",value = "用户id",dataTypeClass = Long.class,required = true,paramType = "query")
     @ApiOperation("用户详情")
-    @PreAuthorize("hasAnyAuthority('sys:user:info')")
+    @PreAuthorize("hasAnyAuthority('sys:user:info','sys:user:update')")
     @PostMapping("/info")
     public R info(@RequestParam("userId") @Positive Long userId){
         boolean removeById = sysUserService.removeById(userId);

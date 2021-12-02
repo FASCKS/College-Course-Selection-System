@@ -13,8 +13,9 @@
         <result column="updated_by" jdbcType="VARCHAR" property="updatedBy"/>
         <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime"/>
         <collection property="sysMenuEntities" ofType="com.pxx.collegecourseselectionsystem.entity.SysMenuEntity">
-        <id column="menu_id" jdbcType="INTEGER" property="menuId"/>
+            <id column="menu_id" jdbcType="INTEGER" property="menuId"/>
             <result column="name" jdbcType="VARCHAR" property="name"/>
+            <result column="parent_id" jdbcType="INTEGER" property="parentId"/>
             <result column="perms" jdbcType="VARCHAR" property="perms"/>
         </collection>
     </resultMap>
@@ -217,7 +218,7 @@
     </select>
 
     <select id="findRoleInfoByRoleId" resultMap="BaseResultMap">
-        select sr.role_id, sr.role_name, sr.remark, sr.REVISION,sm.menu_id, sm.name, sm.perms
+        select sr.role_id, sr.role_name, sr.remark, sr.REVISION, sm.menu_id, sm.name, sm.perms,sm.parent_id
         from sys_role sr
                      left join sys_role_menu srm on sr.role_id = srm.role_id
                      left join sys_menu sm on srm.menu_id = sm.menu_id

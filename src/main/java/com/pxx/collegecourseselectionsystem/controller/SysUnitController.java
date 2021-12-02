@@ -33,7 +33,7 @@ public class SysUnitController {
     @GetMapping("/info")
     @Operation(summary = "部门详情")
     @ApiImplicitParam(name = "unitId",value = "用户id",dataTypeClass = Integer.class,required = true,paramType = "query")
-    @PreAuthorize("hasAnyAuthority('sys:unit:info')")
+    @PreAuthorize("hasAnyAuthority('sys:unit:info','sys:unit:update')")
     public R info(@RequestParam("unitId") Integer unitId) {
         SysUnitEntity sysUnitEntity = sysUnitService.getById(unitId);
         return R.ok().put("data", sysUnitEntity);

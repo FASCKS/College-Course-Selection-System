@@ -36,4 +36,8 @@ public class SysRoleController {
         SysRoleEntity sysRoleEntity= sysRoleService.findRoleInfoByRoleId(roleId);
         return R.ok().put("data",sysRoleEntity);
     }
+    /**
+     * 角色更新
+     */
+
 }
