@@ -1,5 +1,6 @@
 package com.pxx.collegecourseselectionsystem.controller;
 
+import cn.hutool.core.convert.Convert;
 import com.pxx.collegecourseselectionsystem.common.utils.R;
 import com.pxx.collegecourseselectionsystem.common.utils.RedisUtil;
 import com.pxx.collegecourseselectionsystem.config.authorize.TokenManager;
@@ -35,7 +36,7 @@ public class TokenController {
         }catch (ExpiredJwtException e){
                 return R.error(1,"refresh_token expired");
         }
-        String refresh_token =(String) cache.get(account + "_refresh_token");
+        String refresh_token =(String) cache.hget(account,"refresh_token");
         if (!refresh_token.equals(refresh_token)){
             return R.error(1,"refresh_token expired");
         }
@@ -44,12 +45,14 @@ public class TokenController {
 
         //下面判断是否刷新 refreshToken，如果refreshToken 快过期了 需要重新生成一个替换掉
         long minTimeOfRefreshToken = 2*authorizationService.accessTokenExpirationTime;//refreshToken 有效时长是应该为accessToken有效时长的2倍
-        Long refreshTokenStartTime = cache.get("id_refreshTokenStartTime"+account);//refreshToken创建的起始时间点
+        //refreshToken创建的起始时间点
+        Long refreshTokenStartTime = Convert.toLong(cache.hget(account,"start_time"));
         //(refreshToken上次创建的时间点 + refreshToken的有效时长 - 当前时间点) 表示refreshToken还剩余的有效时长，如果小于2倍accessToken时长 ，则刷新 refreshToken
         if(refreshTokenStartTime == null || (refreshTokenStartTime + authorizationService.refreshTokenExpirationTime*1000) - System.currentTimeMillis() <= minTimeOfRefreshToken*1000){
             //刷新refreshToken
             refreshToken = authorizationService.createRefreshIdToken(account);
-            cache.set("id_refreshTokenStartTime"+account,System.currentTimeMillis(),(int)authorizationService.refreshTokenExpirationTime);
+//            cache.set("id_refreshTokenStartTime"+account,System.currentTimeMillis(),(int)authorizationService.refreshTokenExpirationTime);
+            cache.hset(accessToken,"start_time",System.currentTimeMillis());
         }
 
         //response

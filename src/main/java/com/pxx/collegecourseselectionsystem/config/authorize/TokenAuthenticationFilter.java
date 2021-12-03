@@ -51,7 +51,8 @@ public class TokenAuthenticationFilter extends BasicAuthenticationFilter {
         String token = request.getHeader("access_token");
         if (token != null && !"".equals(token.trim())) {
             String userName = tokenManager.getUserFromToken(token);
-            String user_access_token =(String) redisTemplate.opsForValue().get(userName + "_access_token");
+            String user_access_token =(String) redisTemplate.opsForHash().get(userName, "access_token");
+
             if (user_access_token ==null || !user_access_token.equals(token)){
                 return null;
             }

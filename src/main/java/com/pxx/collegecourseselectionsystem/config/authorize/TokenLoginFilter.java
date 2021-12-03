@@ -14,6 +14,7 @@ import com.pxx.collegecourseselectionsystem.service.impl.SysUserServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -25,6 +26,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 @Slf4j
 public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
@@ -77,21 +79,25 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
                                             Authentication auth) throws IOException, ServletException {
         RedisUtil cache = SpringUtil.getBean(RedisUtil.class);//redis工具
 
+        Map<String,Object> redisMap=new HashMap<>(4);
+
+
 
         SysUserEntity user = (SysUserEntity) auth.getPrincipal();
         String accessIdToken = tokenManager.createAccessIdToken(user.getUsername());
         String refreshToken = tokenManager.createRefreshIdToken(user.getUsername());
 
         //缓存用户权限
-        redisTemplate.opsForValue().set(user.getUsername(),user.getAuthorities());
+        redisMap.put("authorities",user.getAuthorities());
         //缓存用户当前的 access_token
-        redisTemplate.opsForValue().set(user.getUsername()+"_access_token",accessIdToken);
+        redisMap.put("access_token",accessIdToken);
         //缓存用户当前的 access_token
-        redisTemplate.opsForValue().set(user.getUsername()+"_refresh_token",refreshToken);
+        redisMap.put("refresh_token",refreshToken);
 
 //        缓存当前登录用户 refreshToken 创建的起始时间，这个会在刷新accessToken方法中 判断是否要重新生成(刷新)refreshToken时用到
-        cache.set("id_refreshTokenStartTime"+user.getUsername(),System.currentTimeMillis(),(int)tokenManager.refreshTokenExpirationTime);
-
+//        cache.set("id_refreshTokenStartTime"+user.getUsername(),System.currentTimeMillis(),(int)tokenManager.refreshTokenExpirationTime);
+        redisMap.put("start_time",System.currentTimeMillis());
+        cache.hmset(user.getUsername(),redisMap);
         //记录日志
         SysLogServiceImpl sysLogService = SpringUtil.getBean(SysLogServiceImpl.class);
         log.info("用户  {}  于  {}  登录成功",user.getUsername(), DateUtil.date());
@@ -131,7 +137,15 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
         sysLogService.save(sysLogEntity);
 
         log.info("ip为 {} 的用户在 {} 登录失败",IPUtils.getIpAddr(request),DateUtil.date());
-        ResponseUtil.write(response, R.error(403,e.getMessage()));
+        if (e instanceof BadCredentialsException){
+            ResponseUtil.write(response, R.error(403,"密码或用户名错误!"));
+        }else {
+            ResponseUtil.write(response, R.error(403,e.getMessage()));
+        }
+
+
+
+
 
     }
 
