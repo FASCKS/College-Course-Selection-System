@@ -4,7 +4,6 @@ import cn.hutool.core.date.DateUtil;
 import com.pxx.collegecourseselectionsystem.common.utils.R;
 import com.pxx.collegecourseselectionsystem.common.utils.ResponseUtil;
 import com.pxx.collegecourseselectionsystem.entity.SysLogEntity;
-import com.pxx.collegecourseselectionsystem.entity.SysUserEntity;
 import com.pxx.collegecourseselectionsystem.service.SysLogService;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -37,17 +36,17 @@ public class TokenLogoutHandler implements LogoutHandler {
         String token = request.getHeader("access_token");
         if (token != null) {
             tokenManager.removeToken(token);
-
             //清空当前用户缓存中的权限数据
-            String userName = tokenManager.getUserFromToken(token);
-            redisTemplate.delete(userName);
+            String username = tokenManager.getUserFromToken(token);
+            redisTemplate.delete(username);
+            log.info("用户  {}  于  {}  注销成功",username, DateUtil.date());
+            SysLogEntity sysLogEntity=new SysLogEntity();
+            sysLogEntity.setUsername(username);
+            sysLogEntity.setOperation("退出平台");
+            sysLogEntity.setTime(System.currentTimeMillis());
+            sysLogService.save(sysLogEntity);
         }
-        SysUserEntity sysUserEntity =(SysUserEntity) authentication.getPrincipal();
-        log.info("用户  {}  于  {}  注销成功",sysUserEntity.getUsername(), DateUtil.date());
-        SysLogEntity sysLogEntity=new SysLogEntity();
-        sysLogEntity.setUsername(sysUserEntity.getUsername());
-        sysLogEntity.setOperation("退出平台");
-        sysLogService.save(sysLogEntity);
+
 
         ResponseUtil.write(response, R.ok());
 

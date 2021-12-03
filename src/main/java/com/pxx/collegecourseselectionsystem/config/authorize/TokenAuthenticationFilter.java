@@ -56,7 +56,7 @@ public class TokenAuthenticationFilter extends BasicAuthenticationFilter {
             if (user_access_token ==null || !user_access_token.equals(token)){
                 return null;
             }
-            Collection<UserGrantedAuthority> authorities  = (List<UserGrantedAuthority>) redisTemplate.opsForValue().get(userName);
+            Collection<UserGrantedAuthority> authorities  =(List<UserGrantedAuthority>) redisTemplate.opsForHash().get(userName,"authorities");
             if (!StrUtil.isEmpty(userName)) {
                 return new UsernamePasswordAuthenticationToken(userName, token, authorities);
             }

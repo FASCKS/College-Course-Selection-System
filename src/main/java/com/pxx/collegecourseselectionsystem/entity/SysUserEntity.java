@@ -175,6 +175,12 @@ public class SysUserEntity implements UserDetails {
     @TableField(value = "unit_id")
     private Integer unitId;
     /**
+     * 性别 0 女 1 男
+     */
+    @ApiModelProperty(value = "性别")
+    @TableField("sex")
+    private Integer sex;
+    /**
      * 用户角色名称合集
      */
     @ApiModelProperty(value = "用户角色名称合集",hidden = true)
@@ -206,6 +212,7 @@ public class SysUserEntity implements UserDetails {
     public static final String COL_NUMBER = "number";
 
     public static final String COL_AGE = "age";
+    public static final String COL_SEX = "sex";
 
     public static final String COL_SALT = "salt";
 
