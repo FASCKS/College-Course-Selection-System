@@ -1,5 +1,6 @@
 package com.pxx.collegecourseselectionsystem.common.utils;
 
+import com.pxx.collegecourseselectionsystem.entity.SysUserEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 public class SpringSecurityUtil {
@@ -8,7 +9,15 @@ public class SpringSecurityUtil {
      * @return
      */
     public static String getUsername(){
-        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return username;
+       SysUserEntity sysUserEntity=(SysUserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return sysUserEntity.getUsername();
+    }
+    public static SysUserEntity getEntity(){
+        SysUserEntity sysUserEntity=(SysUserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return sysUserEntity;
+    }
+    public static Long getUserId(){
+        SysUserEntity sysUserEntity=(SysUserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return sysUserEntity.getUserId();
     }
 }

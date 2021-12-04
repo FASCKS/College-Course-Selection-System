@@ -93,6 +93,10 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
         redisMap.put("access_token",accessIdToken);
         //缓存用户当前的 access_token
         redisMap.put("refresh_token",refreshToken);
+        //缓存当前实体
+        user.setRoleEntityList(null);
+        user.setMenuEntityList(null);
+        redisMap.put("entity",user);
 
 //        缓存当前登录用户 refreshToken 创建的起始时间，这个会在刷新accessToken方法中 判断是否要重新生成(刷新)refreshToken时用到
 //        cache.set("id_refreshTokenStartTime"+user.getUsername(),System.currentTimeMillis(),(int)tokenManager.refreshTokenExpirationTime);

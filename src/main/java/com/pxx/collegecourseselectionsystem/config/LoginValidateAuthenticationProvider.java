@@ -50,6 +50,7 @@ public class LoginValidateAuthenticationProvider implements AuthenticationProvid
             throw new BadCredentialsException("密码或用户名错误!");
         }
 
+
         return new UsernamePasswordAuthenticationToken(userEntity, rawPassword,userEntity.getAuthorities());
 
     }

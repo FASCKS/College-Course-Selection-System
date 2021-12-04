@@ -3,6 +3,7 @@ package com.pxx.collegecourseselectionsystem.config.authorize;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.StrUtil;
 import com.pxx.collegecourseselectionsystem.config.UserGrantedAuthority;
+import com.pxx.collegecourseselectionsystem.entity.SysUserEntity;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.SignatureException;
 import lombok.extern.slf4j.Slf4j;
@@ -59,7 +60,8 @@ public class TokenAuthenticationFilter extends BasicAuthenticationFilter {
 
             Collection<UserGrantedAuthority> authorities  = Convert.toList(UserGrantedAuthority.class,redisTemplate.opsForHash().get(userName,"authorities"));
             if (!StrUtil.isEmpty(userName)) {
-                return new UsernamePasswordAuthenticationToken(userName, token, authorities);
+                SysUserEntity sysUserEntity =(SysUserEntity) redisTemplate.opsForHash().get(userName, "entity");
+                return new UsernamePasswordAuthenticationToken(sysUserEntity, token, authorities);
             }
             return null;
         }
