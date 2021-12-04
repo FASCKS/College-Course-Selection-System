@@ -1,5 +1,6 @@
 package com.pxx.collegecourseselectionsystem.config.authorize;
 
+import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.StrUtil;
 import com.pxx.collegecourseselectionsystem.config.UserGrantedAuthority;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -17,7 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.List;
 
 /**
  * 授权
@@ -56,7 +56,8 @@ public class TokenAuthenticationFilter extends BasicAuthenticationFilter {
             if (user_access_token ==null || !user_access_token.equals(token)){
                 return null;
             }
-            Collection<UserGrantedAuthority> authorities  =(List<UserGrantedAuthority>) redisTemplate.opsForHash().get(userName,"authorities");
+
+            Collection<UserGrantedAuthority> authorities  = Convert.toList(UserGrantedAuthority.class,redisTemplate.opsForHash().get(userName,"authorities"));
             if (!StrUtil.isEmpty(userName)) {
                 return new UsernamePasswordAuthenticationToken(userName, token, authorities);
             }

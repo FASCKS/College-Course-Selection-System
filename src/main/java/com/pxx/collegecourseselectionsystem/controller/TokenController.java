@@ -30,29 +30,33 @@ public class TokenController {
     @GetMapping("/accessToken/refresh")
     public R accessTokenRefresh(@RequestParam("refreshToken") String refreshToken){
         //刷新accessToken:生成新的accessToken
-        String account ="";
+        String username ="";
         try {
-            account= authorizationService.getUserFromToken(refreshToken);
+            username= authorizationService.getUserFromToken(refreshToken);
         }catch (ExpiredJwtException e){
                 return R.error(1,"refresh_token expired");
         }
-        String refresh_token =(String) cache.hget(account,"refresh_token");
-        if (!refresh_token.equals(refresh_token)){
+        String refresh_token =(String) cache.hget(username,"refresh_token");
+
+        if (!refresh_token.equals(refreshToken)){
             return R.error(1,"refresh_token expired");
         }
         //创建新的accessToken
-        String accessToken = authorizationService.createAccessIdToken(account);
+        String accessToken = authorizationService.createAccessIdToken(username);
+      cache.hset(username, "access_token", accessToken);
+
 
         //下面判断是否刷新 refreshToken，如果refreshToken 快过期了 需要重新生成一个替换掉
         long minTimeOfRefreshToken = 2*authorizationService.accessTokenExpirationTime;//refreshToken 有效时长是应该为accessToken有效时长的2倍
         //refreshToken创建的起始时间点
-        Long refreshTokenStartTime = Convert.toLong(cache.hget(account,"start_time"));
+        Long refreshTokenStartTime = Convert.toLong(cache.hget(username,"start_time"));
         //(refreshToken上次创建的时间点 + refreshToken的有效时长 - 当前时间点) 表示refreshToken还剩余的有效时长，如果小于2倍accessToken时长 ，则刷新 refreshToken
         if(refreshTokenStartTime == null || (refreshTokenStartTime + authorizationService.refreshTokenExpirationTime*1000) - System.currentTimeMillis() <= minTimeOfRefreshToken*1000){
             //刷新refreshToken
-            refreshToken = authorizationService.createRefreshIdToken(account);
+            refreshToken = authorizationService.createRefreshIdToken(username);
+            cache.hset(username,"refresh_token",refresh_token);
 //            cache.set("id_refreshTokenStartTime"+account,System.currentTimeMillis(),(int)authorizationService.refreshTokenExpirationTime);
-            cache.hset(accessToken,"start_time",System.currentTimeMillis());
+            cache.hset(username,"start_time",System.currentTimeMillis());
         }
 
         //response

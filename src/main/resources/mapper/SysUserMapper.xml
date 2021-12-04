@@ -11,6 +11,7 @@
         <result column="password" jdbcType="VARCHAR" property="password"/>
         <result column="type" jdbcType="INTEGER" property="type"/>
         <result column="tel" jdbcType="VARCHAR" property="tel"/>
+        <result column="sex" jdbcType="VARCHAR" property="sex"/>
         <result column="enable" jdbcType="INTEGER" property="enable"/>
         <result column="unit_name" jdbcType="VARCHAR" property="unitName"/>
         <result column="email" jdbcType="VARCHAR" property="email"/>
@@ -415,6 +416,7 @@
                su.number,
                su.age,
                su.tel,
+                su.sex,
                su.type,
                su.email,
                su.address,

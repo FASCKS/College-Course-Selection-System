@@ -38,6 +38,10 @@ public interface SysUserService extends IService<SysUserEntity> {
      * @return
      */
     SysUserEntity findOneByUserName(String username);
+    /**
+     * 更新密码
+     */
+    boolean updateOneUserPassword(Long userId,String password,String newPassword);
 }
 
 

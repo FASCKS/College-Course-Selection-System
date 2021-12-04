@@ -5,9 +5,10 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 
 @Getter
-public enum SexEnum {
+public enum SexEnum  {
     MAN(1,"男"),
-    Female(0,"女");
+    Female(0,"女"),
+    Secrecy(2,"保密");
 
     SexEnum(int code, String descp) {
         this.code = code;
@@ -15,7 +16,7 @@ public enum SexEnum {
     }
 
     @EnumValue
-    @JsonValue
     private final int code;
+    @JsonValue
     private final String descp;
 }

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.pxx.collegecourseselectionsystem.annotation.Telephone;
 import com.pxx.collegecourseselectionsystem.config.UserGrantedAuthority;
+import com.pxx.collegecourseselectionsystem.entity.enums.SexEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -131,7 +132,7 @@ public class SysUserEntity implements UserDetails {
      * 锁定时间
      */
     @ApiModelProperty(value = "账号封禁的时间")
-    @TableField(value = "lock_time")
+    @TableField(value = "lock_time",fill = FieldFill.INSERT)
     private Date lockTime;
 
     /**
@@ -175,11 +176,11 @@ public class SysUserEntity implements UserDetails {
     @TableField(value = "unit_id")
     private Integer unitId;
     /**
-     * 性别 0 女 1 男
+     * 性别 0 女 1 男 2 保密
      */
     @ApiModelProperty(value = "性别")
     @TableField("sex")
-    private Integer sex;
+    private SexEnum sex;
     /**
      * 用户角色名称合集
      */

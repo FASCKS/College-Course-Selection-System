@@ -17,12 +17,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
 @Validated
 @RequestMapping("/sys/users")
 @RestController
-@Api(tags = "用户模块",value = "用户UserController")
+@Api(tags = "用户模块", value = "用户UserController")
 public class SysUserController {
     @Autowired
     private SysUserService sysUserService;
@@ -31,18 +33,21 @@ public class SysUserController {
 
     /**
      * 查询所有用户
+     *
      * @param pagination 分页对象
      * @return
      */
     @ApiOperation("分页用户列表")
     @PreAuthorize("hasAnyAuthority('sys:user:list')")
     @GetMapping("/list")
-    public R list(Pagination pagination){
+    public R list(Pagination pagination) {
         PageUtils allUser = sysUserService.findAllUser(new Page<>(pagination.getPage(), pagination.getLimit()));
-        return R.ok().put("data",allUser);
+        return R.ok().put("data", allUser);
     }
+
     /**
      * 添加用户
+     *
      * @param sysUserEntity 用户实体
      * @return true 成功 false 失败
      */
@@ -58,60 +63,104 @@ public class SysUserController {
 
     /**
      * 删除用户
+     *
      * @param userId 用户id
      * @return
      */
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "userId",value = "用户id",dataTypeClass = Long.class,required = true,paramType = "query")
+            @ApiImplicitParam(name = "userId", value = "用户id", dataTypeClass = Long.class, required = true, paramType = "query")
     })
     @ApiOperation("用户删除")
     @PreAuthorize("hasAnyAuthority('sys:user:delete')")
     @PostMapping("/delete")
-    public R delete(@RequestParam("userId") @Positive Long userId){
+    public R delete(@RequestParam("userId") @Positive Long userId) {
 
         boolean removeById = sysUserService.removeById(userId);
-        return R.ok().put("data",removeById);
+        return R.ok().put("data", removeById);
     }
 
     /**
      * 更新用户
+     *
      * @param sysUserEntity 用户实体
      * @return
      */
     @ApiOperation("用户编辑")
     @PreAuthorize("hasAnyAuthority('sys:user:update')")
     @PostMapping("/update")
-    public R update(@RequestBody SysUserEntity sysUserEntity){
+    public R update(@RequestBody SysUserEntity sysUserEntity) {
+        sysUserEntity.setPassword(null);
         boolean updateById = sysUserService.updateById(sysUserEntity);
-        return R.ok().put("data",updateById);
+        return R.ok().put("data", updateById);
     }
 
     /**
      * 用户详情
+     *
      * @param userId 用户id
      * @return
      */
-    @ApiImplicitParam(name = "userId",value = "用户id",dataTypeClass = Long.class,required = true,paramType = "query")
+    @ApiImplicitParam(name = "userId", value = "用户id", dataTypeClass = Long.class, required = true, paramType = "query")
     @ApiOperation("用户详情")
     @PreAuthorize("hasAnyAuthority('sys:user:info','sys:user:update')")
     @PostMapping("/info")
-    public R info(@RequestParam("userId") @Positive Long userId){
+    public R info(@RequestParam("userId") @Positive Long userId) {
         boolean removeById = sysUserService.removeById(userId);
-        return R.ok().put("data",removeById);
+        return R.ok().put("data", removeById);
     }
 
     /**
      * 获得当前登录用户信息
+     *
      * @return
      */
     @ApiOperation("当前登录用户信息")
     @GetMapping("/my")
-    public R my(){
+    public R my() {
         String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-       SysUserEntity sysUserEntity= sysUserService.findOneByUserName(username);
+        SysUserEntity sysUserEntity = sysUserService.findOneByUserName(username);
         sysUserEntity.setPassword(null);
-        return R.ok().put("data",sysUserEntity);
-
+        return R.ok().put("data", sysUserEntity);
     }
 
+    /**
+     * 更新密码
+     * 可更新选定用户
+     */
+    @PreAuthorize("hasAnyAuthority('sys:user:password')")
+    @ApiOperation("更新密码")
+    @PostMapping("/password")
+    public R password(
+          @Positive @NotNull(message = "用户名不能为空") @RequestParam("userId") Long userId,
+          @NotEmpty(message = "旧密码不能为空") @RequestParam("password") String password,
+          @NotEmpty(message = "新密码不能为空")  @RequestParam("newPassword") String newPassword) {
+
+        boolean updateById = sysUserService.updateOneUserPassword(userId, password, newPassword);
+
+        return R.ok().put("data",updateById);
+    }
+    /**
+     * 只能更新自己密码
+     */
+    @PreAuthorize("hasAnyAuthority('sys:my:password')")
+    @ApiOperation("更新密码")
+    @PostMapping("/my/password")
+    public R password(
+            @NotEmpty(message = "旧密码不能为空") @RequestParam("password") String password,
+            @NotEmpty(message = "新密码不能为空")  @RequestParam("newPassword") String newPassword) {
+
+        boolean updateById = sysUserService.updateOneUserPassword(null, password, newPassword);
+
+        return R.ok().put("data",updateById);
+    }
+    /**
+     * 管理员重置密码
+     */
+    @PreAuthorize("hasAnyAuthority('sys:user:reset')")
+    @ApiOperation("重置密码为固定值")
+    @PostMapping("/reset/password")
+    public R resetPassword(@Positive @NotNull(message = "用户名不能为空") @RequestParam("userId") Long userId){
+        boolean resetPassword = sysUserService.updateOneUserPassword(userId, null, "123456");
+        return R.ok().put("data",resetPassword);
+    }
 }
