@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.web.firewall.RequestRejectedException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -60,7 +61,13 @@ public class RRExceptionHandler {
         return r;
     }
 
-
+    /**
+     * 非法字符 %2e
+     */
+    @ExceptionHandler(RequestRejectedException.class)
+    public R handRequestRejectedException(RequestRejectedException e) {
+        return R.error("非法字符");
+    }
 
     /**
      * 验证异常
@@ -233,13 +240,13 @@ public class RRExceptionHandler {
     public R handleAccessDeniedException(AccessDeniedException e) {
         String username = SpringSecurityUtil.getUsername();
 
-        SysLogEntity sysLogEntity=new SysLogEntity();
+        SysLogEntity sysLogEntity = new SysLogEntity();
         sysLogEntity.setUsername(username);
         sysLogEntity.setTime(0L);
         sysLogEntity.setOperation("非法访问");
         sysLogService.save(sysLogEntity);
 
-        return R.error(403, StrUtil.format("用户 {} 没有权限, {} ,请联系管理员授权",username,e.getMessage()));
+        return R.error(403, StrUtil.format("用户 {} 没有权限, {} ,请联系管理员授权", username, e.getMessage()));
     }
 
     @ExceptionHandler(Exception.class)
