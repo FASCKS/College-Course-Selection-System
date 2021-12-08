@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.pxx.collegecourseselectionsystem.entity.enums.CourseEnum;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -29,7 +30,7 @@ public class CourseEntity {
      * 课程类型 1公共课 2选修课 3必修课 4人文素质
      */
     @TableField(value = "`type`")
-    private Integer type;
+    private CourseEnum type;
 
     /**
      * 学分
