@@ -22,9 +22,9 @@ public class SysUnitController {
     private SysUnitService sysUnitService;
 
 
-    @GetMapping("/list")
-    @Operation(summary = "分页部门列表")
-    @PreAuthorize("hasAnyAuthority('sys:unit:list')")
+    @GetMapping("/tree/list")
+    @Operation(summary = "树形部门列表")
+    @PreAuthorize("hasAnyAuthority('sys:unit:tree:list')")
     public R list() {
         List<SysUnitEntity> sysUnitEntities = sysUnitService.findAllUnit();
         return R.ok().put("data", sysUnitEntities);
