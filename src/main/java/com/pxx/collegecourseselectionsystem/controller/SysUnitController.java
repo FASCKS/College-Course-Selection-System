@@ -40,7 +40,7 @@ public class SysUnitController {
     }
 
     @PostMapping("/insert")
-    @Operation(summary = "部门详情")
+    @Operation(summary = "部门添加")
     @PreAuthorize("hasAnyAuthority('sys:unit:insert')")
     public R insert(@RequestBody SysUnitEntity sysUnitEntity) {
         boolean save = sysUnitService.save(sysUnitEntity);

@@ -1,8 +1,9 @@
 package com.pxx.collegecourseselectionsystem.service;
 
-import java.util.List;
-import com.pxx.collegecourseselectionsystem.entity.SysRoleEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.pxx.collegecourseselectionsystem.entity.SysRoleEntity;
+
+import java.util.List;
 public interface SysRoleService extends IService<SysRoleEntity>{
 
 
@@ -20,4 +21,18 @@ public interface SysRoleService extends IService<SysRoleEntity>{
      * @return
      */
     SysRoleEntity findRoleInfoByRoleId(Long roleId);
+
+    /**
+     * 更新角色 和 角色权限
+     * @param sysRoleEntity
+     * @return
+     */
+    boolean updateOneRole(SysRoleEntity sysRoleEntity);
+
+    /**
+     * 新增角色 和 角色权限
+     * @param sysRoleEntity
+     * @return
+     */
+    boolean insertOneRole(SysRoleEntity sysRoleEntity);
 }
