@@ -242,6 +242,7 @@ public class SysUserEntity implements UserDetails {
     public static final String COL_UPDATED_TIME = "updated_time";
 
     public static final String COL_UPDATED_BY = "updated_by";
+    @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<UserGrantedAuthority> authorities = new ArrayList<>();
@@ -267,12 +268,12 @@ public class SysUserEntity implements UserDetails {
 
         return authorities;
     }
-
+    @JsonIgnore
     @Override
     public String getPassword() {
         return this.password;
     }
-
+    @JsonIgnore
     @Override
     public String getUsername() {
         return this.getNumber();
@@ -283,6 +284,7 @@ public class SysUserEntity implements UserDetails {
      *
      * @return
      */
+    @JsonIgnore
     @Override
     public boolean isAccountNonExpired() {
         return this.lockTime.compareTo(DateUtil.date()) < 0;
@@ -293,6 +295,7 @@ public class SysUserEntity implements UserDetails {
      *
      * @return
      */
+    @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
         return state > 0;
@@ -303,6 +306,7 @@ public class SysUserEntity implements UserDetails {
      *
      * @return
      */
+    @JsonIgnore
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
@@ -313,6 +317,7 @@ public class SysUserEntity implements UserDetails {
      *
      * @return
      */
+    @JsonIgnore
     @Override
     public boolean isEnabled() {
         return this.enable > 0;

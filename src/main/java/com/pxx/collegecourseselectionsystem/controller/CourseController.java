@@ -8,10 +8,14 @@ import com.pxx.collegecourseselectionsystem.entity.CourseEntity;
 import com.pxx.collegecourseselectionsystem.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * 课程类型
+ */
 @RestController
 @RequestMapping("/user/course")
 public class CourseController {
@@ -19,14 +23,14 @@ public class CourseController {
     private CourseService courseService;
 
     @PreAuthorize("hasAnyAuthority('user:course:list')")
-    @RequestMapping("/list")
+    @GetMapping("/list")
     public R list(Pagination pagination) {
         Page<CourseEntity> courseEntityPage = courseService.page(new Page<>(pagination.getPage(), pagination.getLimit()));
         PageUtils pageUtils = new PageUtils(courseEntityPage);
         return R.ok().put("data", pageUtils);
     }
     @PreAuthorize("hasAnyAuthority('user:course:info')")
-    @RequestMapping("/info")
+    @GetMapping("/info")
     public R info(@RequestParam("courseId") Integer courseId){
         CourseEntity courseEntity = courseService.getById(courseId);
         return R.ok().put("data",courseEntity);
