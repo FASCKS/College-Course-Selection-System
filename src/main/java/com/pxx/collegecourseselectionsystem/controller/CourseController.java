@@ -30,30 +30,34 @@ public class CourseController {
         PageUtils pageUtils = new PageUtils(courseEntityPage);
         return R.ok().put("data", pageUtils);
     }
+
     @PreAuthorize("hasAnyAuthority('user:course:info')")
     @GetMapping("/info")
-    public R info( @Positive @RequestParam("courseId") Integer courseId){
+    public R info(@Positive @RequestParam("courseId") Integer courseId) {
         CourseEntity courseEntity = courseService.getById(courseId);
-        return R.ok().put("data",courseEntity);
+        return R.ok().put("data", courseEntity);
     }
+
     @PreAuthorize("hasAnyAuthority('user:course:update')")
     @PostMapping("/update")
-    public R update(@RequestBody @Validated CourseEntity courseEntity){
+    public R update(@RequestBody @Validated CourseEntity courseEntity) {
         boolean updateById = courseService.updateById(courseEntity);
-        return R.ok().put("data",updateById);
+        return R.ok().put("data", updateById);
     }
+
     @PreAuthorize("hasAnyAuthority('user:course:insert')")
     @PostMapping("/insert")
-    public R insert(@RequestBody CourseEntity courseEntity){
+    public R insert(@RequestBody CourseEntity courseEntity) {
         courseEntity.setId(null);
         boolean save = courseService.save(courseEntity);
-        return R.ok().put("data",save);
+        return R.ok().put("data", save);
     }
+
     @PreAuthorize("hasAnyAuthority('user:course:delete')")
     @PostMapping("/delete")
-    public R delete(@RequestParam("courseId") Integer courseId){
+    public R delete(@RequestParam("courseId") Integer courseId) {
         boolean removeById = courseService.removeById(courseId);
-        return R.ok().put("data",removeById);
+        return R.ok().put("data", removeById);
     }
 
 

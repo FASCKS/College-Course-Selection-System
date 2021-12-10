@@ -69,7 +69,7 @@ public class SysUserEntity implements UserDetails {
     private String password;
 
     /**
-     * 账号类型 1 学生 2 老师 3其它人员
+     * 账号类型 1 学生 2 老师 3主任 3其它人员
      */
     @Deprecated
     @JsonIgnore
@@ -109,13 +109,13 @@ public class SysUserEntity implements UserDetails {
     /**
      * 用户状态 1 开 0 关
      */
-    @ApiModelProperty(value = "用户状态 1 开 0 关")
+    @ApiModelProperty(value = "用户状态 1 开 0 关",example = "1")
     @TableField(value = "`state`")
     private Integer state;
     /**
      * 账号是否可用
      */
-    @ApiModelProperty(value = "账号状态 1 开 0 关")
+    @ApiModelProperty(value = "账号状态 1 开 0 关",example = "1")
     @TableField(value = "enable")
     private Integer enable;
 

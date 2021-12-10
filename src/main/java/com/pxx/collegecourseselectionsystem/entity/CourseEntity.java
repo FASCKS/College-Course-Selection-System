@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.pxx.collegecourseselectionsystem.entity.enums.CourseEnum;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -15,6 +17,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @ToString
+@ApiModel(value = "课程表")
 @TableName(value = "course")
 public class CourseEntity {
     /**
@@ -27,6 +30,7 @@ public class CourseEntity {
      * 课程名称
      */
     @NotEmpty
+    @ApiModelProperty(value = "课程名称")
     @TableField(value = "`name`")
     private String name;
 
@@ -41,6 +45,7 @@ public class CourseEntity {
      * 学分
      */
     @NotNull
+    @ApiModelProperty(value = "学分",example = "2")
     @TableField(value = "credit")
     private Integer credit;
 
