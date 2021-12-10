@@ -9,6 +9,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 @Getter
 @Setter
 @ToString
@@ -23,18 +26,21 @@ public class CourseEntity {
     /**
      * 课程名称
      */
+    @NotEmpty
     @TableField(value = "`name`")
     private String name;
 
     /**
      * 课程类型 1公共课 2选修课 3必修课 4人文素质
      */
+    @NotNull
     @TableField(value = "`type`")
     private CourseEnum type;
 
     /**
      * 学分
      */
+    @NotNull
     @TableField(value = "credit")
     private Integer credit;
 

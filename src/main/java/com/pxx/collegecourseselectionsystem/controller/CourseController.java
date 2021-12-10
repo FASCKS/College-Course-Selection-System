@@ -8,14 +8,15 @@ import com.pxx.collegecourseselectionsystem.entity.CourseEntity;
 import com.pxx.collegecourseselectionsystem.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.constraints.Positive;
 
 /**
  * 课程类型
  */
+@Validated
 @RestController
 @RequestMapping("/user/course")
 public class CourseController {
@@ -31,9 +32,28 @@ public class CourseController {
     }
     @PreAuthorize("hasAnyAuthority('user:course:info')")
     @GetMapping("/info")
-    public R info(@RequestParam("courseId") Integer courseId){
+    public R info( @Positive @RequestParam("courseId") Integer courseId){
         CourseEntity courseEntity = courseService.getById(courseId);
         return R.ok().put("data",courseEntity);
+    }
+    @PreAuthorize("hasAnyAuthority('user:course:update')")
+    @PostMapping("/update")
+    public R update(@RequestBody @Validated CourseEntity courseEntity){
+        boolean updateById = courseService.updateById(courseEntity);
+        return R.ok().put("data",updateById);
+    }
+    @PreAuthorize("hasAnyAuthority('user:course:insert')")
+    @PostMapping("/insert")
+    public R insert(@RequestBody CourseEntity courseEntity){
+        courseEntity.setId(null);
+        boolean save = courseService.save(courseEntity);
+        return R.ok().put("data",save);
+    }
+    @PreAuthorize("hasAnyAuthority('user:course:delete')")
+    @PostMapping("/delete")
+    public R delete(@RequestParam("courseId") Integer courseId){
+        boolean removeById = courseService.removeById(courseId);
+        return R.ok().put("data",removeById);
     }
 
 

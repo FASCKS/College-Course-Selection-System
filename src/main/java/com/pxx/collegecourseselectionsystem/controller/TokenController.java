@@ -55,7 +55,6 @@ public class TokenController {
             //刷新refreshToken
             refreshToken = authorizationService.createRefreshIdToken(username);
             cache.hset(username,"refresh_token",refresh_token);
-//            cache.set("id_refreshTokenStartTime"+account,System.currentTimeMillis(),(int)authorizationService.refreshTokenExpirationTime);
             cache.hset(username,"start_time",System.currentTimeMillis());
         }
 
