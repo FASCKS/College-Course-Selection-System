@@ -23,6 +23,7 @@ public class SimpleAccessDeniedHandler implements AccessDeniedHandler {
      * @throws IOException      in the event of an IOException
      * @throws ServletException in the event of a ServletException
      */
+    @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
         log.error("自定义异常处理");
         ResponseUtil.write(response, R.error(403,"Access is denied"));

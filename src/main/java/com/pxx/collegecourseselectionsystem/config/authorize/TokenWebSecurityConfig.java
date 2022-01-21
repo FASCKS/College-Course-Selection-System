@@ -1,5 +1,6 @@
 package com.pxx.collegecourseselectionsystem.config.authorize;
 
+import com.pxx.collegecourseselectionsystem.common.xss.XssFilter;
 import com.pxx.collegecourseselectionsystem.config.LoginValidateAuthenticationProvider;
 import com.pxx.collegecourseselectionsystem.service.impl.SysUserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -58,7 +60,10 @@ public class TokenWebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .addLogoutHandler(tokenLogoutHandler)
                 .and()
                 .addFilter(new TokenLoginFilter(authenticationManager(), tokenManager, redisTemplate))
-                .addFilter(new TokenAuthenticationFilter(authenticationManager(), tokenManager, redisTemplate)).httpBasic();
+                .addFilter(new TokenAuthenticationFilter(authenticationManager(), tokenManager, redisTemplate))
+                .addFilterAfter(new XssFilter(), CsrfFilter.class)
+                .httpBasic();
+
 
 
     }
