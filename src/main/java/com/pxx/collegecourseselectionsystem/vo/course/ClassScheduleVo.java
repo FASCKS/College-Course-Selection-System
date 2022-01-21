@@ -19,19 +19,20 @@ public class ClassScheduleVo {
 @Getter
 @Setter
 @ToString
-class ClassScheduleTime {
+class ClassBook {
     private Integer courseId;
-    private Integer week;
-    private Integer upTime;
+    private String courseName;
+    private List<ClassScheduleTime> classScheduleTimes;
 }
 
 @Getter
 @Setter
 @ToString
-class ClassBook {
+class ClassScheduleTime {
     private Integer courseId;
     private String teacherName;
-    private String courseName;
-
-    private List<ClassScheduleTime> classScheduleTimes;
+    private Integer week;
+    private Integer upTime;
 }
+
+

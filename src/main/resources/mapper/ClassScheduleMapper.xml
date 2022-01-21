@@ -22,12 +22,11 @@
         <result column="user_name" property="userName"/>
         <collection property="classBook" ofType="com.pxx.collegecourseselectionsystem.vo.course.ClassBook">
             <result column="course_id" property="courseId"/>
-            <result column="teacher_name" property="teacherName"/>
             <result column="course_name" property="courseName"/>
-
             <collection property="classScheduleTimes"
                         ofType="com.pxx.collegecourseselectionsystem.vo.course.ClassScheduleTime">
                 <result column="course_id" property="courseId"/>
+                <result column="teacher_name" property="teacherName"/>
                 <result column="week" property="week"/>
                 <result column="up_time" property="upTime"/>
             </collection>
