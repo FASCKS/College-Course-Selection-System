@@ -45,7 +45,6 @@ public class TokenAuthenticationFilter extends BasicAuthenticationFilter {
             authentication = getAuthentication(request);
         }catch (ExpiredJwtException | SignatureException e){
             //token过期 或 token签名不匹配
-            logger.error(request.getRequestURI()+"----->"+e.getMessage());
             R errorMsg = R.error(Global.ACCESS_TOKEN_EXPIRED_CODE, "Full authentication is required to access this resource");
             ResponseUtil.writeJson(response,errorMsg);
         }
