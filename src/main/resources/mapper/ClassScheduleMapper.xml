@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pxx.collegecourseselectionsystem.mapper.ClassScheduleMapper">
+    <resultMap id="BaseResultMap" type="com.pxx.collegecourseselectionsystem.entity.ClassSchedule">
+        <!--@mbg.generated-->
+        <!--@Table class_schedule-->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="course_id" jdbcType="INTEGER" property="courseId"/>
+        <result column="up_time" jdbcType="INTEGER" property="upTime"/>
+        <result column="week" jdbcType="INTEGER" property="week"/>
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="unit" jdbcType="INTEGER" property="unit"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id, course_id, up_time, week, user_id, unit, create_time
+    </sql>
+    <resultMap id="findMyClassScheduleVo" type="com.pxx.collegecourseselectionsystem.vo.course.ClassScheduleVo">
+        <id column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="class_name" property="className"/>
+        <result column="user_name" property="userName"/>
+        <collection property="classBook" ofType="com.pxx.collegecourseselectionsystem.vo.course.ClassBook">
+            <result column="course_id" property="courseId"/>
+            <result column="teacher_name" property="teacherName"/>
+            <result column="course_name" property="courseName"/>
+
+            <collection property="classScheduleTimes"
+                        ofType="com.pxx.collegecourseselectionsystem.vo.course.ClassScheduleTime">
+                <result column="course_id" property="courseId"/>
+                <result column="week" property="week"/>
+                <result column="up_time" property="upTime"/>
+            </collection>
+        </collection>
+    </resultMap>
+    <select id="findMyClassSchedule" resultMap="findMyClassScheduleVo">
+        SELECT sun.unit_id AS unit_id,
+               sun.NAME    AS class_name,
+               su.user_id  AS user_id,
+               su.NAME     AS user_name,
+               co.id       AS course_id,
+               co.`name`   AS course_name,
+               st.NAME     AS teacher_name,
+               cs.`week`,
+               cs.up_time
+        FROM class_schedule cs
+                     LEFT JOIN sys_user su ON su.user_id = cs.user_id
+                     LEFT JOIN course co ON co.id = cs.course_id
+                     LEFT JOIN sys_unit sun ON sun.unit_id = cs.unit
+                     LEFT JOIN sys_user st ON st.user_id = cs.teacher
+        <where>
+            <if test="userId != null">
+                and su.user_id = #{userId,jdbcType=BIGINT}
+            </if>
+        </where>
+    </select>
+</mapper>
