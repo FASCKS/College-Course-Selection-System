@@ -2,6 +2,7 @@ package com.pxx.collegecourseselectionsystem.entity;
 
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -254,22 +255,20 @@ public class SysUserEntity implements UserDetails {
         //添加角色
         if (roleEntityList != null) {
             for (SysRoleEntity role : roleEntityList) {
-                if (role.getRoleName() != null && !role.getRoleName().equals("")) {
+                if (StrUtil.isNotBlank(role.getRoleName())) {
                     authorities.add(new UserGrantedAuthority("ROLE_" + role.getRoleName()));
                 }
             }
         }
-//        this.roleEntityList=null;
 
         //添加权限
         if (menuEntityList != null) {
             for (SysMenuEntity sysMenuEntity : menuEntityList) {
-                if (sysMenuEntity.getPerms() != null && !sysMenuEntity.getPerms().equals("")) {
+                if (StrUtil.isNotBlank(sysMenuEntity.getPerms())) {
                     authorities.add(new UserGrantedAuthority(sysMenuEntity.getPerms()));
                 }
             }
         }
-//        this.menuEntityList=null;
 
         return authorities;
     }
@@ -277,7 +276,6 @@ public class SysUserEntity implements UserDetails {
     public String getPassword() {
         return this.password;
     }
-    @JsonIgnore
     @Override
     public String getUsername() {
         return this.getNumber();
