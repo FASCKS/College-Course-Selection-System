@@ -1,7 +1,9 @@
 package com.pxx.collegecourseselectionsystem.entity;
 
+import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.pxx.collegecourseselectionsystem.annotation.Telephone;
@@ -131,6 +133,7 @@ public class SysUserEntity implements UserDetails {
     /**
      * 锁定时间
      */
+    @JsonFormat (pattern = DatePattern.NORM_DATETIME_PATTERN)
     @ApiModelProperty(value = "账号封禁的时间")
     @TableField(value = "lock_time",fill = FieldFill.INSERT)
     private Date lockTime;
@@ -138,6 +141,7 @@ public class SysUserEntity implements UserDetails {
     /**
      * 创建时间
      */
+    @JsonFormat (pattern = DatePattern.NORM_DATETIME_PATTERN)
     @ApiModelProperty(value = "创建时间",hidden = true)
     @TableField(value = "created_time", fill = FieldFill.INSERT)
     private Date createdTime;
@@ -152,13 +156,14 @@ public class SysUserEntity implements UserDetails {
     /**
      * 更新时间
      */
-
+    @JsonFormat (pattern = DatePattern.NORM_DATETIME_PATTERN)
     @ApiModelProperty(value = "更新时间",hidden = true)
     @TableField(value = "updated_time", fill = FieldFill.INSERT_UPDATE)
     private Date updatedTime;
     /**
      * 登录
      */
+    @JsonFormat (pattern = DatePattern.NORM_DATETIME_PATTERN)
     @ApiModelProperty(value = "登录时间")
     @TableField(value = "last_login_time", fill = FieldFill.INSERT_UPDATE)
     private Date lastLoginTime;
@@ -268,7 +273,6 @@ public class SysUserEntity implements UserDetails {
 
         return authorities;
     }
-    @JsonIgnore
     @Override
     public String getPassword() {
         return this.password;

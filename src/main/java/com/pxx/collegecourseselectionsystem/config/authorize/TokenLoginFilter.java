@@ -23,6 +23,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -50,7 +51,8 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
         String username = null;
         String password = null;
         try {
-            Map<String,String> map =new ObjectMapper().readValue(req.getInputStream(), Map.class);
+            ServletInputStream inputStream = req.getInputStream();
+            Map<String,String> map =new ObjectMapper().readValue(inputStream, Map.class);
             username = map.get(SPRING_SECURITY_FORM_USERNAME_KEY);
             password = map.get(SPRING_SECURITY_FORM_PASSWORD_KEY);
         } catch (IOException e) {
@@ -146,10 +148,6 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
         }else {
             ResponseUtil.write(response, R.error(403,e.getMessage()));
         }
-
-
-
-
 
     }
 

@@ -150,7 +150,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
         SysUserEntity sysUserEntity = sysUserMapper.findOneByNumber(username);
 
         if (sysUserEntity == null) {
-            throw new UsernameNotFoundException("密码或用户名错误!");
+            throw new UsernameNotFoundException("密码或用户名错误.");
         }
         //如果是超级管理员
         if (sysUserEntity.getNumber().equals("admin")) {

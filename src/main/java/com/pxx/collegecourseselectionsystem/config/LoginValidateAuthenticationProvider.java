@@ -47,7 +47,7 @@ public class LoginValidateAuthenticationProvider implements AuthenticationProvid
 
         //验证密码
         if (!bCryptPasswordEncoder.matches(rawPassword,userEntity.getPassword())){
-            throw new BadCredentialsException("密码或用户名错误!");
+            throw new BadCredentialsException("密码或用户名错误.");
         }
 
 
