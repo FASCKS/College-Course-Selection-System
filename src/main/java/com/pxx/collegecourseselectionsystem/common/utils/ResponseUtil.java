@@ -17,4 +17,9 @@ public class ResponseUtil {
         out.flush();
         out.close();
     }
+    public static void writeJson(HttpServletResponse response, Object o) throws IOException {
+        response.setContentType("application/json;charset=utf-8");
+        PrintWriter out=response.getWriter();
+        out.println(JSONUtil.toJsonStr(o));
+    }
 }

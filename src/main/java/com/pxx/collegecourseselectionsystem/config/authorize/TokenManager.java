@@ -33,7 +33,7 @@ public class TokenManager {
 
 
         String token = Jwts.builder().setSubject(username)
-                .setExpiration(DateUtil.offsetDay(DateUtil.date(), Convert.toInt(expirationTime)))
+                .setExpiration(DateUtil.offsetMillisecond(DateUtil.date(), Convert.toInt(expirationTime)))
                 .signWith(SignatureAlgorithm.HS256, tokenSignKey)
                 .setIssuedAt(DateUtil.date())
                 .compressWith(CompressionCodecs.GZIP).compact();

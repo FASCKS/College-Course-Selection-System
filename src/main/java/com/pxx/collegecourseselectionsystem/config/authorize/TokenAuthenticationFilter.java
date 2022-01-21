@@ -2,8 +2,11 @@ package com.pxx.collegecourseselectionsystem.config.authorize;
 
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.StrUtil;
+import com.pxx.collegecourseselectionsystem.common.utils.R;
+import com.pxx.collegecourseselectionsystem.common.utils.ResponseUtil;
 import com.pxx.collegecourseselectionsystem.config.UserGrantedAuthority;
 import com.pxx.collegecourseselectionsystem.entity.SysUserEntity;
+import com.pxx.collegecourseselectionsystem.util.Global;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.SignatureException;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +27,7 @@ import java.util.Collection;
  * 授权
  */
 @Slf4j
+
 public class TokenAuthenticationFilter extends BasicAuthenticationFilter {
     private TokenManager tokenManager;
     private RedisTemplate<String, Object> redisTemplate;
@@ -42,6 +46,8 @@ public class TokenAuthenticationFilter extends BasicAuthenticationFilter {
         }catch (ExpiredJwtException | SignatureException e){
             //token过期 或 token签名不匹配
             logger.error(request.getRequestURI()+"----->"+e.getMessage());
+            R errorMsg = R.error(Global.ACCESS_TOKEN_EXPIRED_CODE, "Full authentication is required to access this resource");
+            ResponseUtil.writeJson(response,errorMsg);
         }
         // 将认证信息存入 Spring 安全上下文中
         SecurityContextHolder.getContext().setAuthentication(authentication);
