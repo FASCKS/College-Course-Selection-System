@@ -4,6 +4,7 @@ import com.pxx.collegecourseselectionsystem.common.utils.IPUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +16,7 @@ import java.io.IOException;
  * 处理认证异常
  */
 @Slf4j
+@Component
 public class UnauthorizedEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {

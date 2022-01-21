@@ -23,8 +23,8 @@ public class ClassScheduleController {
 
     @ApiOperation("学生自己的课程表")
     @PreAuthorize("hasAnyAuthority('course:classSchedule:user:course')")
-    @GetMapping("/unit/course")
-    public R byUnitList() {
+    @GetMapping("/user/course")
+    public R courseByUserId() {
         ClassScheduleVo classScheduleVo = classScheduleService.findMyClassSchedule();
         return R.ok().put("data", classScheduleVo);
     }

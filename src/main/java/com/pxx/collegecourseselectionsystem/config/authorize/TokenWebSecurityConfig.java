@@ -42,6 +42,8 @@ public class TokenWebSecurityConfig extends WebSecurityConfigurerAdapter {
     private TokenLogoutHandler tokenLogoutHandler;
     @Autowired
     private SimpleAccessDeniedHandler simpleAccessDeniedHandler;
+    @Autowired
+   private   UnauthorizedEntryPoint unauthorizedEntryPoint;
     /**
      * 配置设置
      */
@@ -49,7 +51,7 @@ public class TokenWebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.exceptionHandling()
-                .authenticationEntryPoint(new UnauthorizedEntryPoint())
+                .authenticationEntryPoint(unauthorizedEntryPoint)
                 .accessDeniedHandler(simpleAccessDeniedHandler)
                 .and().cors()
                 .configurationSource(corsConfigurationSource())
