@@ -276,6 +276,7 @@ public class SysUserEntity implements UserDetails {
     public String getPassword() {
         return this.password;
     }
+    @JsonIgnore
     @Override
     public String getUsername() {
         return this.getNumber();
