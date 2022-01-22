@@ -28,6 +28,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.firewall.RequestRejectedException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -199,7 +200,14 @@ public class RRExceptionHandler {
 
         return R.error(sb.toString());
     }
-
+    /**
+     * Http 请求方法不支持异常
+     */
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public R handHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e){
+        logger.error(e.getMessage(), e);
+        return R.error(e.getMessage());
+    }
     /**
      * @param e 参数绑定异常
      * @return
