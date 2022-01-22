@@ -94,11 +94,10 @@ public class GlobalController {
         String captchaUuid = captchaVo.getCaptchaUuid();
         boolean saveCaptcha = cache.set(captchaUuid, code, 300);
         if (saveCaptcha) {
-            httpServletResponse.setContentType("application/x-jpg;charset=utf-8");
-            httpServletResponse.setHeader("Content-Disposition", "attachment;filename=captcha.jpg");
+            httpServletResponse.setContentType("image/png;charset=utf-8");
+            httpServletResponse.setHeader("Content-Disposition", "attachment;filename=captcha.png");
             ServletOutputStream outputStream = httpServletResponse.getOutputStream();
             outputStream.write(circleCaptcha.getImageBytes());
-
         }
     }
 }

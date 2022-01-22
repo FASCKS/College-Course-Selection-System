@@ -4,6 +4,7 @@ import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import cn.hutool.json.JSONUtil;
+import com.pxx.collegecourseselectionsystem.common.exception.MyAuthenticationException;
 import com.pxx.collegecourseselectionsystem.common.exception.TokenSignatureOrExpiredJwtException;
 import com.pxx.collegecourseselectionsystem.common.utils.R;
 import com.pxx.collegecourseselectionsystem.common.utils.ResponseUtil;
@@ -56,6 +57,7 @@ public class TokenAuthenticationFilter extends BasicAuthenticationFilter {
         }catch (MalformedJwtException malformedJwtException){
             //token 格式错误异常
             R refreshToken_wrong_format = R.error(Global.ACCESS_TOKEN_WRONG_FORMAT_CODE, "access_token wrong format");
+            unauthorizedEntryPoint.commence(request,response,new MyAuthenticationException(JSONUtil.toJsonStr(refreshToken_wrong_format)));
             ResponseUtil.writeJson(response,refreshToken_wrong_format);
         }
 
