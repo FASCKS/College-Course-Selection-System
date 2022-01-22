@@ -62,11 +62,12 @@ public class ImageCodeValidateFilter extends OncePerRequestFilter {
              */
             if (redisCaptchaCode == null || !redisCaptchaCode.equals(captchaCode)) {
                 unauthorizedEntryPoint.commence(request, response, new ImageCodeAuthenticationException("验证码错误！"));
-                if (redisCaptchaCode != null) {
-                    redisUtil.del(captchaUuid);
-                }
                 return;
             }
+            /*
+             * 不管是否验证成功。都要删除验证码
+             */
+            redisUtil.del(captchaUuid);
         }
         filterChain.doFilter(requestWrapper, response);
     }
