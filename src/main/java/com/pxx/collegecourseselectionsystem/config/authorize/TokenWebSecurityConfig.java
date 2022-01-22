@@ -57,13 +57,14 @@ public class TokenWebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .configurationSource(corsConfigurationSource())
                 .and().csrf().disable()
                 .authorizeRequests()
+                .antMatchers(HttpMethod.GET,
+                        "/sys/global/captcha")
+
+                .permitAll()
                 .antMatchers(HttpMethod.POST,
-                        "/sys/token/accessToken/refresh")
+                        "/sys/global/accessToken/refresh"
 
-
-
-
-
+                )
                 .permitAll()
                 .anyRequest()
                 .authenticated()
