@@ -62,6 +62,7 @@ public class ImageCodeValidateFilter extends OncePerRequestFilter {
              */
             if (redisCaptchaCode == null || !redisCaptchaCode.equals(captchaCode)) {
                 unauthorizedEntryPoint.commence(request, response, new ImageCodeAuthenticationException("验证码错误！"));
+                return;
             }
         }
         filterChain.doFilter(requestWrapper, response);
