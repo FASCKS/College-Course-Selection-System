@@ -100,4 +100,20 @@ public class GlobalController {
             outputStream.write(circleCaptcha.getImageBytes());
         }
     }
+    /**
+     * 验证码
+     */
+    @ApiOperation("验证码")
+    @GetMapping("/captcha")
+    public void captchaGet(HttpServletResponse httpServletResponse, @RequestParam("captchaUuid") String captchaUuid) throws IOException {
+        CircleCaptcha circleCaptcha = CaptchaUtil.createCircleCaptcha(200, 56, 5, 20);
+        String code = circleCaptcha.getCode();
+        boolean saveCaptcha = cache.set(captchaUuid, code, 300);
+        if (saveCaptcha) {
+            httpServletResponse.setContentType("image/png;charset=utf-8");
+            httpServletResponse.setHeader("Content-Disposition", "attachment;filename=captcha.png");
+            ServletOutputStream outputStream = httpServletResponse.getOutputStream();
+            outputStream.write(circleCaptcha.getImageBytes());
+        }
+    }
 }

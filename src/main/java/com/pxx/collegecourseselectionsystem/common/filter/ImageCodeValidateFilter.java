@@ -4,6 +4,7 @@ import cn.hutool.core.convert.Convert;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.pxx.collegecourseselectionsystem.common.exception.ImageCodeAuthenticationException;
+import com.pxx.collegecourseselectionsystem.common.utils.BodyReaderHttpServletRequestWrapper;
 import com.pxx.collegecourseselectionsystem.common.utils.R;
 import com.pxx.collegecourseselectionsystem.common.utils.RedisUtil;
 import com.pxx.collegecourseselectionsystem.config.authorize.UnauthorizedEntryPoint;
@@ -16,6 +17,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletInputStream;
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -47,12 +49,12 @@ public class ImageCodeValidateFilter extends OncePerRequestFilter {
      */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        ServletRequest requestWrapper = new BodyReaderHttpServletRequestWrapper(request);
         String method = request.getMethod();
 
         if ("POST".equals(method) && "/login".equals(request.getRequestURI())) {
-            ServletInputStream inputStream = request.getInputStream();
+            ServletInputStream inputStream = requestWrapper.getInputStream();
             String body = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
-            request.setAttribute("body",body);
             JSONObject jsonObject=new JSONObject(body);
             String captchaUuid = (String) jsonObject.get(CAPTCHA_NAME);
             String captchaCode = (String) jsonObject.get(CAPTCHA_CODE);
@@ -66,6 +68,6 @@ public class ImageCodeValidateFilter extends OncePerRequestFilter {
                 unauthorizedEntryPoint.commence(request, response, imageCodeAuthenticationException);
             }
         }
-        filterChain.doFilter(request, response);
+        filterChain.doFilter(requestWrapper, response);
     }
 }

@@ -3,15 +3,13 @@ package com.pxx.collegecourseselectionsystem.config.authorize;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import cn.hutool.json.JSONObject;
-import com.pxx.collegecourseselectionsystem.common.utils.IPUtils;
-import com.pxx.collegecourseselectionsystem.common.utils.R;
-import com.pxx.collegecourseselectionsystem.common.utils.RedisUtil;
-import com.pxx.collegecourseselectionsystem.common.utils.ResponseUtil;
+import com.pxx.collegecourseselectionsystem.common.utils.*;
 import com.pxx.collegecourseselectionsystem.entity.SysLogEntity;
 import com.pxx.collegecourseselectionsystem.entity.SysUserEntity;
 import com.pxx.collegecourseselectionsystem.service.impl.SysLogServiceImpl;
 import com.pxx.collegecourseselectionsystem.service.impl.SysUserServiceImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -23,9 +21,12 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.ServletInputStream;
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,15 +49,19 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest req, HttpServletResponse res) throws AuthenticationException {
+        ServletRequest requestWrapper;
         String username = null;
         String password = null;
-
-        String body = (String) req.getAttribute("body");
-        req.setAttribute("body",null);
-        JSONObject jsonObject = new JSONObject(body);
-        username = (String) jsonObject.get(SPRING_SECURITY_FORM_USERNAME_KEY);
-        password = (String) jsonObject.get(SPRING_SECURITY_FORM_PASSWORD_KEY);
-
+        try {
+             requestWrapper = new BodyReaderHttpServletRequestWrapper(req);
+            ServletInputStream inputStream = requestWrapper.getInputStream();
+            String body = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
+            JSONObject jsonObject = new JSONObject(body);
+            username = (String) jsonObject.get(SPRING_SECURITY_FORM_USERNAME_KEY);
+            password = (String) jsonObject.get(SPRING_SECURITY_FORM_PASSWORD_KEY);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         username = (username != null) ? username : "";
         username = username.trim();
         password = (password != null) ? password : "";
