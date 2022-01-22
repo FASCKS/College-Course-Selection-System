@@ -34,7 +34,7 @@ public class UnauthorizedEntryPoint implements AuthenticationEntryPoint {
         if (authException instanceof InsufficientAuthenticationException) {
            r=R.error(403,authException.getMessage());
         }else if (authException instanceof ImageCodeAuthenticationException){
-            r=R.error(403,authException.getMessage());
+            r = R.error(Global.CAPTCHA_ERROR_CODE, authException.getMessage());
         }else if (authException instanceof TokenSignatureOrExpiredJwtException){
             r=R.error(Global.ACCESS_TOKEN_EXPIRED_CODE,authException.getMessage());
         }else if (authException instanceof MyAuthenticationException){
