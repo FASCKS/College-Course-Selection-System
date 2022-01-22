@@ -23,8 +23,8 @@ public class UnauthorizedEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         String ipAddr = IPUtils.getIpAddr(request);
         log.info("ip为 {} 的用户访问未授权的url------->{}", ipAddr, request.getRequestURI());
+        System.out.println(authException.getMessage());
         ResponseUtil.write(response,authException.getMessage());
-
     }
 
 }

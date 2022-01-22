@@ -100,9 +100,9 @@ public class GlobalController {
             outputStream.write(circleCaptcha.getImageBytes());
         }
     }
-    /**
+/*    *//**
      * 验证码
-     */
+     *//*
     @ApiOperation("验证码")
     @GetMapping("/captcha")
     public void captchaGet(HttpServletResponse httpServletResponse, @RequestParam("captchaUuid") String captchaUuid) throws IOException {
@@ -115,5 +115,5 @@ public class GlobalController {
             ServletOutputStream outputStream = httpServletResponse.getOutputStream();
             outputStream.write(circleCaptcha.getImageBytes());
         }
-    }
+    }*/
 }
