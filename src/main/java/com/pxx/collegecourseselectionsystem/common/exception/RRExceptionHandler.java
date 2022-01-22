@@ -21,6 +21,7 @@ import com.pxx.collegecourseselectionsystem.service.SysLogService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
@@ -124,7 +125,7 @@ public class RRExceptionHandler {
             }
             return R.error(sb.substring(0, sb.length() - 1) + " .");
         }
-        return R.error();
+        return R.error("Required request body is missing");
     }
 
     /**
@@ -235,6 +236,13 @@ public class RRExceptionHandler {
         logger.error(e.getMessage(), e);
         return R.error("数据库中已存在该记录");
     }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public R handDataIntegrityViolationException(DataIntegrityViolationException e) {
+        logger.error(e.getMessage(), e);
+        return R.error("Cannot add or update a child row: a foreign key constraint fails");
+    }
+
 
     @ExceptionHandler(AccessDeniedException.class)
     public R handleAccessDeniedException(AccessDeniedException e) {

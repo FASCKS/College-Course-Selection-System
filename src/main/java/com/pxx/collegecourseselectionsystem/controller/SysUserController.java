@@ -54,9 +54,10 @@ public class SysUserController {
     @ApiOperation("用户新增")
     @PreAuthorize("hasAnyAuthority('sys:user:insert')")
     @PostMapping("/insert")
-    public R insertUser(@RequestBody SysUserEntity sysUserEntity) {
+    public R insertUser(@Validated @RequestBody SysUserEntity sysUserEntity) {
         String password = sysUserEntity.getPassword();
         sysUserEntity.setPassword(passwordEncoder.encode(password));
+        sysUserEntity.setUserId(null);
         boolean save = sysUserService.save(sysUserEntity);
         return R.ok().put("data", save);
     }
