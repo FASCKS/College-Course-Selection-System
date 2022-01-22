@@ -28,6 +28,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.firewall.RequestRejectedException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -199,6 +200,14 @@ public class RRExceptionHandler {
         sb.delete(sb.length() - 1, sb.length());
 
         return R.error(sb.toString());
+    }
+    /**
+     * Http 媒体类型不支持异常
+     */
+    @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
+    public R handHttpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException e){
+        logger.error(e.getMessage(), e);
+        return R.error(e.getMessage());
     }
     /**
      * Http 请求方法不支持异常

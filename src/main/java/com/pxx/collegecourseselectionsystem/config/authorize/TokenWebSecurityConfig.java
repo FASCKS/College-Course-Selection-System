@@ -57,8 +57,19 @@ public class TokenWebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .configurationSource(corsConfigurationSource())
                 .and().csrf().disable()
                 .authorizeRequests()
-                .anyRequest().authenticated()
-                .and().logout().logoutUrl("/logout")
+                .antMatchers(HttpMethod.POST,
+                        "/sys/token/accessToken/refresh")
+
+
+
+
+
+                .permitAll()
+                .anyRequest()
+                .authenticated()
+                .and()
+                .logout()
+                .logoutUrl("/logout")
                 .addLogoutHandler(tokenLogoutHandler)
                 .and()
                 .addFilter(new TokenLoginFilter(authenticationManager(), tokenManager, redisTemplate))
@@ -92,9 +103,7 @@ public class TokenWebSecurityConfig extends WebSecurityConfigurerAdapter {
                 )
                 .antMatchers(HttpMethod.GET,
                         "/login"
-                )
-                .antMatchers(HttpMethod.POST,
-                        "/sys/token/accessToken/refresh");
+                );
     }
     /**
      * 跨域支持
