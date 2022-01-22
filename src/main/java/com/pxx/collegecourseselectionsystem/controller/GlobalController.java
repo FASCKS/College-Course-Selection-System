@@ -92,7 +92,7 @@ public class GlobalController {
     @ApiOperation("验证码")
     @PostMapping("/captcha")
     public void captcha(HttpServletResponse httpServletResponse, @Validated @RequestBody CaptchaVo captchaVo) throws IOException {
-        CircleCaptcha circleCaptcha = CaptchaUtil.createCircleCaptcha(200, 100, 5, 20);
+        CircleCaptcha circleCaptcha = CaptchaUtil.createCircleCaptcha(200, 56, 5, 20);
         String code = circleCaptcha.getCode();
         String captchaUuid = captchaVo.getCaptchaUuid();
         boolean saveCaptcha = cache.set(captchaUuid, code, 30L);

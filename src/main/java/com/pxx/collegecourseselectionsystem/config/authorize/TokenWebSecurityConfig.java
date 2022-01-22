@@ -1,5 +1,6 @@
 package com.pxx.collegecourseselectionsystem.config.authorize;
 
+import com.pxx.collegecourseselectionsystem.common.filter.ImageCodeValidateFilter;
 import com.pxx.collegecourseselectionsystem.common.xss.XssFilter;
 import com.pxx.collegecourseselectionsystem.config.LoginValidateAuthenticationProvider;
 import com.pxx.collegecourseselectionsystem.service.impl.SysUserServiceImpl;
@@ -13,6 +14,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -43,7 +45,13 @@ public class TokenWebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private SimpleAccessDeniedHandler simpleAccessDeniedHandler;
     @Autowired
-   private   UnauthorizedEntryPoint unauthorizedEntryPoint;
+    private UnauthorizedEntryPoint unauthorizedEntryPoint;
+    /**
+     * 验证码图片过滤器
+     */
+    @Autowired
+    private ImageCodeValidateFilter imageCodeValidateFilter;
+
     /**
      * 配置设置
      */
@@ -57,7 +65,6 @@ public class TokenWebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .configurationSource(corsConfigurationSource())
                 .and().csrf().disable()
                 .authorizeRequests()
-
                 .antMatchers(HttpMethod.POST,
                         "/sys/global/accessToken/refresh",
                         "/sys/global/captcha"
@@ -70,19 +77,19 @@ public class TokenWebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutUrl("/logout")
                 .addLogoutHandler(tokenLogoutHandler)
                 .and()
+                .addFilterBefore(imageCodeValidateFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilter(new TokenLoginFilter(authenticationManager(), tokenManager, redisTemplate))
                 .addFilter(new TokenAuthenticationFilter(authenticationManager(), tokenManager, redisTemplate))
                 .addFilterAfter(new XssFilter(), CsrfFilter.class)
                 .httpBasic();
 
 
-
     }
+
     @Override
-    public void configure(AuthenticationManagerBuilder auth)  throws Exception
-    {
+    public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(loginValidateAuthenticationProvider)
-                .userDetailsService( userDetailsService)
+                .userDetailsService(userDetailsService)
                 .passwordEncoder(defaultPasswordEncoder);
     }
 
@@ -90,7 +97,7 @@ public class TokenWebSecurityConfig extends WebSecurityConfigurerAdapter {
      * 此方法配置的资源路径不会进入 Spring Security 机制进行验证
      */
     @Override
-    public void configure(WebSecurity web)  throws Exception {
+    public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers(
                         "/swagger-resources/**",
                         "/webjars/**",
@@ -103,8 +110,10 @@ public class TokenWebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/login"
                 );
     }
+
     /**
      * 跨域支持
+     *
      * @return
      */
     @Bean

@@ -1,11 +1,14 @@
 package com.pxx.collegecourseselectionsystem.common.filter;
 
-import cn.hutool.core.util.StrUtil;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import cn.hutool.core.convert.Convert;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import com.pxx.collegecourseselectionsystem.common.exception.ImageCodeAuthenticationException;
+import com.pxx.collegecourseselectionsystem.common.utils.R;
 import com.pxx.collegecourseselectionsystem.common.utils.RedisUtil;
 import com.pxx.collegecourseselectionsystem.config.authorize.UnauthorizedEntryPoint;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -16,7 +19,7 @@ import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Map;
+import java.nio.charset.StandardCharsets;
 
 /**
  * 图形验证码过滤器
@@ -45,17 +48,21 @@ public class ImageCodeValidateFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String method = request.getMethod();
+
         if ("POST".equals(method) && "/login".equals(request.getRequestURI())) {
             ServletInputStream inputStream = request.getInputStream();
-            Map<String, String> map = new ObjectMapper().readValue(inputStream, Map.class);
-            String captchaUuid = map.get(CAPTCHA_NAME);
-            String captchaCode = map.get(CAPTCHA_CODE);
-            String redisCaptchaCode = (String) redisUtil.get(captchaUuid);
-            if (StrUtil.isNotBlank(redisCaptchaCode) && redisCaptchaCode.equals(captchaCode)) {
-                /*
-                 * 验证码认证失败
-                 */
-                ImageCodeAuthenticationException imageCodeAuthenticationException = new ImageCodeAuthenticationException("验证码错误！");
+            String body = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
+            request.setAttribute("body",body);
+            JSONObject jsonObject=new JSONObject(body);
+            String captchaUuid = (String) jsonObject.get(CAPTCHA_NAME);
+            String captchaCode = (String) jsonObject.get(CAPTCHA_CODE);
+            String redisCaptchaCode = Convert.toStr(redisUtil.get(captchaUuid));
+            /*
+             * 验证码认证失败
+             */
+            if (redisCaptchaCode == null || !redisCaptchaCode.equals(captchaCode)) {
+                R error=R.error(403,"验证码错误！");
+                ImageCodeAuthenticationException imageCodeAuthenticationException = new ImageCodeAuthenticationException(JSONUtil.toJsonStr(error));
                 unauthorizedEntryPoint.commence(request, response, imageCodeAuthenticationException);
             }
         }
