@@ -135,7 +135,7 @@ public class SysUserEntity implements UserDetails {
      * 锁定时间
      */
     @JsonFormat (pattern = DatePattern.NORM_DATETIME_PATTERN)
-    @ApiModelProperty(value = "账号封禁的时间")
+    @ApiModelProperty(value = "账号封禁的时间",example = "2022-01-22 10:33:11")
     @TableField(value = "lock_time",fill = FieldFill.INSERT)
     private Date lockTime;
 
@@ -143,7 +143,7 @@ public class SysUserEntity implements UserDetails {
      * 创建时间
      */
     @JsonFormat (pattern = DatePattern.NORM_DATETIME_PATTERN)
-    @ApiModelProperty(value = "创建时间",hidden = true)
+    @ApiModelProperty(value = "创建时间",hidden = true,example = "2022-01-22 10:33:11")
     @TableField(value = "created_time", fill = FieldFill.INSERT)
     private Date createdTime;
 
@@ -165,7 +165,7 @@ public class SysUserEntity implements UserDetails {
      * 登录
      */
     @JsonFormat (pattern = DatePattern.NORM_DATETIME_PATTERN)
-    @ApiModelProperty(value = "登录时间")
+    @ApiModelProperty(value = "登录时间",example = "2022-01-22 10:33:11")
     @TableField(value = "last_login_time", fill = FieldFill.INSERT_UPDATE)
     private Date lastLoginTime;
 
