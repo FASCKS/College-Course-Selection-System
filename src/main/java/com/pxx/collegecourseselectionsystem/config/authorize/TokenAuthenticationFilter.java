@@ -29,7 +29,6 @@ import java.util.Collection;
  * 授权
  */
 @Slf4j
-
 public class TokenAuthenticationFilter extends BasicAuthenticationFilter {
     private TokenManager tokenManager;
     private RedisTemplate<String, Object> redisTemplate;

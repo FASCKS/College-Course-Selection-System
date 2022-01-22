@@ -3,6 +3,7 @@ package com.pxx.collegecourseselectionsystem.controller;
 import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.CircleCaptcha;
 import cn.hutool.core.convert.Convert;
+import cn.hutool.core.util.IdUtil;
 import com.pxx.collegecourseselectionsystem.common.utils.R;
 import com.pxx.collegecourseselectionsystem.common.utils.RedisUtil;
 import com.pxx.collegecourseselectionsystem.config.authorize.TokenManager;
@@ -22,6 +23,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+@Validated
 @RequestMapping("/sys/global")
 @RestController
 @Slf4j
@@ -36,11 +38,12 @@ public class GlobalController {
 
     @GetMapping("/test")
     public R test() {
-        return R.error(100, "Full authentication is required to access this resource");
+        return R.error(100, IdUtil.getSnowflakeNextIdStr());
     }
 
     /**
      * 用 refreshToken 来刷新 accessToken
+     *
      * @param refreshToken refreshToken
      * @return
      */
@@ -88,12 +91,12 @@ public class GlobalController {
      */
     @ApiOperation("验证码")
     @PostMapping("/captcha")
-    public void captcha(HttpServletResponse httpServletResponse,@RequestBody CaptchaVo captchaVo) throws IOException {
+    public void captcha(HttpServletResponse httpServletResponse, @Validated @RequestBody CaptchaVo captchaVo) throws IOException {
         CircleCaptcha circleCaptcha = CaptchaUtil.createCircleCaptcha(200, 100, 5, 20);
         String code = circleCaptcha.getCode();
         String captchaUuid = captchaVo.getCaptchaUuid();
-        boolean saveCaptcha = cache.set(captchaUuid, code,30L);
-        if (saveCaptcha){
+        boolean saveCaptcha = cache.set(captchaUuid, code, 30L);
+        if (saveCaptcha) {
             ServletOutputStream outputStream = httpServletResponse.getOutputStream();
             outputStream.write(circleCaptcha.getImageBytes());
         }

@@ -201,22 +201,25 @@ public class RRExceptionHandler {
 
         return R.error(sb.toString());
     }
+
     /**
      * Http 媒体类型不支持异常
      */
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
-    public R handHttpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException e){
+    public R handHttpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException e) {
         logger.error(e.getMessage(), e);
         return R.error(e.getMessage());
     }
+
     /**
      * Http 请求方法不支持异常
      */
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public R handHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e){
+    public R handHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
         logger.error(e.getMessage(), e);
         return R.error(e.getMessage());
     }
+
     /**
      * @param e 参数绑定异常
      * @return
@@ -272,6 +275,16 @@ public class RRExceptionHandler {
         sysLogService.save(sysLogEntity);
 
         return R.error(403, StrUtil.format("用户 {} 没有权限, {} ,请联系管理员授权", username, e.getMessage()));
+    }
+
+    /**
+     * 非法参数异常
+     *
+     * @return
+     */
+    @ExceptionHandler(IllegalArgumentException.class)
+    public R handIllegalArgumentException(IllegalArgumentException illegalArgumentException) {
+        return R.error(illegalArgumentException.getMessage());
     }
 
     @ExceptionHandler(Exception.class)
