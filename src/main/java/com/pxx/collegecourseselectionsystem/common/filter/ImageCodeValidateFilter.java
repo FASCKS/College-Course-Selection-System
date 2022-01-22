@@ -2,10 +2,8 @@ package com.pxx.collegecourseselectionsystem.common.filter;
 
 import cn.hutool.core.convert.Convert;
 import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
 import com.pxx.collegecourseselectionsystem.common.exception.ImageCodeAuthenticationException;
 import com.pxx.collegecourseselectionsystem.common.utils.BodyReaderHttpServletRequestWrapper;
-import com.pxx.collegecourseselectionsystem.common.utils.R;
 import com.pxx.collegecourseselectionsystem.common.utils.RedisUtil;
 import com.pxx.collegecourseselectionsystem.config.authorize.UnauthorizedEntryPoint;
 import lombok.extern.slf4j.Slf4j;
@@ -63,9 +61,7 @@ public class ImageCodeValidateFilter extends OncePerRequestFilter {
              * 验证码认证失败
              */
             if (redisCaptchaCode == null || !redisCaptchaCode.equals(captchaCode)) {
-                R error=R.error(403,"验证码错误！");
-                ImageCodeAuthenticationException imageCodeAuthenticationException = new ImageCodeAuthenticationException(JSONUtil.toJsonStr(error));
-                unauthorizedEntryPoint.commence(request, response, imageCodeAuthenticationException);
+                unauthorizedEntryPoint.commence(request, response, new ImageCodeAuthenticationException("验证码错误！"));
             }
         }
         filterChain.doFilter(requestWrapper, response);

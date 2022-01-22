@@ -3,6 +3,7 @@ package com.pxx.collegecourseselectionsystem.config.authorize;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import cn.hutool.json.JSONObject;
+import com.pxx.collegecourseselectionsystem.common.exception.MyAuthenticationException;
 import com.pxx.collegecourseselectionsystem.common.utils.*;
 import com.pxx.collegecourseselectionsystem.entity.SysLogEntity;
 import com.pxx.collegecourseselectionsystem.entity.SysUserEntity;
@@ -60,7 +61,7 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
             username = (String) jsonObject.get(SPRING_SECURITY_FORM_USERNAME_KEY);
             password = (String) jsonObject.get(SPRING_SECURITY_FORM_PASSWORD_KEY);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new MyAuthenticationException("Full authentication is required to access this resource");
         }
         username = (username != null) ? username : "";
         username = username.trim();

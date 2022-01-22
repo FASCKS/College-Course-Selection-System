@@ -3,13 +3,10 @@ package com.pxx.collegecourseselectionsystem.config.authorize;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;
-import cn.hutool.json.JSONUtil;
 import com.pxx.collegecourseselectionsystem.common.exception.MyAuthenticationException;
 import com.pxx.collegecourseselectionsystem.common.exception.TokenSignatureOrExpiredJwtException;
-import com.pxx.collegecourseselectionsystem.common.utils.R;
 import com.pxx.collegecourseselectionsystem.config.UserGrantedAuthority;
 import com.pxx.collegecourseselectionsystem.entity.SysUserEntity;
-import com.pxx.collegecourseselectionsystem.util.Global;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureException;
@@ -50,13 +47,11 @@ public class TokenAuthenticationFilter extends BasicAuthenticationFilter {
             authentication = getAuthentication(request);
         }catch (ExpiredJwtException | SignatureException e){
             //token过期 或 token签名不匹配
-            R errorMsg = R.error(Global.ACCESS_TOKEN_EXPIRED_CODE, "Full authentication is required to access this resource");
-            unauthorizedEntryPoint.commence(request,response,new TokenSignatureOrExpiredJwtException(JSONUtil.toJsonStr(errorMsg)));
+            unauthorizedEntryPoint.commence(request,response,new TokenSignatureOrExpiredJwtException("Full authentication is required to access this resource"));
             return;
         }catch (MalformedJwtException malformedJwtException){
             //token 格式错误异常
-            R refreshToken_wrong_format = R.error(Global.ACCESS_TOKEN_WRONG_FORMAT_CODE, "access_token wrong format");
-            unauthorizedEntryPoint.commence(request,response,new MyAuthenticationException(JSONUtil.toJsonStr(refreshToken_wrong_format)));
+            unauthorizedEntryPoint.commence(request,response,new MyAuthenticationException("access_token wrong format"));
             return;
         }
 
