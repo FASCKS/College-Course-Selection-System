@@ -2,6 +2,7 @@ package com.pxx.collegecourseselectionsystem.config.authorize;
 
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.StrUtil;
+import com.pxx.collegecourseselectionsystem.common.exception.RRException;
 import com.pxx.collegecourseselectionsystem.common.utils.R;
 import com.pxx.collegecourseselectionsystem.common.utils.ResponseUtil;
 import com.pxx.collegecourseselectionsystem.config.UserGrantedAuthority;
@@ -17,7 +18,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
-import javax.security.sasl.AuthenticationException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -45,18 +45,17 @@ public class TokenAuthenticationFilter extends BasicAuthenticationFilter {
         UsernamePasswordAuthenticationToken authentication = null;
         try {
             authentication = getAuthentication(request);
-            if (authentication==null){
-                throw new AuthenticationException();
-            }
         }catch (ExpiredJwtException | SignatureException e){
             //token过期 或 token签名不匹配
             R errorMsg = R.error(Global.ACCESS_TOKEN_EXPIRED_CODE, "Full authentication is required to access this resource");
             ResponseUtil.writeJson(response,errorMsg);
         }catch (MalformedJwtException malformedJwtException){
+            //token 格式错误异常
             R refreshToken_wrong_format = R.error(Global.ACCESS_TOKEN_WRONG_FORMAT_CODE, "access_token wrong format");
             ResponseUtil.writeJson(response,refreshToken_wrong_format);
-        }catch (AuthenticationException authenticationException){
-            R refreshToken_wrong_format = R.error(403,"access_token 不能为空" );
+        }catch (RRException rrException){
+            //token 为空异常
+            R refreshToken_wrong_format = R.error(Global.ACCESS_TOKEN_WRONG_FORMAT_CODE, rrException.getMsg());
             ResponseUtil.writeJson(response,refreshToken_wrong_format);
         }
         // 将认证信息存入 Spring 安全上下文中
@@ -73,7 +72,6 @@ public class TokenAuthenticationFilter extends BasicAuthenticationFilter {
             if (user_access_token ==null || !user_access_token.equals(token)){
                 return null;
             }
-
             Collection<UserGrantedAuthority> authorities  = Convert.toList(UserGrantedAuthority.class,redisTemplate.opsForHash().get(userName,"authorities"));
             if (!StrUtil.isEmpty(userName)) {
                 SysUserEntity sysUserEntity =(SysUserEntity) redisTemplate.opsForHash().get(userName, "entity");
