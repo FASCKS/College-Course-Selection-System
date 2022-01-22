@@ -17,6 +17,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
+import javax.security.sasl.AuthenticationException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -44,12 +45,18 @@ public class TokenAuthenticationFilter extends BasicAuthenticationFilter {
         UsernamePasswordAuthenticationToken authentication = null;
         try {
             authentication = getAuthentication(request);
+            if (authentication==null){
+                throw new AuthenticationException();
+            }
         }catch (ExpiredJwtException | SignatureException e){
             //token过期 或 token签名不匹配
             R errorMsg = R.error(Global.ACCESS_TOKEN_EXPIRED_CODE, "Full authentication is required to access this resource");
             ResponseUtil.writeJson(response,errorMsg);
         }catch (MalformedJwtException malformedJwtException){
             R refreshToken_wrong_format = R.error(Global.ACCESS_TOKEN_WRONG_FORMAT_CODE, "access_token wrong format");
+            ResponseUtil.writeJson(response,refreshToken_wrong_format);
+        }catch (AuthenticationException authenticationException){
+            R refreshToken_wrong_format = R.error(403,"access_token 不能为空" );
             ResponseUtil.writeJson(response,refreshToken_wrong_format);
         }
         // 将认证信息存入 Spring 安全上下文中
