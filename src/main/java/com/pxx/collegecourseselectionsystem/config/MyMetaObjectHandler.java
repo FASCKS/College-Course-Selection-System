@@ -36,9 +36,9 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         return userId;
     }
 
-    private Long getUserName() {
-        final Long userId = SpringSecurityUtil.getUserId();
-        return userId;
+    private String getUserName() {
+        final String username = SpringSecurityUtil.getUsername();
+        return username;
     }
 
 }
