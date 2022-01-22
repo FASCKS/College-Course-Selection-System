@@ -286,7 +286,15 @@ public class RRExceptionHandler {
     public R handIllegalArgumentException(IllegalArgumentException illegalArgumentException) {
         return R.error(illegalArgumentException.getMessage());
     }
-
+    /**
+     * 非法参数异常
+     *
+     * @return
+     */
+    @ExceptionHandler(TokenSignatureOrExpiredJwtException.class)
+    public R handTokenSignatureOrExpiredJwtException(TokenSignatureOrExpiredJwtException illegalArgumentException) {
+        return R.error(illegalArgumentException.getMessage());
+    }
     @ExceptionHandler(Exception.class)
     public R handleException(Exception e) {
         logger.error(e.getMessage(), e);

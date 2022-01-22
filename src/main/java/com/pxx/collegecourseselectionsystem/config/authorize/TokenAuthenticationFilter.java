@@ -2,7 +2,9 @@ package com.pxx.collegecourseselectionsystem.config.authorize;
 
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.StrUtil;
-import com.pxx.collegecourseselectionsystem.common.exception.RRException;
+import cn.hutool.extra.spring.SpringUtil;
+import cn.hutool.json.JSONUtil;
+import com.pxx.collegecourseselectionsystem.common.exception.TokenSignatureOrExpiredJwtException;
 import com.pxx.collegecourseselectionsystem.common.utils.R;
 import com.pxx.collegecourseselectionsystem.common.utils.ResponseUtil;
 import com.pxx.collegecourseselectionsystem.config.UserGrantedAuthority;
@@ -32,6 +34,8 @@ import java.util.Collection;
 public class TokenAuthenticationFilter extends BasicAuthenticationFilter {
     private TokenManager tokenManager;
     private RedisTemplate<String, Object> redisTemplate;
+    private final UnauthorizedEntryPoint unauthorizedEntryPoint=SpringUtil.getBean(UnauthorizedEntryPoint.class);
+
 
     public TokenAuthenticationFilter(AuthenticationManager authManager, TokenManager tokenManager, RedisTemplate redisTemplate) {
         super(authManager);
@@ -44,22 +48,17 @@ public class TokenAuthenticationFilter extends BasicAuthenticationFilter {
         UsernamePasswordAuthenticationToken authentication = null;
         try {
             authentication = getAuthentication(request);
-//            if (authentication==null){
-//                throw new RRException("access_token 不能为空.");
-//            }
         }catch (ExpiredJwtException | SignatureException e){
             //token过期 或 token签名不匹配
             R errorMsg = R.error(Global.ACCESS_TOKEN_EXPIRED_CODE, "Full authentication is required to access this resource");
-            ResponseUtil.writeJson(response,errorMsg);
+            unauthorizedEntryPoint.commence(request,response,new TokenSignatureOrExpiredJwtException(JSONUtil.toJsonStr(errorMsg)));
+            return;
         }catch (MalformedJwtException malformedJwtException){
             //token 格式错误异常
             R refreshToken_wrong_format = R.error(Global.ACCESS_TOKEN_WRONG_FORMAT_CODE, "access_token wrong format");
             ResponseUtil.writeJson(response,refreshToken_wrong_format);
-        }catch (RRException rrException){
-            //token 为空异常
-            R refreshToken_wrong_format = R.error(Global.ACCESS_TOKEN_WRONG_FORMAT_CODE, rrException.getMsg());
-            ResponseUtil.writeJson(response,refreshToken_wrong_format);
         }
+
         // 将认证信息存入 Spring 安全上下文中
         SecurityContextHolder.getContext().setAuthentication(authentication);
         chain.doFilter(request, response);

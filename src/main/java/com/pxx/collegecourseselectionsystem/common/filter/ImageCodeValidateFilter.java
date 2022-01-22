@@ -45,7 +45,7 @@ public class ImageCodeValidateFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String method = request.getMethod();
-        if ("POST".equals(method)) {
+        if ("POST".equals(method) && "/login".equals(request.getRequestURI())) {
             ServletInputStream inputStream = request.getInputStream();
             Map<String, String> map = new ObjectMapper().readValue(inputStream, Map.class);
             String captchaUuid = map.get(CAPTCHA_NAME);
