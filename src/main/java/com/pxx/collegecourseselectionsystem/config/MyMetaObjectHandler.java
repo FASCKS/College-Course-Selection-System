@@ -1,15 +1,8 @@
 package com.pxx.collegecourseselectionsystem.config;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
-
-import com.pxx.collegecourseselectionsystem.entity.SysUserEntity;
+import com.pxx.collegecourseselectionsystem.common.utils.SpringSecurityUtil;
 import org.apache.ibatis.reflection.MetaObject;
-
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -26,33 +19,26 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
     @Override
     public void insertFill(MetaObject metaObject) {
         this.setFieldValByName(revision, 1, metaObject);
-        this.setFieldValByName(createdBy, getName(), metaObject);
-        this.setFieldValByName(updatedBy,getName(),metaObject);
+        this.setFieldValByName(createdBy, getUserId(), metaObject);
+        this.setFieldValByName(updatedBy, getUserId(), metaObject);
         this.setFieldValByName(updateTime, new Date(), metaObject);
         this.setFieldValByName(createTime, new Date(), metaObject);
     }
 
     @Override
     public void updateFill(MetaObject metaObject) {
-        this.setFieldValByName(updatedBy, getName(), metaObject);
+        this.setFieldValByName(updatedBy, getUserId(), metaObject);
         this.setFieldValByName(updateTime, new Date(), metaObject);
     }
 
-    private Integer getName() {
-//        SysUserEntity userDetails = (SysUserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-/*        Object principal = SecurityUtils.getSubject().getPrincipal();
-        if (principal instanceof User) {
-            String userName = ((User) principal).getUserName();
-            return userName;
-        }
-        if (principal instanceof Personnel) {
-            Personnel personnel = (Personnel) principal;
-            return personnel.getName();
-        }*/
-
-        return 1;
+    private Long getUserId() {
+        final Long userId = SpringSecurityUtil.getUserId();
+        return userId;
     }
 
+    private Long getUserName() {
+        final Long userId = SpringSecurityUtil.getUserId();
+        return userId;
+    }
 
 }
