@@ -43,9 +43,6 @@ public class GlobalController {
 
     /**
      * 用 refreshToken 来刷新 accessToken
-     *
-     * @param refreshToken refreshToken
-     * @return
      */
     @ApiOperation("token刷新")
     @PostMapping("/accessToken/refresh")
@@ -95,7 +92,7 @@ public class GlobalController {
         CircleCaptcha circleCaptcha = CaptchaUtil.createCircleCaptcha(200, 56, 5, 20);
         String code = circleCaptcha.getCode();
         String captchaUuid = captchaVo.getCaptchaUuid();
-        boolean saveCaptcha = cache.set(captchaUuid, code, 30L);
+        boolean saveCaptcha = cache.set(captchaUuid, code, 300);
         if (saveCaptcha) {
             httpServletResponse.setContentType("application/image;charset=utf-8");
             httpServletResponse.setHeader("Content-Disposition", "attachment;filename=captcha.jpg");
