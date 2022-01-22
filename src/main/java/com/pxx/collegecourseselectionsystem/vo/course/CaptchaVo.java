@@ -7,13 +7,12 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.validation.constraints.NotEmpty;
-
+@ApiModel("验证码VO类")
 @Getter
 @Setter
 @ToString
-@ApiModel(value = "刷新tokenVo")
-public class RefreshTokenVo {
-    @ApiModelProperty(value = "刷新refreshToken")
-    @NotEmpty(message = "refreshToken 不能为空")
-    private String refreshToken;
+public class CaptchaVo {
+    @NotEmpty
+    @ApiModelProperty(value = "验证码唯一标识")
+    private String captchaUuid;
 }

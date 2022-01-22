@@ -3,14 +3,16 @@ package com.pxx.collegecourseselectionsystem.controller;
 import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.CircleCaptcha;
 import cn.hutool.core.convert.Convert;
-import cn.hutool.core.util.IdUtil;
 import com.pxx.collegecourseselectionsystem.common.utils.R;
 import com.pxx.collegecourseselectionsystem.common.utils.RedisUtil;
 import com.pxx.collegecourseselectionsystem.config.authorize.TokenManager;
 import com.pxx.collegecourseselectionsystem.util.Global;
+import com.pxx.collegecourseselectionsystem.vo.course.CaptchaVo;
 import com.pxx.collegecourseselectionsystem.vo.course.RefreshTokenVo;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -23,6 +25,7 @@ import java.io.IOException;
 @RequestMapping("/sys/global")
 @RestController
 @Slf4j
+@Api(tags = "公共类")
 public class GlobalController {
     @Autowired
     TokenManager authorizationService;
@@ -41,6 +44,7 @@ public class GlobalController {
      * @param refreshToken refreshToken
      * @return
      */
+    @ApiOperation("token刷新")
     @PostMapping("/accessToken/refresh")
     public R accessTokenRefresh(@RequestBody @Validated RefreshTokenVo refreshTokenVo) {
         String refreshToken = refreshTokenVo.getRefreshToken();
@@ -82,11 +86,12 @@ public class GlobalController {
     /**
      * 验证码
      */
+    @ApiOperation("验证码")
     @PostMapping("/captcha")
-    public void captcha(HttpServletResponse httpServletResponse) throws IOException {
+    public void captcha(HttpServletResponse httpServletResponse,@RequestBody CaptchaVo captchaVo) throws IOException {
         CircleCaptcha circleCaptcha = CaptchaUtil.createCircleCaptcha(200, 100, 5, 20);
         String code = circleCaptcha.getCode();
-        String captchaUuid = IdUtil.getSnowflakeNextIdStr();
+        String captchaUuid = captchaVo.getCaptchaUuid();
         boolean saveCaptcha = cache.set(captchaUuid, code,30L);
         if (saveCaptcha){
             ServletOutputStream outputStream = httpServletResponse.getOutputStream();

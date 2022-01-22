@@ -45,9 +45,9 @@ public class TokenAuthenticationFilter extends BasicAuthenticationFilter {
         UsernamePasswordAuthenticationToken authentication = null;
         try {
             authentication = getAuthentication(request);
-            if (authentication==null){
-                throw new RRException("access_token 不能为空.");
-            }
+//            if (authentication==null){
+//                throw new RRException("access_token 不能为空.");
+//            }
         }catch (ExpiredJwtException | SignatureException e){
             //token过期 或 token签名不匹配
             R errorMsg = R.error(Global.ACCESS_TOKEN_EXPIRED_CODE, "Full authentication is required to access this resource");
