@@ -91,10 +91,10 @@ public class TokenWebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/static/**"
                 )
                 .antMatchers(HttpMethod.GET,
-                        "/login",
-                        "/sys/token/accessToken/refresh"
-
-                );
+                        "/login"
+                )
+                .antMatchers(HttpMethod.POST,
+                        "/sys/token/accessToken/refresh");
     }
     /**
      * 跨域支持

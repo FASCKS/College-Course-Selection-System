@@ -8,6 +8,7 @@ import com.pxx.collegecourseselectionsystem.config.UserGrantedAuthority;
 import com.pxx.collegecourseselectionsystem.entity.SysUserEntity;
 import com.pxx.collegecourseselectionsystem.util.Global;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -47,6 +48,9 @@ public class TokenAuthenticationFilter extends BasicAuthenticationFilter {
             //token过期 或 token签名不匹配
             R errorMsg = R.error(Global.ACCESS_TOKEN_EXPIRED_CODE, "Full authentication is required to access this resource");
             ResponseUtil.writeJson(response,errorMsg);
+        }catch (MalformedJwtException malformedJwtException){
+            R refreshToken_wrong_format = R.error(Global.ACCESS_TOKEN_WRONG_FORMAT_CODE, "access_token wrong format");
+            ResponseUtil.writeJson(response,refreshToken_wrong_format);
         }
         // 将认证信息存入 Spring 安全上下文中
         SecurityContextHolder.getContext().setAuthentication(authentication);
