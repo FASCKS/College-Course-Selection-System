@@ -7,7 +7,6 @@ import cn.hutool.json.JSONUtil;
 import com.pxx.collegecourseselectionsystem.common.exception.MyAuthenticationException;
 import com.pxx.collegecourseselectionsystem.common.exception.TokenSignatureOrExpiredJwtException;
 import com.pxx.collegecourseselectionsystem.common.utils.R;
-import com.pxx.collegecourseselectionsystem.common.utils.ResponseUtil;
 import com.pxx.collegecourseselectionsystem.config.UserGrantedAuthority;
 import com.pxx.collegecourseselectionsystem.entity.SysUserEntity;
 import com.pxx.collegecourseselectionsystem.util.Global;
@@ -58,7 +57,7 @@ public class TokenAuthenticationFilter extends BasicAuthenticationFilter {
             //token 格式错误异常
             R refreshToken_wrong_format = R.error(Global.ACCESS_TOKEN_WRONG_FORMAT_CODE, "access_token wrong format");
             unauthorizedEntryPoint.commence(request,response,new MyAuthenticationException(JSONUtil.toJsonStr(refreshToken_wrong_format)));
-            ResponseUtil.writeJson(response,refreshToken_wrong_format);
+            return;
         }
 
         // 将认证信息存入 Spring 安全上下文中
