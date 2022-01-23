@@ -10,6 +10,7 @@ import com.pxx.collegecourseselectionsystem.util.Global;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -30,10 +31,12 @@ import java.nio.charset.StandardCharsets;
 public class ImageCodeValidateFilter extends OncePerRequestFilter {
     @Autowired
     private RedisUtil redisUtil;
-    private static final String CAPTCHA_NAME = "captchaUuid";
-    private static final String CAPTCHA_CODE = "captchaCode";
     @Autowired
     private UnauthorizedEntryPoint unauthorizedEntryPoint;
+    private static final String CAPTCHA_NAME = "captchaUuid";
+    private static final String CAPTCHA_CODE = "captchaCode";
+    @Value("${captcha}")
+    private boolean captcha;
 
     /**
      * Same contract as for {@code doFilter}, but guaranteed to be
@@ -51,7 +54,7 @@ public class ImageCodeValidateFilter extends OncePerRequestFilter {
         ServletRequest requestWrapper = new BodyReaderHttpServletRequestWrapper(request);
         String method = request.getMethod();
 
-        if ("POST".equals(method) && "/login".equals(request.getRequestURI())) {
+        if ("POST".equals(method) && "/login".equals(request.getRequestURI()) && captcha) {
             ServletInputStream inputStream = requestWrapper.getInputStream();
             String body = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
             JSONObject jsonObject = new JSONObject(body);
