@@ -53,10 +53,10 @@ public class ImageCodeValidateFilter extends OncePerRequestFilter {
         if ("POST".equals(method) && "/login".equals(request.getRequestURI())) {
             ServletInputStream inputStream = requestWrapper.getInputStream();
             String body = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
-            JSONObject jsonObject=new JSONObject(body);
+            JSONObject jsonObject = new JSONObject(body);
             String captchaUuid = (String) jsonObject.get(CAPTCHA_NAME);
-            String captchaCode = (String) jsonObject.get(CAPTCHA_CODE);
-            String redisCaptchaCode = Convert.toStr(redisUtil.get(captchaUuid));
+            String captchaCode = Convert.toStr(jsonObject.get(CAPTCHA_CODE)).toLowerCase();
+            String redisCaptchaCode = Convert.toStr(redisUtil.get(captchaUuid)).toLowerCase();
             /*
              * 验证码认证失败
              */
