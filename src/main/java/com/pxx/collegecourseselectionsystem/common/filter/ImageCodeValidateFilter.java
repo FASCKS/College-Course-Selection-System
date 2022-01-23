@@ -6,6 +6,7 @@ import com.pxx.collegecourseselectionsystem.common.exception.ImageCodeAuthentica
 import com.pxx.collegecourseselectionsystem.common.utils.BodyReaderHttpServletRequestWrapper;
 import com.pxx.collegecourseselectionsystem.common.utils.RedisUtil;
 import com.pxx.collegecourseselectionsystem.config.authorize.UnauthorizedEntryPoint;
+import com.pxx.collegecourseselectionsystem.util.Global;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +55,7 @@ public class ImageCodeValidateFilter extends OncePerRequestFilter {
             ServletInputStream inputStream = requestWrapper.getInputStream();
             String body = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
             JSONObject jsonObject = new JSONObject(body);
-            String captchaUuid = (String) jsonObject.get(CAPTCHA_NAME);
+            String captchaUuid = Global.CAPTCHA_PREFIX_NAME + "_" + (String) jsonObject.get(CAPTCHA_NAME);
             String captchaCode = Convert.toStr(jsonObject.get(CAPTCHA_CODE)).toLowerCase();
             String redisCaptchaCode = Convert.toStr(redisUtil.get(captchaUuid)).toLowerCase();
             /*

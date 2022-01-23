@@ -91,7 +91,7 @@ public class GlobalController {
     public void captcha(HttpServletResponse httpServletResponse, @Validated @RequestBody CaptchaVo captchaVo) throws IOException {
         CircleCaptcha circleCaptcha = CaptchaUtil.createCircleCaptcha(200, 56, 5, 20);
         String code = circleCaptcha.getCode();
-        String captchaUuid = captchaVo.getCaptchaUuid();
+        String captchaUuid = Global.CAPTCHA_PREFIX_NAME + "_" + captchaVo.getCaptchaUuid();
         boolean saveCaptcha = cache.set(captchaUuid, code, 300);
         if (saveCaptcha) {
             httpServletResponse.setContentType("image/png;charset=utf-8");
