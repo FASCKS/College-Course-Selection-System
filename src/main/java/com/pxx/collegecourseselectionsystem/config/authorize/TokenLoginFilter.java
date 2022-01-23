@@ -108,7 +108,6 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
         cache.hmset(user.getUsername(), redisMap);
         //记录日志
         SysLogServiceImpl sysLogService = SpringUtil.getBean(SysLogServiceImpl.class);
-        log.info("用户  {}  于  {}  登录成功", user.getUsername(), DateUtil.date());
         SysLogEntity sysLogEntity = new SysLogEntity();
         sysLogEntity.setUsername(user.getUsername());
         sysLogEntity.setOperation("登录平台");
@@ -120,7 +119,7 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
         SysUserServiceImpl sysUserService = SpringUtil.getBean(SysUserServiceImpl.class);
         user.setLastLoginTime(DateUtil.date());
         sysUserService.updateById(user);
-
+        log.info("用户  {}  于  {}  登录成功", user.getUsername(), DateUtil.date());
         ResponseUtil.write(res, R.ok()
                 .put("access_token", accessIdToken)
                 .put("refresh_token", refreshToken)
