@@ -51,10 +51,9 @@ public class ImageCodeValidateFilter extends OncePerRequestFilter {
      */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        ServletRequest requestWrapper = new BodyReaderHttpServletRequestWrapper(request);
         String method = request.getMethod();
-
         if ("POST".equals(method) && "/login".equals(request.getRequestURI()) && captcha) {
+            ServletRequest requestWrapper = new BodyReaderHttpServletRequestWrapper(request);
             ServletInputStream inputStream = requestWrapper.getInputStream();
             String body = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
             JSONObject jsonObject = new JSONObject(body);
@@ -72,7 +71,10 @@ public class ImageCodeValidateFilter extends OncePerRequestFilter {
              * 不管是否验证成功。都要删除验证码
              */
 //            redisUtil.del(captchaUuid);
+            filterChain.doFilter(requestWrapper, response);
+        }else{
+            filterChain.doFilter(request, response);
         }
-        filterChain.doFilter(requestWrapper, response);
+
     }
 }
