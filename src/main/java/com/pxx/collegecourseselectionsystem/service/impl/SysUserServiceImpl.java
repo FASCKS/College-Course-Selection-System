@@ -80,8 +80,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
      * @return
      */
     @Override
-    public PageUtils findAllUser(IPage<SysUserEntity> iPage) {
-        IPage<SysUserEntity> allUser = sysUserMapper.findAllUser(iPage);
+    public PageUtils findAllUser(IPage<SysUserEntity> iPage,Integer type) {
+        IPage<SysUserEntity> allUser = sysUserMapper.findAllUser(iPage,type);
         PageUtils pageUtils = new PageUtils(allUser);
         return pageUtils;
     }

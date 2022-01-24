@@ -70,9 +70,9 @@ public class ImageCodeValidateFilter extends OncePerRequestFilter {
                 return;
             }
             /*
-             * 不管是否验证成功。都要删除验证码
+             * 验证成功，删除验证码。
              */
-//            redisUtil.del(captchaUuid);
+            redisUtil.del(captchaUuid);
             filterChain.doFilter(requestWrapper, response);
         }else{
             filterChain.doFilter(request, response);

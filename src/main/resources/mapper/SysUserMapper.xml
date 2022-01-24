@@ -428,5 +428,10 @@
                s.name as unit_name
         from sys_user su
                      left join sys_unit s on su.unit_id = s.unit_id
+        <where>
+            <if test="type != null">
+                and type=#{type,jdbcType=INTEGER}
+            </if>
+        </where>
     </select>
 </mapper>

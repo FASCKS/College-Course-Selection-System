@@ -134,6 +134,7 @@ public class SysUserEntity implements UserDetails {
     /**
      * 锁定时间
      */
+    @JsonIgnore
     @JsonFormat (pattern = DatePattern.NORM_DATETIME_PATTERN)
     @ApiModelProperty(value = "账号封禁的时间",example = "2022-01-22 10:33:11")
     @TableField(value = "lock_time",fill = FieldFill.INSERT)
@@ -142,6 +143,7 @@ public class SysUserEntity implements UserDetails {
     /**
      * 创建时间
      */
+    @JsonIgnore
     @JsonFormat (pattern = DatePattern.NORM_DATETIME_PATTERN)
     @ApiModelProperty(value = "创建时间",hidden = true,example = "2022-01-22 10:33:11")
     @TableField(value = "created_time", fill = FieldFill.INSERT)
@@ -150,6 +152,7 @@ public class SysUserEntity implements UserDetails {
     /**
      * 创建人
      */
+    @JsonIgnore
     @ApiModelProperty(value = "创建人id",hidden = true)
     @TableField(value = "created_by", fill = FieldFill.INSERT)
     private String createdBy;
@@ -157,6 +160,7 @@ public class SysUserEntity implements UserDetails {
     /**
      * 更新时间
      */
+    @JsonIgnore
     @JsonFormat (pattern = DatePattern.NORM_DATETIME_PATTERN)
     @ApiModelProperty(value = "更新时间",hidden = true)
     @TableField(value = "updated_time", fill = FieldFill.INSERT_UPDATE)
@@ -164,6 +168,7 @@ public class SysUserEntity implements UserDetails {
     /**
      * 登录
      */
+    @JsonIgnore
     @JsonFormat (pattern = DatePattern.NORM_DATETIME_PATTERN)
     @ApiModelProperty(value = "登录时间",example = "2022-01-22 10:33:11")
     @TableField(value = "last_login_time", fill = FieldFill.INSERT_UPDATE)
@@ -172,6 +177,7 @@ public class SysUserEntity implements UserDetails {
     /**
      * 更新人
      */
+    @JsonIgnore
     @ApiModelProperty(value = "更新人id",hidden = true)
     @TableField(value = "updated_by", fill = FieldFill.INSERT_UPDATE)
     private String updatedBy;

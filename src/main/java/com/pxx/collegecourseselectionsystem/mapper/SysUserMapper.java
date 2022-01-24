@@ -12,10 +12,13 @@ import java.util.List;
 public interface SysUserMapper extends BaseMapper<SysUserEntity> {
     @Deprecated
     int updateBatch(List<SysUserEntity> list);
+
     @Deprecated
     int batchInsert(@Param("list") List<SysUserEntity> list);
+
     @Deprecated
     int insertOrUpdate(SysUserEntity record);
+
     @Deprecated
     int insertOrUpdateSelective(SysUserEntity record);
 
@@ -28,6 +31,7 @@ public interface SysUserMapper extends BaseMapper<SysUserEntity> {
 
     /**
      * 通过用户名查询用户
+     *
      * @param username
      * @return
      */
@@ -35,7 +39,8 @@ public interface SysUserMapper extends BaseMapper<SysUserEntity> {
 
     /**
      * 查询所有用户
+     *
      * @return
      */
-   IPage<SysUserEntity> findAllUser(IPage<SysUserEntity> iPage);
+    IPage<SysUserEntity> findAllUser(@Param("iPage") IPage<SysUserEntity> iPage, @Param("type") Integer type);
 }

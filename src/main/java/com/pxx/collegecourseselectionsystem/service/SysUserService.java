@@ -30,7 +30,7 @@ public interface SysUserService extends IService<SysUserEntity> {
      * 查询所有用户
      * @return
      */
-    PageUtils findAllUser(IPage<SysUserEntity> iPage);
+    PageUtils findAllUser(IPage<SysUserEntity> iPage,Integer type);
 
     /**
      * 通过用户名查找用户
