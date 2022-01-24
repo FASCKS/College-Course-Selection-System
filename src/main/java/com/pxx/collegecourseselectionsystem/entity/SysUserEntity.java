@@ -152,7 +152,7 @@ public class SysUserEntity implements UserDetails {
      */
     @ApiModelProperty(value = "创建人id",hidden = true)
     @TableField(value = "created_by", fill = FieldFill.INSERT)
-    private Integer createdBy;
+    private Long createdBy;
 
     /**
      * 更新时间
@@ -174,7 +174,7 @@ public class SysUserEntity implements UserDetails {
      */
     @ApiModelProperty(value = "更新人id",hidden = true)
     @TableField(value = "updated_by", fill = FieldFill.INSERT_UPDATE)
-    private Integer updatedBy;
+    private Long updatedBy;
     /**
      * 用户部门
      */

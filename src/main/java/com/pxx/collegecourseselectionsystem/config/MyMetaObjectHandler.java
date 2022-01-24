@@ -1,7 +1,6 @@
 package com.pxx.collegecourseselectionsystem.config;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
-import com.pxx.collegecourseselectionsystem.common.utils.SpringSecurityUtil;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.stereotype.Component;
 
@@ -32,13 +31,13 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
     }
 
     private Long getUserId() {
-        final Long userId = SpringSecurityUtil.getUserId();
-        return userId;
+//        final Long userId = SpringSecurityUtil.getUserId();
+        return 1L;
     }
 
     private String getUserName() {
-        final String username = SpringSecurityUtil.getUsername();
-        return username;
+//        final String username = SpringSecurityUtil.getUsername();
+        return "admin";
     }
 
 }
