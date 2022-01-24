@@ -7,6 +7,8 @@ import com.pxx.collegecourseselectionsystem.common.exception.MyAuthenticationExc
 import com.pxx.collegecourseselectionsystem.common.utils.*;
 import com.pxx.collegecourseselectionsystem.entity.SysLogEntity;
 import com.pxx.collegecourseselectionsystem.entity.SysUserEntity;
+import com.pxx.collegecourseselectionsystem.service.SysLogService;
+import com.pxx.collegecourseselectionsystem.service.SysUserService;
 import com.pxx.collegecourseselectionsystem.service.impl.SysLogServiceImpl;
 import com.pxx.collegecourseselectionsystem.service.impl.SysUserServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -36,11 +38,13 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
     private TokenManager tokenManager;
     public static final String SPRING_SECURITY_FORM_USERNAME_KEY = "username";
     public static final String SPRING_SECURITY_FORM_PASSWORD_KEY = "password";
-    private final SysLogServiceImpl sysLogService = SpringUtil.getBean(SysLogServiceImpl.class);
-    private final SysUserServiceImpl sysUserService = SpringUtil.getBean(SysUserServiceImpl.class);;
+    private  SysLogService sysLogService ;
+    private  SysUserService sysUserService ;
 
 
     public TokenLoginFilter(AuthenticationManager authenticationManager, TokenManager tokenManager) {
+        this.sysLogService=SpringUtil.getBean(SysLogServiceImpl.class);
+        this.sysUserService=SpringUtil.getBean(SysUserServiceImpl.class);
         this.authenticationManager = authenticationManager;
         this.tokenManager = tokenManager;
         this.setPostOnly(true);
@@ -112,10 +116,10 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
         sysLogEntity.setTime(0L);
         sysLogEntity.setCreateDate(DateUtil.date());
         sysLogEntity.setIp(IPUtils.getIpAddr(req));
-//        sysLogService.save(sysLogEntity);
+        sysLogService.save(sysLogEntity);
         //记录登录时间
         user.setLastLoginTime(DateUtil.date());
-//        sysUserService.updateById(user);
+        sysUserService.updateById(user);
         log.info("用户  {}  于  {}  登录成功", user.getUsername(), DateUtil.date());
         ResponseUtil.write(res, R.ok()
                 .put("access_token", accessIdToken)
