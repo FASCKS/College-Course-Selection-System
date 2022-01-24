@@ -2,18 +2,8 @@ package com.pxx.collegecourseselectionsystem.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.pxx.collegecourseselectionsystem.entity.SysRoleEntity;
-
-import java.util.List;
 public interface SysRoleService extends IService<SysRoleEntity>{
 
-
-    int updateBatch(List<SysRoleEntity> list);
-
-    int batchInsert(List<SysRoleEntity> list);
-
-    int insertOrUpdate(SysRoleEntity record);
-
-    int insertOrUpdateSelective(SysRoleEntity record);
 
     /**
      * 通过角色id查询角色详情

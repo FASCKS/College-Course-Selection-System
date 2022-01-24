@@ -1,15 +1,12 @@
 package com.pxx.collegecourseselectionsystem.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import java.util.Date;
-import java.util.List;
-
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.util.Date;
+import java.util.List;
 
 /**
     * 角色
@@ -43,25 +40,25 @@ public class SysRoleEntity {
     /**
      * 创建人
      */
-    @TableField(value = "created_by")
+    @TableField(value = "created_by",fill = FieldFill.INSERT)
     private String createdBy;
 
     /**
      * 创建时间
      */
-    @TableField(value = "created_time")
+    @TableField(value = "created_time",fill = FieldFill.INSERT)
     private Date createdTime;
 
     /**
      * 更新人
      */
-    @TableField(value = "updated_by")
+    @TableField(value = "updated_by",fill = FieldFill.INSERT_UPDATE)
     private String updatedBy;
 
     /**
      * 更新时间
      */
-    @TableField(value = "updated_time")
+    @TableField(value = "updated_time",fill = FieldFill.INSERT_UPDATE)
     private Date updatedTime;
     /**
      * 权限集合

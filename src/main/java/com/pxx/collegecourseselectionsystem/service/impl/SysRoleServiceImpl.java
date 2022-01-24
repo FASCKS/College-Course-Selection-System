@@ -24,25 +24,6 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRoleEntity
     @Autowired
     private SysRoleMenuService sysRoleMenuService;
 
-    @Override
-    public int updateBatch(List<SysRoleEntity> list) {
-        return baseMapper.updateBatch(list);
-    }
-
-    @Override
-    public int batchInsert(List<SysRoleEntity> list) {
-        return baseMapper.batchInsert(list);
-    }
-
-    @Override
-    public int insertOrUpdate(SysRoleEntity record) {
-        return baseMapper.insertOrUpdate(record);
-    }
-
-    @Override
-    public int insertOrUpdateSelective(SysRoleEntity record) {
-        return baseMapper.insertOrUpdateSelective(record);
-    }
 
     /**
      * 通过角色id查询角色详情
