@@ -43,6 +43,7 @@ public class SysUserEntity implements UserDetails {
     /**
      * 用户名称
      */
+    @NotBlank
     @ApiModelProperty(value = "用户姓名")
     @NotBlank(message = "用户名不能为空")
     @TableField(value = "`name`")
@@ -51,6 +52,7 @@ public class SysUserEntity implements UserDetails {
     /**
      * 工号或学号 账号
      */
+    @NotBlank
     @ApiModelProperty(value = "账号/用户名")
     @TableField(value = "`number`")
     private String number;
@@ -67,6 +69,7 @@ public class SysUserEntity implements UserDetails {
     /**
      * 密码
      */
+    @NotBlank
     @ApiModelProperty(value = "密码")
     @TableField(value = "`password`")
     private String password;
@@ -74,8 +77,7 @@ public class SysUserEntity implements UserDetails {
     /**
      * 账号类型 1 学生 2 老师 3主任 3其它人员
      */
-    @Deprecated
-    @JsonIgnore
+
     @ApiModelProperty(value = "账号类型")
     @TableField(value = "`type`")
     private Integer type;
