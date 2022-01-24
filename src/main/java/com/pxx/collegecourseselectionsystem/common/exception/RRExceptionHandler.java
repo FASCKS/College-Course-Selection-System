@@ -9,18 +9,13 @@
 package com.pxx.collegecourseselectionsystem.common.exception;
 
 import cn.hutool.core.exceptions.ValidateException;
-import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.pxx.collegecourseselectionsystem.common.utils.R;
-import com.pxx.collegecourseselectionsystem.common.utils.SpringSecurityUtil;
-import com.pxx.collegecourseselectionsystem.entity.SysLogEntity;
-import com.pxx.collegecourseselectionsystem.service.SysLogService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -49,9 +44,6 @@ import java.util.List;
 @RestControllerAdvice
 public class RRExceptionHandler {
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    @Autowired
-    private SysLogService sysLogService;
-
     /**
      * 处理自定义异常
      */
@@ -265,16 +257,8 @@ public class RRExceptionHandler {
 
 
     @ExceptionHandler(AccessDeniedException.class)
-    public R handleAccessDeniedException(AccessDeniedException e) {
-        String username = SpringSecurityUtil.getUsername();
-
-        SysLogEntity sysLogEntity = new SysLogEntity();
-        sysLogEntity.setUsername(username);
-        sysLogEntity.setTime(0L);
-        sysLogEntity.setOperation("非法访问");
-        sysLogService.save(sysLogEntity);
-
-        return R.error(403, StrUtil.format("用户 {} 没有权限, {} ,请联系管理员授权", username, e.getMessage()));
+    public void handleAccessDeniedException(AccessDeniedException accessDeniedException) {
+        throw accessDeniedException;
     }
 
     /**
@@ -286,6 +270,7 @@ public class RRExceptionHandler {
     public R handIllegalArgumentException(IllegalArgumentException illegalArgumentException) {
         return R.error(illegalArgumentException.getMessage());
     }
+
     /**
      * 非法参数异常
      *
@@ -295,6 +280,7 @@ public class RRExceptionHandler {
     public R handTokenSignatureOrExpiredJwtException(TokenSignatureOrExpiredJwtException illegalArgumentException) {
         return R.error(illegalArgumentException.getMessage());
     }
+
     @ExceptionHandler(Exception.class)
     public R handleException(Exception e) {
         logger.error(e.getMessage(), e);

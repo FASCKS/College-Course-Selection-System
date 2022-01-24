@@ -56,7 +56,8 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenuEntity
                     sysMenuEntity.getName(),
                     sysMenuEntity.getOrderNum(),
                     sysMenuEntity.getUrl(),
-                    sysMenuEntity.getStatus()));
+                    sysMenuEntity.getStatus(),
+                    sysMenuEntity.getType()));
         }
         List<Tree<Integer>> buildTreeList = TreeUtil.build(nodeList, 0,
                 (treeNode, tree) -> {
@@ -66,7 +67,8 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenuEntity
                     tree.setName(treeNode.getName());
                     tree.putExtra("url", treeNode.getUrl());
                     tree.putExtra("status",treeNode.getStatus());
-                });
+                    tree.putExtra("type",treeNode.getType());}
+                );
         return buildTreeList;
     }
 

@@ -1,8 +1,13 @@
 package com.pxx.collegecourseselectionsystem.config.authorize;
 
+import cn.hutool.core.util.StrUtil;
 import com.pxx.collegecourseselectionsystem.common.utils.R;
 import com.pxx.collegecourseselectionsystem.common.utils.ResponseUtil;
+import com.pxx.collegecourseselectionsystem.common.utils.SpringSecurityUtil;
+import com.pxx.collegecourseselectionsystem.entity.SysLogEntity;
+import com.pxx.collegecourseselectionsystem.service.SysLogService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
@@ -14,6 +19,8 @@ import java.io.IOException;
 @Component
 @Slf4j
 public class SimpleAccessDeniedHandler implements AccessDeniedHandler {
+    @Autowired
+    private SysLogService sysLogService;
     /**
      * Handles an access denied failure.
      *
@@ -25,7 +32,13 @@ public class SimpleAccessDeniedHandler implements AccessDeniedHandler {
      */
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
-        log.error("自定义异常处理");
-        ResponseUtil.write(response, R.error(403,"Access is denied"));
+        String username = SpringSecurityUtil.getUsername();
+        log.info("用户 {} 非法访问--->{}",username,request.getRequestURI());
+        SysLogEntity sysLogEntity = new SysLogEntity();
+        sysLogEntity.setUsername(username);
+        sysLogEntity.setTime(0L);
+        sysLogEntity.setOperation("非法访问");
+        sysLogService.save(sysLogEntity);
+        ResponseUtil.write(response, R.error(403, StrUtil.format("用户 {} 没有权限, {} ,请联系管理员授权", username, accessDeniedException.getMessage())));
     }
 }
