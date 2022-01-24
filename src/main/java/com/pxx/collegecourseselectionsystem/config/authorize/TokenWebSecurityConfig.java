@@ -78,7 +78,7 @@ public class TokenWebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .addLogoutHandler(tokenLogoutHandler)
                 .and()
                 .addFilterBefore(imageCodeValidateFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilter(new TokenLoginFilter(authenticationManager(), tokenManager, redisTemplate))
+                .addFilter(new TokenLoginFilter(authenticationManager(), tokenManager))
                 .addFilter(new TokenAuthenticationFilter(authenticationManager(), tokenManager, redisTemplate))
                 .addFilterAfter(new XssFilter(), CsrfFilter.class)
                 .httpBasic();
@@ -88,6 +88,7 @@ public class TokenWebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
+
         auth.authenticationProvider(loginValidateAuthenticationProvider)
                 .userDetailsService(userDetailsService)
                 .passwordEncoder(defaultPasswordEncoder);

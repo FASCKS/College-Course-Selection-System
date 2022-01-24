@@ -11,7 +11,6 @@ import com.pxx.collegecourseselectionsystem.service.impl.SysLogServiceImpl;
 import com.pxx.collegecourseselectionsystem.service.impl.SysUserServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -35,15 +34,15 @@ import java.util.Map;
 public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
     private AuthenticationManager authenticationManager;
     private TokenManager tokenManager;
-    private RedisTemplate<String, Object> redisTemplate;
     public static final String SPRING_SECURITY_FORM_USERNAME_KEY = "username";
     public static final String SPRING_SECURITY_FORM_PASSWORD_KEY = "password";
+    private final SysLogServiceImpl sysLogService = SpringUtil.getBean(SysLogServiceImpl.class);
+    private final SysUserServiceImpl sysUserService = SpringUtil.getBean(SysUserServiceImpl.class);;
 
 
-    public TokenLoginFilter(AuthenticationManager authenticationManager, TokenManager tokenManager, RedisTemplate redisTemplate) {
+    public TokenLoginFilter(AuthenticationManager authenticationManager, TokenManager tokenManager) {
         this.authenticationManager = authenticationManager;
         this.tokenManager = tokenManager;
-        this.redisTemplate = redisTemplate;
         this.setPostOnly(true);
         this.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/login", "POST"));
     }
@@ -107,18 +106,16 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
         redisMap.put("start_time", System.currentTimeMillis());
         cache.hmset(user.getUsername(), redisMap);
         //记录日志
-        SysLogServiceImpl sysLogService = SpringUtil.getBean(SysLogServiceImpl.class);
         SysLogEntity sysLogEntity = new SysLogEntity();
         sysLogEntity.setUsername(user.getUsername());
         sysLogEntity.setOperation("登录平台");
         sysLogEntity.setTime(0L);
         sysLogEntity.setCreateDate(DateUtil.date());
         sysLogEntity.setIp(IPUtils.getIpAddr(req));
-        sysLogService.save(sysLogEntity);
+//        sysLogService.save(sysLogEntity);
         //记录登录时间
-        SysUserServiceImpl sysUserService = SpringUtil.getBean(SysUserServiceImpl.class);
         user.setLastLoginTime(DateUtil.date());
-        sysUserService.updateById(user);
+//        sysUserService.updateById(user);
         log.info("用户  {}  于  {}  登录成功", user.getUsername(), DateUtil.date());
         ResponseUtil.write(res, R.ok()
                 .put("access_token", accessIdToken)

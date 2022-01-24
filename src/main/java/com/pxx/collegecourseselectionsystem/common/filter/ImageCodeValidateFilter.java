@@ -1,6 +1,7 @@
 package com.pxx.collegecourseselectionsystem.common.filter;
 
 import cn.hutool.core.convert.Convert;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import com.pxx.collegecourseselectionsystem.common.exception.ImageCodeAuthenticationException;
 import com.pxx.collegecourseselectionsystem.common.utils.BodyReaderHttpServletRequestWrapper;
@@ -58,12 +59,12 @@ public class ImageCodeValidateFilter extends OncePerRequestFilter {
             String body = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
             JSONObject jsonObject = new JSONObject(body);
             String captchaUuid = Global.CAPTCHA_PREFIX_NAME + "_" + (String) jsonObject.get(CAPTCHA_NAME);
-            String captchaCode = Convert.toStr(jsonObject.get(CAPTCHA_CODE)).toLowerCase();
+            String captchaCode = Convert.toStr(jsonObject.get(CAPTCHA_CODE)).toLowerCase().trim();
             String redisCaptchaCode = Convert.toStr(redisUtil.get(captchaUuid)).toLowerCase();
             /*
              * 验证码认证失败
              */
-            if (redisCaptchaCode == null || !redisCaptchaCode.equals(captchaCode)) {
+            if (StrUtil.isBlank(redisCaptchaCode) || !redisCaptchaCode.equals(captchaCode)) {
                 unauthorizedEntryPoint.commence(request, response, new ImageCodeAuthenticationException("验证码错误！"));
                 return;
             }
