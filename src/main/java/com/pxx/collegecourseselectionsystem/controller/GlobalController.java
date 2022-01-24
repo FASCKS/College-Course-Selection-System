@@ -91,7 +91,7 @@ public class GlobalController {
     @PostMapping("/captcha")
     public void captcha(HttpServletResponse httpServletResponse, @Validated @RequestBody CaptchaVo captchaVo) throws IOException {
         //去掉o和0 i和l
-        RandomGenerator randomGenerator = new RandomGenerator("abcdefghijkmnpqrstuvwxyz23456789", 5);
+        RandomGenerator randomGenerator = new RandomGenerator("abcdefghijkmnpqrstuvwxyzABCDEFGHIJKMNPQRSTUVWXYZ23456789", 5);
         CircleCaptcha circleCaptcha = CaptchaUtil.createCircleCaptcha(200, 56, 5, 20);
 
         circleCaptcha.setGenerator(randomGenerator);
@@ -105,20 +105,4 @@ public class GlobalController {
             outputStream.write(circleCaptcha.getImageBytes());
         }
     }
-/*    *//**
-     * 验证码
-     *//*
-    @ApiOperation("验证码")
-    @GetMapping("/captcha")
-    public void captchaGet(HttpServletResponse httpServletResponse, @RequestParam("captchaUuid") String captchaUuid) throws IOException {
-        CircleCaptcha circleCaptcha = CaptchaUtil.createCircleCaptcha(200, 56, 5, 20);
-        String code = circleCaptcha.getCode();
-        boolean saveCaptcha = cache.set(captchaUuid, code, 300);
-        if (saveCaptcha) {
-            httpServletResponse.setContentType("image/png;charset=utf-8");
-            httpServletResponse.setHeader("Content-Disposition", "attachment;filename=captcha.png");
-            ServletOutputStream outputStream = httpServletResponse.getOutputStream();
-            outputStream.write(circleCaptcha.getImageBytes());
-        }
-    }*/
 }
