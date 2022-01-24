@@ -33,7 +33,7 @@ public class SimpleAccessDeniedHandler implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
         String username = SpringSecurityUtil.getUsername();
-        log.info("用户 {} 非法访问--->{}",username,request.getRequestURI());
+        log.info("用户 {} 非法访问未授权--->{}",username,request.getRequestURI());
         SysLogEntity sysLogEntity = new SysLogEntity();
         sysLogEntity.setUsername(username);
         sysLogEntity.setTime(0L);

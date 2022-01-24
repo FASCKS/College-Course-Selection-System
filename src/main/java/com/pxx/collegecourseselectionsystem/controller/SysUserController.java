@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import java.util.List;
 
 @Validated
 @RequestMapping("/sys/users")
@@ -65,18 +66,20 @@ public class SysUserController {
     /**
      * 删除用户
      *
-     * @param userId 用户id
+     * @param userIds 多个用户id
      * @return
      */
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "userId", value = "用户id", dataTypeClass = Long.class, required = true, paramType = "query")
+            @ApiImplicitParam(name = "userIds", value = "用户id",required = true)
     })
     @ApiOperation("用户删除")
     @PreAuthorize("hasAnyAuthority('sys:user:delete')")
     @PostMapping("/delete")
-    public R delete(@RequestParam("userId") @Positive Long userId) {
-
-        boolean removeById = sysUserService.removeById(userId);
+    public R delete(@NotEmpty @RequestBody List<Long> userIds) {
+        if (userIds.contains(1L)){
+            return R.error("不能删除超级管理员");
+        }
+        boolean removeById = sysUserService.removeBatchByIds(userIds);
         return R.ok().put("data", removeById);
     }
 

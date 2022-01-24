@@ -29,7 +29,7 @@ public class UnauthorizedEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         String ipAddr = IPUtils.getIpAddr(request);
-        log.info("ip为 {} 的用户访问未授权的url---->{}--->{}", ipAddr,request.getMethod(), request.getRequestURI());
+        log.info("ip为 {} 的用户非法访问url---->{}--->{}", ipAddr,request.getMethod(), request.getRequestURI());
         R r=null;
         if (authException instanceof InsufficientAuthenticationException) {
            r=R.error(403,authException.getMessage());
