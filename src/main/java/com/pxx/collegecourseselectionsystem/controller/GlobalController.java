@@ -2,6 +2,7 @@ package com.pxx.collegecourseselectionsystem.controller;
 
 import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.CircleCaptcha;
+import cn.hutool.captcha.generator.RandomGenerator;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.IdUtil;
 import com.pxx.collegecourseselectionsystem.common.utils.R;
@@ -89,10 +90,14 @@ public class GlobalController {
     @ApiOperation("验证码")
     @PostMapping("/captcha")
     public void captcha(HttpServletResponse httpServletResponse, @Validated @RequestBody CaptchaVo captchaVo) throws IOException {
+        //去掉o和0 i和l
+        RandomGenerator randomGenerator = new RandomGenerator("abcdefghijkmnpqrstuvwxyz23456789", 5);
         CircleCaptcha circleCaptcha = CaptchaUtil.createCircleCaptcha(200, 56, 5, 20);
+
+        circleCaptcha.setGenerator(randomGenerator);
         String code = circleCaptcha.getCode();
         String captchaUuid = Global.CAPTCHA_PREFIX_NAME + "_" + captchaVo.getCaptchaUuid();
-        boolean saveCaptcha = cache.set(captchaUuid, code, 300);
+        boolean saveCaptcha = cache.set(captchaUuid, code, 130);
         if (saveCaptcha) {
             httpServletResponse.setContentType("image/png;charset=utf-8");
             httpServletResponse.setHeader("Content-Disposition", "attachment;filename=captcha.png");
