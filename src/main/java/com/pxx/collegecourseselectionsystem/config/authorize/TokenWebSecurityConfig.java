@@ -66,9 +66,11 @@ public class TokenWebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().csrf().disable()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST,
-                        "/sys/global/accessToken/refresh",
                         "/sys/global/captcha"
                 )
+                .permitAll()
+                .antMatchers(HttpMethod.GET,
+                        "/sys/global/accessToken/refresh")
                 .permitAll()
                 .anyRequest()
                 .authenticated()

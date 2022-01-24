@@ -1,5 +1,6 @@
 package com.pxx.collegecourseselectionsystem.service;
 
+import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.pxx.collegecourseselectionsystem.entity.SysMenuEntity;
 
@@ -20,6 +21,7 @@ public interface SysMenuService extends IService<SysMenuEntity>{
      * 返回所有菜单
      * @return
      */
-    List<SysMenuEntity> findMenuByType();
+    List<Tree<Integer>> findMenuByType();
+
     List<SysMenuEntity> createTree(List<SysMenuEntity> menuEntityList, int pid);
 }
