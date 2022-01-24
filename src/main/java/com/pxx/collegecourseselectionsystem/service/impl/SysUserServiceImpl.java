@@ -17,6 +17,7 @@ import com.pxx.collegecourseselectionsystem.service.SysLogService;
 import com.pxx.collegecourseselectionsystem.service.SysMenuService;
 import com.pxx.collegecourseselectionsystem.service.SysRoleService;
 import com.pxx.collegecourseselectionsystem.service.SysUserService;
+import com.pxx.collegecourseselectionsystem.util.Global;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -153,7 +154,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
             throw new UsernameNotFoundException("密码或用户名错误.");
         }
         //如果是超级管理员
-        if (sysUserEntity.getNumber().equals("admin")) {
+        if (Global.SUPER_ADMINISTRATOR_NAME.equals(sysUserEntity.getNumber())) {
             //所有角色
             List<SysRoleEntity> roleEntityList = sysRoleService.list();
             sysUserEntity.setRoleEntityList(roleEntityList);

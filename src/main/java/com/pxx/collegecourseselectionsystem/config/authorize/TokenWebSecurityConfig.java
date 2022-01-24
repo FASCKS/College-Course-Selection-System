@@ -45,6 +45,8 @@ public class TokenWebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private SimpleAccessDeniedHandler simpleAccessDeniedHandler;
     @Autowired
+    private SimpleLogoutSuccessHandler simpleLogoutSuccessHandler;
+    @Autowired
     private UnauthorizedEntryPoint unauthorizedEntryPoint;
     /**
      * 验证码图片过滤器
@@ -78,6 +80,7 @@ public class TokenWebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout()
                 .logoutUrl("/logout")
                 .addLogoutHandler(tokenLogoutHandler)
+                .logoutSuccessHandler(simpleLogoutSuccessHandler)
                 .and()
                 .addFilterBefore(imageCodeValidateFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilter(new TokenLoginFilter(authenticationManager(), tokenManager))

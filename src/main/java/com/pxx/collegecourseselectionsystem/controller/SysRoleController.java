@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Positive;
 import java.util.List;
 @Api(tags = "角色类")
@@ -57,11 +58,11 @@ public class SysRoleController {
      * 角色删除
      */
     @ApiOperation("角色删除")
-    @ApiImplicitParam(name = "roleId",value = "角色id",defaultValue = "1",required = true)
+    @ApiImplicitParam(name = "roleIds",value = "角色id",required = true)
     @PreAuthorize("hasAnyAuthority('sys:role:delete')")
     @PostMapping("/delete")
-    public R delete(@RequestParam("roleId") Long roleId){
-        boolean removeById = sysRoleService.removeById(roleId);
+    public R delete(@NotEmpty @RequestBody List<Long> roleIds){
+        boolean removeById = sysRoleService.removeBatchByIds(roleIds);
         return R.ok().put("data",removeById);
     }
     /**
