@@ -26,7 +26,7 @@ public class SysRoleController {
      * 角色列表
      * @return
      */
-    @ApiOperation("所有角色列表")
+    @ApiOperation("角色列表")
     @PreAuthorize("hasAnyAuthority('sys:role:list')")
     @GetMapping("/list")
     public R list() {
@@ -47,7 +47,7 @@ public class SysRoleController {
     /**
      * 角色更新
      */
-    @ApiOperation("角色更新")
+    @ApiOperation("角色编辑")
     @PreAuthorize("hasAnyAuthority('sys:role:update')")
     @PostMapping("/update")
     public R update(@RequestBody SysRoleEntity sysRoleEntity){
