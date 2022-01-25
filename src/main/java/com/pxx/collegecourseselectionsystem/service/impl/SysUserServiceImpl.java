@@ -9,15 +9,9 @@ import com.pxx.collegecourseselectionsystem.common.utils.PageUtils;
 import com.pxx.collegecourseselectionsystem.common.utils.RedisUtil;
 import com.pxx.collegecourseselectionsystem.common.utils.SpringSecurityUtil;
 import com.pxx.collegecourseselectionsystem.dto.SysUserDto;
-import com.pxx.collegecourseselectionsystem.entity.SysLogEntity;
-import com.pxx.collegecourseselectionsystem.entity.SysMenuEntity;
-import com.pxx.collegecourseselectionsystem.entity.SysRoleEntity;
-import com.pxx.collegecourseselectionsystem.entity.SysUserEntity;
+import com.pxx.collegecourseselectionsystem.entity.*;
 import com.pxx.collegecourseselectionsystem.mapper.SysUserMapper;
-import com.pxx.collegecourseselectionsystem.service.SysLogService;
-import com.pxx.collegecourseselectionsystem.service.SysMenuService;
-import com.pxx.collegecourseselectionsystem.service.SysRoleService;
-import com.pxx.collegecourseselectionsystem.service.SysUserService;
+import com.pxx.collegecourseselectionsystem.service.*;
 import com.pxx.collegecourseselectionsystem.util.Global;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -34,6 +28,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
     private SysUserMapper sysUserMapper;
     @Autowired
     private SysRoleService sysRoleService;
+    @Autowired
+    private SysUserRoleService sysUserRoleService;
     @Autowired
     private SysMenuService sysMenuService;
     @Autowired
@@ -70,8 +66,17 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
      * @return 是否添加成功
      */
     @Override
-    public boolean insertOneUser(SysUserEntity sysUserEntity) {
-        return false;
+    public boolean insertOneUser(SysUserDto sysUserEntity) {
+        boolean saveUser = this.save(sysUserEntity);
+        SysUserRoleEntity sysUserRole = new SysUserRoleEntity();
+        sysUserRole.setUserId(sysUserEntity.getUserId());
+        sysUserRole.setRoleId(sysUserEntity.getRoleId());
+        boolean saveUserRole = sysUserRoleService.save(sysUserRole);
+        if (!saveUser && !saveUserRole) {
+            throw new RRException("用户添加失败");
+        }
+
+        return saveUser && saveUserRole;
     }
 
     /**
@@ -81,8 +86,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
      * @return
      */
     @Override
-    public PageUtils findAllUser(IPage<SysUserDto> iPage,Integer type) {
-        IPage<SysUserDto> allUser = sysUserMapper.findAllUser(iPage,type);
+    public PageUtils findAllUser(IPage<SysUserDto> iPage, Integer type) {
+        IPage<SysUserDto> allUser = sysUserMapper.findAllUser(iPage, type);
         PageUtils pageUtils = new PageUtils(allUser);
         return pageUtils;
     }
@@ -132,9 +137,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
         boolean updateById = this.updateById(sysUserEntity);
         if (updateById) {
             String username = SpringSecurityUtil.getUsername();
-            SysLogEntity sysLogEntity=new SysLogEntity();
+            SysLogEntity sysLogEntity = new SysLogEntity();
             sysLogEntity.setTime(0L);
-            sysLogEntity.setOperation(StrUtil.format("用户 {} 修改了 用户 {} 的密码",username,sysUserEntity.getUsername()));
+            sysLogEntity.setOperation(StrUtil.format("用户 {} 修改了 用户 {} 的密码", username, sysUserEntity.getUsername()));
             sysLogEntity.setUsername(username);
             sysLogService.save(sysLogEntity);
 

@@ -61,7 +61,7 @@ public class SysUserController {
         String password = sysUserEntity.getPassword();
         sysUserEntity.setPassword(passwordEncoder.encode(password));
         sysUserEntity.setUserId(null);
-        boolean save = sysUserService.save(sysUserEntity);
+        boolean save = sysUserService.insertOneUser(sysUserEntity);
         return R.ok().put("data", save);
     }
 

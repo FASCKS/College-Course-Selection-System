@@ -25,8 +25,7 @@ public interface SysUserService extends IService<SysUserEntity> {
      * @param sysUserEntity 用户实体
      * @return 是否添加成功
      */
-    @Deprecated
-    boolean insertOneUser(SysUserEntity sysUserEntity);
+    boolean insertOneUser(SysUserDto sysUserEntity);
     /**
      * 查询所有用户
      * @return
