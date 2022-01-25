@@ -19,6 +19,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -65,6 +66,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
      * @param sysUserEntity 用户实体
      * @return 是否添加成功
      */
+    @Transactional
     @Override
     public boolean insertOneUser(SysUserDto sysUserEntity) {
         boolean saveUser = this.save(sysUserEntity);
@@ -149,6 +151,25 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
         }
 
         return updateById;
+    }
+
+    /**
+     * 更新一个用户
+     *
+     * @param sysUserEntity
+     * @return
+     */
+    @Transactional
+    @Override
+    public boolean updateOneUser(SysUserDto sysUserEntity) {
+        boolean updateUser = this.updateById(sysUserEntity);
+        Long userId = sysUserEntity.getUserId();
+        Long roleId = sysUserEntity.getRoleId();
+        boolean updateRole = sysUserRoleService.updateOneByUserId(userId, roleId);
+        if (!updateUser || !updateRole ){
+            throw new RRException("用户更新失败");
+        }
+        return true;
     }
 
 

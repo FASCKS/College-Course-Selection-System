@@ -97,7 +97,7 @@ public class SysUserController {
     public R update(@RequestBody @Validated SysUserDto sysUserEntity) {
         sysUserEntity.setPassword(null);
         sysUserEntity.setNumber(null);
-        boolean updateById = sysUserService.updateById(sysUserEntity);
+        boolean updateById = sysUserService.updateOneUser(sysUserEntity);
         return R.ok().put("data", updateById);
     }
 
@@ -112,8 +112,8 @@ public class SysUserController {
     @PreAuthorize("hasAnyAuthority('sys:user:info','sys:user:update')")
     @PostMapping("/info")
     public R info(@RequestParam("userId") @Positive Long userId) {
-        boolean removeById = sysUserService.removeById(userId);
-        return R.ok().put("data", removeById);
+        SysUserEntity sysUserEntity = sysUserService.getById(userId);
+        return R.ok().put("data", sysUserEntity);
     }
 
     /**
