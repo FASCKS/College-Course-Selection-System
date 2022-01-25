@@ -7,6 +7,7 @@ import com.pxx.collegecourseselectionsystem.common.utils.R;
 import com.pxx.collegecourseselectionsystem.dto.SysUserDto;
 import com.pxx.collegecourseselectionsystem.entity.SysUserEntity;
 import com.pxx.collegecourseselectionsystem.service.SysUserService;
+import com.pxx.collegecourseselectionsystem.util.Global;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -78,7 +79,7 @@ public class SysUserController {
     @PreAuthorize("hasAnyAuthority('sys:user:delete')")
     @PostMapping("/delete")
     public R delete(@NotEmpty @RequestBody List<Long> userIds) {
-        if (userIds.contains(1L)){
+        if (userIds.contains(Global.SUPER_ADMINISTRATOR_USER_ID)){
             return R.error("不能删除超级管理员");
         }
         boolean removeById = sysUserService.removeBatchByIds(userIds);

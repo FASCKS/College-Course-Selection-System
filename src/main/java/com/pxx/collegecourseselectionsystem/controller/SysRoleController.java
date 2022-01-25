@@ -1,6 +1,7 @@
 package com.pxx.collegecourseselectionsystem.controller;
 
 import com.pxx.collegecourseselectionsystem.common.utils.R;
+import com.pxx.collegecourseselectionsystem.dto.SysRoleDto;
 import com.pxx.collegecourseselectionsystem.entity.SysRoleEntity;
 import com.pxx.collegecourseselectionsystem.service.SysRoleService;
 import io.swagger.annotations.Api;
@@ -50,7 +51,7 @@ public class SysRoleController {
     @ApiOperation("角色编辑")
     @PreAuthorize("hasAnyAuthority('sys:role:update')")
     @PostMapping("/update")
-    public R update(@RequestBody SysRoleEntity sysRoleEntity){
+    public R update(@RequestBody SysRoleDto sysRoleEntity){
         boolean updateOneRole = sysRoleService.updateOneRole(sysRoleEntity);
         return R.ok().put("data",updateOneRole);
     }
@@ -71,7 +72,7 @@ public class SysRoleController {
     @ApiOperation("角色新增")
     @PreAuthorize("hasAnyAuthority('sys:role:insert')")
     @PostMapping("/insert")
-    public R insert(@RequestBody SysRoleEntity sysRoleEntity){
+    public R insert(@RequestBody SysRoleDto sysRoleEntity){
         boolean insertOneRole =   sysRoleService.insertOneRole(sysRoleEntity);
         return R.ok().put("data",insertOneRole);
     }

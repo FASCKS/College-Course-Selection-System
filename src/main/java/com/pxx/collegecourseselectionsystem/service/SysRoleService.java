@@ -1,6 +1,7 @@
 package com.pxx.collegecourseselectionsystem.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.pxx.collegecourseselectionsystem.dto.SysRoleDto;
 import com.pxx.collegecourseselectionsystem.entity.SysRoleEntity;
 public interface SysRoleService extends IService<SysRoleEntity>{
 
@@ -17,12 +18,12 @@ public interface SysRoleService extends IService<SysRoleEntity>{
      * @param sysRoleEntity
      * @return
      */
-    boolean updateOneRole(SysRoleEntity sysRoleEntity);
+    boolean updateOneRole(SysRoleDto sysRoleEntity);
 
     /**
      * 新增角色 和 角色权限
      * @param sysRoleEntity
      * @return
      */
-    boolean insertOneRole(SysRoleEntity sysRoleEntity);
+    boolean insertOneRole(SysRoleDto sysRoleEntity);
 }

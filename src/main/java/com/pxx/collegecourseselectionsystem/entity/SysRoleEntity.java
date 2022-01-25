@@ -2,7 +2,6 @@ package com.pxx.collegecourseselectionsystem.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -10,7 +9,6 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.util.Date;
-import java.util.List;
 
 /**
     * 角色
@@ -73,19 +71,7 @@ public class SysRoleEntity {
     @JsonIgnore
     @TableField(value = "updated_time",fill = FieldFill.INSERT_UPDATE)
     private Date updatedTime;
-    /**
-     * 权限集合
-     */
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @TableField(exist = false)
-    private List<SysMenuEntity> sysMenuEntities;
-    /**
-     * 新增得菜单id数组
-     */
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @TableField(exist = false)
-    @ApiModelProperty("新增权限需要得菜单id")
-    private List<Long> MenuAuthorityIds;
+
 
     public static final String COL_ROLE_ID = "role_id";
 

@@ -2,6 +2,7 @@ package com.pxx.collegecourseselectionsystem.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.pxx.collegecourseselectionsystem.common.exception.RRException;
+import com.pxx.collegecourseselectionsystem.dto.SysRoleDto;
 import com.pxx.collegecourseselectionsystem.entity.SysMenuEntity;
 import com.pxx.collegecourseselectionsystem.entity.SysRoleEntity;
 import com.pxx.collegecourseselectionsystem.entity.SysRoleMenuEntity;
@@ -11,6 +12,7 @@ import com.pxx.collegecourseselectionsystem.service.SysRoleMenuService;
 import com.pxx.collegecourseselectionsystem.service.SysRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +35,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRoleEntity
      */
     @Override
     public SysRoleEntity findRoleInfoByRoleId(Long roleId) {
-        SysRoleEntity sysRoleEntity = sysRoleMapper.findRoleInfoByRoleId(roleId);
+        SysRoleDto sysRoleEntity = sysRoleMapper.findRoleInfoByRoleId(roleId);
         List<SysMenuEntity> sysMenuEntities = sysRoleEntity.getSysMenuEntities();
         //菜单权限变成树
         if (!sysMenuEntities.isEmpty()) {
@@ -43,9 +45,9 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRoleEntity
 
         return sysRoleEntity;
     }
-
+    @Transactional
     @Override
-    public boolean updateOneRole(SysRoleEntity sysRoleEntity) {
+    public boolean updateOneRole(SysRoleDto sysRoleEntity) {
         boolean updateById = this.updateById(sysRoleEntity);
 
         if (!sysRoleEntity.getSysMenuEntities().isEmpty()) {
@@ -72,8 +74,9 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRoleEntity
      * @param sysRoleEntity
      * @return
      */
+    @Transactional
     @Override
-    public boolean insertOneRole(SysRoleEntity sysRoleEntity) {
+    public boolean insertOneRole(SysRoleDto sysRoleEntity) {
         int insert = sysRoleMapper.insert(sysRoleEntity);
         if (!sysRoleEntity.getSysMenuEntities().isEmpty()) {
             //添加角色菜单关联
