@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.pxx.collegecourseselectionsystem.dto.SysMenuDto;
 import com.pxx.collegecourseselectionsystem.entity.SysMenuEntity;
 import com.pxx.collegecourseselectionsystem.mapper.SysMenuMapper;
 import com.pxx.collegecourseselectionsystem.service.SysMenuService;
@@ -73,9 +74,9 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenuEntity
     }
 
     @Override
-    public List<SysMenuEntity> createTree(List<SysMenuEntity> menuEntityList, int pid) {
-        List<SysMenuEntity> newTree = new ArrayList<>();
-        for (SysMenuEntity sysMenuEntity : menuEntityList) {
+    public List<SysMenuDto> createTree(List<SysMenuDto> menuEntityList, int pid) {
+        List<SysMenuDto> newTree = new ArrayList<>();
+        for (SysMenuDto sysMenuEntity : menuEntityList) {
             Integer menuId = sysMenuEntity.getParentId();
             if (Objects.equals(menuId, pid)) {
                 newTree.add(sysMenuEntity);

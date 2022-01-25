@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -14,7 +13,6 @@ import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 /**
  * 菜单管理
@@ -82,16 +80,13 @@ public class SysMenuEntity {
     @NotNull
     @TableField(value = "order_num")
     private Integer orderNum;
+
+
     @ApiModelProperty("状态")
     @NotNull
     @TableField(value = "`status`")
     private Integer status;
-    /**
-     * 子菜单
-     */
-    @TableField(exist = false)
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private List<SysMenuEntity> menuEntities;
+
 
     public static final String COL_MENU_ID = "menu_id";
 

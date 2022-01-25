@@ -22,7 +22,6 @@ public class SysMenuController {
 
     /**
      * 返回菜单
-     *
      * @return
      */
     @ApiOperation("返回所有菜单")

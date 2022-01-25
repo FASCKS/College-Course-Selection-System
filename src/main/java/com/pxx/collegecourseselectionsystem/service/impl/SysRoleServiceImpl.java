@@ -2,8 +2,8 @@ package com.pxx.collegecourseselectionsystem.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.pxx.collegecourseselectionsystem.common.exception.RRException;
+import com.pxx.collegecourseselectionsystem.dto.SysMenuDto;
 import com.pxx.collegecourseselectionsystem.dto.SysRoleDto;
-import com.pxx.collegecourseselectionsystem.entity.SysMenuEntity;
 import com.pxx.collegecourseselectionsystem.entity.SysRoleEntity;
 import com.pxx.collegecourseselectionsystem.entity.SysRoleMenuEntity;
 import com.pxx.collegecourseselectionsystem.mapper.SysRoleMapper;
@@ -36,10 +36,10 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRoleEntity
     @Override
     public SysRoleEntity findRoleInfoByRoleId(Long roleId) {
         SysRoleDto sysRoleEntity = sysRoleMapper.findRoleInfoByRoleId(roleId);
-        List<SysMenuEntity> sysMenuEntities = sysRoleEntity.getSysMenuEntities();
+        List<SysMenuDto> sysMenuEntities = sysRoleEntity.getSysMenuEntities();
         //菜单权限变成树
         if (!sysMenuEntities.isEmpty()) {
-            List<SysMenuEntity> tree = sysMenuService.createTree(sysMenuEntities, 0);
+            List<SysMenuDto> tree = sysMenuService.createTree(sysMenuEntities, 0);
             sysRoleEntity.setSysMenuEntities(tree);
         }
 
@@ -101,7 +101,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRoleEntity
      * @param roleId
      * @return
      */
-    private List<SysRoleMenuEntity> insertRoleIdAndMenuId(List<SysMenuEntity> sysMenuEntities, Long roleId) {
+    private List<SysRoleMenuEntity> insertRoleIdAndMenuId(List<SysMenuDto> sysMenuEntities, Long roleId) {
 
         List<SysRoleMenuEntity> sysRoleMenuEntities = new ArrayList<>();
         sysMenuEntities.forEach(

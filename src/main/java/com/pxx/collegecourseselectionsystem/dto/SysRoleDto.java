@@ -2,7 +2,6 @@ package com.pxx.collegecourseselectionsystem.dto;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.pxx.collegecourseselectionsystem.entity.SysMenuEntity;
 import com.pxx.collegecourseselectionsystem.entity.SysRoleEntity;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -18,7 +17,7 @@ public class SysRoleDto  extends SysRoleEntity {
      */
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @TableField(exist = false)
-    private List<SysMenuEntity> sysMenuEntities;
+    private List<SysMenuDto> sysMenuEntities;
     /**
      * 新增得菜单id数组
      */

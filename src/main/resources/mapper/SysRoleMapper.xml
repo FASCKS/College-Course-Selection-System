@@ -36,5 +36,10 @@
         from sys_role sr
                      left join sys_role_menu srm on sr.role_id = srm.role_id
                      left join sys_menu sm on srm.menu_id = sm.menu_id
+        <where>
+            <if test="roleId != null">
+                and sr.role_id=#{roleId,jdbcType=BIGINT}
+            </if>
+        </where>
     </select>
 </mapper>
