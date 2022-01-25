@@ -114,13 +114,13 @@ public class SysUserEntity implements UserDetails {
     /**
      * 用户状态 1 开 0 关
      */
-    @ApiModelProperty(value = "用户状态 1 开 0 关",example = "1")
+    @ApiModelProperty(value = "账户是否被锁 1 开 0 关",example = "1")
     @TableField(value = "`state`")
     private Integer state;
     /**
      * 账号是否可用
      */
-    @ApiModelProperty(value = "账号状态 1 开 0 关",example = "1")
+    @ApiModelProperty(value = "账户是否可用 1 开 0 关",example = "1")
     @TableField(value = "enable")
     private Integer enable;
 

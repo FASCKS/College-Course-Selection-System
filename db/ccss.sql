@@ -11,7 +11,7 @@
  Target Server Version : 50726
  File Encoding         : 65001
 
- Date: 22/01/2022 17:33:09
+ Date: 25/01/2022 17:15:12
 */
 
 SET NAMES utf8mb4;
@@ -289,6 +289,23 @@ CREATE TABLE `roles`  (
 INSERT INTO `roles` VALUES ('nacos', 'ROLE_ADMIN');
 
 -- ----------------------------
+-- Table structure for second_course
+-- ----------------------------
+DROP TABLE IF EXISTS `second_course`;
+CREATE TABLE `second_course`  (
+  `id` int(11) NOT NULL COMMENT '抢课自增id',
+  `course_id` int(11) NULL DEFAULT NULL COMMENT '课程id',
+  `course_sum` int(11) NULL DEFAULT NULL COMMENT '课程剩余数量',
+  `user_id` bigint(22) NULL DEFAULT NULL COMMENT '用户id,确保每个人只抢一次.',
+  `start_time` datetime NULL DEFAULT NULL COMMENT '开始得时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of second_course
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for sys_log
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_log`;
@@ -302,7 +319,7 @@ CREATE TABLE `sys_log`  (
   `ip` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'IP地址',
   `create_date` datetime NULL DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 9415 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '系统日志' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 9524 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '系统日志' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_log
@@ -782,6 +799,115 @@ INSERT INTO `sys_log` VALUES (9411, 'admin', '登录平台', NULL, NULL, 0, '192
 INSERT INTO `sys_log` VALUES (9412, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-22 17:25:45');
 INSERT INTO `sys_log` VALUES (9413, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-22 17:25:49');
 INSERT INTO `sys_log` VALUES (9414, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-22 17:26:23');
+INSERT INTO `sys_log` VALUES (9415, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-24 09:23:50');
+INSERT INTO `sys_log` VALUES (9416, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-24 09:24:46');
+INSERT INTO `sys_log` VALUES (9417, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-24 09:26:45');
+INSERT INTO `sys_log` VALUES (9418, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-24 09:27:48');
+INSERT INTO `sys_log` VALUES (9419, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-24 09:28:01');
+INSERT INTO `sys_log` VALUES (9420, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-24 09:30:16');
+INSERT INTO `sys_log` VALUES (9421, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-24 09:31:13');
+INSERT INTO `sys_log` VALUES (9422, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-24 09:32:10');
+INSERT INTO `sys_log` VALUES (9423, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-24 09:32:43');
+INSERT INTO `sys_log` VALUES (9424, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-24 09:34:19');
+INSERT INTO `sys_log` VALUES (9425, 'lyt', '登录平台', NULL, NULL, 0, '192.168.6.105', '2022-01-24 09:57:54');
+INSERT INTO `sys_log` VALUES (9426, 'lyt', '登录平台', NULL, NULL, 0, '192.168.6.105', '2022-01-24 10:02:27');
+INSERT INTO `sys_log` VALUES (9427, 'lyt', '登录平台', NULL, NULL, 0, '192.168.6.105', '2022-01-24 10:03:12');
+INSERT INTO `sys_log` VALUES (9428, 'lyt', '登录平台', NULL, NULL, 0, '192.168.6.105', '2022-01-24 10:03:25');
+INSERT INTO `sys_log` VALUES (9429, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-24 10:04:19');
+INSERT INTO `sys_log` VALUES (9430, 'lyt', '登录平台', NULL, NULL, 0, '192.168.6.105', '2022-01-24 10:04:27');
+INSERT INTO `sys_log` VALUES (9431, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-24 10:04:35');
+INSERT INTO `sys_log` VALUES (9432, 'lyt', '登录平台', NULL, NULL, 0, '192.168.6.105', '2022-01-24 10:04:41');
+INSERT INTO `sys_log` VALUES (9433, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-24 10:11:04');
+INSERT INTO `sys_log` VALUES (9434, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-24 10:13:52');
+INSERT INTO `sys_log` VALUES (9435, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-24 10:14:00');
+INSERT INTO `sys_log` VALUES (9436, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-24 10:14:10');
+INSERT INTO `sys_log` VALUES (9437, 'lyt', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-24 10:14:18');
+INSERT INTO `sys_log` VALUES (9438, 'lyt', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-24 10:14:52');
+INSERT INTO `sys_log` VALUES (9439, 'lyt', '登录平台', NULL, NULL, 0, '192.168.6.105', '2022-01-24 10:15:46');
+INSERT INTO `sys_log` VALUES (9440, 'lyt', '登录平台', NULL, NULL, 0, '192.168.6.105', '2022-01-24 10:16:08');
+INSERT INTO `sys_log` VALUES (9441, NULL, '尝试登录', NULL, NULL, 0, '192.168.6.105', '2022-01-24 10:21:48');
+INSERT INTO `sys_log` VALUES (9442, 'lyt', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-24 10:23:46');
+INSERT INTO `sys_log` VALUES (9443, NULL, '尝试登录', NULL, NULL, 0, '192.168.6.105', '2022-01-24 10:23:53');
+INSERT INTO `sys_log` VALUES (9444, NULL, '尝试登录', NULL, NULL, 0, '192.168.6.105', '2022-01-24 10:25:06');
+INSERT INTO `sys_log` VALUES (9445, 'lyt', '登录平台', NULL, NULL, 0, '192.168.6.105', '2022-01-24 10:25:16');
+INSERT INTO `sys_log` VALUES (9446, 'lyt', '登录平台', NULL, NULL, 0, '192.168.6.105', '2022-01-24 10:29:21');
+INSERT INTO `sys_log` VALUES (9447, 'lyt', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-24 10:37:04');
+INSERT INTO `sys_log` VALUES (9448, 'lyt', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-24 10:38:59');
+INSERT INTO `sys_log` VALUES (9449, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-24 10:39:28');
+INSERT INTO `sys_log` VALUES (9450, 'lyt', '登录平台', NULL, NULL, 0, '192.168.6.105', '2022-01-24 10:46:37');
+INSERT INTO `sys_log` VALUES (9451, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-24 10:56:21');
+INSERT INTO `sys_log` VALUES (9452, 'lyt', '登录平台', NULL, NULL, 0, '192.168.6.105', '2022-01-24 10:57:13');
+INSERT INTO `sys_log` VALUES (9453, 'lyt', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-24 10:58:25');
+INSERT INTO `sys_log` VALUES (9454, 'lyt', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-24 10:59:37');
+INSERT INTO `sys_log` VALUES (9455, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-24 11:08:01');
+INSERT INTO `sys_log` VALUES (9456, 'lyt', '登录平台', NULL, NULL, 0, '192.168.6.105', '2022-01-24 11:16:13');
+INSERT INTO `sys_log` VALUES (9457, 'lyt', '登录平台', NULL, NULL, 0, '192.168.6.105', '2022-01-24 11:17:06');
+INSERT INTO `sys_log` VALUES (9458, 'lyt', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-24 11:22:46');
+INSERT INTO `sys_log` VALUES (9459, 'lyt', '登录平台', NULL, NULL, 0, '192.168.6.105', '2022-01-24 11:25:33');
+INSERT INTO `sys_log` VALUES (9460, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-24 11:51:05');
+INSERT INTO `sys_log` VALUES (9461, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-24 11:57:47');
+INSERT INTO `sys_log` VALUES (9462, 'admin', '非法访问', NULL, NULL, 0, NULL, NULL);
+INSERT INTO `sys_log` VALUES (9463, 'admin', '非法访问', NULL, NULL, 0, NULL, NULL);
+INSERT INTO `sys_log` VALUES (9464, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-24 13:03:12');
+INSERT INTO `sys_log` VALUES (9465, 'lyt', '登录平台', NULL, NULL, 0, '192.168.6.105', '2022-01-24 13:05:47');
+INSERT INTO `sys_log` VALUES (9466, 'admin', '非法访问', NULL, NULL, 0, NULL, NULL);
+INSERT INTO `sys_log` VALUES (9467, 'admin', '非法访问', NULL, NULL, 0, NULL, NULL);
+INSERT INTO `sys_log` VALUES (9468, 'lyt', '登录平台', NULL, NULL, 0, '192.168.6.105', '2022-01-24 13:18:12');
+INSERT INTO `sys_log` VALUES (9469, 'admin', '非法访问', NULL, NULL, 0, NULL, NULL);
+INSERT INTO `sys_log` VALUES (9470, 'admin', '非法访问', NULL, NULL, 0, NULL, NULL);
+INSERT INTO `sys_log` VALUES (9471, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-24 13:57:05');
+INSERT INTO `sys_log` VALUES (9472, 'lyt', '登录平台', NULL, NULL, 0, '192.168.6.105', '2022-01-24 14:14:43');
+INSERT INTO `sys_log` VALUES (9473, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-24 14:23:27');
+INSERT INTO `sys_log` VALUES (9474, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-24 15:03:52');
+INSERT INTO `sys_log` VALUES (9475, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-24 15:27:05');
+INSERT INTO `sys_log` VALUES (9476, 'admin', '退出平台', NULL, NULL, 1643009437846, NULL, NULL);
+INSERT INTO `sys_log` VALUES (9477, 'admin', '退出平台', NULL, NULL, 1643009450755, NULL, NULL);
+INSERT INTO `sys_log` VALUES (9478, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-24 15:41:10');
+INSERT INTO `sys_log` VALUES (9479, 'admin', '退出平台', NULL, NULL, 1643010273754, NULL, NULL);
+INSERT INTO `sys_log` VALUES (9480, 'lyt', '登录平台', NULL, NULL, 0, '192.168.6.105', '2022-01-24 15:44:54');
+INSERT INTO `sys_log` VALUES (9481, 'lyt', '非法访问', NULL, NULL, 0, NULL, NULL);
+INSERT INTO `sys_log` VALUES (9482, 'lyt', '登录平台', NULL, NULL, 0, '192.168.6.105', '2022-01-24 15:45:23');
+INSERT INTO `sys_log` VALUES (9483, 'lyt', '非法访问', NULL, NULL, 0, NULL, NULL);
+INSERT INTO `sys_log` VALUES (9484, 'lyt', '登录平台', NULL, NULL, 0, '192.168.6.105', '2022-01-24 15:47:32');
+INSERT INTO `sys_log` VALUES (9485, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-24 16:46:29');
+INSERT INTO `sys_log` VALUES (9486, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-24 16:52:56');
+INSERT INTO `sys_log` VALUES (9487, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-24 16:53:49');
+INSERT INTO `sys_log` VALUES (9488, 'lyt', '登录平台', NULL, NULL, 0, '192.168.6.105', '2022-01-24 16:54:16');
+INSERT INTO `sys_log` VALUES (9489, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-24 16:58:24');
+INSERT INTO `sys_log` VALUES (9490, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-24 16:58:56');
+INSERT INTO `sys_log` VALUES (9491, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-24 17:24:11');
+INSERT INTO `sys_log` VALUES (9492, 'lyt', '登录平台', NULL, NULL, 0, '192.168.6.105', '2022-01-25 08:40:16');
+INSERT INTO `sys_log` VALUES (9493, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-25 08:48:19');
+INSERT INTO `sys_log` VALUES (9494, 'admin', '非法访问', NULL, NULL, 0, NULL, NULL);
+INSERT INTO `sys_log` VALUES (9495, 'admin', '非法访问', NULL, NULL, 0, NULL, NULL);
+INSERT INTO `sys_log` VALUES (9496, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-25 08:50:59');
+INSERT INTO `sys_log` VALUES (9497, 'lyt', '登录平台', NULL, NULL, 0, '192.168.6.105', '2022-01-25 11:25:06');
+INSERT INTO `sys_log` VALUES (9498, 'lyt', '登录平台', NULL, NULL, 0, '192.168.6.105', '2022-01-25 13:03:25');
+INSERT INTO `sys_log` VALUES (9499, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-25 13:03:34');
+INSERT INTO `sys_log` VALUES (9500, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-25 13:12:56');
+INSERT INTO `sys_log` VALUES (9501, 'admin', '非法访问', NULL, NULL, 0, NULL, NULL);
+INSERT INTO `sys_log` VALUES (9502, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-25 13:14:48');
+INSERT INTO `sys_log` VALUES (9503, 'lyt', '登录平台', NULL, NULL, 0, '192.168.6.105', '2022-01-25 14:12:00');
+INSERT INTO `sys_log` VALUES (9504, 'lyt', '登录平台', NULL, NULL, 0, '192.168.6.105', '2022-01-25 14:23:40');
+INSERT INTO `sys_log` VALUES (9505, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-25 14:31:08');
+INSERT INTO `sys_log` VALUES (9506, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-25 14:50:15');
+INSERT INTO `sys_log` VALUES (9507, 'lyt', '登录平台', NULL, NULL, 0, '192.168.6.105', '2022-01-25 14:52:54');
+INSERT INTO `sys_log` VALUES (9508, 'lyt', '登录平台', NULL, NULL, 0, '192.168.6.105', '2022-01-25 15:59:38');
+INSERT INTO `sys_log` VALUES (9509, 'lyt', '非法访问', NULL, NULL, 0, NULL, NULL);
+INSERT INTO `sys_log` VALUES (9510, 'lyt', '登录平台', NULL, NULL, 0, '192.168.6.105', '2022-01-25 16:00:12');
+INSERT INTO `sys_log` VALUES (9511, 'lyt', '非法访问', NULL, NULL, 0, NULL, NULL);
+INSERT INTO `sys_log` VALUES (9512, 'lyt', '登录平台', NULL, NULL, 0, '192.168.6.105', '2022-01-25 16:01:41');
+INSERT INTO `sys_log` VALUES (9513, 'lyt', '非法访问', NULL, NULL, 0, NULL, NULL);
+INSERT INTO `sys_log` VALUES (9514, 'lyt', '登录平台', NULL, NULL, 0, '192.168.6.105', '2022-01-25 16:05:47');
+INSERT INTO `sys_log` VALUES (9515, 'lyt', '非法访问', NULL, NULL, 0, NULL, NULL);
+INSERT INTO `sys_log` VALUES (9516, 'lyt', '登录平台', NULL, NULL, 0, '192.168.6.105', '2022-01-25 16:09:28');
+INSERT INTO `sys_log` VALUES (9517, 'lyt', '非法访问', NULL, NULL, 0, NULL, NULL);
+INSERT INTO `sys_log` VALUES (9518, 'lyt', '登录平台', NULL, NULL, 0, '192.168.6.105', '2022-01-25 16:09:39');
+INSERT INTO `sys_log` VALUES (9519, 'lyt', '非法访问', NULL, NULL, 0, NULL, NULL);
+INSERT INTO `sys_log` VALUES (9520, 'lyt', '登录平台', NULL, NULL, 0, '192.168.6.105', '2022-01-25 16:13:19');
+INSERT INTO `sys_log` VALUES (9521, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-25 16:22:56');
+INSERT INTO `sys_log` VALUES (9522, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-25 17:04:43');
+INSERT INTO `sys_log` VALUES (9523, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-25 17:06:19');
 
 -- ----------------------------
 -- Table structure for sys_menu
@@ -798,21 +924,19 @@ CREATE TABLE `sys_menu`  (
   `order_num` int(11) NULL DEFAULT NULL COMMENT '排序',
   `status` int(11) NULL DEFAULT NULL,
   PRIMARY KEY (`menu_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 19 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '菜单管理' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 33 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '菜单管理' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_menu
 -- ----------------------------
-INSERT INTO `sys_menu` VALUES (1, 0, '首页', '/index', NULL, 0, NULL, 1, 1);
-INSERT INTO `sys_menu` VALUES (2, 0, '基础管理', NULL, NULL, 0, NULL, 1, 1);
-INSERT INTO `sys_menu` VALUES (3, 2, '用户管理', '/user', NULL, 1, NULL, 1, 1);
+INSERT INTO `sys_menu` VALUES (2, 0, '基础管理', '/base', NULL, 0, NULL, 1, 1);
+INSERT INTO `sys_menu` VALUES (3, 2, '用户管理', '/user', NULL, 0, NULL, 1, 1);
 INSERT INTO `sys_menu` VALUES (4, 3, '用户集合', NULL, 'sys:user:list', 2, NULL, 1, 1);
 INSERT INTO `sys_menu` VALUES (5, 3, '用户新增', NULL, 'sys:user:insert', 2, NULL, 1, 1);
 INSERT INTO `sys_menu` VALUES (6, 3, '用户删除', NULL, 'sys:user:delete', 2, NULL, 1, 1);
 INSERT INTO `sys_menu` VALUES (7, 3, '用户编辑', NULL, 'sys:user:update', 2, NULL, 1, 1);
 INSERT INTO `sys_menu` VALUES (8, 3, '用户详情', NULL, 'sys:user:info', 2, NULL, 1, 1);
 INSERT INTO `sys_menu` VALUES (9, 2, '部门管理', '/unit', '', 1, NULL, 1, 1);
-INSERT INTO `sys_menu` VALUES (10, 9, '部门集合', NULL, 'sys:unit:list', 2, NULL, 1, 1);
 INSERT INTO `sys_menu` VALUES (11, 3, '更新密码', NULL, 'sys:user:password', 2, NULL, 1, 1);
 INSERT INTO `sys_menu` VALUES (12, 3, '更新个人密码', NULL, 'sys:my:password', 2, NULL, 1, 1);
 INSERT INTO `sys_menu` VALUES (13, 3, '重置密码', NULL, 'sys:user:reset', 2, NULL, 1, 1);
@@ -821,6 +945,19 @@ INSERT INTO `sys_menu` VALUES (15, 14, '课程集合', NULL, 'user:course:list',
 INSERT INTO `sys_menu` VALUES (16, 14, '课程详情', NULL, 'user:course:info', 2, NULL, 1, 1);
 INSERT INTO `sys_menu` VALUES (17, 2, '课程表', '/classCourse', NULL, 1, NULL, 1, 1);
 INSERT INTO `sys_menu` VALUES (18, 17, '当前个人课程表', NULL, 'course:classSchedule:user:course', 2, NULL, 1, 1);
+INSERT INTO `sys_menu` VALUES (19, 3, '老师管理', '/teacher', NULL, 1, NULL, 1, 1);
+INSERT INTO `sys_menu` VALUES (20, 3, '学生管理', '/student', NULL, 1, NULL, 1, 1);
+INSERT INTO `sys_menu` VALUES (22, 9, '部门列表', NULL, 'sys:unit:tree:list', 2, NULL, 1, 1);
+INSERT INTO `sys_menu` VALUES (23, 9, '部门详情', NULL, 'sys:unit:info', 2, NULL, 1, 1);
+INSERT INTO `sys_menu` VALUES (24, 9, '部门新增', NULL, 'sys:unit:insert', 2, NULL, 1, 1);
+INSERT INTO `sys_menu` VALUES (25, 9, '部门编辑', NULL, 'sys:unit:update', 2, NULL, 1, 1);
+INSERT INTO `sys_menu` VALUES (26, 9, '部门删除', NULL, 'sys:unit:delete', 2, NULL, 1, 1);
+INSERT INTO `sys_menu` VALUES (27, 2, '角色管理', '/role', NULL, 1, NULL, 1, 1);
+INSERT INTO `sys_menu` VALUES (28, 27, '角色列表', NULL, 'sys:role:list', 2, NULL, 1, 1);
+INSERT INTO `sys_menu` VALUES (29, 27, '角色详情', NULL, 'sys:role:info', 2, NULL, 1, 1);
+INSERT INTO `sys_menu` VALUES (30, 27, '角色编辑', NULL, 'sys:role:update', 2, NULL, 1, 1);
+INSERT INTO `sys_menu` VALUES (31, 27, '角色删除', NULL, 'sys:role:delete', 2, NULL, 1, 1);
+INSERT INTO `sys_menu` VALUES (32, 27, '角色新增', NULL, 'sys:role:insert', 2, NULL, 1, 1);
 
 -- ----------------------------
 -- Table structure for sys_role
@@ -857,14 +994,40 @@ CREATE TABLE `sys_role_menu`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `role_id`(`role_id`) USING BTREE,
   INDEX `menu_id`(`menu_id`) USING BTREE,
-  CONSTRAINT `sys_role_menu_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `sys_role` (`role_id`) ON DELETE CASCADE ON UPDATE RESTRICT,
-  CONSTRAINT `sys_role_menu_ibfk_2` FOREIGN KEY (`menu_id`) REFERENCES `sys_menu` (`menu_id`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色与菜单对应关系' ROW_FORMAT = DYNAMIC;
+  CONSTRAINT `sys_role_menu_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `sys_role` (`role_id`) ON DELETE CASCADE ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 33 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色与菜单对应关系' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_role_menu
 -- ----------------------------
-INSERT INTO `sys_role_menu` VALUES (1, 1, 1);
+INSERT INTO `sys_role_menu` VALUES (2, 1, 2);
+INSERT INTO `sys_role_menu` VALUES (3, 1, 3);
+INSERT INTO `sys_role_menu` VALUES (4, 1, 4);
+INSERT INTO `sys_role_menu` VALUES (5, 1, 5);
+INSERT INTO `sys_role_menu` VALUES (6, 1, 6);
+INSERT INTO `sys_role_menu` VALUES (7, 1, 7);
+INSERT INTO `sys_role_menu` VALUES (8, 1, 8);
+INSERT INTO `sys_role_menu` VALUES (9, 1, 9);
+INSERT INTO `sys_role_menu` VALUES (11, 1, 11);
+INSERT INTO `sys_role_menu` VALUES (12, 1, 12);
+INSERT INTO `sys_role_menu` VALUES (13, 1, 13);
+INSERT INTO `sys_role_menu` VALUES (14, 1, 14);
+INSERT INTO `sys_role_menu` VALUES (15, 1, 15);
+INSERT INTO `sys_role_menu` VALUES (16, 1, 16);
+INSERT INTO `sys_role_menu` VALUES (17, 1, 18);
+INSERT INTO `sys_role_menu` VALUES (18, 1, 19);
+INSERT INTO `sys_role_menu` VALUES (19, 1, 20);
+INSERT INTO `sys_role_menu` VALUES (20, 1, 22);
+INSERT INTO `sys_role_menu` VALUES (21, 1, 23);
+INSERT INTO `sys_role_menu` VALUES (22, 1, 24);
+INSERT INTO `sys_role_menu` VALUES (23, 1, 25);
+INSERT INTO `sys_role_menu` VALUES (24, 1, 26);
+INSERT INTO `sys_role_menu` VALUES (25, 1, 27);
+INSERT INTO `sys_role_menu` VALUES (26, 1, 28);
+INSERT INTO `sys_role_menu` VALUES (27, 1, 29);
+INSERT INTO `sys_role_menu` VALUES (28, 1, 30);
+INSERT INTO `sys_role_menu` VALUES (29, 1, 31);
+INSERT INTO `sys_role_menu` VALUES (30, 1, 32);
 
 -- ----------------------------
 -- Table structure for sys_unit
@@ -904,9 +1067,9 @@ CREATE TABLE `sys_user`  (
   `revision` int(10) NULL DEFAULT NULL COMMENT '乐观锁',
   `lock_time` datetime NULL DEFAULT NULL COMMENT '锁定时间',
   `created_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `created_by` int(10) NULL DEFAULT NULL COMMENT '创建人',
+  `created_by` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
   `updated_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
-  `updated_by` int(10) NULL DEFAULT NULL COMMENT '更新人',
+  `updated_by` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新人',
   `enable` int(1) NULL DEFAULT 0 COMMENT '账号是否可用',
   `unit_id` int(11) UNSIGNED NULL DEFAULT NULL COMMENT '部门id',
   `last_login_time` datetime NULL DEFAULT NULL COMMENT '登录时间',
@@ -915,17 +1078,24 @@ CREATE TABLE `sys_user`  (
   UNIQUE INDEX `number`(`number`) USING BTREE,
   INDEX `unit_id`(`unit_id`) USING BTREE,
   CONSTRAINT `sys_user_ibfk_1` FOREIGN KEY (`unit_id`) REFERENCES `sys_unit` (`unit_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 129 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 134 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (1, '管理员', 'admin', 0, '$2a$10$SDvONxqv83ufTAMlS0pXqePTpnFxvEHjN5Qirh90NTOwzKUhvB7EK', NULL, 0, 'String', 'String', 'String', 1, 61, '2021-11-18 10:48:13', '2021-11-26 10:48:52', 1, '2021-12-01 11:29:00', 1, 1, 1, '2021-12-01 11:29:00', 1);
-INSERT INTO `sys_user` VALUES (30, 'String', '1234', 0, '$2a$10$YYkRs9LdKGMqEV6eNAqTY.7nGIKv7fGEPLH5OAUDLIXyOhtTtZeNy', 'String', 1, 'String', 'String', 'String', 1, 20, '2021-11-29 17:24:31', '2021-11-30 11:05:40', 1, '2021-12-04 15:30:01', 1, 1, 2, '2021-12-04 15:30:01', 0);
-INSERT INTO `sys_user` VALUES (110, '11111', '1111111', 0, '$2a$10$unzrz/B4X3OP7c8HlPfjOeDFfeaV6rkE17zKachPm6mGqdVeT5rgO', 'String', 1, 'String', NULL, NULL, 1, 1, '2021-12-04 09:46:21', '2021-12-04 09:04:10', 1, '2021-12-04 09:04:10', 1, 1, 2, NULL, 1);
-INSERT INTO `sys_user` VALUES (117, '王老师', '1111111111111', 0, '$2a$10$SNQRhP2H91rflnZKBFBkTuZtW3MsaN1vRVGpYgVnvclvY9FbrZtma', 'String', 2, 'String', NULL, NULL, 0, 1, '2021-12-04 10:04:25', '2021-12-04 10:04:09', 1, '2021-12-04 10:04:09', 1, 0, 2, NULL, 0);
-INSERT INTO `sys_user` VALUES (118, '2号老师', '12', 0, '$2a$10$SNQRhP2H91rflnZKBFBkTuZtW3MsaN1vRVGpYgVnvclvY9FbrZtma', 'String', 2, 'String', NULL, NULL, 0, 1, '2021-12-04 10:04:25', '2021-12-04 10:04:09', 1, '2021-12-04 10:04:09', 1, 0, 2, NULL, 0);
-INSERT INTO `sys_user` VALUES (119, 'lyt', 'lyt', 0, '$2a$10$h5PPUcJnkxTor58IKbb/u.cOeiTCORlnfxXHs.LXuNsMecvGjmLQW', 'String', NULL, 'String', 'String', 'String', 1, 1, '2021-11-18 10:48:13', '2021-11-26 10:48:52', 1, '2022-01-22 14:17:10', 1, 1, 1, '2022-01-22 14:17:10', 1);
+INSERT INTO `sys_user` VALUES (1, '管理员', 'admin', 0, '$2a$10$SDvONxqv83ufTAMlS0pXqePTpnFxvEHjN5Qirh90NTOwzKUhvB7EK', NULL, 0, 'String', 'String', 'String', 1, 61, '2021-11-18 10:48:13', '2021-11-26 10:48:52', '1', '2021-12-01 11:29:00', '1', 1, 1, '2021-12-01 11:29:00', 1);
+INSERT INTO `sys_user` VALUES (30, 'String', '1234', 0, '$2a$10$YYkRs9LdKGMqEV6eNAqTY.7nGIKv7fGEPLH5OAUDLIXyOhtTtZeNy', 'String', 1, 'String', 'String', 'String', 1, 20, '2021-11-29 17:24:31', '2021-11-30 11:05:40', '1', '2021-12-04 15:30:01', '1', 1, 2, '2021-12-04 15:30:01', 0);
+INSERT INTO `sys_user` VALUES (110, '11111', '1111111', 0, '$2a$10$unzrz/B4X3OP7c8HlPfjOeDFfeaV6rkE17zKachPm6mGqdVeT5rgO', 'String', 1, 'String', NULL, NULL, 1, 1, '2021-12-04 09:46:21', '2021-12-04 09:04:10', '1', '2021-12-04 09:04:10', '1', 1, 2, NULL, 1);
+INSERT INTO `sys_user` VALUES (117, '王老师', '1111111111111', 0, '$2a$10$SNQRhP2H91rflnZKBFBkTuZtW3MsaN1vRVGpYgVnvclvY9FbrZtma', 'String', 2, 'String', NULL, NULL, 0, 1, '2021-12-04 10:04:25', '2021-12-04 10:04:09', '1', '2021-12-04 10:04:09', '1', 0, 2, NULL, 0);
+INSERT INTO `sys_user` VALUES (118, '2号老师', '12', 0, '$2a$10$SNQRhP2H91rflnZKBFBkTuZtW3MsaN1vRVGpYgVnvclvY9FbrZtma', 'String', 2, 'String', NULL, NULL, 0, 1, '2021-12-04 10:04:25', '2021-12-04 10:04:09', '1', '2021-12-04 10:04:09', '1', 0, 2, NULL, 0);
+INSERT INTO `sys_user` VALUES (119, 'lyt', 'lyt', 0, '$2a$10$h5PPUcJnkxTor58IKbb/u.cOeiTCORlnfxXHs.LXuNsMecvGjmLQW', 'String', 1, 'String', 'String', 'String', 1, 1, '2021-11-18 10:48:13', '2021-11-26 10:48:52', '1', '2022-01-24 10:38:59', '1', 1, 1, '2022-01-24 10:38:59', 1);
+INSERT INTO `sys_user` VALUES (120, 'string', 'string', 23, '$2a$10$dEW0Uz1RmRxmazQqY7gs/uUvuBE4clSx8/DsoBsF3iQTS20g7LY/W', '18795845624', 1, 'string@qq.com', 'string', 'string', 1, 1, NULL, '2022-01-24 17:06:32', 'admin', '2022-01-24 17:06:32', 'admin', 1, 1, NULL, 1);
+INSERT INTO `sys_user` VALUES (122, 'string', 'stri1ng', 23, '$2a$10$N5POFHI2QnZK91noYbmznOsV6hl9XA/7jZgIIgDbdcXNY2CiYvEtu', '18795845624', 2, 'string@qq.com', 'string', 'string', 1, 1, NULL, '2022-01-24 17:06:39', 'admin', '2022-01-24 17:06:39', 'admin', 1, 1, NULL, 1);
+INSERT INTO `sys_user` VALUES (123, 'string', 'stri11ng', 23, '$2a$10$cwotOCyzhPwvTCKIEsMGruimTUQ2qB64wrA8yM2SOQEOp6Edv4GPi', '18795845624', 2, 'string@qq.com', 'string', 'string', 1, 1, NULL, '2022-01-24 17:06:41', 'admin', '2022-01-24 17:06:41', 'admin', 1, 1, NULL, 1);
+INSERT INTO `sys_user` VALUES (124, 'string', 'stri111ng', 23, '$2a$10$ao8egsCfSTjrtu/Oc63coO5afNIIfBSrnLY1Zwf7sBCf6gEuCz5uW', '18795845624', 1, 'string@qq.com', 'string', 'string', 1, 1, NULL, '2022-01-24 17:06:43', 'admin', '2022-01-24 17:06:43', 'admin', 1, 1, NULL, 1);
+INSERT INTO `sys_user` VALUES (126, 'string', 'str1i111ng', 23, '$2a$10$guXAE2bm0CUTSGM.Mq4F8eSFx3WbCAq1mIJbWpm84M.6qTU/fn.ou', '18795845624', 1, 'string@qq.com', 'string', 'string', 1, 1, NULL, '2022-01-24 17:07:46', 'admin', '2022-01-24 17:07:46', 'admin', 1, 1, NULL, 1);
+INSERT INTO `sys_user` VALUES (129, 'string', 'str1i1111n1g', 23, '$2a$10$vSOnirKNStgK8fBv0QOM7uKQhlH9ms3nMmM3bxs./6OdLqNTe1GkW', '18795845624', 2, 'string@qq.com', 'string', 'string', 1, 1, NULL, '2022-01-24 17:07:54', 'admin', '2022-01-24 17:07:54', 'admin', 1, 1, NULL, 1);
+INSERT INTO `sys_user` VALUES (130, 'string', 'str1i1111n11g', 23, '$2a$10$TBEbligpYWS4LU6JBWsgQuKEnp1D86nFioCbbx9.C/epT6AfB6TKW', '18795845624', 2, 'string@qq.com', 'string', 'string', 1, 1, NULL, '2022-01-24 17:07:56', 'admin', '2022-01-24 17:07:56', 'admin', 1, 1, NULL, 1);
 
 -- ----------------------------
 -- Table structure for sys_user_role
@@ -940,12 +1110,13 @@ CREATE TABLE `sys_user_role`  (
   INDEX `sys_user_role_ibfk_2`(`user_id`) USING BTREE,
   CONSTRAINT `sys_user_role_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `sys_role` (`role_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `sys_user_role_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `sys_user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户与角色对应关系' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户与角色对应关系' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_user_role
 -- ----------------------------
 INSERT INTO `sys_user_role` VALUES (1, 1, 1);
+INSERT INTO `sys_user_role` VALUES (2, 119, 1);
 
 -- ----------------------------
 -- Table structure for tenant_capacity
