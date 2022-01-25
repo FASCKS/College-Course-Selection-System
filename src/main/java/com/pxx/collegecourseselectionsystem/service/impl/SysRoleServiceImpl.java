@@ -1,5 +1,9 @@
 package com.pxx.collegecourseselectionsystem.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.lang.tree.Tree;
+import cn.hutool.core.lang.tree.TreeNode;
+import cn.hutool.core.lang.tree.TreeUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.pxx.collegecourseselectionsystem.common.exception.RRException;
 import com.pxx.collegecourseselectionsystem.dto.SysMenuDto;
@@ -39,8 +43,14 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRoleEntity
         List<SysMenuDto> sysMenuEntities = sysRoleEntity.getSysMenuEntities();
         //菜单权限变成树
         if (!sysMenuEntities.isEmpty()) {
-            List<SysMenuDto> tree = sysMenuService.createTree(sysMenuEntities, 0);
-            sysRoleEntity.setSysMenuEntities(tree);
+            List<TreeNode<Integer>> nodeList = CollUtil.newArrayList();
+            for (SysMenuDto sysMenuEntity : sysMenuEntities) {
+                nodeList.add(new TreeNode<>(sysMenuEntity.getMenuId(),sysMenuEntity.getParentId(),sysMenuEntity.getName(),sysMenuEntity.getOrderNum()));
+            }
+            List<Tree<Integer>> buildMenuTree = TreeUtil.build(nodeList, 0);
+            sysRoleEntity.setSysMenuTreeNode(buildMenuTree);
+            sysRoleEntity.setSysMenuEntities(null);
+
         }
 
         return sysRoleEntity;

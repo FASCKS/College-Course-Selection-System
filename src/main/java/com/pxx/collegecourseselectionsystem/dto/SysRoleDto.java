@@ -1,6 +1,8 @@
 package com.pxx.collegecourseselectionsystem.dto;
 
+import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.pxx.collegecourseselectionsystem.entity.SysRoleEntity;
 import io.swagger.annotations.ApiModelProperty;
@@ -15,9 +17,16 @@ public class SysRoleDto  extends SysRoleEntity {
     /**
      * 权限集合
      */
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonIgnore
     @TableField(exist = false)
     private List<SysMenuDto> sysMenuEntities;
+    /**
+     * 权限集合树
+     */
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @TableField(exist = false)
+    private List<Tree<Integer>> sysMenuTreeNode;
+
     /**
      * 新增得菜单id数组
      */
