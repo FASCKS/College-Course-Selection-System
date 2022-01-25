@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.pxx.collegecourseselectionsystem.common.utils.PageUtils;
 import com.pxx.collegecourseselectionsystem.common.utils.Pagination;
 import com.pxx.collegecourseselectionsystem.common.utils.R;
+import com.pxx.collegecourseselectionsystem.dto.SysUserDto;
 import com.pxx.collegecourseselectionsystem.entity.SysUserEntity;
 import com.pxx.collegecourseselectionsystem.service.SysUserService;
 import io.swagger.annotations.Api;
@@ -56,7 +57,7 @@ public class SysUserController {
     @ApiOperation("用户新增")
     @PreAuthorize("hasAnyAuthority('sys:user:insert')")
     @PostMapping("/insert")
-    public R insertUser(@Validated @RequestBody SysUserEntity sysUserEntity) {
+    public R insertUser(@Validated @RequestBody SysUserDto sysUserEntity) {
         String password = sysUserEntity.getPassword();
         sysUserEntity.setPassword(passwordEncoder.encode(password));
         sysUserEntity.setUserId(null);
@@ -93,8 +94,9 @@ public class SysUserController {
     @ApiOperation("用户编辑")
     @PreAuthorize("hasAnyAuthority('sys:user:update')")
     @PostMapping("/update")
-    public R update(@RequestBody SysUserEntity sysUserEntity) {
+    public R update(@RequestBody @Validated SysUserDto sysUserEntity) {
         sysUserEntity.setPassword(null);
+        sysUserEntity.setNumber(null);
         boolean updateById = sysUserService.updateById(sysUserEntity);
         return R.ok().put("data", updateById);
     }

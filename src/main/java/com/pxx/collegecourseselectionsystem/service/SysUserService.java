@@ -3,6 +3,7 @@ package com.pxx.collegecourseselectionsystem.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.pxx.collegecourseselectionsystem.common.utils.PageUtils;
+import com.pxx.collegecourseselectionsystem.dto.SysUserDto;
 import com.pxx.collegecourseselectionsystem.entity.SysUserEntity;
 
 import java.util.List;
@@ -30,7 +31,7 @@ public interface SysUserService extends IService<SysUserEntity> {
      * 查询所有用户
      * @return
      */
-    PageUtils findAllUser(IPage<SysUserEntity> iPage,Integer type);
+    PageUtils findAllUser(IPage<SysUserDto> iPage, Integer type);
 
     /**
      * 通过用户名查找用户

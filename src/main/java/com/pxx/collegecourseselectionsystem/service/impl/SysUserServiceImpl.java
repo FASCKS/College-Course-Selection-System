@@ -8,6 +8,7 @@ import com.pxx.collegecourseselectionsystem.common.exception.RRException;
 import com.pxx.collegecourseselectionsystem.common.utils.PageUtils;
 import com.pxx.collegecourseselectionsystem.common.utils.RedisUtil;
 import com.pxx.collegecourseselectionsystem.common.utils.SpringSecurityUtil;
+import com.pxx.collegecourseselectionsystem.dto.SysUserDto;
 import com.pxx.collegecourseselectionsystem.entity.SysLogEntity;
 import com.pxx.collegecourseselectionsystem.entity.SysMenuEntity;
 import com.pxx.collegecourseselectionsystem.entity.SysRoleEntity;
@@ -80,8 +81,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
      * @return
      */
     @Override
-    public PageUtils findAllUser(IPage<SysUserEntity> iPage,Integer type) {
-        IPage<SysUserEntity> allUser = sysUserMapper.findAllUser(iPage,type);
+    public PageUtils findAllUser(IPage<SysUserDto> iPage,Integer type) {
+        IPage<SysUserDto> allUser = sysUserMapper.findAllUser(iPage,type);
         PageUtils pageUtils = new PageUtils(allUser);
         return pageUtils;
     }

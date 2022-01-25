@@ -1,6 +1,7 @@
 package com.pxx.collegecourseselectionsystem.annotation;
 
 import cn.hutool.core.util.ReUtil;
+import cn.hutool.core.util.StrUtil;
 
 import javax.validation.Constraint;
 import javax.validation.ConstraintValidator;
@@ -27,6 +28,10 @@ public @interface Telephone {
 
         @Override
         public boolean isValid(String value, ConstraintValidatorContext context) {
+            //如果为空
+            if (StrUtil.isBlank(value)) {
+                return true;
+            }
             boolean match = ReUtil.isMatch("^1(3|4|5|6|7|8|9)\\d{9}$", value);
             return match;
         }

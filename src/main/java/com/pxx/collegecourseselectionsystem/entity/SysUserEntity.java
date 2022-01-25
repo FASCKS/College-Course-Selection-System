@@ -209,13 +209,6 @@ public class SysUserEntity implements UserDetails {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @TableField(exist = false)
     private List<SysMenuEntity> menuEntityList;
-    /**
-     * 部门名称
-     */
-    @ApiModelProperty(value = "部门名称")
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @TableField(exist = false)
-    private String unitName;
 
 
 

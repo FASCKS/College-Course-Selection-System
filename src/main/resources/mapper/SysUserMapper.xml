@@ -345,7 +345,6 @@
         <result column="address" jdbcType="VARCHAR" property="address"/>
         <result column="avatar" jdbcType="VARCHAR" property="avatar"/>
         <result column="state" jdbcType="INTEGER" property="state"/>
-        <result column="unit_name" jdbcType="VARCHAR" property="unitName"/>
         <result column="revision" jdbcType="INTEGER" property="revision"/>
         <result column="lock_time" jdbcType="TIMESTAMP" property="lockTime"/>
         <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
@@ -410,7 +409,7 @@
         </where>
     </select>
 
-    <select id="findAllUser" resultMap="BaseResultMap">
+    <select id="findAllUser" resultType="com.pxx.collegecourseselectionsystem.dto.SysUserDto">
         select su.user_id,
                su.name,
                su.number,

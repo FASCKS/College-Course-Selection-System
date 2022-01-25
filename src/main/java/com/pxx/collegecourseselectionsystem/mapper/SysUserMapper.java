@@ -2,6 +2,7 @@ package com.pxx.collegecourseselectionsystem.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.pxx.collegecourseselectionsystem.dto.SysUserDto;
 import com.pxx.collegecourseselectionsystem.entity.SysUserEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -42,5 +43,5 @@ public interface SysUserMapper extends BaseMapper<SysUserEntity> {
      *
      * @return
      */
-    IPage<SysUserEntity> findAllUser(@Param("iPage") IPage<SysUserEntity> iPage, @Param("type") Integer type);
+    IPage<SysUserDto> findAllUser(@Param("iPage") IPage<SysUserDto> iPage, @Param("type") Integer type);
 }
