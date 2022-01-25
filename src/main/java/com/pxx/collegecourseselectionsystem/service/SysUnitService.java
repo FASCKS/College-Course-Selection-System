@@ -1,5 +1,6 @@
 package com.pxx.collegecourseselectionsystem.service;
 
+import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.pxx.collegecourseselectionsystem.entity.SysUnitEntity;
 
@@ -15,11 +16,10 @@ public interface SysUnitService extends IService<SysUnitEntity>{
 
     int insertOrUpdateSelective(SysUnitEntity record);
 
-    List<SysUnitEntity> createTree(List<SysUnitEntity> unitEntityList,int pid);
 
     /**
      * 所有部门
      * @return
      */
-    List<SysUnitEntity> findAllUnit();
+    List<Tree<Integer>> findAllUnit();
 }
