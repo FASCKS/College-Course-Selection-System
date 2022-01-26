@@ -124,7 +124,8 @@
                su.state,
                su.revision,
                su.lock_time,
-               su.enable
+               su.enable,
+        s.name as unit_name
         from sys_user su
                      left join sys_unit s on su.unit_id = s.unit_id
         <where>

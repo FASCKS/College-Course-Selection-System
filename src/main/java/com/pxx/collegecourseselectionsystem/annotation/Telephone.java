@@ -32,7 +32,7 @@ public @interface Telephone {
             if (StrUtil.isBlank(value)) {
                 return true;
             }
-            boolean match = ReUtil.isMatch("^1(3|4|5|6|7|8|9)\\d{9}$", value);
+            boolean match = ReUtil.isMatch("^(13[0-9]|14[5|7]|15[0|1|2|3|4|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\\d{8}$", value);
             return match;
         }
     }

@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import java.util.Date;
 import java.util.List;
 
 @Validated
@@ -63,6 +64,10 @@ public class SysUserController {
         String password = sysUserEntity.getPassword();
         sysUserEntity.setPassword(passwordEncoder.encode(password));
         sysUserEntity.setUserId(null);
+        sysUserEntity.setEnable(1);
+        sysUserEntity.setState(1);
+        sysUserEntity.setLockTime(new Date());
+        sysUserEntity.setLastLoginTime(new Date());
         boolean save = sysUserService.insertOneUser(sysUserEntity);
         return R.ok().put("data", save);
     }
