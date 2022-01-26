@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.pxx.collegecourseselectionsystem.annotation.Telephone;
+import com.pxx.collegecourseselectionsystem.common.validator.group.Update;
 import com.pxx.collegecourseselectionsystem.config.UserGrantedAuthority;
 import com.pxx.collegecourseselectionsystem.entity.enums.SexEnum;
 import io.swagger.annotations.ApiModel;
@@ -21,6 +22,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -37,6 +39,7 @@ public class SysUserEntity implements UserDetails {
      * 用户id
      */
     @Positive
+    @NotNull(groups = Update.class)
     @ApiModelProperty(value = "用户id")
     @TableId(value = "user_id", type = IdType.AUTO)
     private Long userId;

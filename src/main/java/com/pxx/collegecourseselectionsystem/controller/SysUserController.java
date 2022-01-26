@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.pxx.collegecourseselectionsystem.common.utils.PageUtils;
 import com.pxx.collegecourseselectionsystem.common.utils.Pagination;
 import com.pxx.collegecourseselectionsystem.common.utils.R;
+import com.pxx.collegecourseselectionsystem.common.validator.group.Update;
 import com.pxx.collegecourseselectionsystem.dto.SysUserDto;
 import com.pxx.collegecourseselectionsystem.entity.SysUserEntity;
 import com.pxx.collegecourseselectionsystem.service.SysUserService;
@@ -95,7 +96,7 @@ public class SysUserController {
     @ApiOperation("用户编辑")
     @PreAuthorize("hasAnyAuthority('sys:user:update')")
     @PostMapping("/update")
-    public R update(@RequestBody @Validated SysUserDto sysUserEntity) {
+    public R update(@RequestBody @Validated(Update.class) SysUserDto sysUserEntity) {
         sysUserEntity.setPassword(null);
         sysUserEntity.setNumber(null);
         boolean updateById = sysUserService.updateOneUser(sysUserEntity);
@@ -108,12 +109,12 @@ public class SysUserController {
      * @param userId 用户id
      * @return
      */
-    @ApiImplicitParam(name = "userId", value = "用户id", dataTypeClass = Long.class, required = true, paramType = "query")
+    @ApiImplicitParam(name = "userId", value = "用户id", dataTypeClass = Long.class, required = true, paramType = "path")
     @ApiOperation("用户详情")
     @PreAuthorize("hasAnyAuthority('sys:user:info','sys:user:update')")
-    @PostMapping("/info")
-    public R info(@RequestParam("userId") @Positive Long userId) {
-        SysUserEntity sysUserEntity = sysUserService.getById(userId);
+    @PostMapping("/info/{userId}")
+    public R info(@PathVariable("userId") @Positive Long userId) {
+        SysUserDto sysUserEntity = sysUserService.findOneByUserId(userId);
         return R.ok().put("data", sysUserEntity);
     }
 

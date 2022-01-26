@@ -423,13 +423,41 @@
                su.state,
                su.revision,
                su.lock_time,
-               su.enable,
-               s.name as unit_name
+               su.enable
         from sys_user su
                      left join sys_unit s on su.unit_id = s.unit_id
         <where>
             <if test="type != null">
                 and type=#{type,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
+
+    <select id="findOneByUserId" resultType="com.pxx.collegecourseselectionsystem.dto.SysUserDto">
+        select su.user_id,
+        su.name,
+        su.number,
+        su.age,
+        su.tel,
+        su.sex,
+        su.type,
+        su.email,
+        su.address,
+        su.avatar,
+        su.state,
+        su.revision,
+        su.enable,
+        s.unit_id,
+        s.name as unit_name,
+        sr.role_id,
+        sr.role_name
+        from sys_user su
+        left join sys_unit s on su.unit_id = s.unit_id
+        left join sys_user_role sur on su.user_id = sur.user_id
+        left join sys_role sr on sur.role_id = sr.role_id
+        <where>
+            <if test="userId != null">
+                and su.user_id=#{userId,jdbcType=BIGINT}
             </if>
         </where>
     </select>

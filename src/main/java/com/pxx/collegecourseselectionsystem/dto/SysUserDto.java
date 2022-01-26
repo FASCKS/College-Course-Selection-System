@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @ToString@Getter@Setter
@@ -16,7 +15,6 @@ public class SysUserDto extends SysUserEntity {
      * 部门名称
      */
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @NotBlank
     private String unitName;
     /**
      * 单位id
@@ -28,7 +26,6 @@ public class SysUserDto extends SysUserEntity {
      * 角色名称
      */
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @NotBlank
     private String roleName;
     /**
      * 角色id

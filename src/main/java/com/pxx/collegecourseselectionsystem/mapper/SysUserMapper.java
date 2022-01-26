@@ -44,4 +44,12 @@ public interface SysUserMapper extends BaseMapper<SysUserEntity> {
      * @return
      */
     IPage<SysUserDto> findAllUser(@Param("iPage") IPage<SysUserDto> iPage, @Param("type") Integer type);
+
+    /**
+     * 查询一个用户
+     *
+     * @param userId
+     * @return
+     */
+    SysUserDto findOneByUserId(@Param("userId") Long userId);
 }

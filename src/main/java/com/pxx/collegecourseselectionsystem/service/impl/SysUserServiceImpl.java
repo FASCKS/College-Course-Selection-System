@@ -166,10 +166,22 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
         Long userId = sysUserEntity.getUserId();
         Long roleId = sysUserEntity.getRoleId();
         boolean updateRole = sysUserRoleService.updateOneByUserId(userId, roleId);
-        if (!updateUser || !updateRole ){
+        if (!updateUser || !updateRole) {
             throw new RRException("用户更新失败");
         }
         return true;
+    }
+
+    /**
+     * 查询一个用户
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public SysUserDto findOneByUserId(Long userId) {
+        SysUserDto sysUserDto = baseMapper.findOneByUserId(userId);
+        return sysUserDto;
     }
 
 

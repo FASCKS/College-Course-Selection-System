@@ -49,6 +49,13 @@ public interface SysUserService extends IService<SysUserEntity> {
      * @return
      */
     boolean updateOneUser(SysUserDto sysUserEntity);
+
+    /**
+     * 查询一个用户
+     * @param userId
+     * @return
+     */
+    SysUserDto findOneByUserId(Long userId);
 }
 
 

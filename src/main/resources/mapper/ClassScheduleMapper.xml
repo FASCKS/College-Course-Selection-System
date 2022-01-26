@@ -28,7 +28,9 @@
                 <result column="course_id" property="courseId"/>
                 <result column="teacher_name" property="teacherName"/>
                 <result column="week" property="week"/>
+                <result column="week_name" property="weekName"/>
                 <result column="up_time" property="upTime"/>
+                <result column="up_time_name" property="upTimeName"/>
             </collection>
         </collection>
     </resultMap>
@@ -41,7 +43,9 @@
                co.`name`   AS course_name,
                st.NAME     AS teacher_name,
                cs.`week`,
-               cs.up_time
+                cs.`week` as week_name,
+               cs.up_time,
+        cs.up_time as up_time_name
         FROM class_schedule cs
                      LEFT JOIN sys_user su ON su.user_id = cs.user_id
                      LEFT JOIN course co ON co.id = cs.course_id
