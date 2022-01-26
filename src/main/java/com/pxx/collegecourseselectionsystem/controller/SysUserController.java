@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.pxx.collegecourseselectionsystem.common.utils.PageUtils;
 import com.pxx.collegecourseselectionsystem.common.utils.Pagination;
 import com.pxx.collegecourseselectionsystem.common.utils.R;
+import com.pxx.collegecourseselectionsystem.common.utils.SpringSecurityUtil;
 import com.pxx.collegecourseselectionsystem.common.validator.group.Update;
 import com.pxx.collegecourseselectionsystem.dto.SysUserDto;
 import com.pxx.collegecourseselectionsystem.entity.SysUserEntity;
@@ -15,7 +16,6 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -142,8 +142,7 @@ public class SysUserController {
     @ApiOperation("当前登录用户信息")
     @GetMapping("/my")
     public R my() {
-        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        SysUserEntity sysUserEntity = sysUserService.findOneByUserName(username);
+        SysUserEntity sysUserEntity = SpringSecurityUtil.getEntity();
         sysUserEntity.setPassword(null);
         return R.ok().put("data", sysUserEntity);
     }
