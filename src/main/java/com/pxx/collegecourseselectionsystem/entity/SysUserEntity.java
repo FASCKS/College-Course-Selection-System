@@ -69,7 +69,7 @@ public class SysUserEntity implements UserDetails {
     /**
      * 密码
      */
-    @NotBlank
+//    @NotBlank
     @ApiModelProperty(value = "密码")
     @TableField(value = "`password`")
     private String password;
