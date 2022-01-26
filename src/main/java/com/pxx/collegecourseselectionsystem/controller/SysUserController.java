@@ -42,12 +42,21 @@ public class SysUserController {
      * @param pagination 分页对象
      * @return
      */
-    @ApiImplicitParam(name = "type",value = "账号类型 1 学生 2 老师 3主任 3其它人员",required = true,example = "1")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "type",value = "账号类型 1 学生 2 老师 3主任 3其它人员",required = true,example = "1"),
+            @ApiImplicitParam(name = "name",value = "人员名字",required = false,example = "张三")
+
+    })
     @ApiOperation("分页用户列表")
     @PreAuthorize("hasAnyAuthority('sys:user:list')")
     @GetMapping("/list")
-    public R list(Pagination pagination,@NotNull @RequestParam("type") Integer type) {
-        PageUtils allUser = sysUserService.findAllUser(new Page<>(pagination.getPage(), pagination.getLimit()),type);
+    public R list(Pagination pagination,
+                  @NotNull @RequestParam("type") Integer type,
+                   @RequestParam(value = "name",required = false) String name) {
+        PageUtils allUser = sysUserService.findAllUser(
+                new Page<>(pagination.getPage(), pagination.getLimit()),
+                type,
+                name);
         return R.ok().put("data", allUser);
     }
 

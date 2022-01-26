@@ -132,6 +132,9 @@
             <if test="type != null">
                 and type=#{type,jdbcType=INTEGER}
             </if>
+            <if test="name != null and name != ''">
+                and su.name like CONCAT('%',#{name,jdbcType=VARCHAR},'%')
+            </if>
         </where>
     </select>
 
