@@ -1,4 +1,6 @@
 package com.pxx.collegecourseselectionsystem.common.validator.group;
 
-public interface Insert {
+import javax.validation.groups.Default;
+
+public interface Insert extends Default {
 }
