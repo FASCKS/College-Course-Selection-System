@@ -40,26 +40,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
     @Autowired
     private SysLogService sysLogService;
 
-    @Override
-    public int updateBatch(List<SysUserEntity> list) {
-        return baseMapper.updateBatch(list);
-    }
-
-    @Override
-    public int batchInsert(List<SysUserEntity> list) {
-        return baseMapper.batchInsert(list);
-    }
-
-    @Override
-    public int insertOrUpdate(SysUserEntity record) {
-        return baseMapper.insertOrUpdate(record);
-    }
-
-    @Override
-    public int insertOrUpdateSelective(SysUserEntity record) {
-        return baseMapper.insertOrUpdateSelective(record);
-    }
-
     /**
      * 添加一个用户
      *

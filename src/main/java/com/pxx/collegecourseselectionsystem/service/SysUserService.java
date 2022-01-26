@@ -6,18 +6,8 @@ import com.pxx.collegecourseselectionsystem.common.utils.PageUtils;
 import com.pxx.collegecourseselectionsystem.dto.SysUserDto;
 import com.pxx.collegecourseselectionsystem.entity.SysUserEntity;
 
-import java.util.List;
-
 public interface SysUserService extends IService<SysUserEntity> {
 
-
-    int updateBatch(List<SysUserEntity> list);
-
-    int batchInsert(List<SysUserEntity> list);
-
-    int insertOrUpdate(SysUserEntity record);
-
-    int insertOrUpdateSelective(SysUserEntity record);
 
     /**
      * 添加一个用户
