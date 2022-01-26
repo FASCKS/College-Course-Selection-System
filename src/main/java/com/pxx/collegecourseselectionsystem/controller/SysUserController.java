@@ -44,19 +44,21 @@ public class SysUserController {
      */
     @ApiImplicitParams({
             @ApiImplicitParam(name = "type",value = "账号类型 1 学生 2 老师 3主任 3其它人员",required = true,example = "1"),
-            @ApiImplicitParam(name = "name",value = "人员名字",required = false,example = "张三")
-
+            @ApiImplicitParam(name = "name",value = "人员名字",required = false,example = "张三"),
+            @ApiImplicitParam(name = "unitId",value = "所属部门id",required = false,example = "1"),
     })
     @ApiOperation("分页用户列表")
     @PreAuthorize("hasAnyAuthority('sys:user:list')")
     @GetMapping("/list")
     public R list(Pagination pagination,
                   @NotNull @RequestParam("type") Integer type,
-                   @RequestParam(value = "name",required = false) String name) {
+                   @RequestParam(value = "name",required = false) String name,
+                  @RequestParam(value = "unitId",required = false) Integer unitId) {
         PageUtils allUser = sysUserService.findAllUser(
                 new Page<>(pagination.getPage(), pagination.getLimit()),
                 type,
-                name);
+                name,
+                unitId);
         return R.ok().put("data", allUser);
     }
 

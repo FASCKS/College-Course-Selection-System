@@ -135,6 +135,9 @@
             <if test="name != null and name != ''">
                 and su.name like CONCAT('%',#{name,jdbcType=VARCHAR},'%')
             </if>
+            <if test="unitId != null">
+                and s.unit_id=#{unitId,jdbcType=INTEGER}
+            </if>
         </where>
     </select>
 
