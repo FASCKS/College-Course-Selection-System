@@ -11,7 +11,7 @@
  Target Server Version : 50726
  File Encoding         : 65001
 
- Date: 25/01/2022 17:15:12
+ Date: 26/01/2022 11:42:57
 */
 
 SET NAMES utf8mb4;
@@ -32,9 +32,9 @@ CREATE TABLE `class_schedule`  (
   `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `course_id`(`course_id`) USING BTREE,
-  INDEX `user_id`(`user_id`) USING BTREE,
+  INDEX `class_schedule_ibfk_2`(`user_id`) USING BTREE,
   CONSTRAINT `class_schedule_ibfk_1` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  CONSTRAINT `class_schedule_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `sys_user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+  CONSTRAINT `class_schedule_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `sys_user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
@@ -43,7 +43,6 @@ CREATE TABLE `class_schedule`  (
 INSERT INTO `class_schedule` VALUES (1, 4, 1, 2, 1, 2, 117, '2022-01-21 10:56:50');
 INSERT INTO `class_schedule` VALUES (2, 4, 4, 4, 1, 2, 117, '2022-01-21 10:56:53');
 INSERT INTO `class_schedule` VALUES (3, 4, 1, 1, 1, 2, 118, '2022-01-21 10:56:55');
-INSERT INTO `class_schedule` VALUES (4, 4, 1, 1, 110, 3, 117, '2022-01-21 11:01:35');
 INSERT INTO `class_schedule` VALUES (5, 1, 2, 1, 1, 2, 117, '2022-01-21 13:08:09');
 
 -- ----------------------------
@@ -319,7 +318,7 @@ CREATE TABLE `sys_log`  (
   `ip` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'IP地址',
   `create_date` datetime NULL DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 9524 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '系统日志' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 9554 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '系统日志' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_log
@@ -908,6 +907,36 @@ INSERT INTO `sys_log` VALUES (9520, 'lyt', '登录平台', NULL, NULL, 0, '192.1
 INSERT INTO `sys_log` VALUES (9521, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-25 16:22:56');
 INSERT INTO `sys_log` VALUES (9522, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-25 17:04:43');
 INSERT INTO `sys_log` VALUES (9523, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-25 17:06:19');
+INSERT INTO `sys_log` VALUES (9524, 'lyt', '登录平台', NULL, NULL, 0, '192.168.6.105', '2022-01-25 17:18:40');
+INSERT INTO `sys_log` VALUES (9525, 'lyt', '登录平台', NULL, NULL, 0, '192.168.6.105', '2022-01-26 08:32:29');
+INSERT INTO `sys_log` VALUES (9526, 'lyt', '登录平台', NULL, NULL, 0, '192.168.6.105', '2022-01-26 09:57:04');
+INSERT INTO `sys_log` VALUES (9527, 'lyt', '登录平台', NULL, NULL, 0, '192.168.6.105', '2022-01-26 10:04:53');
+INSERT INTO `sys_log` VALUES (9528, 'lyt', '登录平台', NULL, NULL, 0, '192.168.6.105', '2022-01-26 10:05:08');
+INSERT INTO `sys_log` VALUES (9529, 'lyt', '登录平台', NULL, NULL, 0, '192.168.6.105', '2022-01-26 10:05:12');
+INSERT INTO `sys_log` VALUES (9530, 'lyt', '登录平台', NULL, NULL, 0, '192.168.6.105', '2022-01-26 10:14:53');
+INSERT INTO `sys_log` VALUES (9531, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-26 10:15:16');
+INSERT INTO `sys_log` VALUES (9532, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-26 10:23:13');
+INSERT INTO `sys_log` VALUES (9533, 'lyt', '登录平台', NULL, NULL, 0, '192.168.6.105', '2022-01-26 10:50:18');
+INSERT INTO `sys_log` VALUES (9534, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-26 11:14:33');
+INSERT INTO `sys_log` VALUES (9535, NULL, '尝试登录', NULL, NULL, 0, '192.168.6.44', '2022-01-26 11:14:36');
+INSERT INTO `sys_log` VALUES (9536, NULL, '尝试登录', NULL, NULL, 0, '192.168.6.44', '2022-01-26 11:14:40');
+INSERT INTO `sys_log` VALUES (9537, NULL, '尝试登录', NULL, NULL, 0, '192.168.6.44', '2022-01-26 11:14:47');
+INSERT INTO `sys_log` VALUES (9538, NULL, '尝试登录', NULL, NULL, 0, '192.168.6.44', '2022-01-26 11:15:20');
+INSERT INTO `sys_log` VALUES (9539, NULL, '尝试登录', NULL, NULL, 0, '192.168.6.44', '2022-01-26 11:15:25');
+INSERT INTO `sys_log` VALUES (9540, NULL, '尝试登录', NULL, NULL, 0, '192.168.6.44', '2022-01-26 11:16:41');
+INSERT INTO `sys_log` VALUES (9541, NULL, '尝试登录', NULL, NULL, 0, '192.168.6.44', '2022-01-26 11:16:42');
+INSERT INTO `sys_log` VALUES (9542, NULL, '尝试登录', NULL, NULL, 0, '192.168.6.44', '2022-01-26 11:16:43');
+INSERT INTO `sys_log` VALUES (9543, NULL, '尝试登录', NULL, NULL, 0, '192.168.6.44', '2022-01-26 11:16:43');
+INSERT INTO `sys_log` VALUES (9544, NULL, '尝试登录', NULL, NULL, 0, '192.168.6.44', '2022-01-26 11:20:07');
+INSERT INTO `sys_log` VALUES (9545, NULL, '尝试登录', NULL, NULL, 0, '192.168.6.44', '2022-01-26 11:20:10');
+INSERT INTO `sys_log` VALUES (9546, NULL, '尝试登录', NULL, NULL, 0, '192.168.6.44', '2022-01-26 11:20:14');
+INSERT INTO `sys_log` VALUES (9547, NULL, '尝试登录', NULL, NULL, 0, '192.168.6.44', '2022-01-26 11:21:15');
+INSERT INTO `sys_log` VALUES (9548, NULL, '尝试登录', NULL, NULL, 0, '192.168.6.44', '2022-01-26 11:21:20');
+INSERT INTO `sys_log` VALUES (9549, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-26 11:21:52');
+INSERT INTO `sys_log` VALUES (9550, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-26 11:21:54');
+INSERT INTO `sys_log` VALUES (9551, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-01-26 11:22:42');
+INSERT INTO `sys_log` VALUES (9552, NULL, '尝试登录', NULL, NULL, 0, '192.168.6.44', '2022-01-26 11:28:14');
+INSERT INTO `sys_log` VALUES (9553, NULL, '尝试登录', NULL, NULL, 0, '192.168.6.44', '2022-01-26 11:28:21');
 
 -- ----------------------------
 -- Table structure for sys_menu
@@ -940,10 +969,10 @@ INSERT INTO `sys_menu` VALUES (9, 2, '部门管理', '/unit', '', 1, NULL, 1, 1)
 INSERT INTO `sys_menu` VALUES (11, 3, '更新密码', NULL, 'sys:user:password', 2, NULL, 1, 1);
 INSERT INTO `sys_menu` VALUES (12, 3, '更新个人密码', NULL, 'sys:my:password', 2, NULL, 1, 1);
 INSERT INTO `sys_menu` VALUES (13, 3, '重置密码', NULL, 'sys:user:reset', 2, NULL, 1, 1);
-INSERT INTO `sys_menu` VALUES (14, 0, '课程类型', '/course', NULL, 1, NULL, 1, 1);
+INSERT INTO `sys_menu` VALUES (14, 2, '课程类型', '/course', NULL, 1, NULL, 2, 1);
 INSERT INTO `sys_menu` VALUES (15, 14, '课程集合', NULL, 'user:course:list', 2, '', 1, 1);
 INSERT INTO `sys_menu` VALUES (16, 14, '课程详情', NULL, 'user:course:info', 2, NULL, 1, 1);
-INSERT INTO `sys_menu` VALUES (17, 2, '课程表', '/classCourse', NULL, 1, NULL, 1, 1);
+INSERT INTO `sys_menu` VALUES (17, 0, '课程表', '/classCourse', NULL, 1, NULL, 2, 1);
 INSERT INTO `sys_menu` VALUES (18, 17, '当前个人课程表', NULL, 'course:classSchedule:user:course', 2, NULL, 1, 1);
 INSERT INTO `sys_menu` VALUES (19, 3, '老师管理', '/teacher', NULL, 1, NULL, 1, 1);
 INSERT INTO `sys_menu` VALUES (20, 3, '学生管理', '/student', NULL, 1, NULL, 1, 1);
@@ -995,7 +1024,7 @@ CREATE TABLE `sys_role_menu`  (
   INDEX `role_id`(`role_id`) USING BTREE,
   INDEX `menu_id`(`menu_id`) USING BTREE,
   CONSTRAINT `sys_role_menu_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `sys_role` (`role_id`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 33 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色与菜单对应关系' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 31 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色与菜单对应关系' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_role_menu
@@ -1084,18 +1113,8 @@ CREATE TABLE `sys_user`  (
 -- Records of sys_user
 -- ----------------------------
 INSERT INTO `sys_user` VALUES (1, '管理员', 'admin', 0, '$2a$10$SDvONxqv83ufTAMlS0pXqePTpnFxvEHjN5Qirh90NTOwzKUhvB7EK', NULL, 0, 'String', 'String', 'String', 1, 61, '2021-11-18 10:48:13', '2021-11-26 10:48:52', '1', '2021-12-01 11:29:00', '1', 1, 1, '2021-12-01 11:29:00', 1);
-INSERT INTO `sys_user` VALUES (30, 'String', '1234', 0, '$2a$10$YYkRs9LdKGMqEV6eNAqTY.7nGIKv7fGEPLH5OAUDLIXyOhtTtZeNy', 'String', 1, 'String', 'String', 'String', 1, 20, '2021-11-29 17:24:31', '2021-11-30 11:05:40', '1', '2021-12-04 15:30:01', '1', 1, 2, '2021-12-04 15:30:01', 0);
-INSERT INTO `sys_user` VALUES (110, '11111', '1111111', 0, '$2a$10$unzrz/B4X3OP7c8HlPfjOeDFfeaV6rkE17zKachPm6mGqdVeT5rgO', 'String', 1, 'String', NULL, NULL, 1, 1, '2021-12-04 09:46:21', '2021-12-04 09:04:10', '1', '2021-12-04 09:04:10', '1', 1, 2, NULL, 1);
-INSERT INTO `sys_user` VALUES (117, '王老师', '1111111111111', 0, '$2a$10$SNQRhP2H91rflnZKBFBkTuZtW3MsaN1vRVGpYgVnvclvY9FbrZtma', 'String', 2, 'String', NULL, NULL, 0, 1, '2021-12-04 10:04:25', '2021-12-04 10:04:09', '1', '2021-12-04 10:04:09', '1', 0, 2, NULL, 0);
-INSERT INTO `sys_user` VALUES (118, '2号老师', '12', 0, '$2a$10$SNQRhP2H91rflnZKBFBkTuZtW3MsaN1vRVGpYgVnvclvY9FbrZtma', 'String', 2, 'String', NULL, NULL, 0, 1, '2021-12-04 10:04:25', '2021-12-04 10:04:09', '1', '2021-12-04 10:04:09', '1', 0, 2, NULL, 0);
-INSERT INTO `sys_user` VALUES (119, 'lyt', 'lyt', 0, '$2a$10$h5PPUcJnkxTor58IKbb/u.cOeiTCORlnfxXHs.LXuNsMecvGjmLQW', 'String', 1, 'String', 'String', 'String', 1, 1, '2021-11-18 10:48:13', '2021-11-26 10:48:52', '1', '2022-01-24 10:38:59', '1', 1, 1, '2022-01-24 10:38:59', 1);
-INSERT INTO `sys_user` VALUES (120, 'string', 'string', 23, '$2a$10$dEW0Uz1RmRxmazQqY7gs/uUvuBE4clSx8/DsoBsF3iQTS20g7LY/W', '18795845624', 1, 'string@qq.com', 'string', 'string', 1, 1, NULL, '2022-01-24 17:06:32', 'admin', '2022-01-24 17:06:32', 'admin', 1, 1, NULL, 1);
-INSERT INTO `sys_user` VALUES (122, 'string', 'stri1ng', 23, '$2a$10$N5POFHI2QnZK91noYbmznOsV6hl9XA/7jZgIIgDbdcXNY2CiYvEtu', '18795845624', 2, 'string@qq.com', 'string', 'string', 1, 1, NULL, '2022-01-24 17:06:39', 'admin', '2022-01-24 17:06:39', 'admin', 1, 1, NULL, 1);
-INSERT INTO `sys_user` VALUES (123, 'string', 'stri11ng', 23, '$2a$10$cwotOCyzhPwvTCKIEsMGruimTUQ2qB64wrA8yM2SOQEOp6Edv4GPi', '18795845624', 2, 'string@qq.com', 'string', 'string', 1, 1, NULL, '2022-01-24 17:06:41', 'admin', '2022-01-24 17:06:41', 'admin', 1, 1, NULL, 1);
-INSERT INTO `sys_user` VALUES (124, 'string', 'stri111ng', 23, '$2a$10$ao8egsCfSTjrtu/Oc63coO5afNIIfBSrnLY1Zwf7sBCf6gEuCz5uW', '18795845624', 1, 'string@qq.com', 'string', 'string', 1, 1, NULL, '2022-01-24 17:06:43', 'admin', '2022-01-24 17:06:43', 'admin', 1, 1, NULL, 1);
-INSERT INTO `sys_user` VALUES (126, 'string', 'str1i111ng', 23, '$2a$10$guXAE2bm0CUTSGM.Mq4F8eSFx3WbCAq1mIJbWpm84M.6qTU/fn.ou', '18795845624', 1, 'string@qq.com', 'string', 'string', 1, 1, NULL, '2022-01-24 17:07:46', 'admin', '2022-01-24 17:07:46', 'admin', 1, 1, NULL, 1);
-INSERT INTO `sys_user` VALUES (129, 'string', 'str1i1111n1g', 23, '$2a$10$vSOnirKNStgK8fBv0QOM7uKQhlH9ms3nMmM3bxs./6OdLqNTe1GkW', '18795845624', 2, 'string@qq.com', 'string', 'string', 1, 1, NULL, '2022-01-24 17:07:54', 'admin', '2022-01-24 17:07:54', 'admin', 1, 1, NULL, 1);
-INSERT INTO `sys_user` VALUES (130, 'string', 'str1i1111n11g', 23, '$2a$10$TBEbligpYWS4LU6JBWsgQuKEnp1D86nFioCbbx9.C/epT6AfB6TKW', '18795845624', 2, 'string@qq.com', 'string', 'string', 1, 1, NULL, '2022-01-24 17:07:56', 'admin', '2022-01-24 17:07:56', 'admin', 1, 1, NULL, 1);
+INSERT INTO `sys_user` VALUES (132, 'lyt', 'lyt', 22, '$2a$10$ZyMH1lHj1XfGVpslDRPLV.Jgu8oTCA7yEzxCKlq3IDQecU/fXeppK', '13736521260', 1, '1830841504@qq.com', '浙江省台州市黄岩区', NULL, 1, 1, '2022-01-26 11:37:20', '2022-01-26 11:32:57', 'admin', '2022-01-26 11:38:25', 'admin', 1, 2, NULL, 1);
+INSERT INTO `sys_user` VALUES (133, 'lz', 'lz', 16, '$2a$10$1TUdS7us3V3K6EQ8qBaDXeUDR.2aRtDuL6ZyNxiEJPk1iE4Kk46j.', '13564852451', 1, 'lz@qq.com', 'lz', NULL, 1, 1, '2022-01-26 11:36:18', '2022-01-26 11:36:18', 'admin', '2022-01-26 11:36:18', 'admin', 1, 2, '2022-01-26 11:36:18', 1);
 
 -- ----------------------------
 -- Table structure for sys_user_role
@@ -1108,15 +1127,15 @@ CREATE TABLE `sys_user_role`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `role_id`(`role_id`) USING BTREE,
   INDEX `sys_user_role_ibfk_2`(`user_id`) USING BTREE,
-  CONSTRAINT `sys_user_role_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `sys_role` (`role_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `sys_user_role_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `sys_user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户与角色对应关系' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 20 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户与角色对应关系' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_user_role
 -- ----------------------------
 INSERT INTO `sys_user_role` VALUES (1, 1, 1);
-INSERT INTO `sys_user_role` VALUES (2, 119, 1);
+INSERT INTO `sys_user_role` VALUES (18, 132, 1);
+INSERT INTO `sys_user_role` VALUES (19, 133, 1);
 
 -- ----------------------------
 -- Table structure for tenant_capacity
