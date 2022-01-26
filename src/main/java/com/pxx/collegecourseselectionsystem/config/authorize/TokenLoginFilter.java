@@ -1,6 +1,7 @@
 package com.pxx.collegecourseselectionsystem.config.authorize;
 
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import cn.hutool.json.JSONObject;
 import com.pxx.collegecourseselectionsystem.common.exception.MyAuthenticationException;
@@ -70,6 +71,10 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
         username = username.trim();
         password = (password != null) ? password : "";
         username = username.trim();
+        if (StrUtil.isBlank(username) || StrUtil.isBlank(password)){
+            throw new MyAuthenticationException("用户名或密码不能为空.");
+        }
+
 
         UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(username, password);
         setDetails(req, authRequest);
@@ -146,7 +151,7 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
 
         log.info("ip为 {} 的用户在 {} 登录失败", IPUtils.getIpAddr(request), DateUtil.date());
         if (e instanceof BadCredentialsException) {
-            ResponseUtil.write(response, R.error(403, "密码或用户名错误!"));
+            ResponseUtil.write(response, R.error(403, "用户名或密码错误!"));
         } else {
             ResponseUtil.write(response, R.error(403, e.getMessage()));
         }

@@ -63,7 +63,7 @@ public class SysUserEntity implements UserDetails {
      * 年龄
      */
     @ApiModelProperty(value = "年龄")
-    @Range(min = 16, max = 120, message = "年龄最小不能小于 16 ,最大不能大于120")
+    @Range(min = 16, max = 120, message = "年龄最小不能小于16,最大不能大于120")
     @TableField(value = "age")
     private Integer age;
 
