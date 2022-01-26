@@ -1,6 +1,7 @@
 package com.pxx.collegecourseselectionsystem.config.authorize;
 
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.ReUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import cn.hutool.json.JSONObject;
@@ -74,7 +75,15 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
         if (StrUtil.isBlank(username) || StrUtil.isBlank(password)){
             throw new MyAuthenticationException("用户名或密码不能为空.");
         }
-
+        //用户名匹配中文，英文字母和数字及下划线
+        boolean matchUserName = ReUtil.isMatch("^[\\u4e00-\\u9fa5_a-zA-Z0-9]+$", username);
+        if (!matchUserName){
+            throw new MyAuthenticationException("用户名格式错误,不能含有特殊字符.");
+        }
+        boolean matchPassword = ReUtil.isMatch("^[_a-zA-Z0-9]+$", password);
+        if (!matchPassword){
+            throw new MyAuthenticationException("密码格式错误,不能含有特殊字符.");
+        }
 
         UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(username, password);
         setDetails(req, authRequest);
