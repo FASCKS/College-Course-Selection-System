@@ -14,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Positive;
 import java.util.List;
 
 @Api(tags = "部门模块")
@@ -37,7 +38,7 @@ public class SysUnitController {
     @Operation(summary = "部门详情")
     @ApiImplicitParam(name = "unitId", value = "用户id", dataTypeClass = Integer.class, required = true, paramType = "query")
     @PreAuthorize("hasAnyAuthority('sys:unit:info')")
-    public R info(@RequestParam("unitId") Integer unitId) {
+    public R info(@RequestParam("unitId") @Positive Integer unitId) {
         SysUnitEntity sysUnitEntity = sysUnitService.getById(unitId);
         return R.ok().put("data", sysUnitEntity);
     }
@@ -61,7 +62,7 @@ public class SysUnitController {
     @PostMapping("/delete")
     @Operation(summary = "部门删除")
     @PreAuthorize("hasAnyAuthority('sys:unit:delete')")
-    public R delete(@RequestParam("unitId") Integer unitId) {
+    public R delete(@RequestParam("unitId") @Positive Integer unitId) {
         //删除当前部门和子部门
         boolean removeById = sysUnitService.removeById(unitId);
         return R.ok().put("data", removeById);
