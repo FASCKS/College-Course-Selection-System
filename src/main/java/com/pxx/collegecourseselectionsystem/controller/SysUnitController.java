@@ -55,7 +55,7 @@ public class SysUnitController {
     @Operation(summary = "部门编辑")
     @PreAuthorize("hasAnyAuthority('sys:unit:update' ,'sys:unit:info')")
     public R update(@RequestBody @Validated(Update.class) SysUnitEntity sysUnitEntity) {
-        boolean update = sysUnitService.updateById(sysUnitEntity);
+        boolean update = sysUnitService.updateOneById(sysUnitEntity);
         return R.ok().put("data", update);
     }
 

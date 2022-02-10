@@ -22,4 +22,11 @@ public interface SysUnitService extends IService<SysUnitEntity>{
      * @return
      */
     List<Tree<Integer>> findAllUnit();
+
+    /**
+     * 更新部门
+     * @param sysUnitEntity
+     * @return
+     */
+    boolean updateOneById(SysUnitEntity sysUnitEntity);
 }

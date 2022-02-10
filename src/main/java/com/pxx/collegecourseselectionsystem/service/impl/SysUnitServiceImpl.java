@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeNode;
 import cn.hutool.core.lang.tree.TreeUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.pxx.collegecourseselectionsystem.entity.SysUnitEntity;
 import com.pxx.collegecourseselectionsystem.mapper.SysUnitMapper;
@@ -57,5 +58,20 @@ public class SysUnitServiceImpl extends ServiceImpl<SysUnitMapper, SysUnitEntity
 
 
         return buildTree;
+    }
+
+    /**
+     * 更新部门
+     *
+     * @param sysUnitEntity
+     * @return
+     */
+    @Override
+    public boolean updateOneById(SysUnitEntity sysUnitEntity) {
+        QueryWrapper<SysUnitEntity> sysUnitEntityQueryWrapper=new QueryWrapper<>();
+        sysUnitEntityQueryWrapper.eq(SysUnitEntity.COL_UNIT_ID,sysUnitEntity.getUnitId())
+                .notIn(SysUnitEntity.COL_PID,sysUnitEntity.getUnitId());
+        int update = sysUnitMapper.update(sysUnitEntity, sysUnitEntityQueryWrapper);
+        return update>0;
     }
 }

@@ -16,4 +16,6 @@ public interface SysUnitMapper extends BaseMapper<SysUnitEntity> {
     int insertOrUpdate(SysUnitEntity record);
 
     int insertOrUpdateSelective(SysUnitEntity record);
+
+
 }
