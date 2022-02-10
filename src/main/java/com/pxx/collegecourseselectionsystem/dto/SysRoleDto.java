@@ -33,5 +33,5 @@ public class SysRoleDto  extends SysRoleEntity {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @TableField(exist = false)
     @ApiModelProperty("新增权限需要得菜单id")
-    private List<Long> MenuAuthorityIds;
+    private List<Long> menuAuthorityIds;
 }

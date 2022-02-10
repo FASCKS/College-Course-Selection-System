@@ -257,9 +257,9 @@ public class RRExceptionHandler {
         Throwable cause = e.getCause();
         if (cause instanceof SQLIntegrityConstraintViolationException){
             SQLIntegrityConstraintViolationException integrityConstraintViolationException=(SQLIntegrityConstraintViolationException)cause;
-            return R.error("该部门及下级部门绑定学生");
+            return R.error("该资源被关联");
         }
-        return R.error("该部门及下级部门绑定学生");
+        return R.error("该资源被关联");
     }
 
 

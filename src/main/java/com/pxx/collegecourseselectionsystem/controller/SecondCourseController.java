@@ -4,6 +4,7 @@ import com.pxx.collegecourseselectionsystem.common.utils.R;
 import com.pxx.collegecourseselectionsystem.dto.SecondCourseDto;
 import com.pxx.collegecourseselectionsystem.service.OrderCourseService;
 import com.pxx.collegecourseselectionsystem.service.SecondCourseService;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,7 @@ import java.util.List;
  * @author pxx
  * @Date 2022/2/10 14:49
  */
+@Api(tags = "抢课")
 @RestController
 @RequestMapping("/second")
 public class SecondCourseController {
