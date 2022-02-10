@@ -29,4 +29,6 @@ public interface SysUnitService extends IService<SysUnitEntity>{
      * @return
      */
     boolean updateOneById(SysUnitEntity sysUnitEntity);
+
+    boolean deleteOneById(Integer unitId);
 }

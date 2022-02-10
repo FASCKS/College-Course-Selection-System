@@ -11,7 +11,9 @@ import com.pxx.collegecourseselectionsystem.mapper.SysUnitMapper;
 import com.pxx.collegecourseselectionsystem.service.SysUnitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -68,10 +70,33 @@ public class SysUnitServiceImpl extends ServiceImpl<SysUnitMapper, SysUnitEntity
      */
     @Override
     public boolean updateOneById(SysUnitEntity sysUnitEntity) {
-        QueryWrapper<SysUnitEntity> sysUnitEntityQueryWrapper=new QueryWrapper<>();
-        sysUnitEntityQueryWrapper.eq(SysUnitEntity.COL_UNIT_ID,sysUnitEntity.getUnitId())
-                .notIn(SysUnitEntity.COL_PID,sysUnitEntity.getUnitId());
+        QueryWrapper<SysUnitEntity> sysUnitEntityQueryWrapper = new QueryWrapper<>();
+        sysUnitEntityQueryWrapper.eq(SysUnitEntity.COL_UNIT_ID, sysUnitEntity.getUnitId())
+                .notIn(SysUnitEntity.COL_PID, sysUnitEntity.getUnitId());
         int update = sysUnitMapper.update(sysUnitEntity, sysUnitEntityQueryWrapper);
-        return update>0;
+        return update > 0;
+    }
+
+    @Override
+    @Transactional
+    public boolean deleteOneById(Integer unitId) {
+        // 级联删除部门
+        List<SysUnitEntity> sysUnitEntities = this.list();
+        List<Integer> ids = new ArrayList<>();
+        getSonDtId(sysUnitEntities,unitId,ids);
+        if (!ids.isEmpty()){
+            boolean removeByIds = this.removeByIds(ids);
+        }
+        boolean removeById = this.removeById(unitId);
+
+        return true;
+    }
+    private void getSonDtId(List<SysUnitEntity> departmentList, Integer dtId, List<Integer> dtIds) {
+        for (SysUnitEntity department : departmentList) {
+            if (dtId.equals(department.getPid())) {
+                dtIds.add(department.getUnitId());
+                getSonDtId(departmentList, department.getUnitId(), dtIds);
+            }
+        }
     }
 }

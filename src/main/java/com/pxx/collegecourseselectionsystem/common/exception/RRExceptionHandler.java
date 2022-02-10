@@ -34,6 +34,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 
 import javax.validation.ConstraintViolationException;
 import java.io.IOException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 /**
@@ -252,7 +253,13 @@ public class RRExceptionHandler {
     @ExceptionHandler(DataIntegrityViolationException.class)
     public R handDataIntegrityViolationException(DataIntegrityViolationException e) {
         logger.error(e.getMessage(), e);
-        return R.error("Cannot add or update a child row: a foreign key constraint fails");
+        e.getMessage();
+        Throwable cause = e.getCause();
+        if (cause instanceof SQLIntegrityConstraintViolationException){
+            SQLIntegrityConstraintViolationException integrityConstraintViolationException=(SQLIntegrityConstraintViolationException)cause;
+            return R.error("该部门及下级部门绑定学生");
+        }
+        return R.error("该部门及下级部门绑定学生");
     }
 
 

@@ -64,7 +64,7 @@ public class SysUnitController {
     @PreAuthorize("hasAnyAuthority('sys:unit:delete')")
     public R delete(@RequestParam("unitId") @Positive Integer unitId) {
         //删除当前部门和子部门
-        boolean removeById = sysUnitService.removeById(unitId);
+        boolean removeById = sysUnitService.deleteOneById(unitId);
         return R.ok().put("data", removeById);
     }
 }
