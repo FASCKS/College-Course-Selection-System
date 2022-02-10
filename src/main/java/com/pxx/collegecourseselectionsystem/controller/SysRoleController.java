@@ -1,12 +1,14 @@
 package com.pxx.collegecourseselectionsystem.controller;
 
 import com.pxx.collegecourseselectionsystem.common.utils.R;
+import com.pxx.collegecourseselectionsystem.common.validator.group.Update;
 import com.pxx.collegecourseselectionsystem.dto.SysRoleDto;
 import com.pxx.collegecourseselectionsystem.entity.SysRoleEntity;
 import com.pxx.collegecourseselectionsystem.service.SysRoleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import org.apache.ibatis.annotations.Insert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -51,7 +53,7 @@ public class SysRoleController {
     @ApiOperation("角色编辑")
     @PreAuthorize("hasAnyAuthority('sys:role:update')")
     @PostMapping("/update")
-    public R update(@RequestBody SysRoleDto sysRoleEntity){
+    public R update(@RequestBody @Validated({Update.class}) SysRoleDto sysRoleEntity){
         boolean updateOneRole = sysRoleService.updateOneRole(sysRoleEntity);
         return R.ok().put("data",updateOneRole);
     }
@@ -72,7 +74,7 @@ public class SysRoleController {
     @ApiOperation("角色新增")
     @PreAuthorize("hasAnyAuthority('sys:role:insert')")
     @PostMapping("/insert")
-    public R insert(@RequestBody SysRoleDto sysRoleEntity){
+    public R insert(@RequestBody @Validated(Insert.class) SysRoleDto sysRoleEntity){
         boolean insertOneRole =   sysRoleService.insertOneRole(sysRoleEntity);
         return R.ok().put("data",insertOneRole);
     }

@@ -2,12 +2,18 @@ package com.pxx.collegecourseselectionsystem.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.pxx.collegecourseselectionsystem.common.validator.group.Update;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.apache.ibatis.annotations.Insert;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import java.util.Date;
 
 /**
@@ -19,6 +25,8 @@ import java.util.Date;
 @ToString
 @TableName(value = "sys_role")
 public class SysRoleEntity {
+    @Null(groups = Insert.class)
+    @NotNull(groups = Update.class)
     @ApiModelProperty("角色id")
     @TableId(value = "role_id", type = IdType.AUTO)
     private Long roleId;
@@ -26,6 +34,7 @@ public class SysRoleEntity {
     /**
      * 角色名称
      */
+    @NotEmpty
     @ApiModelProperty("角色名称")
     @TableField(value = "role_name")
     private String roleName;
@@ -33,6 +42,7 @@ public class SysRoleEntity {
     /**
      * 备注
      */
+    @NotBlank
     @ApiModelProperty("角色备注")
     @TableField(value = "remark")
     private String remark;

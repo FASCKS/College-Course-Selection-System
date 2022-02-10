@@ -2,6 +2,8 @@ package com.pxx.collegecourseselectionsystem.controller;
 
 import cn.hutool.core.lang.tree.Tree;
 import com.pxx.collegecourseselectionsystem.common.utils.R;
+import com.pxx.collegecourseselectionsystem.common.validator.group.Insert;
+import com.pxx.collegecourseselectionsystem.common.validator.group.Update;
 import com.pxx.collegecourseselectionsystem.entity.SysUnitEntity;
 import com.pxx.collegecourseselectionsystem.service.SysUnitService;
 import io.swagger.annotations.Api;
@@ -43,7 +45,7 @@ public class SysUnitController {
     @PostMapping("/insert")
     @Operation(summary = "部门新增")
     @PreAuthorize("hasAnyAuthority('sys:unit:insert')")
-    public R insert(@RequestBody SysUnitEntity sysUnitEntity) {
+    public R insert(@RequestBody @Validated(Insert.class) SysUnitEntity sysUnitEntity) {
         boolean save = sysUnitService.save(sysUnitEntity);
         return R.ok().put("data", save);
     }
@@ -51,7 +53,7 @@ public class SysUnitController {
     @PostMapping("/update")
     @Operation(summary = "部门编辑")
     @PreAuthorize("hasAnyAuthority('sys:unit:update' ,'sys:unit:info')")
-    public R update(@RequestBody SysUnitEntity sysUnitEntity) {
+    public R update(@RequestBody @Validated(Update.class) SysUnitEntity sysUnitEntity) {
         boolean update = sysUnitService.updateById(sysUnitEntity);
         return R.ok().put("data", update);
     }

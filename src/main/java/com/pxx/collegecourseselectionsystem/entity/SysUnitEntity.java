@@ -5,12 +5,16 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.pxx.collegecourseselectionsystem.common.validator.group.Insert;
+import com.pxx.collegecourseselectionsystem.common.validator.group.Update;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import java.util.List;
 
 @Getter
@@ -22,6 +26,8 @@ public class SysUnitEntity {
     /**
      * 部门id
      */
+    @NotNull(groups = Update.class)
+    @Null(groups = Insert.class)
     @ApiModelProperty(value = "部门id")
     @TableId(value = "unit_id", type = IdType.AUTO)
     private Integer unitId;
@@ -29,6 +35,7 @@ public class SysUnitEntity {
     /**
      * 部门名字
      */
+    @NotNull
     @ApiModelProperty(value = "部门名称")
     @TableField(value = "`name`")
     private String name;
@@ -36,6 +43,7 @@ public class SysUnitEntity {
     /**
      * 父亲id
      */
+    @NotNull
     @ApiModelProperty(value = "父亲id")
     @TableField(value = "pid")
     private Integer pid;
