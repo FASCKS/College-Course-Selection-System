@@ -17,12 +17,6 @@ public class SysUserDto extends SysUserEntity {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private String unitName;
     /**
-     * 单位id
-     */
-    @ApiModelProperty("部门id")
-    @NotNull
-    private Integer unitId;
-    /**
      * 角色名称
      */
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
