@@ -19,4 +19,6 @@ public interface SysRoleMenuMapper extends BaseMapper<SysRoleMenuEntity> {
 
 
     int deleteByRoleId(@Param("roleId") Long roleId);
+
+    List<Integer> findMenuIdByRoleId(@Param("roleId") Long roleId);
 }

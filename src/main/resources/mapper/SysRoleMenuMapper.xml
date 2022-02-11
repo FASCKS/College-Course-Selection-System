@@ -111,4 +111,9 @@
   <delete id="deleteByRoleId" parameterType="long">
     delete from sys_role_menu srm where srm.role_id=#{roleId,jdbcType=BIGINT}
   </delete>
+
+  <select id="findMenuIdByRoleId" resultType="java.lang.Integer">
+    select menu_id from sys_role_menu
+        where role_id=#{roleId,jdbcType=BIGINT}
+    </select>
 </mapper>

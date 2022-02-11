@@ -22,9 +22,6 @@
         <result column="created_by" jdbcType="INTEGER" property="createdBy"/>
         <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime"/>
         <result column="updated_by" jdbcType="INTEGER" property="updatedBy"/>
-        <result column="last_login_time" property="lastLoginTime"/>
-        <result column="unit_id" property="unitId"/>
-        <result column="sex" property="sex"/>
     </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->

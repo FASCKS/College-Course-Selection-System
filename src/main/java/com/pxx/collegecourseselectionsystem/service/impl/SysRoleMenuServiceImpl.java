@@ -40,4 +40,16 @@ private SysRoleMenuMapper sysRoleMenuMapper;
         int delete = sysRoleMenuMapper.deleteByRoleId(roleId);
         return delete>0;
     }
+
+    /**
+     * 获取菜单id数组
+     *
+     * @param roleId
+     * @return
+     */
+    @Override
+    public List<Integer> findMenuIdByRoleId(Long roleId) {
+
+        return  sysRoleMenuMapper.findMenuIdByRoleId(roleId);
+    }
 }

@@ -1,12 +1,8 @@
 package com.pxx.collegecourseselectionsystem.service.impl;
 
-import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.lang.tree.Tree;
-import cn.hutool.core.lang.tree.TreeNode;
-import cn.hutool.core.lang.tree.TreeUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.pxx.collegecourseselectionsystem.dto.SysMenuDto;
+import com.pxx.collegecourseselectionsystem.common.exception.RRException;
 import com.pxx.collegecourseselectionsystem.dto.SysRoleDto;
 import com.pxx.collegecourseselectionsystem.entity.SysRoleEntity;
 import com.pxx.collegecourseselectionsystem.entity.SysRoleMenuEntity;
@@ -40,18 +36,9 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRoleEntity
     @Override
     public SysRoleEntity findRoleInfoByRoleId(Long roleId) {
         SysRoleDto sysRoleEntity = sysRoleMapper.findRoleInfoByRoleId(roleId);
-        List<SysMenuDto> sysMenuEntities = sysRoleEntity.getSysMenuEntities();
-        //菜单权限变成树
-        if (!sysMenuEntities.isEmpty()) {
-            List<TreeNode<Integer>> nodeList = CollUtil.newArrayList();
-            for (SysMenuDto sysMenuEntity : sysMenuEntities) {
-                nodeList.add(new TreeNode<>(sysMenuEntity.getMenuId(), sysMenuEntity.getParentId(), sysMenuEntity.getName(), sysMenuEntity.getOrderNum()));
-            }
-            List<Tree<Integer>> buildMenuTree = TreeUtil.build(nodeList, 0);
-            sysRoleEntity.setSysMenuTreeNode(buildMenuTree);
-            sysRoleEntity.setSysMenuEntities(null);
+        List<Integer> integerList=sysRoleMenuService.findMenuIdByRoleId(roleId);
+        sysRoleEntity.setMenuAuthorityIds(integerList);
 
-        }
 
         return sysRoleEntity;
     }
@@ -61,7 +48,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRoleEntity
     public boolean updateOneRole(SysRoleDto sysRoleEntity) {
         boolean updateById = this.updateById(sysRoleEntity);
 
-        if (!sysRoleEntity.getSysMenuEntities().isEmpty()) {
+        if (!sysRoleEntity.getMenuAuthorityIds().isEmpty()) {
             boolean insertRoleIdAndMenuId = this.insertRoleIdAndMenuId(sysRoleEntity.getMenuAuthorityIds(), sysRoleEntity.getRoleId());
         }
 
@@ -81,12 +68,16 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRoleEntity
         List<Integer> menuAuthorityIds = sysRoleEntity.getMenuAuthorityIds();
         if (menuAuthorityIds != null && !menuAuthorityIds.isEmpty()) {
             boolean insertRoleIdAndMenuId = this.insertRoleIdAndMenuId(menuAuthorityIds, sysRoleEntity.getRoleId());
+            if (!insertRoleIdAndMenuId) {
+                throw new RRException("");
+            }
         }
         return insert > 0;
     }
 
     /**
      * 添加角色和菜单绑定关系
+     *
      * @param menuIds
      * @param roleId
      * @return
@@ -100,9 +91,12 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRoleEntity
             SysRoleMenuEntity sysRoleMenuEntity = new SysRoleMenuEntity();
             sysRoleMenuEntity.setMenuId(menuAuthorityId);
             sysRoleMenuEntity.setRoleId(roleId);
+            sysRoleMenuEntity.setId(null);
+            sysRoleMenuEntityList.add(sysRoleMenuEntity);
         }
-        int batchInsert = sysRoleMenuService.batchInsert(sysRoleMenuEntityList);
+        boolean batchInsert = sysRoleMenuService.saveBatch(sysRoleMenuEntityList);
 
-        return batchInsert>=0;
+        return batchInsert;
     }
+
 }
