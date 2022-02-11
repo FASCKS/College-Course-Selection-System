@@ -50,11 +50,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRoleEntity
     @Override
     public boolean updateOneRole(SysRoleDto sysRoleEntity) {
         boolean updateById = this.updateById(sysRoleEntity);
-
-        if (!sysRoleEntity.getMenuAuthorityIds().isEmpty()) {
-            boolean insertRoleIdAndMenuId = this.insertRoleIdAndMenuId(sysRoleEntity.getMenuAuthorityIds(), sysRoleEntity.getRoleId());
-        }
-
+        boolean insertRoleIdAndMenuId = this.insertRoleIdAndMenuId(sysRoleEntity.getMenuAuthorityIds(), sysRoleEntity.getRoleId());
         return updateById;
     }
 
@@ -69,12 +65,12 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRoleEntity
     public boolean insertOneRole(SysRoleDto sysRoleEntity) {
         int insert = sysRoleMapper.insert(sysRoleEntity);
         List<Integer> menuAuthorityIds = sysRoleEntity.getMenuAuthorityIds();
-        if (menuAuthorityIds != null && !menuAuthorityIds.isEmpty()) {
+
             boolean insertRoleIdAndMenuId = this.insertRoleIdAndMenuId(menuAuthorityIds, sysRoleEntity.getRoleId());
             if (!insertRoleIdAndMenuId) {
                 throw new RRException("");
             }
-        }
+
         return insert > 0;
     }
 

@@ -1,7 +1,9 @@
 package com.pxx.collegecourseselectionsystem.controller;
 
 import com.pxx.collegecourseselectionsystem.common.utils.R;
+import com.pxx.collegecourseselectionsystem.common.utils.RedisUtil;
 import com.pxx.collegecourseselectionsystem.dto.SecondCourseDto;
+import com.pxx.collegecourseselectionsystem.entity.SecondCourse;
 import com.pxx.collegecourseselectionsystem.service.OrderCourseService;
 import com.pxx.collegecourseselectionsystem.service.SecondCourseService;
 import io.swagger.annotations.Api;
@@ -26,6 +28,8 @@ public class SecondCourseController {
     private SecondCourseService secondCourseService;
     @Autowired
     private OrderCourseService orderCourseService;
+    @Autowired
+    private RedisUtil redisUtil;
 
     @PreAuthorize("hasAnyAuthority('ccss:second:list')")
     @GetMapping("/list")
@@ -35,6 +39,7 @@ public class SecondCourseController {
 
     /**
      * 抢课链接
+     *
      * @param secondCourseId
      * @return
      */
@@ -47,9 +52,26 @@ public class SecondCourseController {
         }
         return null;
     }
+
     /**
      * 发布抢课内容
      */
+    @GetMapping("/put")
+    public R put() {
+        List<SecondCourse> secondCourses = secondCourseService.list();
+
+        for (SecondCourse secondCourse : secondCourses) {
+            secondCourse.setState(1);
+        }
+
+//        boolean update = secondCourseService.updateById(secondCourses);
+        //缓存到redis
+
+
+
+
+        return R.ok().put("data", "update");
+    }
 
     /**
      * 添加选课
