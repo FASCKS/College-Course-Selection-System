@@ -23,6 +23,7 @@ public class CourseEntity {
     /**
      * 课程id
      */
+    @ApiModelProperty("课程id")
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
@@ -38,6 +39,7 @@ public class CourseEntity {
      * 课程类型 1公共课 2选修课 3必修课 4人文素质
      */
     @NotNull
+    @ApiModelProperty("课程类型 课程类型 1公共课 2选修课 3必修课 4人文素质")
     @TableField(value = "`type`")
     private CourseEnum type;
 

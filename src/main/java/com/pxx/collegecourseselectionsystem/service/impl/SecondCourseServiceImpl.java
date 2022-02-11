@@ -66,10 +66,10 @@ public class SecondCourseServiceImpl extends ServiceImpl<SecondCourseMapper, Sec
         Date startTime = secondCourse.getStartTime();
         Date endTime = secondCourse.getEndTime();
         DateTime date = DateUtil.date();
-        if (date.compareTo(startTime) <= 0) {
+        if (date.compareTo(startTime) < 0) {
             return false;
         }
-        if (date.compareTo(endTime) >= 0) {
+        if (date.compareTo(endTime) > 0) {
             return false;
         }
 

@@ -11,5 +11,8 @@ public class Global {
     public final static String CAPTCHA_PREFIX_NAME = "CAPTCHA";
     public static final String SUPER_ADMINISTRATOR_NAME="admin";
     public static final Long SUPER_ADMINISTRATOR_USER_ID=1L;
-    public static final String KILL_SECOND_COURSE="course:kill";
+    public static final String KILL_SECOND_COURSE="course:kill:";
+    public static final String COURSE_QUEUE_ORDER_PLUGIN_CANCEL="course_queue_order_plugin_cancel";
+    public static final String COURSE_QUEUE_ORDER_PLUGIN_QUEUE="course_queue_order_plugin_queue";
+
 }

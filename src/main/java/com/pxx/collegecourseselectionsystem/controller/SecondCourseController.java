@@ -1,12 +1,19 @@
 package com.pxx.collegecourseselectionsystem.controller;
 
+import cn.hutool.core.convert.Convert;
 import com.pxx.collegecourseselectionsystem.common.utils.R;
 import com.pxx.collegecourseselectionsystem.common.utils.RedisUtil;
+import com.pxx.collegecourseselectionsystem.common.utils.SpringSecurityUtil;
 import com.pxx.collegecourseselectionsystem.dto.SecondCourseDto;
+import com.pxx.collegecourseselectionsystem.entity.OrderCourse;
 import com.pxx.collegecourseselectionsystem.entity.SecondCourse;
+import com.pxx.collegecourseselectionsystem.entity.enums.QueueEnum;
+import com.pxx.collegecourseselectionsystem.service.ClassScheduleService;
 import com.pxx.collegecourseselectionsystem.service.OrderCourseService;
 import com.pxx.collegecourseselectionsystem.service.SecondCourseService;
+import com.pxx.collegecourseselectionsystem.util.Global;
 import io.swagger.annotations.Api;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -30,6 +37,10 @@ public class SecondCourseController {
     private OrderCourseService orderCourseService;
     @Autowired
     private RedisUtil redisUtil;
+    @Autowired
+    private ClassScheduleService classScheduleService;
+    @Autowired
+    private AmqpTemplate amqpTemplate;
 
     @PreAuthorize("hasAnyAuthority('ccss:second:list')")
     @GetMapping("/list")
@@ -50,7 +61,21 @@ public class SecondCourseController {
         if (!checkTime) {
             return R.error("时间未开始或已经结束");
         }
-        return null;
+        //判断库存
+        Integer courseSum = (Integer) redisUtil.get(Global.KILL_SECOND_COURSE + secondCourseId);
+        if (courseSum <= 0) {
+            return R.ok("课程无空余");
+        }
+        //更新到数据库
+        Long userId = SpringSecurityUtil.getUserId();
+        OrderCourse orderCourse = new OrderCourse();
+        orderCourse.setSecondCourseId(secondCourseId);
+        orderCourse.setUserId(userId);
+        boolean insertOne = orderCourseService.save(orderCourse);
+
+        long decr = redisUtil.decr(Global.KILL_SECOND_COURSE + secondCourseId, 1);
+
+        return R.ok().put("data", insertOne);
     }
 
     /**
@@ -59,19 +84,33 @@ public class SecondCourseController {
     @GetMapping("/put")
     public R put() {
         List<SecondCourse> secondCourses = secondCourseService.list();
-
+        if (secondCourses.isEmpty()) {
+            return R.ok("没有需要发布得课程");
+        }
         for (SecondCourse secondCourse : secondCourses) {
             secondCourse.setState(1);
         }
-
-//        boolean update = secondCourseService.updateById(secondCourses);
+        boolean update = secondCourseService.updateBatchById(secondCourses);
+        if (!update) {
+            return R.ok("没有需要发布得课程");
+        }
         //缓存到redis
 
+        for (SecondCourse secondCours : secondCourses) {
+            Long endTime = Convert.toLong(secondCours.getEndTime());
+            Long stateTime = Convert.toLong(secondCours.getStartTime());
+            redisUtil.set(Global.KILL_SECOND_COURSE + secondCours.getId(), secondCours.getCourseSum(), endTime - stateTime);
+        }
 
-
-
-        return R.ok().put("data", "update");
+        //给延迟队列发送消息
+        amqpTemplate.convertAndSend(QueueEnum.QUEUE_ORDER_PLUGIN_CANCEL.getExchange(), QueueEnum.QUEUE_ORDER_PLUGIN_CANCEL.getRouteKey(), 11L, message -> {
+            //给消息设置延迟毫秒值
+            message.getMessageProperties().setHeader("x-delay",30000);
+            return message;
+        });
+        return R.ok().put("data", update);
     }
+
 
     /**
      * 添加选课

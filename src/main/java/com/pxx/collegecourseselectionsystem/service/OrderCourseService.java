@@ -9,4 +9,4 @@ import com.pxx.collegecourseselectionsystem.entity.OrderCourse;
 public interface OrderCourseService extends IService<OrderCourse>{
 
 
-}
+    }
