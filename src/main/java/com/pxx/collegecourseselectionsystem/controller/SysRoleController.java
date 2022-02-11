@@ -1,5 +1,8 @@
 package com.pxx.collegecourseselectionsystem.controller;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.pxx.collegecourseselectionsystem.common.utils.PageUtils;
+import com.pxx.collegecourseselectionsystem.common.utils.Pagination;
 import com.pxx.collegecourseselectionsystem.common.utils.R;
 import com.pxx.collegecourseselectionsystem.common.validator.group.Update;
 import com.pxx.collegecourseselectionsystem.dto.SysRoleDto;
@@ -32,8 +35,10 @@ public class SysRoleController {
     @ApiOperation("角色列表")
     @PreAuthorize("hasAnyAuthority('sys:role:list')")
     @GetMapping("/list")
-    public R list() {
-        List<SysRoleEntity> sysRoleEntityList = sysRoleService.list();
+    public R list(Pagination pagination) {
+        Page<SysRoleEntity> page=new Page<>(pagination.getPage(), pagination.getLimit());
+
+        PageUtils sysRoleEntityList = sysRoleService.findAllRole(page);
         return R.ok().put("data", sysRoleEntityList);
     }
     /**

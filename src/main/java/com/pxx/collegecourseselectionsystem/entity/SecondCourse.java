@@ -83,6 +83,7 @@ public class SecondCourse {
      * 开始得时间
      */
     @NotNull
+
     @JsonFormat(pattern = DatePattern.NORM_DATETIME_PATTERN)
     @TableField(value = "start_time")
     @ApiModelProperty(value = "开始得时间")
@@ -96,6 +97,13 @@ public class SecondCourse {
     @TableField(value = "end_time")
     @ApiModelProperty(value = "结束时间")
     private Date endTime;
+    /**
+     * 发布状态
+     */
+    @JsonIgnore
+    @TableField(value = "state")
+    @ApiModelProperty(value = "发布状态")
+    private Integer state;
 
     public static final String COL_ID = "id";
 

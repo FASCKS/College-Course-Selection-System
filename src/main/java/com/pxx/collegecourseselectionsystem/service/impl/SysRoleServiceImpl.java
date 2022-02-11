@@ -1,8 +1,11 @@
 package com.pxx.collegecourseselectionsystem.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.pxx.collegecourseselectionsystem.common.exception.RRException;
+import com.pxx.collegecourseselectionsystem.common.utils.PageUtils;
 import com.pxx.collegecourseselectionsystem.dto.SysRoleDto;
 import com.pxx.collegecourseselectionsystem.entity.SysRoleEntity;
 import com.pxx.collegecourseselectionsystem.entity.SysRoleMenuEntity;
@@ -73,6 +76,18 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRoleEntity
             }
         }
         return insert > 0;
+    }
+
+    /**
+     * 获取所有角色
+     *
+     * @param page
+     * @return
+     */
+    @Override
+    public PageUtils findAllRole(Page<SysRoleEntity> page) {
+        IPage<SysRoleEntity> entityIPage=sysRoleMapper.findAllRole(page);
+        return new PageUtils(entityIPage);
     }
 
     /**

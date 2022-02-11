@@ -1,6 +1,8 @@
 package com.pxx.collegecourseselectionsystem.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.pxx.collegecourseselectionsystem.dto.SysRoleDto;
 import com.pxx.collegecourseselectionsystem.entity.SysRoleEntity;
 import org.apache.ibatis.annotations.Mapper;
@@ -23,4 +25,11 @@ public interface SysRoleMapper extends BaseMapper<SysRoleEntity> {
      * @return
      */
     SysRoleDto findRoleInfoByRoleId(@Param("roleId") Long roleId);
+
+    /**
+     * 所有角色
+     * @param page
+     * @return
+     */
+    IPage<SysRoleEntity> findAllRole(Page<SysRoleEntity> page);
 }

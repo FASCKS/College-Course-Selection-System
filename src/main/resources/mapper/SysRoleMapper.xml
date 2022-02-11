@@ -43,4 +43,8 @@
             </if>
         </where>
     </select>
+
+    <select id="findAllRole" resultType="com.pxx.collegecourseselectionsystem.entity.SysRoleEntity">
+        select * from sys_role
+    </select>
 </mapper>

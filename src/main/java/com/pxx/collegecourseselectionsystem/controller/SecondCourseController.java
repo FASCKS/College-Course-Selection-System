@@ -10,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 /**
@@ -32,6 +33,11 @@ public class SecondCourseController {
         return secondCourseService.findAllSecondCourse();
     }
 
+    /**
+     * 抢课链接
+     * @param secondCourseId
+     * @return
+     */
     @GetMapping("/go/course/{id}")
     public R goCourse(@PathVariable("id") Integer secondCourseId) {
 
@@ -41,17 +47,39 @@ public class SecondCourseController {
         }
         return null;
     }
+    /**
+     * 发布抢课内容
+     */
 
     /**
      * 添加选课
      */
     @PostMapping("/insert")
     public R insert(@RequestBody @Validated SecondCourseDto secondCourseDto) {
-      boolean insert=  secondCourseService.insertOne(secondCourseDto);
-      return R.ok().put("data",insert);
+        if (secondCourseDto.getStartTime().compareTo(secondCourseDto.getEndTime()) <= 0) {
+            return R.error("开始时间不能小于结束时间");
+        }
+        secondCourseDto.setState(0);
+        boolean insert = secondCourseService.insertOne(secondCourseDto);
+        return R.ok().put("data", insert);
     }
+
     /**
      * 删除选课
      */
+    @PostMapping("/delete")
+    public R delete(@NotEmpty @RequestBody List<Integer> course) {
+        boolean removeBatchByIds = secondCourseService.removeBatchByIds(course);
+        return R.ok().put("data", removeBatchByIds);
+    }
+
+    /**
+     * 编辑
+     */
+    @PostMapping("/update")
+    public R update(@RequestBody @Validated SecondCourseDto secondCourseDto) {
+        boolean update = secondCourseService.updateById(secondCourseDto);
+        return R.ok().put("data", update);
+    }
 
 }

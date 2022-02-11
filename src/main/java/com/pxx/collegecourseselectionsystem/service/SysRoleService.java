@@ -1,6 +1,8 @@
 package com.pxx.collegecourseselectionsystem.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.pxx.collegecourseselectionsystem.common.utils.PageUtils;
 import com.pxx.collegecourseselectionsystem.dto.SysRoleDto;
 import com.pxx.collegecourseselectionsystem.entity.SysRoleEntity;
 public interface SysRoleService extends IService<SysRoleEntity>{
@@ -26,4 +28,11 @@ public interface SysRoleService extends IService<SysRoleEntity>{
      * @return
      */
     boolean insertOneRole(SysRoleDto sysRoleEntity);
+
+    /**
+     * 获取所有角色
+     * @param page
+     * @return
+     */
+    PageUtils findAllRole(Page<SysRoleEntity> page);
 }
