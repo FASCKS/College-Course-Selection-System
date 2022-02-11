@@ -1,219 +1,230 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.pxx.collegecourseselectionsystem.mapper.SecondCourseMapper">
-  <resultMap id="BaseResultMap" type="com.pxx.collegecourseselectionsystem.entity.SecondCourse">
-    <!--@mbg.generated-->
-    <!--@Table second_course-->
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="course_id" jdbcType="INTEGER" property="courseId" />
-    <result column="teacher" jdbcType="BIGINT" property="teacher" />
-    <result column="course_sum" jdbcType="INTEGER" property="courseSum" />
-    <result column="up_time" jdbcType="INTEGER" property="upTime" />
-    <result column="week" jdbcType="INTEGER" property="week" />
-    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
-    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    <!--@mbg.generated-->
-    id, course_id, teacher, course_sum, up_time, week, start_time, end_time
-  </sql>
-  <update id="updateBatch" parameterType="java.util.List">
-    <!--@mbg.generated-->
-    update second_course
-    <trim prefix="set" suffixOverrides=",">
-      <trim prefix="course_id = case" suffix="end,">
-        <foreach collection="list" index="index" item="item">
-          when id = #{item.id,jdbcType=INTEGER} then #{item.courseId,jdbcType=INTEGER}
+    <resultMap id="BaseResultMap" type="com.pxx.collegecourseselectionsystem.entity.SecondCourse">
+        <!--@mbg.generated-->
+        <!--@Table second_course-->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="course_id" jdbcType="INTEGER" property="courseId"/>
+        <result column="teacher" jdbcType="BIGINT" property="teacher"/>
+        <result column="course_sum" jdbcType="INTEGER" property="courseSum"/>
+        <result column="up_time" jdbcType="INTEGER" property="upTime"/>
+        <result column="week" jdbcType="INTEGER" property="week"/>
+        <result column="start_time" jdbcType="TIMESTAMP" property="startTime"/>
+        <result column="end_time" jdbcType="TIMESTAMP" property="endTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id, course_id, teacher, course_sum, up_time, week, start_time, end_time
+    </sql>
+    <update id="updateBatch" parameterType="java.util.List">
+        <!--@mbg.generated-->
+        update second_course
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="course_id = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.courseId,jdbcType=INTEGER}
+                </foreach>
+            </trim>
+            <trim prefix="teacher = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.teacher,jdbcType=BIGINT}
+                </foreach>
+            </trim>
+            <trim prefix="course_sum = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.courseSum,jdbcType=INTEGER}
+                </foreach>
+            </trim>
+            <trim prefix="up_time = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.upTime,jdbcType=INTEGER}
+                </foreach>
+            </trim>
+            <trim prefix="week = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.week,jdbcType=INTEGER}
+                </foreach>
+            </trim>
+            <trim prefix="start_time = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.startTime,jdbcType=TIMESTAMP}
+                </foreach>
+            </trim>
+            <trim prefix="end_time = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.endTime,jdbcType=TIMESTAMP}
+                </foreach>
+            </trim>
+        </trim>
+        where id in
+        <foreach close=")" collection="list" item="item" open="(" separator=", ">
+            #{item.id,jdbcType=INTEGER}
         </foreach>
-      </trim>
-      <trim prefix="teacher = case" suffix="end,">
-        <foreach collection="list" index="index" item="item">
-          when id = #{item.id,jdbcType=INTEGER} then #{item.teacher,jdbcType=BIGINT}
+    </update>
+    <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into second_course
+                (course_id, teacher, course_sum, up_time, week, start_time, end_time)
+                values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.courseId,jdbcType=INTEGER}, #{item.teacher,jdbcType=BIGINT}, #{item.courseSum,jdbcType=INTEGER},
+             #{item.upTime,jdbcType=INTEGER}, #{item.week,jdbcType=INTEGER}, #{item.startTime,jdbcType=TIMESTAMP},
+             #{item.endTime,jdbcType=TIMESTAMP})
         </foreach>
-      </trim>
-      <trim prefix="course_sum = case" suffix="end,">
-        <foreach collection="list" index="index" item="item">
-          when id = #{item.id,jdbcType=INTEGER} then #{item.courseSum,jdbcType=INTEGER}
-        </foreach>
-      </trim>
-      <trim prefix="up_time = case" suffix="end,">
-        <foreach collection="list" index="index" item="item">
-          when id = #{item.id,jdbcType=INTEGER} then #{item.upTime,jdbcType=INTEGER}
-        </foreach>
-      </trim>
-      <trim prefix="week = case" suffix="end,">
-        <foreach collection="list" index="index" item="item">
-          when id = #{item.id,jdbcType=INTEGER} then #{item.week,jdbcType=INTEGER}
-        </foreach>
-      </trim>
-      <trim prefix="start_time = case" suffix="end,">
-        <foreach collection="list" index="index" item="item">
-          when id = #{item.id,jdbcType=INTEGER} then #{item.startTime,jdbcType=TIMESTAMP}
-        </foreach>
-      </trim>
-      <trim prefix="end_time = case" suffix="end,">
-        <foreach collection="list" index="index" item="item">
-          when id = #{item.id,jdbcType=INTEGER} then #{item.endTime,jdbcType=TIMESTAMP}
-        </foreach>
-      </trim>
-    </trim>
-    where id in
-    <foreach close=")" collection="list" item="item" open="(" separator=", ">
-      #{item.id,jdbcType=INTEGER}
-    </foreach>
-  </update>
-  <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
-    <!--@mbg.generated-->
-    insert into second_course
-    (course_id, teacher, course_sum, up_time, week, start_time, end_time)
-    values
-    <foreach collection="list" item="item" separator=",">
-      (#{item.courseId,jdbcType=INTEGER}, #{item.teacher,jdbcType=BIGINT}, #{item.courseSum,jdbcType=INTEGER}, 
-        #{item.upTime,jdbcType=INTEGER}, #{item.week,jdbcType=INTEGER}, #{item.startTime,jdbcType=TIMESTAMP}, 
-        #{item.endTime,jdbcType=TIMESTAMP})
-    </foreach>
-  </insert>
-  <insert id="insertOrUpdate" keyColumn="id" keyProperty="id" parameterType="com.pxx.collegecourseselectionsystem.entity.SecondCourse" useGeneratedKeys="true">
-    <!--@mbg.generated-->
-    insert into second_course
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
-      course_id,
-      teacher,
-      course_sum,
-      up_time,
-      week,
-      start_time,
-      end_time,
-    </trim>
-    values
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=INTEGER},
-      </if>
-      #{courseId,jdbcType=INTEGER},
-      #{teacher,jdbcType=BIGINT},
-      #{courseSum,jdbcType=INTEGER},
-      #{upTime,jdbcType=INTEGER},
-      #{week,jdbcType=INTEGER},
-      #{startTime,jdbcType=TIMESTAMP},
-      #{endTime,jdbcType=TIMESTAMP},
-    </trim>
-    on duplicate key update 
-    <trim suffixOverrides=",">
-      <if test="id != null">
-        id = #{id,jdbcType=INTEGER},
-      </if>
-      course_id = #{courseId,jdbcType=INTEGER},
-      teacher = #{teacher,jdbcType=BIGINT},
-      course_sum = #{courseSum,jdbcType=INTEGER},
-      up_time = #{upTime,jdbcType=INTEGER},
-      week = #{week,jdbcType=INTEGER},
-      start_time = #{startTime,jdbcType=TIMESTAMP},
-      end_time = #{endTime,jdbcType=TIMESTAMP},
-    </trim>
-  </insert>
-  <insert id="insertOrUpdateSelective" keyColumn="id" keyProperty="id" parameterType="com.pxx.collegecourseselectionsystem.entity.SecondCourse" useGeneratedKeys="true">
-    <!--@mbg.generated-->
-    insert into second_course
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
-      <if test="courseId != null">
-        course_id,
-      </if>
-      <if test="teacher != null">
-        teacher,
-      </if>
-      <if test="courseSum != null">
-        course_sum,
-      </if>
-      <if test="upTime != null">
-        up_time,
-      </if>
-      <if test="week != null">
-        week,
-      </if>
-      <if test="startTime != null">
-        start_time,
-      </if>
-      <if test="endTime != null">
-        end_time,
-      </if>
-    </trim>
-    values
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=INTEGER},
-      </if>
-      <if test="courseId != null">
-        #{courseId,jdbcType=INTEGER},
-      </if>
-      <if test="teacher != null">
-        #{teacher,jdbcType=BIGINT},
-      </if>
-      <if test="courseSum != null">
-        #{courseSum,jdbcType=INTEGER},
-      </if>
-      <if test="upTime != null">
-        #{upTime,jdbcType=INTEGER},
-      </if>
-      <if test="week != null">
-        #{week,jdbcType=INTEGER},
-      </if>
-      <if test="startTime != null">
-        #{startTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="endTime != null">
-        #{endTime,jdbcType=TIMESTAMP},
-      </if>
-    </trim>
-    on duplicate key update 
-    <trim suffixOverrides=",">
-      <if test="id != null">
-        id = #{id,jdbcType=INTEGER},
-      </if>
-      <if test="courseId != null">
-        course_id = #{courseId,jdbcType=INTEGER},
-      </if>
-      <if test="teacher != null">
-        teacher = #{teacher,jdbcType=BIGINT},
-      </if>
-      <if test="courseSum != null">
-        course_sum = #{courseSum,jdbcType=INTEGER},
-      </if>
-      <if test="upTime != null">
-        up_time = #{upTime,jdbcType=INTEGER},
-      </if>
-      <if test="week != null">
-        week = #{week,jdbcType=INTEGER},
-      </if>
-      <if test="startTime != null">
-        start_time = #{startTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="endTime != null">
-        end_time = #{endTime,jdbcType=TIMESTAMP},
-      </if>
-    </trim>
-  </insert>
+    </insert>
+    <insert id="insertOrUpdate" keyColumn="id" keyProperty="id"
+            parameterType="com.pxx.collegecourseselectionsystem.entity.SecondCourse" useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into second_course
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            course_id,
+            teacher,
+            course_sum,
+            up_time,
+            week,
+            start_time,
+            end_time,
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            #{courseId,jdbcType=INTEGER},
+            #{teacher,jdbcType=BIGINT},
+            #{courseSum,jdbcType=INTEGER},
+            #{upTime,jdbcType=INTEGER},
+            #{week,jdbcType=INTEGER},
+            #{startTime,jdbcType=TIMESTAMP},
+            #{endTime,jdbcType=TIMESTAMP},
+        </trim>
+        on duplicate key update
+        <trim suffixOverrides=",">
+            <if test="id != null">
+                id = #{id,jdbcType=INTEGER},
+            </if>
+            course_id  = #{courseId,jdbcType=INTEGER},
+            teacher    = #{teacher,jdbcType=BIGINT},
+            course_sum = #{courseSum,jdbcType=INTEGER},
+            up_time    = #{upTime,jdbcType=INTEGER},
+            week       = #{week,jdbcType=INTEGER},
+            start_time = #{startTime,jdbcType=TIMESTAMP},
+            end_time   = #{endTime,jdbcType=TIMESTAMP},
+        </trim>
+    </insert>
+    <insert id="insertOrUpdateSelective" keyColumn="id" keyProperty="id"
+            parameterType="com.pxx.collegecourseselectionsystem.entity.SecondCourse" useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into second_course
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="courseId != null">
+                course_id,
+            </if>
+            <if test="teacher != null">
+                teacher,
+            </if>
+            <if test="courseSum != null">
+                course_sum,
+            </if>
+            <if test="upTime != null">
+                up_time,
+            </if>
+            <if test="week != null">
+                week,
+            </if>
+            <if test="startTime != null">
+                start_time,
+            </if>
+            <if test="endTime != null">
+                end_time,
+            </if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="courseId != null">
+                #{courseId,jdbcType=INTEGER},
+            </if>
+            <if test="teacher != null">
+                #{teacher,jdbcType=BIGINT},
+            </if>
+            <if test="courseSum != null">
+                #{courseSum,jdbcType=INTEGER},
+            </if>
+            <if test="upTime != null">
+                #{upTime,jdbcType=INTEGER},
+            </if>
+            <if test="week != null">
+                #{week,jdbcType=INTEGER},
+            </if>
+            <if test="startTime != null">
+                #{startTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endTime != null">
+                #{endTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+        on duplicate key update
+        <trim suffixOverrides=",">
+            <if test="id != null">
+                id = #{id,jdbcType=INTEGER},
+            </if>
+            <if test="courseId != null">
+                course_id = #{courseId,jdbcType=INTEGER},
+            </if>
+            <if test="teacher != null">
+                teacher = #{teacher,jdbcType=BIGINT},
+            </if>
+            <if test="courseSum != null">
+                course_sum = #{courseSum,jdbcType=INTEGER},
+            </if>
+            <if test="upTime != null">
+                up_time = #{upTime,jdbcType=INTEGER},
+            </if>
+            <if test="week != null">
+                week = #{week,jdbcType=INTEGER},
+            </if>
+            <if test="startTime != null">
+                start_time = #{startTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endTime != null">
+                end_time = #{endTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
 
-  <select id="findAllSecondCourse" resultType="com.pxx.collegecourseselectionsystem.dto.SecondCourseDto">
-    SELECT cs.id,
-           co.`name`,
-           su.name as teacher_name,
-           cs.up_time,
-           cs.week,
-           cs.start_time,
-           cs.end_time,
-            cs.course_sum
+    <select id="findAllSecondCourse" resultType="com.pxx.collegecourseselectionsystem.dto.SecondCourseDto">
+        SELECT cs.id,
+               co.`name`,
+               su.name as teacher_name,
+               cs.up_time,
+               cs.week,
+               cs.start_time,
+               cs.end_time,
+               cs.course_sum
 
-    FROM second_course cs
-                 LEFT JOIN course co ON co.id = cs.id
-                 left join sys_user su on su.user_id = cs.teacher
+        FROM second_course cs
+                     LEFT JOIN course co ON co.id = cs.course_id
+                     LEFT JOIN sys_user su on su.user_id = cs.teacher
 
-    where su.type = 2
+        where su.type = 2
+    </select>
+
+    <select id="findOneByCourseIdAndUpTimeAndWeek"
+            resultType="com.pxx.collegecourseselectionsystem.dto.SecondCourseDto">
+        select *
+        from second_course sc
+        where course_sum = #{courseId,jdbcType=INTEGER}
+          and up_time = #{upTime}
+          and week = #{week}
     </select>
 </mapper>

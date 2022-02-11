@@ -11,7 +11,7 @@
  Target Server Version : 50726
  File Encoding         : 65001
 
- Date: 10/02/2022 16:51:26
+ Date: 10/02/2022 17:00:46
 */
 
 SET NAMES utf8mb4;
@@ -339,7 +339,7 @@ CREATE TABLE `sys_log`  (
   `ip` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'IP地址',
   `create_date` datetime NULL DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 9573 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '系统日志' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 9574 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '系统日志' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_log
@@ -977,6 +977,7 @@ INSERT INTO `sys_log` VALUES (9569, 'lyt', '登录平台', NULL, NULL, 0, '192.1
 INSERT INTO `sys_log` VALUES (9570, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-02-10 16:11:17');
 INSERT INTO `sys_log` VALUES (9571, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-02-10 16:40:30');
 INSERT INTO `sys_log` VALUES (9572, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-02-10 16:46:25');
+INSERT INTO `sys_log` VALUES (9573, 'admin', '登录平台', NULL, NULL, 0, '192.168.6.44', '2022-02-10 16:58:05');
 
 -- ----------------------------
 -- Table structure for sys_menu
@@ -1045,7 +1046,7 @@ CREATE TABLE `sys_role`  (
   `updated_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`role_id`) USING BTREE,
   UNIQUE INDEX `role_name`(`role_name`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 24 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '角色' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 25 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '角色' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_role
@@ -1053,6 +1054,7 @@ CREATE TABLE `sys_role`  (
 INSERT INTO `sys_role` VALUES (1, 'admin', '管理员', 12, 'admin', '2021-08-10 11:54:26', 'admin', '2021-09-23 14:27:10');
 INSERT INTO `sys_role` VALUES (22, 'Student', '学生', 1, 'admin', '2021-11-25 13:52:26', 'admin', '2021-11-25 13:52:30');
 INSERT INTO `sys_role` VALUES (23, 'Teacher', '老师', 1, 'admin', '2021-11-25 13:59:27', 'admin', '2021-11-25 13:59:31');
+INSERT INTO `sys_role` VALUES (24, 'test', '1', 1, '1', NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for sys_role_menu
@@ -1177,7 +1179,7 @@ CREATE TABLE `sys_user_role`  (
   INDEX `sys_user_role_ibfk_2`(`user_id`) USING BTREE,
   CONSTRAINT `sys_user_role_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `sys_user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `sys_user_role_ibfk_3` FOREIGN KEY (`role_id`) REFERENCES `sys_role` (`role_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 26 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户与角色对应关系' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 27 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户与角色对应关系' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_user_role
@@ -1186,7 +1188,7 @@ INSERT INTO `sys_user_role` VALUES (1, 1, 1);
 INSERT INTO `sys_user_role` VALUES (18, 132, 1);
 INSERT INTO `sys_user_role` VALUES (19, 133, 1);
 INSERT INTO `sys_user_role` VALUES (20, 134, 1);
-INSERT INTO `sys_user_role` VALUES (25, 140, 23);
+INSERT INTO `sys_user_role` VALUES (25, 140, 24);
 
 -- ----------------------------
 -- Table structure for tenant_capacity

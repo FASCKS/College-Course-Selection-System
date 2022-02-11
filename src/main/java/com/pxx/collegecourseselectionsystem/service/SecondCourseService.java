@@ -23,7 +23,18 @@ public interface SecondCourseService extends IService<SecondCourse> {
 
     List<SecondCourseDto> findAllSecondCourse();
 
+    /**
+     * 检查课程是否在时间之内
+     * @param secondCourseId
+     * @return
+     */
+    boolean checkTime(Integer secondCourseId);
 
-
+    /**
+     * 新增数据
+     * @param secondCourseDto
+     * @return
+     */
+    boolean insertOne(SecondCourseDto secondCourseDto);
 }
 

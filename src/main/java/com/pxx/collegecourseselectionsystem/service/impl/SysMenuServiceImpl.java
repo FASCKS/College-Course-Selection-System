@@ -47,8 +47,8 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenuEntity
      * @return
      */
     @Override
-    public List<Tree<Integer>> findMenuByType() {
-        List<SysMenuEntity> sysMenuEntities = sysMenuMapper.findMenuByType(1, 0);
+    public List<Tree<Integer>> findMenuByType(Integer ...type) {
+        List<SysMenuEntity> sysMenuEntities = sysMenuMapper.findMenuByType(type);
         List<MenuTreeNode<Integer>> nodeList = CollUtil.newArrayList();
         for (SysMenuEntity sysMenuEntity : sysMenuEntities) {
             nodeList.add(new MenuTreeNode<>(

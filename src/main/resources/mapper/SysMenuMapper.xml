@@ -71,12 +71,12 @@
     <insert id="batchInsert" keyColumn="menu_id" keyProperty="menuId" parameterType="map" useGeneratedKeys="true">
         <!--@mbg.generated-->
         insert into sys_menu
-        (parent_id, `name`, url, perms, `type`, icon, order_num, `status`)
-        values
+                (parent_id, `name`, url, perms, `type`, icon, order_num, `status`)
+                values
         <foreach collection="list" item="item" separator=",">
             (#{item.parentId,jdbcType=INTEGER}, #{item.name,jdbcType=VARCHAR}, #{item.url,jdbcType=VARCHAR},
-            #{item.perms,jdbcType=VARCHAR}, #{item.type,jdbcType=INTEGER}, #{item.icon,jdbcType=VARCHAR},
-            #{item.orderNum,jdbcType=INTEGER}, #{item.status,jdbcType=INTEGER})
+             #{item.perms,jdbcType=VARCHAR}, #{item.type,jdbcType=INTEGER}, #{item.icon,jdbcType=VARCHAR},
+             #{item.orderNum,jdbcType=INTEGER}, #{item.status,jdbcType=INTEGER})
         </foreach>
     </insert>
     <insert id="insertOrUpdate" keyColumn="menu_id" keyProperty="menuId"
@@ -116,13 +116,13 @@
                 menu_id = #{menuId,jdbcType=INTEGER},
             </if>
             parent_id = #{parentId,jdbcType=INTEGER},
-            `name` = #{name,jdbcType=VARCHAR},
-            url = #{url,jdbcType=VARCHAR},
-            perms = #{perms,jdbcType=VARCHAR},
-            `type` = #{type,jdbcType=INTEGER},
-            icon = #{icon,jdbcType=VARCHAR},
+            `name`    = #{name,jdbcType=VARCHAR},
+            url       = #{url,jdbcType=VARCHAR},
+            perms     = #{perms,jdbcType=VARCHAR},
+            `type`    = #{type,jdbcType=INTEGER},
+            icon      = #{icon,jdbcType=VARCHAR},
             order_num = #{orderNum,jdbcType=INTEGER},
-            `status` = #{status,jdbcType=INTEGER},
+            `status`  = #{status,jdbcType=INTEGER},
         </trim>
     </insert>
     <insert id="insertOrUpdateSelective" keyColumn="menu_id" keyProperty="menuId"
@@ -225,12 +225,12 @@
                `name`,
                url,
                perms,
-        status,
-        type
-        from sys_menu where type  in (
-                <foreach collection="type" item="item" index="index" separator=",">
-                    #{item}
-                </foreach>
-                )
+               status,
+               type
+        from sys_menu where type in (
+        <foreach collection="type" item="item" index="index" separator=",">
+            #{item}
+        </foreach>
+        )
     </select>
 </mapper>

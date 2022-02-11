@@ -27,10 +27,18 @@ public class SysMenuController {
     @ApiOperation("返回所有菜单")
     @GetMapping("/list")
     public R list() {
-        List<Tree<Integer>> list = sysMenuService.findMenuByType();
+        List<Tree<Integer>> list = sysMenuService.findMenuByType(0,1);
         return R.ok().put("data", list);
     }
-
+    /**
+     * 返回菜单和权限
+     */
+    @ApiOperation("返回菜单和权限")
+    @GetMapping("/list/menu")
+    public R listMenu() {
+        List<Tree<Integer>> list = sysMenuService.findMenuByType(0,1,2);
+        return R.ok().put("data", list);
+    }
     /**
      * 新增菜单
      */

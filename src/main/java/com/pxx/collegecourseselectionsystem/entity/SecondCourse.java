@@ -16,6 +16,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -39,6 +40,7 @@ public class SecondCourse {
     /**
      * 课程id
      */
+    @NotNull
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @TableField(value = "course_id")
     @ApiModelProperty(value = "课程id")
@@ -47,6 +49,7 @@ public class SecondCourse {
     /**
      * 授课老师
      */
+    @NotNull
     @JsonIgnore
     @TableField(value = "teacher")
     @ApiModelProperty(value = "授课老师")
@@ -55,6 +58,7 @@ public class SecondCourse {
     /**
      * 课程剩余数量
      */
+    @NotNull
     @TableField(value = "course_sum")
     @ApiModelProperty(value = "课程剩余数量")
     private Integer courseSum;
@@ -62,6 +66,7 @@ public class SecondCourse {
     /**
      * 上课时间
      */
+    @NotNull
     @TableField(value = "up_time")
     @ApiModelProperty(value = "上课时间")
     private CourseUpTimeEnum upTime;
@@ -69,6 +74,7 @@ public class SecondCourse {
     /**
      * 星期几
      */
+    @NotNull
     @TableField(value = "week")
     @ApiModelProperty(value = "星期几")
     private CourseWeekEnum week;
@@ -76,6 +82,7 @@ public class SecondCourse {
     /**
      * 开始得时间
      */
+    @NotNull
     @JsonFormat(pattern = DatePattern.NORM_DATETIME_PATTERN)
     @TableField(value = "start_time")
     @ApiModelProperty(value = "开始得时间")
@@ -84,6 +91,7 @@ public class SecondCourse {
     /**
      * 结束时间
      */
+    @NotNull
     @JsonFormat(pattern = DatePattern.NORM_DATETIME_PATTERN)
     @TableField(value = "end_time")
     @ApiModelProperty(value = "结束时间")

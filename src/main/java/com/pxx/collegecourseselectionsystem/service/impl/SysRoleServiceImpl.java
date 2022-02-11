@@ -4,8 +4,8 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeNode;
 import cn.hutool.core.lang.tree.TreeUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.pxx.collegecourseselectionsystem.common.exception.RRException;
 import com.pxx.collegecourseselectionsystem.dto.SysMenuDto;
 import com.pxx.collegecourseselectionsystem.dto.SysRoleDto;
 import com.pxx.collegecourseselectionsystem.entity.SysRoleEntity;
@@ -45,7 +45,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRoleEntity
         if (!sysMenuEntities.isEmpty()) {
             List<TreeNode<Integer>> nodeList = CollUtil.newArrayList();
             for (SysMenuDto sysMenuEntity : sysMenuEntities) {
-                nodeList.add(new TreeNode<>(sysMenuEntity.getMenuId(),sysMenuEntity.getParentId(),sysMenuEntity.getName(),sysMenuEntity.getOrderNum()));
+                nodeList.add(new TreeNode<>(sysMenuEntity.getMenuId(), sysMenuEntity.getParentId(), sysMenuEntity.getName(), sysMenuEntity.getOrderNum()));
             }
             List<Tree<Integer>> buildMenuTree = TreeUtil.build(nodeList, 0);
             sysRoleEntity.setSysMenuTreeNode(buildMenuTree);
@@ -55,25 +55,15 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRoleEntity
 
         return sysRoleEntity;
     }
+
     @Transactional
     @Override
     public boolean updateOneRole(SysRoleDto sysRoleEntity) {
         boolean updateById = this.updateById(sysRoleEntity);
 
         if (!sysRoleEntity.getSysMenuEntities().isEmpty()) {
-            //先删除全部角色关联
-            boolean deleteByRoleId = sysRoleMenuService.deleteByRoleId(sysRoleEntity.getRoleId());
-            //添加角色菜单关联
-            List<SysRoleMenuEntity> sysRoleMenuEntities =
-                    insertRoleIdAndMenuId(
-                            sysRoleEntity.getSysMenuEntities()
-                            , sysRoleEntity.getRoleId());
-            int batchInsert = sysRoleMenuService.batchInsert(sysRoleMenuEntities);
-            if (!deleteByRoleId || batchInsert != sysRoleMenuEntities.size()) {
-                throw new RRException("角色菜单更新失败.");
-            }
+            boolean insertRoleIdAndMenuId = this.insertRoleIdAndMenuId(sysRoleEntity.getMenuAuthorityIds(), sysRoleEntity.getRoleId());
         }
-
 
         return updateById;
     }
@@ -88,40 +78,31 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRoleEntity
     @Override
     public boolean insertOneRole(SysRoleDto sysRoleEntity) {
         int insert = sysRoleMapper.insert(sysRoleEntity);
-        if (!sysRoleEntity.getSysMenuEntities().isEmpty()) {
-            //添加角色菜单关联
-            List<SysRoleMenuEntity> sysRoleMenuEntities =
-                    insertRoleIdAndMenuId(
-                            sysRoleEntity.getSysMenuEntities()
-                            , sysRoleEntity.getRoleId());
-
-            int batchInsert = sysRoleMenuService.batchInsert(sysRoleMenuEntities);
-            if (batchInsert != sysRoleMenuEntities.size()) {
-                throw new RRException("角色菜单添加失败.");
-            }
+        List<Integer> menuAuthorityIds = sysRoleEntity.getMenuAuthorityIds();
+        if (menuAuthorityIds != null && !menuAuthorityIds.isEmpty()) {
+            boolean insertRoleIdAndMenuId = this.insertRoleIdAndMenuId(menuAuthorityIds, sysRoleEntity.getRoleId());
         }
-
         return insert > 0;
     }
 
     /**
-     * 创建角色菜单临时表对象
-     *
-     * @param sysMenuEntities
+     * 添加角色和菜单绑定关系
+     * @param menuIds
      * @param roleId
      * @return
      */
-    private List<SysRoleMenuEntity> insertRoleIdAndMenuId(List<SysMenuDto> sysMenuEntities, Long roleId) {
+    private boolean insertRoleIdAndMenuId(List<Integer> menuIds, Long roleId) {
+        QueryWrapper<SysRoleMenuEntity> sysRoleMenuEntityQueryWrapper = new QueryWrapper<>();
+        sysRoleMenuEntityQueryWrapper.eq(SysRoleMenuEntity.COL_ROLE_ID, roleId);
+        boolean remove = sysRoleMenuService.remove(sysRoleMenuEntityQueryWrapper);
+        List<SysRoleMenuEntity> sysRoleMenuEntityList = new ArrayList<>();
+        for (Integer menuAuthorityId : menuIds) {
+            SysRoleMenuEntity sysRoleMenuEntity = new SysRoleMenuEntity();
+            sysRoleMenuEntity.setMenuId(menuAuthorityId);
+            sysRoleMenuEntity.setRoleId(roleId);
+        }
+        int batchInsert = sysRoleMenuService.batchInsert(sysRoleMenuEntityList);
 
-        List<SysRoleMenuEntity> sysRoleMenuEntities = new ArrayList<>();
-        sysMenuEntities.forEach(
-                sysMenuEntity -> {
-                    SysRoleMenuEntity sysRoleMenuEntity = new SysRoleMenuEntity();
-                    sysRoleMenuEntity.setRoleId(roleId);
-                    sysRoleMenuEntity.setMenuId(sysMenuEntity.getMenuId());
-                    sysRoleMenuEntities.add(sysRoleMenuEntity);
-                }
-        );
-        return sysRoleMenuEntities;
+        return batchInsert>=0;
     }
 }
