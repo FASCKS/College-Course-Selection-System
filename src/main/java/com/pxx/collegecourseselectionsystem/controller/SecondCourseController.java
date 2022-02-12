@@ -238,6 +238,21 @@ public class SecondCourseController {
         return R.ok().put("data", update);
     }
     /**
+     * 学生当前课表
+     */
+    @ApiOperation("学生当前课表")
+    @GetMapping("/get/class/course")
+    public R getClassCourse() {
+        boolean hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE + "all");
+        if (!hasKey){
+            return R.error("当前不是抢课时间");
+        }
+
+        Long userId = SpringSecurityUtil.getUserId();
+        return R.ok();
+    }
+
+    /**
      * 删除抢课计划
      */
     @ApiOperation("删除抢课计划")
@@ -252,15 +267,7 @@ public class SecondCourseController {
     }
 
 
-    /**
-     * 学生当前课表
-     */
-    @ApiOperation("学生当前课表")
-    @GetMapping("/get/class/course")
-    public R getClassCourse() {
-        Long userId = SpringSecurityUtil.getUserId();
-        return R.ok();
-    }
+
 
     /**
      * 添加选课
