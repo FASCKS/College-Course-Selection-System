@@ -5,6 +5,7 @@ import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.pxx.collegecourseselectionsystem.common.utils.RedisUtil;
 import com.pxx.collegecourseselectionsystem.dto.SecondCourseDto;
+import com.pxx.collegecourseselectionsystem.entity.ClassSchedule;
 import com.pxx.collegecourseselectionsystem.entity.SecondCourse;
 import com.pxx.collegecourseselectionsystem.mapper.SecondCourseMapper;
 import com.pxx.collegecourseselectionsystem.service.SecondCourseService;
@@ -90,6 +91,17 @@ public class SecondCourseServiceImpl extends ServiceImpl<SecondCourseMapper, Sec
 
 
         return save;
+    }
+
+    /**
+     * 将临时表中的数据加到课程表
+     *
+     * @return
+     */
+    @Override
+    public List<ClassSchedule> findAllOrderCourseAndSecondCourseData() {
+
+        return secondCourseMapper.findAllOrderCourseAndSecondCourseData();
     }
 }
 

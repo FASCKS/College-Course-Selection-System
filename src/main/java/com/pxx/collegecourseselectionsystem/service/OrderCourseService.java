@@ -8,5 +8,8 @@ import com.pxx.collegecourseselectionsystem.entity.OrderCourse;
  */
 public interface OrderCourseService extends IService<OrderCourse>{
 
-
+        /**
+         * 删除全部数据
+         */
+        void deleteAll();
     }

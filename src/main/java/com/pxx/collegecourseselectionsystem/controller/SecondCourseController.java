@@ -194,11 +194,11 @@ public class SecondCourseController {
             Long endTime = Convert.toLong(secondCours.getEndTime());
             Long stateTime = Convert.toLong(secondCours.getStartTime());
             //缓存库存
-            redisUtil.set(Global.KILL_SECOND_COURSE + "sum:" + secondCours.getId(), secondCours.getCourseSum(), endTime - stateTime + 60 * 60 * 24);
+            redisUtil.set(Global.KILL_SECOND_COURSE + "sum:" + secondCours.getId(), secondCours.getCourseSum(), endTime - stateTime + 60 * 4);
             //给延迟队列发送消息
             amqpTemplate.convertAndSend(QueueEnum.QUEUE_ORDER_PLUGIN_CANCEL.getExchange(), QueueEnum.QUEUE_ORDER_PLUGIN_CANCEL.getRouteKey(), secondCours.getId(), message -> {
                 //给消息设置延迟毫秒值
-                message.getMessageProperties().setHeader("x-delay", endTime - stateTime + 60 * 60 * 12);
+                message.getMessageProperties().setHeader("x-delay", endTime - stateTime + 60 * 2);
                 return message;
             });
         }

@@ -2,6 +2,7 @@ package com.pxx.collegecourseselectionsystem.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.pxx.collegecourseselectionsystem.dto.SecondCourseDto;
+import com.pxx.collegecourseselectionsystem.entity.ClassSchedule;
 import com.pxx.collegecourseselectionsystem.entity.SecondCourse;
 import com.pxx.collegecourseselectionsystem.entity.enums.CourseUpTimeEnum;
 import com.pxx.collegecourseselectionsystem.entity.enums.CourseWeekEnum;
@@ -35,4 +36,6 @@ public interface SecondCourseMapper extends BaseMapper<SecondCourse> {
      * @return
      */
     SecondCourse findOneByCourseIdAndUpTimeAndWeek(@Param("courseId") Integer courseId, @Param("upTime") CourseUpTimeEnum upTime, @Param("week") CourseWeekEnum week);
+
+    List<ClassSchedule> findAllOrderCourseAndSecondCourseData();
 }

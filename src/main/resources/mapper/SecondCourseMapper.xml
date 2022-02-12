@@ -205,7 +205,7 @@
     <select id="findAllSecondCourse" resultType="com.pxx.collegecourseselectionsystem.dto.SecondCourseDto">
         SELECT cs.id,
                co.`name`,
-                co.id as course_id,
+               co.id   as course_id,
                su.name as teacher_name,
                cs.up_time,
                cs.week,
@@ -218,7 +218,7 @@
                      LEFT JOIN sys_user su on su.user_id = cs.teacher
 
         where su.type = 2
-        and cs.state = 1
+          and cs.state = 1
     </select>
 
     <select id="findOneByCourseIdAndUpTimeAndWeek"
@@ -228,5 +228,15 @@
         where course_sum = #{courseId,jdbcType=INTEGER}
           and up_time = #{upTime}
           and week = #{week}
+    </select>
+
+    <select id="findAllOrderCourseAndSecondCourseData" resultType="com.pxx.collegecourseselectionsystem.entity.ClassSchedule">
+        select sc.course_id, sc.up_time, sc.week, oc.user_id, su.unit_id, sc.teacher
+        from second_course sc
+                     left join order_course oc on sc.id = oc.second_course_id
+                     left join sys_user su on oc.user_id = su.user_id
+                     left join sys_unit s on su.unit_id = s.unit_id
+
+        where su.type in (0,1, 2)
     </select>
 </mapper>

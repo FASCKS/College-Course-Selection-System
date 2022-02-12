@@ -1,7 +1,6 @@
 package com.pxx.collegecourseselectionsystem.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.pxx.collegecourseselectionsystem.common.utils.RedisUtil;
 import com.pxx.collegecourseselectionsystem.entity.OrderCourse;
 import com.pxx.collegecourseselectionsystem.mapper.OrderCourseMapper;
 import com.pxx.collegecourseselectionsystem.service.OrderCourseService;
@@ -16,7 +15,13 @@ import org.springframework.stereotype.Service;
 public class OrderCourseServiceImpl extends ServiceImpl<OrderCourseMapper, OrderCourse> implements OrderCourseService {
     @Autowired
     private OrderCourseMapper orderCourseMapper;
-    @Autowired
-        private RedisUtil redisUtil;
 
+
+    /**
+     * 删除全部数据
+     */
+    @Override
+    public void deleteAll() {
+        orderCourseMapper.deleteAll();
+    }
 }

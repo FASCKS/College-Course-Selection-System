@@ -2,6 +2,7 @@ package com.pxx.collegecourseselectionsystem.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.pxx.collegecourseselectionsystem.dto.SecondCourseDto;
+import com.pxx.collegecourseselectionsystem.entity.ClassSchedule;
 import com.pxx.collegecourseselectionsystem.entity.SecondCourse;
 
 import java.util.List;
@@ -36,5 +37,11 @@ public interface SecondCourseService extends IService<SecondCourse> {
      * @return
      */
     boolean insertOne(SecondCourseDto secondCourseDto);
+
+    /**
+     * 将临时表中的数据加到课程表
+     * @return
+     */
+    List<ClassSchedule> findAllOrderCourseAndSecondCourseData();
 }
 
