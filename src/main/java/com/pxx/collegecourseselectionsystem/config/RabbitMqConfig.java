@@ -6,10 +6,7 @@ package com.pxx.collegecourseselectionsystem.config;
  */
 
 import com.pxx.collegecourseselectionsystem.entity.enums.QueueEnum;
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.CustomExchange;
-import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -31,7 +28,33 @@ public class RabbitMqConfig {
         //创建一个自定义交换机，可以发送延迟消息
         Map<String, Object> args = new HashMap<>();
         args.put("x-delayed-type", "direct");
-        return new CustomExchange(QueueEnum.QUEUE_ORDER_PLUGIN_CANCEL.getExchange(), "x-delayed-message",true, false,args);
+        return new CustomExchange(QueueEnum.QUEUE_ORDER_PLUGIN_CANCEL.getExchange(), "x-delayed-message", true, false, args);
+    }
+
+    /**
+     * 普通交换机
+     */
+    @Bean
+    public DirectExchange directExchange() {
+        return new DirectExchange("course.kill.syn.mysql",true,false);
+    }
+    /**
+     * 普通队列
+     */
+    @Bean
+    public Queue courseKillSyn(){
+        return new Queue("course.kill.cancel.syn.mysql");
+    }
+    /**
+     * 绑定
+     */
+    @Bean
+    public Binding courseKillSynBinding(DirectExchange directExchange,Queue courseKillSyn){
+        return BindingBuilder
+                .bind(courseKillSyn)
+                .to(directExchange)
+                .with("course.kill.cancel.syn.mysql");
+
     }
 
     /**

@@ -217,6 +217,7 @@
                      LEFT JOIN sys_user su on su.user_id = cs.teacher
 
         where su.type = 2
+        and cs.state = 1
     </select>
 
     <select id="findOneByCourseIdAndUpTimeAndWeek"

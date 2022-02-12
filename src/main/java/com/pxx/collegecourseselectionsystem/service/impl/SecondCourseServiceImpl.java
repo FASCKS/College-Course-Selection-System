@@ -58,13 +58,10 @@ public class SecondCourseServiceImpl extends ServiceImpl<SecondCourseMapper, Sec
      * @return
      */
     @Override
-    public boolean checkTime(Integer secondCourseId) {
-        SecondCourse secondCourse = baseMapper.selectById(secondCourseId);
-        if (secondCourse == null) {
-            return false;
-        }
-        Date startTime = secondCourse.getStartTime();
-        Date endTime = secondCourse.getEndTime();
+    public boolean checkTime(SecondCourseDto secondCourseDto) {
+
+        Date startTime = secondCourseDto.getStartTime();
+        Date endTime = secondCourseDto.getEndTime();
         DateTime date = DateUtil.date();
         if (date.compareTo(startTime) < 0) {
             return false;

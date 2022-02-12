@@ -28,7 +28,7 @@ public interface SecondCourseService extends IService<SecondCourse> {
      * @param secondCourseId
      * @return
      */
-    boolean checkTime(Integer secondCourseId);
+    boolean checkTime(SecondCourseDto secondCourseDto);
 
     /**
      * 新增数据
