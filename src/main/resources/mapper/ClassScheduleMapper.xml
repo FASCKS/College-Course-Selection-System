@@ -57,4 +57,25 @@
             </if>
         </where>
     </select>
+    <resultMap id="findSimpleMyClassScheduleVo" type="com.pxx.collegecourseselectionsystem.vo.course.SimpleClassScheduleVo">
+        <id column="user_id" jdbcType="BIGINT" property="userId"/>
+        <collection property="classBook" ofType="com.pxx.collegecourseselectionsystem.vo.course.SimpleClassBook">
+            <result column="course_id" property="courseId"/>
+            <collection property="classScheduleTimes" ofType="com.pxx.collegecourseselectionsystem.vo.course.SimpleClassScheduleTime">
+                <result column="course_id" property="courseId"/>
+                <result column="week" property="week"/>
+                <result column="up_time" property="upTime"/>
+            </collection>
+        </collection>
+    </resultMap>
+    <select id="findSimpleMyClassSchedule" resultMap="findSimpleMyClassScheduleVo">
+        SELECT
+        su.user_id  AS user_id,
+        co.id       AS course_id,
+        cs.`week`,
+        cs.up_time
+        FROM class_schedule cs
+        LEFT JOIN sys_user su ON su.user_id = cs.user_id
+        LEFT JOIN course co ON co.id = cs.course_id
+    </select>
 </mapper>

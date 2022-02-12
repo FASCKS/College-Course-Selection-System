@@ -6,7 +6,10 @@ import com.pxx.collegecourseselectionsystem.entity.ClassSchedule;
 import com.pxx.collegecourseselectionsystem.mapper.ClassScheduleMapper;
 import com.pxx.collegecourseselectionsystem.service.ClassScheduleService;
 import com.pxx.collegecourseselectionsystem.vo.course.ClassScheduleVo;
+import com.pxx.collegecourseselectionsystem.vo.course.SimpleClassScheduleVo;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ClassScheduleServiceImpl extends ServiceImpl<ClassScheduleMapper, ClassSchedule> implements ClassScheduleService {
@@ -23,6 +26,15 @@ public class ClassScheduleServiceImpl extends ServiceImpl<ClassScheduleMapper, C
         return classScheduleVo;
 
 
+    }
+
+    /**
+     * 查询所有课表
+     */
+    @Override
+    public List<SimpleClassScheduleVo> findSimpleMyClassSchedule() {
+        List<SimpleClassScheduleVo> classScheduleVo=baseMapper.findSimpleMyClassSchedule();
+        return classScheduleVo;
     }
 }
 
