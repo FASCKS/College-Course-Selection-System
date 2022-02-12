@@ -3,9 +3,9 @@ package com.pxx.collegecourseselectionsystem.entity.enums;
 import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
-
 @Getter
 public enum CourseEnum {
+
     Public(1, "公共课"),
     Elective(2, "选修课"),
     Compulsory(3, "必修课"),
