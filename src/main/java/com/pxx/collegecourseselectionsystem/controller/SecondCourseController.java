@@ -22,6 +22,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.util.List;
 
 /**
@@ -65,7 +67,8 @@ public class SecondCourseController {
      * @return
      */
     @GetMapping("/go/course/{id}/{state}")
-    public R goCourse(@PathVariable("id") Integer secondCourseId, @PathVariable("state") Integer state) {
+    public R goCourse(@Positive @NotNull @PathVariable("id") Integer secondCourseId,
+                      @Positive @NotNull @PathVariable("state") Integer state) {
         Long userId = SpringSecurityUtil.getUserId();
         //如果是退课
         if (state==0){
@@ -74,14 +77,20 @@ public class SecondCourseController {
             if (!hasKey){
                 return R.error("退课失败");
             }
+            //判断库存
+            Integer courseSum =(Integer) redisUtil.get(Global.KILL_SECOND_COURSE + "sum:" + secondCourseId);
+            if (courseSum<0){
+                return R.error("退课失败");
+            }
+            //递增加一
+            long decr = redisUtil.incr(Global.KILL_SECOND_COURSE + "sum:" + secondCourseId, 1);
+
             //先删除缓存
             amqpTemplate.convertAndSend("course.kill.syn.mysql","course.kill.cancel.del.mysql",message -> {
                 //给消息设置延迟毫秒值
                 message.getMessageProperties().setHeader("x-delay", 3000);
                 return message;
             });
-            //递增加一
-            long decr = redisUtil.incr(Global.KILL_SECOND_COURSE + "sum:" + secondCourseId, 1);
             return R.ok("退课成功");
         }
         //判断是否已经发布
