@@ -60,25 +60,64 @@ public class SecondCourseController {
 
     /**
      * 抢课链接
-     *
+     *      1 抢课   0  退课
      * @param secondCourseId
      * @return
      */
-    @GetMapping("/go/course/{id}")
-    public R goCourse(@PathVariable("id") Integer secondCourseId) {
+    @GetMapping("/go/course/{id}/{state}")
+    public R goCourse(@PathVariable("id") Integer secondCourseId, @PathVariable("state") Integer state) {
         Long userId = SpringSecurityUtil.getUserId();
+        //如果是退课
+        if (state==0){
+            //检查学生是否已经抢到课程
+            boolean hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE + userId + "course" + secondCourseId);
+            if (!hasKey){
+                return R.error("退课失败");
+            }
+            //先删除缓存
+            amqpTemplate.convertAndSend("course.kill.syn.mysql","course.kill.cancel.del.mysql",message -> {
+                //给消息设置延迟毫秒值
+                message.getMessageProperties().setHeader("x-delay", 3000);
+                return message;
+            });
+            //递增加一
+            long decr = redisUtil.incr(Global.KILL_SECOND_COURSE + "sum:" + secondCourseId, 1);
+            return R.ok("退课成功");
+        }
+        //判断是否已经发布
+        boolean hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE + "all");
+        if (!hasKey) {
+            return R.error("未发布抢课计划");
+        }
+
         //检验活动是否开始
         SecondCourseDto secondCourseDto = (SecondCourseDto) redisUtil.get(Global.KILL_SECOND_COURSE + "entity:" + secondCourseId);
         boolean checkTime = secondCourseService.checkTime(secondCourseDto);
         if (!checkTime) {
             return R.error("时间未开始或已经结束");
         }
-        //TODO 判断是否课程冲突
+        //判断是否重复抢购
+        {
+            Object course = redisUtil.get(Global.KILL_SECOND_COURSE + userId + "course:" + secondCourseId);
+            if (course != null) {
+                return R.error("重复抢课");
+            }
+        }
+        //判断库存
+        Integer courseSum = (Integer) redisUtil.get(Global.KILL_SECOND_COURSE + "sum:" + secondCourseId);
+        if (courseSum <= 0) {
+            return R.error("课程无空余");
+        }
+        //判断是否课程冲突
         {
             SimpleClassScheduleVo simpleClassScheduleVo = (SimpleClassScheduleVo) redisUtil.get(Global.KILL_SECOND_COURSE + "class:schedule:" + userId);
             Integer courseId = secondCourseDto.getCourseId();
             Integer week = secondCourseDto.getWeek().getCode();
             Integer upTime = secondCourseDto.getUpTime().getCode();
+            //表示没有课程表
+            if (simpleClassScheduleVo==null){
+                return R.error("课程表为空");
+            }
             for (SimpleClassBook simpleClassBook : simpleClassScheduleVo.getClassBook()) {
                 //如果课程相同
                 if (courseId.equals(simpleClassBook.getCourseId())) {
@@ -91,20 +130,8 @@ public class SecondCourseController {
                     }
                 }
             }
-
         }
-        //判断是否重复抢购
-        {
-            Object course = redisUtil.get(Global.KILL_SECOND_COURSE + userId + "course:" + secondCourseId);
-            if (course != null) {
-                return R.ok("重复抢课");
-            }
-        }
-        //判断库存
-        Integer courseSum = (Integer) redisUtil.get(Global.KILL_SECOND_COURSE + "sum:" + secondCourseId);
-        if (courseSum <= 0) {
-            return R.ok("课程无空余");
-        }
+        //递减操作
         long decr = redisUtil.decr(Global.KILL_SECOND_COURSE + "sum:" + secondCourseId, 1);
         //用户抢课成功   redis标记
         redisUtil.set(Global.KILL_SECOND_COURSE + userId + "course:" + secondCourseId, "");

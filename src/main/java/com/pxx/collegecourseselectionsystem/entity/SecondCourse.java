@@ -7,7 +7,6 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.pxx.collegecourseselectionsystem.entity.enums.CourseUpTimeEnum;
 import com.pxx.collegecourseselectionsystem.entity.enums.CourseWeekEnum;
 import io.swagger.annotations.ApiModel;
@@ -41,7 +40,6 @@ public class SecondCourse {
      * 课程id
      */
     @NotNull
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @TableField(value = "course_id")
     @ApiModelProperty(value = "课程id")
     private Integer courseId;

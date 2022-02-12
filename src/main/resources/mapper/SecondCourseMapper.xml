@@ -205,6 +205,7 @@
     <select id="findAllSecondCourse" resultType="com.pxx.collegecourseselectionsystem.dto.SecondCourseDto">
         SELECT cs.id,
                co.`name`,
+                co.id as course_id,
                su.name as teacher_name,
                cs.up_time,
                cs.week,

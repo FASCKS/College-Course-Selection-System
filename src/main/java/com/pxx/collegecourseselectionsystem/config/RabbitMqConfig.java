@@ -39,11 +39,18 @@ public class RabbitMqConfig {
         return new DirectExchange("course.kill.syn.mysql",true,false);
     }
     /**
-     * 普通队列
+     * 递减队列
      */
     @Bean
     public Queue courseKillSyn(){
         return new Queue("course.kill.cancel.syn.mysql");
+    }
+    /**
+     * 递增队列
+     */
+    @Bean
+    public Queue courseKilldel(){
+        return new Queue("course.kill.cancel.del.mysql");
     }
     /**
      * 绑定
@@ -54,9 +61,14 @@ public class RabbitMqConfig {
                 .bind(courseKillSyn)
                 .to(directExchange)
                 .with("course.kill.cancel.syn.mysql");
-
     }
-
+    @Bean
+    public Binding courseKillDelBinding(DirectExchange directExchange,Queue courseKilldel){
+        return BindingBuilder
+                .bind(courseKilldel)
+                .to(directExchange)
+                .with("course.kill.cancel.del.mysql");
+    }
     /**
      * 订单延迟插件队列
      */

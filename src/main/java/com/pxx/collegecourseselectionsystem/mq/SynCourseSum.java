@@ -1,13 +1,13 @@
 package com.pxx.collegecourseselectionsystem.mq;
 
 import cn.hutool.json.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.pxx.collegecourseselectionsystem.common.utils.RedisUtil;
 import com.pxx.collegecourseselectionsystem.entity.OrderCourse;
 import com.pxx.collegecourseselectionsystem.entity.SecondCourse;
 import com.pxx.collegecourseselectionsystem.service.OrderCourseService;
 import com.pxx.collegecourseselectionsystem.service.SecondCourseService;
 import com.pxx.collegecourseselectionsystem.util.Global;
-import com.rabbitmq.client.Channel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -52,7 +52,7 @@ public class SynCourseSum {
      */
     @RabbitListener(queues = "course.kill.cancel.syn.mysql")
     @RabbitHandler
-    public void sysHandle(JSONObject jsonObject, Channel channel) {
+    public void sysHandle(JSONObject jsonObject) {
         Long userId =(Long) jsonObject.get("userID");
         Integer secondCourseId =(Integer) jsonObject.get("secondCourseId");
         OrderCourse orderCourse=new OrderCourse();
@@ -60,6 +60,19 @@ public class SynCourseSum {
         orderCourse.setSecondCourseId(secondCourseId);
         orderCourseService.save(orderCourse);
         log.info("同步订单");
+    }
+    /**
+     * 删除订单
+     */
+    @RabbitListener(queues = "course.kill.cancel.del.mysql")
+    @RabbitHandler
+    public void delHandle(JSONObject jsonObject) {
+        Long userId =(Long) jsonObject.get("userID");
+        Integer secondCourseId =(Integer) jsonObject.get("secondCourseId");
+        QueryWrapper<OrderCourse> orderCourseQueryWrapper=new QueryWrapper<>();
+        orderCourseQueryWrapper.eq(OrderCourse.COL_USER_ID,userId).eq(OrderCourse.COL_SECOND_COURSE_ID,secondCourseId);
+        boolean removeById = orderCourseService.removeById(orderCourseQueryWrapper);
+        log.info("退课成功---》{}",removeById);
     }
 
 }
