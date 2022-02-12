@@ -71,7 +71,7 @@ public class SynCourseSum {
         Integer secondCourseId =(Integer) jsonObject.get("secondCourseId");
         QueryWrapper<OrderCourse> orderCourseQueryWrapper=new QueryWrapper<>();
         orderCourseQueryWrapper.eq(OrderCourse.COL_USER_ID,userId).eq(OrderCourse.COL_SECOND_COURSE_ID,secondCourseId);
-        boolean removeById = orderCourseService.removeById(orderCourseQueryWrapper);
+        boolean removeById = orderCourseService.remove(orderCourseQueryWrapper);
         log.info("退课成功---》{}",removeById);
     }
 

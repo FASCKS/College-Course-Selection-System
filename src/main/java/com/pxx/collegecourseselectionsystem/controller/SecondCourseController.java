@@ -15,6 +15,8 @@ import com.pxx.collegecourseselectionsystem.vo.course.SimpleClassBook;
 import com.pxx.collegecourseselectionsystem.vo.course.SimpleClassScheduleTime;
 import com.pxx.collegecourseselectionsystem.vo.course.SimpleClassScheduleVo;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 /**
@@ -66,16 +69,20 @@ public class SecondCourseController {
      * @param secondCourseId
      * @return
      */
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id",value = "要抢课课程id"),
+            @ApiImplicitParam(name = "state",value = "1 抢课   0  退课")
+    })
     @GetMapping("/go/course/{id}/{state}")
     public R goCourse(@Positive @NotNull @PathVariable("id") Integer secondCourseId,
-                      @Positive @NotNull @PathVariable("state") Integer state) {
+                      @PositiveOrZero @NotNull @PathVariable("state") Integer state) {
         Long userId = SpringSecurityUtil.getUserId();
         //如果是退课
         if (state==0){
             //检查学生是否已经抢到课程
-            boolean hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE + userId + "course" + secondCourseId);
+            boolean hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE + userId + "course:" + secondCourseId);
             if (!hasKey){
-                return R.error("退课失败");
+                return R.error("无可课程可退");
             }
             //判断库存
             Integer courseSum =(Integer) redisUtil.get(Global.KILL_SECOND_COURSE + "sum:" + secondCourseId);
@@ -84,9 +91,13 @@ public class SecondCourseController {
             }
             //递增加一
             long decr = redisUtil.incr(Global.KILL_SECOND_COURSE + "sum:" + secondCourseId, 1);
-
             //先删除缓存
-            amqpTemplate.convertAndSend("course.kill.syn.mysql","course.kill.cancel.del.mysql",message -> {
+            redisUtil.del(Global.KILL_SECOND_COURSE+userId+"course:"+secondCourseId);
+            //同步数据库
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.putOpt("secondCourseId", secondCourseId);
+            jsonObject.putOpt("userID", userId);
+            amqpTemplate.convertAndSend("course.kill.syn.mysql","course.kill.cancel.del.mysql",jsonObject,message -> {
                 //给消息设置延迟毫秒值
                 message.getMessageProperties().setHeader("x-delay", 3000);
                 return message;
