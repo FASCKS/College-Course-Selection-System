@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.pxx.collegecourseselectionsystem.common.validator.group.Insert;
+import com.pxx.collegecourseselectionsystem.common.validator.group.Update;
 import com.pxx.collegecourseselectionsystem.entity.enums.SecondCoursePlanGroupEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -13,6 +15,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import java.util.Date;
 
 /**
@@ -24,7 +28,9 @@ import java.util.Date;
 @Setter
 @ToString
 @TableName(value = "second_course_plan")
-public class SecondCoursePlanEntity {
+public class SecondCoursePlanGroupEntity {
+    @Null(groups = Insert.class)
+    @NotNull(groups = Update.class)
     @TableId(value = "id", type = IdType.AUTO)
     @ApiModelProperty(value="")
     private Integer id;
@@ -32,6 +38,7 @@ public class SecondCoursePlanEntity {
     /**
      * 年份
      */
+    @NotNull
     @TableField(value = "`year`")
     @ApiModelProperty(value="年份")
     private Integer year;
@@ -39,6 +46,7 @@ public class SecondCoursePlanEntity {
     /**
      * 0 上学期  1 下学期
      */
+    @NotNull
     @TableField(value = "up_or_down")
     @ApiModelProperty(value="0 上学期  1 下学期")
     private SecondCoursePlanGroupEnum upOrDown;
@@ -46,6 +54,7 @@ public class SecondCoursePlanEntity {
     /**
      * 开始时间
      */
+    @NotNull
     @JsonFormat(pattern = DatePattern.NORM_DATETIME_PATTERN)
     @TableField(value = "start_time")
     @ApiModelProperty(value="开始时间")
@@ -54,6 +63,7 @@ public class SecondCoursePlanEntity {
     /**
      * 结束时间
      */
+    @NotNull
     @JsonFormat(pattern = DatePattern.NORM_DATETIME_PATTERN)
     @TableField(value = "end_time")
     @ApiModelProperty(value="结束时间")
@@ -62,6 +72,7 @@ public class SecondCoursePlanEntity {
     /**
      * 计划状态  0 未开始  1  进行中  2 已结束
      */
+    @NotNull
     @TableField(value = "`state`")
     @ApiModelProperty(value="计划状态  0 未开始  1  进行中  2 已结束")
     private SecondCoursePlanGroupEnum state;

@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.pxx.collegecourseselectionsystem.common.utils.PageUtils;
 import com.pxx.collegecourseselectionsystem.common.utils.Pagination;
-import com.pxx.collegecourseselectionsystem.entity.SecondCoursePlanEntity;
+import com.pxx.collegecourseselectionsystem.entity.SecondCoursePlanGroupEntity;
 import com.pxx.collegecourseselectionsystem.mapper.SecondCoursePlanGroupMapper;
 import com.pxx.collegecourseselectionsystem.service.SecondCoursePlanGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
  * @Date 2022/2/14 10:25
  */
 @Service
-public class SecondCoursePlanGroupServiceImpl extends ServiceImpl<SecondCoursePlanGroupMapper, SecondCoursePlanEntity> implements SecondCoursePlanGroupService {
+public class SecondCoursePlanGroupServiceImpl extends ServiceImpl<SecondCoursePlanGroupMapper, SecondCoursePlanGroupEntity> implements SecondCoursePlanGroupService {
     @Autowired
     private SecondCoursePlanGroupMapper secondCoursePlanMapper;
 
@@ -28,8 +28,8 @@ public class SecondCoursePlanGroupServiceImpl extends ServiceImpl<SecondCoursePl
      */
     @Override
     public PageUtils findAllGroupPlan(Pagination pagination) {
-        IPage<SecondCoursePlanEntity> secondCoursePlanEntityIPage = secondCoursePlanMapper.findAllGroupPlan(
-                new Page<SecondCoursePlanEntity>(pagination.getPage(), pagination.getLimit())
+        IPage<SecondCoursePlanGroupEntity> secondCoursePlanEntityIPage = secondCoursePlanMapper.findAllGroupPlan(
+                new Page<SecondCoursePlanGroupEntity>(pagination.getPage(), pagination.getLimit())
         );
         return new PageUtils(secondCoursePlanEntityIPage);
     }
