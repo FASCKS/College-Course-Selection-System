@@ -23,4 +23,10 @@ public interface SecondCoursePlanGroupService extends IService<SecondCoursePlanG
          * @return
          */
         SecondCoursePlanGroupEntity findOneById(Integer id);
+
+        /**
+         * 获取最后一条数据
+         * @return
+         */
+        int findEndDataSum(Integer year,Integer code);
     }

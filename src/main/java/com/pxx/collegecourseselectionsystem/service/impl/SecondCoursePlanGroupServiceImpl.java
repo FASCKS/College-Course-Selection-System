@@ -44,4 +44,17 @@ public class SecondCoursePlanGroupServiceImpl extends ServiceImpl<SecondCoursePl
     public SecondCoursePlanGroupEntity findOneById(Integer id) {
         return secondCoursePlanMapper.findOneById(id);
     }
+
+    /**
+     * 获取最后一条数据
+     *
+     * @param year
+     * @param code
+     * @return
+     */
+    @Override
+    public int findEndDataSum(Integer year, Integer code) {
+
+        return secondCoursePlanMapper.findEndDataSum( year, code);
+    }
 }

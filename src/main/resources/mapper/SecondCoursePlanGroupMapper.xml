@@ -17,7 +17,7 @@
     </sql>
     <!--状态时间判断-->
     <sql id="state_time">
-        if(now() &lt; scpg.start_time , scpg.state = 0,
+        if(now() &lt; scpg.start_time, scpg.state = 0,
            if((now() > scpg.start_time and now() &lt; scpg.end_time), scpg.state = 1, scpg.state = 2)) as state
     </sql>
     <select id="findAllGroupPlan" resultMap="BaseResultMap">
@@ -26,6 +26,7 @@
                up_or_down,
                start_time,
                end_time,
+               sum,
         <include refid="state_time">
         </include>
 
@@ -60,6 +61,7 @@
              , sc.course_sum
              , sc.up_time
              , sc.week
+             , sum
              ,
         <include refid="state_time">
         </include>
@@ -75,5 +77,14 @@
                 where su.type = 2
                   and sc.state = 1
                   and scpg.id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <select id="findEndDataSum" resultType="int">
+        select sum
+        from second_course_plan_group
+        where year = #{year,jdbcType=INTEGER}
+          and up_or_down = #{code,jdbcType=INTEGER}
+        order by sum desc
+        limit 1
     </select>
 </mapper>

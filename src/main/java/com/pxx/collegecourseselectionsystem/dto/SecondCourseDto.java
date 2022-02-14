@@ -32,11 +32,6 @@ public class SecondCourseDto extends SecondCourse {
     @TableField(exist = false)
     @ApiModelProperty("课程类型")
     private CourseEnum type;
-    /**
-     * 分组id
-     */
-    @TableField(exist = false)
-    @ApiModelProperty("分组id")
-    private Integer planGroup;
+
 
 }

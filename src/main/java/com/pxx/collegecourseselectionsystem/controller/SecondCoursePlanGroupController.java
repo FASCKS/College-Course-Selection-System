@@ -51,6 +51,10 @@ public class SecondCoursePlanGroupController {
     @ApiOperation("新增")
     @PostMapping("/insert")
     public R insert(@RequestBody @Validated(Insert.class) SecondCoursePlanGroupEntity secondCoursePlanGroupEntity) {
+        Integer year = secondCoursePlanGroupEntity.getYear();
+        int code = secondCoursePlanGroupEntity.getUpOrDown().getCode();
+        int sum = secondCoursePlanGroupService.findEndDataSum(year, code);
+        secondCoursePlanGroupEntity.setSum(++sum);
         boolean save = secondCoursePlanGroupService.save(secondCoursePlanGroupEntity);
         return R.ok().put("data", save);
     }

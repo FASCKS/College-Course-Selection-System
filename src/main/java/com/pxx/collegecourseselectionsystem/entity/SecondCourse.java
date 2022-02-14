@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.pxx.collegecourseselectionsystem.common.validator.group.Insert;
 import com.pxx.collegecourseselectionsystem.entity.enums.CourseUpTimeEnum;
 import com.pxx.collegecourseselectionsystem.entity.enums.CourseWeekEnum;
 import io.swagger.annotations.ApiModel;
@@ -103,11 +104,11 @@ public class SecondCourse {
     @ApiModelProperty(value = "发布状态")
     private Integer state;
     /**
-     * 发布状态
+     * 计划分组
      */
-    @JsonIgnore
+    @NotNull(groups = Insert.class)
     @TableField(value = "plan_group_id")
-    @ApiModelProperty(value = "计划分组id")
+    @ApiModelProperty(value = "计划分组")
     private Integer planGroupId;
 
     public static final String COL_ID = "id";

@@ -3,6 +3,7 @@ package com.pxx.collegecourseselectionsystem.controller;
 import cn.hutool.core.convert.Convert;
 import com.pxx.collegecourseselectionsystem.common.utils.R;
 import com.pxx.collegecourseselectionsystem.common.utils.RedisUtil;
+import com.pxx.collegecourseselectionsystem.common.validator.group.Insert;
 import com.pxx.collegecourseselectionsystem.dto.SecondCourseDto;
 import com.pxx.collegecourseselectionsystem.entity.SecondCourse;
 import com.pxx.collegecourseselectionsystem.entity.enums.CourseEnum;
@@ -125,7 +126,7 @@ public class SecondCoursePlanController {
      */
     @ApiOperation("添加抢课课程")
     @PostMapping("/insert")
-    public R insert(@RequestBody @Validated SecondCourseDto secondCourseDto) {
+    public R insert(@RequestBody @Validated(Insert.class) SecondCourseDto secondCourseDto) {
         if (secondCourseDto.getStartTime().compareTo(secondCourseDto.getEndTime()) <= 0) {
             return R.error("开始时间不能小于结束时间");
         }
