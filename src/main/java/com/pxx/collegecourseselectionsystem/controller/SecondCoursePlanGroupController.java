@@ -1,5 +1,6 @@
 package com.pxx.collegecourseselectionsystem.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.pxx.collegecourseselectionsystem.common.utils.PageUtils;
 import com.pxx.collegecourseselectionsystem.common.utils.Pagination;
 import com.pxx.collegecourseselectionsystem.common.utils.R;
@@ -50,6 +51,9 @@ public class SecondCoursePlanGroupController {
     @ApiOperation("编辑")
     @PostMapping("/update")
     public R update(@RequestBody @Validated(Update.class) SecondCoursePlanGroupEntity secondCoursePlanGroupEntity) {
+        if (secondCoursePlanGroupEntity.getState().getCode() != 0) {
+            return R.ok("只能编辑未开始的计划");
+        }
         Integer year = secondCoursePlanGroupEntity.getYear();
         Integer code = secondCoursePlanGroupEntity.getUpOrDown().getCode();
         Integer sum = secondCoursePlanGroupService.findEndDataSum(year, code);
@@ -57,7 +61,9 @@ public class SecondCoursePlanGroupController {
             sum = 0;
         }
         secondCoursePlanGroupEntity.setSum(++sum);
-        boolean update = secondCoursePlanGroupService.updateById(secondCoursePlanGroupEntity);
+        QueryWrapper<SecondCoursePlanGroupEntity> secondCoursePlanGroupEntityQueryWrapper = new QueryWrapper<>();
+        secondCoursePlanGroupEntityQueryWrapper.eq("state", 0);
+        boolean update = secondCoursePlanGroupService.update(secondCoursePlanGroupEntity, secondCoursePlanGroupEntityQueryWrapper);
         return R.ok().put("data", update);
     }
 
@@ -87,6 +93,7 @@ public class SecondCoursePlanGroupController {
     public R info(@RequestParam("id") Integer id) {
         SecondCoursePlanGroupEntityDto secondCoursePlanGroupEntity = secondCoursePlanGroupService.findOneById(id);
         List<SecondCourseDto> secondCourseDtoList = secondCoursePlanGroupEntity.getSecondCourseDtoList();
+        //同步库存
         for (SecondCourseDto secondCourseDto : secondCourseDtoList) {
             Integer Integer = (Integer) redisUtil.get(Global.KILL_SECOND_COURSE + "sum:" + secondCourseDto.getId());
             secondCourseDto.setCourseSum(Integer);

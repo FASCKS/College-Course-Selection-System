@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * 课程表
  */
@@ -27,5 +29,11 @@ public class ClassScheduleController {
     public R courseByUserId() {
         ClassScheduleVo classScheduleVo = classScheduleService.findMyClassSchedule();
         return R.ok().put("data", classScheduleVo);
+    }
+
+    @ApiOperation("导出课程表")
+    @GetMapping("/get/classSchedule")
+    public void getClassSchedule(HttpServletResponse httpServletResponse) {
+
     }
 }
