@@ -15,10 +15,21 @@
         <!--@mbg.generated-->
         id, `year`, up_or_down, start_time, end_time, `state`
     </sql>
-
+    <!--状态时间判断-->
+    <sql id="state_time">
+        if(now() &lt; scpg.start_time = 0, scpg.state = 0,
+           if((now() > scpg.start_time and now() &lt; scpg.end_time) = 1, scpg.state = 1, scpg.state = 2)) as state
+    </sql>
     <select id="findAllGroupPlan" resultMap="BaseResultMap">
-        select *
-        from second_course_plan_group
+        select id,
+               year,
+               up_or_down,
+               start_time,
+               end_time,
+        <include refid="state_time">
+        </include>
+
+        from second_course_plan_group scpg
     </select>
     <resultMap id="findOneByIdMap" type="com.pxx.collegecourseselectionsystem.dto.SecondCoursePlanGroupEntityDto">
         <!--@mbg.generated-->
@@ -39,7 +50,6 @@
             <result column="teacher_name" property="teacherName"/>
             <result column="course_name" property="courseName"/>
             <result column="type" property="type"/>
-
         </collection>
     </resultMap>
     <select id="findOneById" resultMap="findOneByIdMap">
@@ -50,17 +60,20 @@
              , sc.course_sum
              , sc.up_time
              , sc.week
-             , sc.state,
-                co.`name` as course_name,
-                su.name as teacher_name,
-                co.type as type
+             ,
+        <include refid="state_time">
+        </include>
+        , co.`name` as course_name
+        , su.name   as teacher_name
+        , co.type   as type
 
-        from second_course_plan_group scpg
-                     left join second_course sc on scpg.id = sc.plan_group_id
-                     LEFT JOIN course co ON co.id = sc.course_id
-                     LEFT JOIN sys_user su on su.user_id = sc.teacher
+                from second_course_plan_group scpg
+                             left join second_course sc on scpg.id = sc.plan_group_id
+                             LEFT JOIN course co ON co.id = sc.course_id
+                             LEFT JOIN sys_user su on su.user_id = sc.teacher
 
-        where su.type = 2
-          and sc.state = 1
+                where su.type = 2
+                  and sc.state = 1
+                  and scpg.id = #{id,jdbcType=INTEGER}
     </select>
 </mapper>
