@@ -28,5 +28,5 @@ public interface SecondCoursePlanGroupService extends IService<SecondCoursePlanG
          * 获取最后一条数据
          * @return
          */
-        int findEndDataSum(Integer year,Integer code);
+        Integer findEndDataSum(Integer year,Integer code);
     }

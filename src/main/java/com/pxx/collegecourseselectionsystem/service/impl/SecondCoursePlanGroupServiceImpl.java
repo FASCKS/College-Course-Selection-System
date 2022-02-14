@@ -53,7 +53,7 @@ public class SecondCoursePlanGroupServiceImpl extends ServiceImpl<SecondCoursePl
      * @return
      */
     @Override
-    public int findEndDataSum(Integer year, Integer code) {
+    public Integer findEndDataSum(Integer year, Integer code) {
 
         return secondCoursePlanMapper.findEndDataSum( year, code);
     }

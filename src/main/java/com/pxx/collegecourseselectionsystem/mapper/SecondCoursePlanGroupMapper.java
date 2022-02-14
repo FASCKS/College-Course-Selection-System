@@ -30,5 +30,5 @@ public interface SecondCoursePlanGroupMapper extends BaseMapper<SecondCoursePlan
      * @param code
      * @return
      */
-    int findEndDataSum(@Param("year") Integer year, @Param("code") Integer code);
+    Integer findEndDataSum(@Param("year") Integer year, @Param("code") Integer code);
 }

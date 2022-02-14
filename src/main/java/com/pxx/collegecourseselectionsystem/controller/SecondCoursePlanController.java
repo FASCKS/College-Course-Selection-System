@@ -14,6 +14,7 @@ import com.pxx.collegecourseselectionsystem.service.SecondCourseService;
 import com.pxx.collegecourseselectionsystem.util.Global;
 import com.pxx.collegecourseselectionsystem.vo.course.SimpleClassScheduleVo;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,13 +46,14 @@ public class SecondCoursePlanController {
     private SecondCourseService secondCourseService;
     private static final String courseSum = Global.KILL_SECOND_COURSE + "sum:";
 
+    @ApiImplicitParam(name = "id", value = "分组id")
     @ApiOperation("抢课计划列表")
     @GetMapping("/plan/list/{id}")
     public R list(@RequestParam(required = false) CourseEnum courseEnum, @PathVariable("id") @NotNull Integer planGroupId) {
 
         boolean hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE + "all:" + planGroupId);
         if (!hasKey) {
-            return R.ok("当前不是选课时间");
+            return R.ok("未发布抢课计划");
         }
         List<SecondCourseDto> secondCourseDtos = redisUtil.get(Global.KILL_SECOND_COURSE + "all:" + planGroupId);
         Iterator<SecondCourseDto> iterator = secondCourseDtos.iterator();
@@ -73,6 +75,7 @@ public class SecondCoursePlanController {
     /**
      * 发布抢课内容
      */
+    @ApiImplicitParam(name = "id", value = "分组id")
     @ApiOperation("发布抢课计划")
     @GetMapping("/put/{id}")
     public R put(@PathVariable("id") @NotNull Integer planGroupId) {
@@ -83,17 +86,6 @@ public class SecondCoursePlanController {
                 return R.ok("抢课计划已经发布.");
             }
         }
-/*        List<SecondCourse> secondCourses = secondCourseService.list();
-        if (secondCourses.isEmpty()) {
-            return R.ok("没有需要发布得课程");
-        }
-        for (SecondCourse secondCourse : secondCourses) {
-            secondCourse.setState(1);
-        }
-        boolean update = secondCourseService.updateBatchById(secondCourses);
-        if (!update) {
-            return R.ok("没有需要发布得课程");
-        }*/
         //缓存课程
         List<SecondCourseDto> allSecondCourse = secondCourseService.findAllSecondCourse(planGroupId);
         if (allSecondCourse.isEmpty()) {
@@ -168,6 +160,7 @@ public class SecondCoursePlanController {
     /**
      * 删除抢课计划
      */
+    @ApiImplicitParam(name = "id", value = "分组id")
     @ApiOperation("删除抢课计划")
     @GetMapping("/del/{id}")
     public R del(@PathVariable("id") @NotNull Integer planGroupId) {

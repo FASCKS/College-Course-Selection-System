@@ -73,7 +73,7 @@ public class SecondCoursePlanGroupEntity {
     /**
      * 计划状态  0 未开始  1  进行中  2 已结束
      */
-    @NotNull
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @TableField(value = "`state`")
     @ApiModelProperty(value="计划状态  0 未开始  1  进行中  2 已结束")
     private SecondCoursePlanGroupEnum state;

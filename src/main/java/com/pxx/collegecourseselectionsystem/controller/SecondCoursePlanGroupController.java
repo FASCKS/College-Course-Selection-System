@@ -8,6 +8,7 @@ import com.pxx.collegecourseselectionsystem.common.validator.group.Update;
 import com.pxx.collegecourseselectionsystem.entity.SecondCoursePlanGroupEntity;
 import com.pxx.collegecourseselectionsystem.service.SecondCoursePlanGroupService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -52,8 +53,11 @@ public class SecondCoursePlanGroupController {
     @PostMapping("/insert")
     public R insert(@RequestBody @Validated(Insert.class) SecondCoursePlanGroupEntity secondCoursePlanGroupEntity) {
         Integer year = secondCoursePlanGroupEntity.getYear();
-        int code = secondCoursePlanGroupEntity.getUpOrDown().getCode();
-        int sum = secondCoursePlanGroupService.findEndDataSum(year, code);
+        Integer code = secondCoursePlanGroupEntity.getUpOrDown().getCode();
+        Integer sum = secondCoursePlanGroupService.findEndDataSum(year, code);
+        if (sum == null) {
+            sum = 0;
+        }
         secondCoursePlanGroupEntity.setSum(++sum);
         boolean save = secondCoursePlanGroupService.save(secondCoursePlanGroupEntity);
         return R.ok().put("data", save);
@@ -62,6 +66,7 @@ public class SecondCoursePlanGroupController {
     /**
      * 详情
      */
+    @ApiImplicitParam(name = "id", value = "分组id")
     @ApiOperation("详情")
     @GetMapping("/info")
     public R info(@RequestParam("id") Integer id) {
@@ -72,6 +77,7 @@ public class SecondCoursePlanGroupController {
     /**
      * 删除
      */
+    @ApiImplicitParam(name = "id", value = "分组id")
     @ApiOperation("删除")
     @PostMapping("/delete")
     public R delete(@RequestParam("id") Integer id) {

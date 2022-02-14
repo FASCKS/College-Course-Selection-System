@@ -163,10 +163,11 @@ public class SecondCourseController {
     /**
      * 学生当前课表
      */
+    @ApiImplicitParam(name = "id",value = "分组id")
     @ApiOperation("学生当前课表")
-    @GetMapping("/get/class/course")
-    public R getClassCourse() {
-        boolean hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE + "all");
+    @GetMapping("/get/class/course/{id}")
+    public R getClassCourse(@PathVariable("id") Integer planGroupId) {
+        boolean hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE + "all:" + planGroupId);
         if (!hasKey){
             return R.error("当前不是抢课时间");
         }
