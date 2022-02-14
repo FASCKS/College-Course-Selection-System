@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -90,14 +91,19 @@ public class SecondCoursePlanGroupController {
     @ApiImplicitParam(name = "id", value = "分组id")
     @ApiOperation("详情")
     @GetMapping("/info")
-    public R info(@RequestParam("id") Integer id) {
+    public R info(@RequestParam("id") @NotNull Integer id) {
         SecondCoursePlanGroupEntityDto secondCoursePlanGroupEntity = secondCoursePlanGroupService.findOneById(id);
+        if (secondCoursePlanGroupEntity == null) {
+            SecondCoursePlanGroupEntity secondCoursePlanGroup = secondCoursePlanGroupService.getById(id);
+            return R.ok().put("data", secondCoursePlanGroup);
+        }
         List<SecondCourseDto> secondCourseDtoList = secondCoursePlanGroupEntity.getSecondCourseDtoList();
         //同步库存
         for (SecondCourseDto secondCourseDto : secondCourseDtoList) {
             Integer Integer = (Integer) redisUtil.get(Global.KILL_SECOND_COURSE + "sum:" + secondCourseDto.getId());
             secondCourseDto.setCourseSum(Integer);
         }
+
 
         return R.ok().put("data", secondCoursePlanGroupEntity);
     }

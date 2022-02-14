@@ -14,4 +14,6 @@ public interface ClassScheduleMapper extends BaseMapper<ClassSchedule> {
     ClassScheduleVo findMyClassSchedule(@Param("userId") Long userId);
 
     List<SimpleClassScheduleVo> findSimpleMyClassSchedule();
+@Deprecated
+    SimpleClassScheduleVo findMySimpleMyClassSchedule(Long userId);
 }

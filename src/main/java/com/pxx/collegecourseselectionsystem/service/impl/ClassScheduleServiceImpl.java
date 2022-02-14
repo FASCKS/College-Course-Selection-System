@@ -36,5 +36,14 @@ public class ClassScheduleServiceImpl extends ServiceImpl<ClassScheduleMapper, C
         List<SimpleClassScheduleVo> classScheduleVo=baseMapper.findSimpleMyClassSchedule();
         return classScheduleVo;
     }
+
+    /**
+     * 查询自己的课表
+     */
+    @Override
+    public SimpleClassScheduleVo findMySimpleMyClassSchedule() {
+        Long userId = SpringSecurityUtil.getUserId();
+        return baseMapper.findMySimpleMyClassSchedule(userId);
+    }
 }
 
