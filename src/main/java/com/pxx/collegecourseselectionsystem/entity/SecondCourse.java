@@ -103,6 +103,7 @@ public class SecondCourse {
     @ApiModelProperty(value = "发布状态")
     private Integer state;
 
+
     public static final String COL_ID = "id";
 
     public static final String COL_COURSE_ID = "course_id";

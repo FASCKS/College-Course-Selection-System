@@ -212,7 +212,9 @@
                cs.week,
                cs.start_time,
                cs.end_time,
-               cs.course_sum
+               cs.course_sum,
+            cs.year,
+            cs.up_or_down
 
         FROM second_course cs
                      LEFT JOIN course co ON co.id = cs.course_id

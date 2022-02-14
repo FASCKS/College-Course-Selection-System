@@ -1,15 +1,10 @@
 package com.pxx.collegecourseselectionsystem.controller;
 
-import cn.hutool.core.convert.Convert;
 import cn.hutool.json.JSONObject;
 import com.pxx.collegecourseselectionsystem.common.utils.R;
 import com.pxx.collegecourseselectionsystem.common.utils.RedisUtil;
 import com.pxx.collegecourseselectionsystem.common.utils.SpringSecurityUtil;
 import com.pxx.collegecourseselectionsystem.dto.SecondCourseDto;
-import com.pxx.collegecourseselectionsystem.entity.SecondCourse;
-import com.pxx.collegecourseselectionsystem.entity.enums.CourseEnum;
-import com.pxx.collegecourseselectionsystem.entity.enums.QueueEnum;
-import com.pxx.collegecourseselectionsystem.service.ClassScheduleService;
 import com.pxx.collegecourseselectionsystem.service.SecondCourseService;
 import com.pxx.collegecourseselectionsystem.util.Global;
 import com.pxx.collegecourseselectionsystem.vo.course.SimpleClassBook;
@@ -21,63 +16,32 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * @author pxx
  * @Date 2022/2/10 14:49
  */
 @Validated
-@Api(tags = "抢课")
+@Api(tags = "选课管理")
 @RestController
 @RequestMapping("/second")
 public class SecondCourseController {
     @Autowired
     private SecondCourseService secondCourseService;
-    @Autowired
-    private ClassScheduleService classScheduleService;
+
     @Autowired
     private RedisUtil redisUtil;
     @Autowired
     private AmqpTemplate amqpTemplate;
-    private static final String courseSum = Global.KILL_SECOND_COURSE + "sum:";
-    @ApiOperation("抢课计划")
-    @PreAuthorize("hasAnyAuthority('ccss:second:list')")
-    @GetMapping("/list")
-    public R list(@RequestParam(required = false) CourseEnum courseEnum) {
-
-        boolean hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE + "all");
-        if (!hasKey) {
-            return R.ok("当前不是选课时间");
-        }
-        List<SecondCourseDto> secondCourseDtos = redisUtil.get(Global.KILL_SECOND_COURSE + "all");
-        Iterator<SecondCourseDto> iterator = secondCourseDtos.iterator();
-
-        while (iterator.hasNext()){
-            SecondCourseDto secondCourseDto = iterator.next();
-            secondCourseDto.setCourseSum(redisUtil.get(courseSum + secondCourseDto.getId()));
-            if (courseEnum!=null){
-                String describe = secondCourseDto.getType().getDescribe();
-                String describe1 = courseEnum.getDescribe();
-                if (!describe.contains(describe1)){
-                    iterator.remove();
-                }
-            }
-        }
-
-
-        return R.ok().put("data", secondCourseDtos);
-    }
-
     /**
      * 抢课链接
      * 1 抢课   0  退课
@@ -94,6 +58,19 @@ public class SecondCourseController {
     public R goCourse(@Positive @NotNull @PathVariable("id") Integer secondCourseId,
                       @PositiveOrZero @NotNull @PathVariable("state") Integer state) {
         Long userId = SpringSecurityUtil.getUserId();
+        //判断是否已经发布
+        {
+            boolean hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE + "all");
+            if (!hasKey) {
+                return R.error("未发布抢课计划");
+            }
+        }
+        //检验活动是否开始
+        SecondCourseDto secondCourseDto = (SecondCourseDto) redisUtil.get(Global.KILL_SECOND_COURSE + "entity:" + secondCourseId);
+        boolean checkTime = secondCourseService.checkTime(secondCourseDto);
+        if (!checkTime) {
+            return R.error("时间未开始或已经结束");
+        }
         //如果是退课
         if (state == 0) {
             //检查学生是否已经抢到课程
@@ -120,18 +97,6 @@ public class SecondCourseController {
                 return message;
             });
             return R.ok("退课成功");
-        }
-        //判断是否已经发布
-        boolean hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE + "all");
-        if (!hasKey) {
-            return R.error("未发布抢课计划");
-        }
-
-        //检验活动是否开始
-        SecondCourseDto secondCourseDto = (SecondCourseDto) redisUtil.get(Global.KILL_SECOND_COURSE + "entity:" + secondCourseId);
-        boolean checkTime = secondCourseService.checkTime(secondCourseDto);
-        if (!checkTime) {
-            return R.error("时间未开始或已经结束");
         }
         //判断是否重复抢购
         {
@@ -185,58 +150,7 @@ public class SecondCourseController {
         return R.ok().put("data", true);
     }
 
-    /**
-     * 发布抢课内容
-     */
-    @ApiOperation("发布抢课计划")
-    @GetMapping("/put")
-    public R put() {
-        //判断是否已经发布
-        boolean hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE + "all");
-        if (hasKey) {
-            return R.ok("抢课计划已经发布。");
-        }
-        List<SecondCourse> secondCourses = secondCourseService.list();
-        if (secondCourses.isEmpty()) {
-            return R.ok("没有需要发布得课程");
-        }
-        for (SecondCourse secondCourse : secondCourses) {
-            secondCourse.setState(1);
-        }
-        boolean update = secondCourseService.updateBatchById(secondCourses);
-        if (!update) {
-            return R.ok("没有需要发布得课程");
-        }
 
-        for (SecondCourse secondCours : secondCourses) {
-            Long endTime = Convert.toLong(secondCours.getEndTime());
-            Long stateTime = Convert.toLong(secondCours.getStartTime());
-            //缓存库存
-            redisUtil.set(Global.KILL_SECOND_COURSE + "sum:" + secondCours.getId(), secondCours.getCourseSum(), endTime - stateTime + 60 * 4);
-            //给延迟队列发送消息
-            amqpTemplate.convertAndSend(QueueEnum.QUEUE_ORDER_PLUGIN_CANCEL.getExchange(), QueueEnum.QUEUE_ORDER_PLUGIN_CANCEL.getRouteKey(), secondCours.getId(), message -> {
-                //给消息设置延迟毫秒值
-                message.getMessageProperties().setHeader("x-delay", endTime - stateTime + 60 * 2);
-                return message;
-            });
-        }
-        //缓存课程
-        List<SecondCourseDto> allSecondCourse = secondCourseService.findAllSecondCourse();
-        //添加全部
-        redisUtil.set(Global.KILL_SECOND_COURSE + "all", allSecondCourse);
-        //添加单个
-        for (SecondCourseDto secondCourseDto : allSecondCourse) {
-            redisUtil.set(Global.KILL_SECOND_COURSE + "entity:" + secondCourseDto.getId(), secondCourseDto);
-        }
-        //缓存学生课程表
-        List<SimpleClassScheduleVo> simpleMyClassSchedule = classScheduleService.findSimpleMyClassSchedule();
-        for (SimpleClassScheduleVo simpleClassScheduleVo : simpleMyClassSchedule) {
-            redisUtil.set(Global.KILL_SECOND_COURSE + "class:schedule:" + simpleClassScheduleVo.getUserId(), simpleClassScheduleVo);
-        }
-
-
-        return R.ok().put("data", update);
-    }
     /**
      * 学生当前课表
      */
@@ -269,38 +183,5 @@ public class SecondCourseController {
 
 
 
-    /**
-     * 添加选课
-     */
-    @ApiOperation("添加抢课课程")
-    @PostMapping("/insert")
-    public R insert(@RequestBody @Validated SecondCourseDto secondCourseDto) {
-        if (secondCourseDto.getStartTime().compareTo(secondCourseDto.getEndTime()) <= 0) {
-            return R.error("开始时间不能小于结束时间");
-        }
-        secondCourseDto.setState(0);
-        boolean insert = secondCourseService.insertOne(secondCourseDto);
-        return R.ok().put("data", insert);
-    }
-
-    /**
-     * 删除选课
-     */
-    @ApiOperation("删除抢课课程")
-    @PostMapping("/delete")
-    public R delete(@NotEmpty @RequestBody List<Integer> course) {
-        boolean removeBatchByIds = secondCourseService.removeBatchByIds(course);
-        return R.ok().put("data", removeBatchByIds);
-    }
-
-    /**
-     * 编辑
-     */
-    @ApiOperation("编辑抢课课程")
-    @PostMapping("/update")
-    public R update(@RequestBody @Validated SecondCourseDto secondCourseDto) {
-        boolean update = secondCourseService.updateById(secondCourseDto);
-        return R.ok().put("data", update);
-    }
 
 }

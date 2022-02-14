@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pxx.collegecourseselectionsystem.mapper.SecondCoursePlanGroupMapper">
+  <resultMap id="BaseResultMap" type="com.pxx.collegecourseselectionsystem.entity.SecondCoursePlanEntity">
+    <!--@mbg.generated-->
+    <!--@Table second_course_plan_group-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="year" jdbcType="INTEGER" property="year" />
+    <result column="up_or_down" jdbcType="INTEGER" property="upOrDown" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, `year`, up_or_down, start_time, end_time, `state`
+  </sql>
+
+  <select id="findAllGroupPlan" resultMap="BaseResultMap">
+    select * from second_course_plan_group
+  </select>
+</mapper>
