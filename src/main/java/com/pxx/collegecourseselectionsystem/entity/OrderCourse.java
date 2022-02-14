@@ -47,6 +47,12 @@ public class OrderCourse {
     @TableField(value = "second_course_id")
     @ApiModelProperty(value="抢课id")
     private Integer secondCourseId;
+    /**
+     * 分组id
+     */
+    @TableField(value = "plan_group_id")
+    @ApiModelProperty(value="分组id")
+    private Integer planGroupId;
 
     public static final String COL_ORDER_ID = "order_id";
 

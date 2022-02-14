@@ -96,6 +96,7 @@ public class SecondCourseController {
             JSONObject jsonObject = new JSONObject();
             jsonObject.putOpt("secondCourseId", secondCourseId);
             jsonObject.putOpt("userID", userId);
+            jsonObject.putOpt("planGroupId", planGroupId);
             amqpTemplate.convertAndSend("course.kill.syn.mysql", "course.kill.cancel.del.mysql", jsonObject, message -> {
                 //给消息设置延迟毫秒值
                 message.getMessageProperties().setHeader("x-delay", 3000);
@@ -147,6 +148,8 @@ public class SecondCourseController {
         JSONObject jsonObject = new JSONObject();
         jsonObject.putOpt("secondCourseId", secondCourseId);
         jsonObject.putOpt("userID", userId);
+        jsonObject.putOpt("planGroupId", planGroupId);
+
         amqpTemplate.convertAndSend("course.kill.syn.mysql", "course.kill.cancel.syn.mysql", jsonObject, message -> {
             //给消息设置延迟毫秒值
             message.getMessageProperties().setHeader("x-delay", 3000);

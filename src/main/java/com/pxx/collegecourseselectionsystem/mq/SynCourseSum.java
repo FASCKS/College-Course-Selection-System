@@ -68,9 +68,11 @@ public class SynCourseSum {
     public void sysHandle(JSONObject jsonObject) {
         Long userId = (Long) jsonObject.get("userID");
         Integer secondCourseId = (Integer) jsonObject.get("secondCourseId");
+        Integer planGroupId = (Integer) jsonObject.get("planGroupId");
         OrderCourse orderCourse = new OrderCourse();
         orderCourse.setUserId(userId);
         orderCourse.setSecondCourseId(secondCourseId);
+        orderCourse.setPlanGroupId(planGroupId);
         orderCourseService.save(orderCourse);
         log.info("同步订单");
     }
@@ -83,8 +85,12 @@ public class SynCourseSum {
     public void delHandle(JSONObject jsonObject) {
         Long userId = (Long) jsonObject.get("userID");
         Integer secondCourseId = (Integer) jsonObject.get("secondCourseId");
+        Integer planGroupId = (Integer) jsonObject.get("planGroupId");
         QueryWrapper<OrderCourse> orderCourseQueryWrapper = new QueryWrapper<>();
-        orderCourseQueryWrapper.eq(OrderCourse.COL_USER_ID, userId).eq(OrderCourse.COL_SECOND_COURSE_ID, secondCourseId);
+        orderCourseQueryWrapper
+                .eq(OrderCourse.COL_USER_ID, userId)
+                .eq(OrderCourse.COL_SECOND_COURSE_ID, secondCourseId)
+                .eq("plan_group_id",planGroupId);
         boolean removeById = orderCourseService.remove(orderCourseQueryWrapper);
         log.info("退课成功---》{}", removeById);
     }
