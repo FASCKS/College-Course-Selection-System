@@ -7,6 +7,7 @@ import com.pxx.collegecourseselectionsystem.common.exception.MyAuthenticationExc
 import com.pxx.collegecourseselectionsystem.common.exception.TokenSignatureOrExpiredJwtException;
 import com.pxx.collegecourseselectionsystem.config.UserGrantedAuthority;
 import com.pxx.collegecourseselectionsystem.entity.SysUserEntity;
+import com.pxx.collegecourseselectionsystem.util.Global;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureException;
@@ -64,14 +65,14 @@ public class TokenAuthenticationFilter extends BasicAuthenticationFilter {
         String token = request.getHeader("access_token");
         if (token != null && !"".equals(token.trim())) {
             String userName = tokenManager.getUserFromToken(token);
-            String user_access_token =(String) redisTemplate.opsForHash().get(userName, "access_token");
+            String user_access_token =(String) redisTemplate.opsForHash().get("UserDetail:"+userName, "access_token");
 
             if (user_access_token ==null || !user_access_token.equals(token)){
                 return null;
             }
-            Collection<UserGrantedAuthority> authorities  = Convert.toList(UserGrantedAuthority.class,redisTemplate.opsForHash().get(userName,"authorities"));
+            Collection<UserGrantedAuthority> authorities  = Convert.toList(UserGrantedAuthority.class,redisTemplate.opsForHash().get(Global.REDIS_USER_DETAIL+userName,"authorities"));
             if (!StrUtil.isEmpty(userName)) {
-                SysUserEntity sysUserEntity =(SysUserEntity) redisTemplate.opsForHash().get(userName, "entity");
+                SysUserEntity sysUserEntity =(SysUserEntity) redisTemplate.opsForHash().get("UserDetail:"+userName, "entity");
                 return new UsernamePasswordAuthenticationToken(sysUserEntity, token, authorities);
             }
             return null;

@@ -14,5 +14,6 @@ public class Global {
     public static final String KILL_SECOND_COURSE="course:kill:";
     public static final String COURSE_QUEUE_ORDER_PLUGIN_CANCEL="course_queue_order_plugin_cancel";
     public static final String COURSE_QUEUE_ORDER_PLUGIN_QUEUE="course_queue_order_plugin_queue";
+    public static final String REDIS_USER_DETAIL="UserDetail:";
 
 }

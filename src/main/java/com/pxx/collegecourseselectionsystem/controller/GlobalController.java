@@ -58,26 +58,26 @@ public class GlobalController {
         } catch (MalformedJwtException malformedJwtException) {
             return R.error(Global.REFRESH_TOKEN_WRONG_FORMAT_CODE, "refreshToken wrong format");
         }
-        String refresh_token = (String) cache.hget(username, "refresh_token");
+        String refresh_token = (String) cache.hget(Global.REDIS_USER_DETAIL+username, "refresh_token");
 
         if (!refresh_token.equals(refreshToken)) {
             return R.error(1, "refresh_token expired");
         }
         //创建新的accessToken
         String accessToken = authorizationService.createAccessIdToken(username);
-        cache.hset(username, "access_token", accessToken);
+        cache.hset(Global.REDIS_USER_DETAIL+username, "access_token", accessToken);
 
 
         //下面判断是否刷新 refreshToken，如果refreshToken 快过期了 需要重新生成一个替换掉
         long minTimeOfRefreshToken = 2 * authorizationService.accessTokenExpirationTime;//refreshToken 有效时长是应该为accessToken有效时长的2倍
         //refreshToken创建的起始时间点
-        Long refreshTokenStartTime = Convert.toLong(cache.hget(username, "start_time"));
+        Long refreshTokenStartTime = Convert.toLong(cache.hget(Global.REDIS_USER_DETAIL+username, "start_time"));
         //(refreshToken上次创建的时间点 + refreshToken的有效时长 - 当前时间点) 表示refreshToken还剩余的有效时长，如果小于2倍accessToken时长 ，则刷新 refreshToken
         if (refreshTokenStartTime == null || (refreshTokenStartTime + authorizationService.refreshTokenExpirationTime * 1000) - System.currentTimeMillis() <= minTimeOfRefreshToken * 1000) {
             //刷新refreshToken
             refreshToken = authorizationService.createRefreshIdToken(username);
-            cache.hset(username, "refresh_token", refresh_token);
-            cache.hset(username, "start_time", System.currentTimeMillis());
+            cache.hset(Global.REDIS_USER_DETAIL+username, "refresh_token", refresh_token);
+            cache.hset(Global.REDIS_USER_DETAIL+username, "start_time", System.currentTimeMillis());
         }
 
         //response
@@ -96,7 +96,7 @@ public class GlobalController {
 
         circleCaptcha.setGenerator(randomGenerator);
         String code = circleCaptcha.getCode();
-        String captchaUuid = Global.CAPTCHA_PREFIX_NAME + "_" + captchaVo.getCaptchaUuid();
+        String captchaUuid = Global.CAPTCHA_PREFIX_NAME + ":" + captchaVo.getCaptchaUuid();
         boolean saveCaptcha = cache.set(captchaUuid, code, 130);
         if (saveCaptcha) {
             httpServletResponse.setContentType("image/png;charset=utf-8");

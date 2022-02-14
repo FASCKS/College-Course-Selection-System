@@ -127,7 +127,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
 
 
             //密码更新成功需要重新验证授权
-            redisUtil.del(sysUserEntity.getUsername());
+            redisUtil.del(Global.REDIS_USER_DETAIL+sysUserEntity.getUsername());
         }
 
         return updateById;

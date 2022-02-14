@@ -36,9 +36,9 @@ public class TokenLogoutHandler implements LogoutHandler {
             //清空当前用户缓存中的权限数据
             String username = tokenManager.getUserFromToken(token);
             //判断有没有这个用户
-            boolean entityIsNull = redisUtil.hasKey(username);
+            boolean entityIsNull = redisUtil.hasKey("UserDetail:"+username);
             if (entityIsNull) {
-                String access_token = (String)redisUtil.hget(username, "access_token");
+                String access_token = (String)redisUtil.hget("UserDetail:"+username, "access_token");
                 if (!access_token.equals(token)){
                     ResponseUtil.write(response, R.ok());
                     return;
@@ -47,7 +47,7 @@ public class TokenLogoutHandler implements LogoutHandler {
                 ResponseUtil.write(response, R.ok());
                 return;
             }
-            redisUtil.del(username);
+            redisUtil.del("UserDetail:"+username);
             log.info("用户  {}  于  {}  注销成功", username, DateUtil.date());
             SysLogEntity sysLogEntity = new SysLogEntity();
             sysLogEntity.setUsername(username);
