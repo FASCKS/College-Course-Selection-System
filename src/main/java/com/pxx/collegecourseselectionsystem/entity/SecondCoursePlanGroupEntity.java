@@ -73,6 +73,7 @@ public class SecondCoursePlanGroupEntity {
     /**
      * 计划状态  0 未开始  1  进行中  2 已结束
      */
+    @NotNull(groups = Update.class,message = "只能编辑编辑开始的计划")
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @TableField(value = "`state`")
     @ApiModelProperty(value="计划状态  0 未开始  1  进行中  2 已结束")

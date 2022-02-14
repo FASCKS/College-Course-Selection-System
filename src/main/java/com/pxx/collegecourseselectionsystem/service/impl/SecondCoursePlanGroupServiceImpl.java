@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.pxx.collegecourseselectionsystem.common.utils.PageUtils;
 import com.pxx.collegecourseselectionsystem.common.utils.Pagination;
+import com.pxx.collegecourseselectionsystem.dto.SecondCoursePlanGroupEntityDto;
 import com.pxx.collegecourseselectionsystem.entity.SecondCoursePlanGroupEntity;
 import com.pxx.collegecourseselectionsystem.mapper.SecondCoursePlanGroupMapper;
 import com.pxx.collegecourseselectionsystem.service.SecondCoursePlanGroupService;
@@ -41,7 +42,7 @@ public class SecondCoursePlanGroupServiceImpl extends ServiceImpl<SecondCoursePl
      * @return
      */
     @Override
-    public SecondCoursePlanGroupEntity findOneById(Integer id) {
+    public SecondCoursePlanGroupEntityDto findOneById(Integer id) {
         return secondCoursePlanMapper.findOneById(id);
     }
 

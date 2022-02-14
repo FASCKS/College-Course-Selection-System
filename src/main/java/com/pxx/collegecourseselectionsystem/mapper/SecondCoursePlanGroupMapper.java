@@ -3,6 +3,7 @@ package com.pxx.collegecourseselectionsystem.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.pxx.collegecourseselectionsystem.dto.SecondCoursePlanGroupEntityDto;
 import com.pxx.collegecourseselectionsystem.entity.SecondCoursePlanGroupEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -21,7 +22,7 @@ public interface SecondCoursePlanGroupMapper extends BaseMapper<SecondCoursePlan
      * @param id
      * @return
      */
-    SecondCoursePlanGroupEntity findOneById(Integer id);
+    SecondCoursePlanGroupEntityDto findOneById(Integer id);
 
     /**
      * 最后一条数据

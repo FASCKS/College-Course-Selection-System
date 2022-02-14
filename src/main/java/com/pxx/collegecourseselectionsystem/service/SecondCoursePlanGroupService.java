@@ -3,6 +3,7 @@ package com.pxx.collegecourseselectionsystem.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.pxx.collegecourseselectionsystem.common.utils.PageUtils;
 import com.pxx.collegecourseselectionsystem.common.utils.Pagination;
+import com.pxx.collegecourseselectionsystem.dto.SecondCoursePlanGroupEntityDto;
 import com.pxx.collegecourseselectionsystem.entity.SecondCoursePlanGroupEntity;
     /**
  *  @author Gpxx
@@ -22,7 +23,7 @@ public interface SecondCoursePlanGroupService extends IService<SecondCoursePlanG
          * @param id
          * @return
          */
-        SecondCoursePlanGroupEntity findOneById(Integer id);
+        SecondCoursePlanGroupEntityDto findOneById(Integer id);
 
         /**
          * 获取最后一条数据
