@@ -46,7 +46,7 @@ public class SynCourseSum {
     public void handle(Integer secondCourseId) {
         SecondCourse secondCourse = new SecondCourse();
         secondCourse.setId(secondCourseId);
-        secondCourse.setCourseSum(redisUtil.get(Global.KILL_SECOND_COURSE + secondCourseId));
+        secondCourse.setCourseSum(redisUtil.get(Global.KILL_SECOND_COURSE +"sum:"+ secondCourseId));
         boolean updateBatchById = secondCourseService.updateById(secondCourse);
         //获取临时表中的数据添加进课程表中
         List<ClassSchedule> classSchedule = secondCourseService.findAllOrderCourseAndSecondCourseData();

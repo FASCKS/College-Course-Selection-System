@@ -5,6 +5,7 @@ import com.pxx.collegecourseselectionsystem.common.utils.R;
 import com.pxx.collegecourseselectionsystem.common.utils.RedisUtil;
 import com.pxx.collegecourseselectionsystem.common.utils.SpringSecurityUtil;
 import com.pxx.collegecourseselectionsystem.dto.SecondCourseDto;
+import com.pxx.collegecourseselectionsystem.entity.SecondCoursePlanGroupEntity;
 import com.pxx.collegecourseselectionsystem.service.SecondCourseService;
 import com.pxx.collegecourseselectionsystem.util.Global;
 import com.pxx.collegecourseselectionsystem.vo.course.SimpleClassBook;
@@ -31,7 +32,7 @@ import javax.validation.constraints.PositiveOrZero;
  * @Date 2022/2/10 14:49
  */
 @Validated
-@Api(tags = "选课管理")
+@Api(tags = "自主选课")
 @RestController
 @RequestMapping("/second")
 public class SecondCourseController {
@@ -52,24 +53,28 @@ public class SecondCourseController {
     @ApiOperation("抢课接口")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "要抢课课程id"),
-            @ApiImplicitParam(name = "state", value = "1 抢课   0  退课")
+            @ApiImplicitParam(name = "state", value = "1 抢课   0  退课"),
+            @ApiImplicitParam(name = "planGroupId", value = "组id")
     })
-    @GetMapping("/go/course/{id}/{state}")
+    @GetMapping("/go/course/{id}/{state}/{planGroupId}")
     public R goCourse(@Positive @NotNull @PathVariable("id") Integer secondCourseId,
-                      @PositiveOrZero @NotNull @PathVariable("state") Integer state) {
+                      @PositiveOrZero @NotNull @PathVariable("state") Integer state,
+                      @NotNull @PathVariable("planGroupId") Integer planGroupId) {
         Long userId = SpringSecurityUtil.getUserId();
         //判断是否已经发布
         {
-            boolean hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE + "all");
+            boolean hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE + "all:"+planGroupId);
             if (!hasKey) {
                 return R.error("未发布抢课计划");
             }
         }
         //检验活动是否开始
-        SecondCourseDto secondCourseDto = (SecondCourseDto) redisUtil.get(Global.KILL_SECOND_COURSE + "entity:" + secondCourseId);
-        boolean checkTime = secondCourseService.checkTime(secondCourseDto);
-        if (!checkTime) {
-            return R.error("时间未开始或已经结束");
+        {
+            SecondCoursePlanGroupEntity secondCoursePlanGroupEntity = redisUtil.get(Global.KILL_SECOND_COURSE + "plan_group:" + planGroupId);
+            boolean checkTime = secondCourseService.checkTime(secondCoursePlanGroupEntity);
+            if (!checkTime) {
+                return R.error("时间未开始或已经结束");
+            }
         }
         //如果是退课
         if (state == 0) {
@@ -112,6 +117,7 @@ public class SecondCourseController {
         }
         //判断是否课程冲突
         {
+            SecondCourseDto secondCourseDto = (SecondCourseDto) redisUtil.get(Global.KILL_SECOND_COURSE + "entity:" + secondCourseId+planGroupId);
             SimpleClassScheduleVo simpleClassScheduleVo = (SimpleClassScheduleVo) redisUtil.get(Global.KILL_SECOND_COURSE + "class:schedule:" + userId);
             Integer courseId = secondCourseDto.getCourseId();
             Integer week = secondCourseDto.getWeek().getCode();

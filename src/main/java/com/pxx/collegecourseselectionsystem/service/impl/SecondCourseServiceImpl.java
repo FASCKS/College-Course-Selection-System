@@ -7,6 +7,7 @@ import com.pxx.collegecourseselectionsystem.common.utils.RedisUtil;
 import com.pxx.collegecourseselectionsystem.dto.SecondCourseDto;
 import com.pxx.collegecourseselectionsystem.entity.ClassSchedule;
 import com.pxx.collegecourseselectionsystem.entity.SecondCourse;
+import com.pxx.collegecourseselectionsystem.entity.SecondCoursePlanGroupEntity;
 import com.pxx.collegecourseselectionsystem.mapper.SecondCourseMapper;
 import com.pxx.collegecourseselectionsystem.service.SecondCourseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,27 @@ public class SecondCourseServiceImpl extends ServiceImpl<SecondCourseMapper, Sec
     @Override
     public boolean checkTime(SecondCourseDto secondCourseDto) {
 
+        Date startTime = secondCourseDto.getStartTime();
+        Date endTime = secondCourseDto.getEndTime();
+        DateTime date = DateUtil.date();
+        if (date.compareTo(startTime) < 0) {
+            return false;
+        }
+        if (date.compareTo(endTime) > 0) {
+            return false;
+        }
+
+
+        return true;
+    }
+
+    /**
+     * 检查课程是否在时间之内
+     *
+     * @param secondCourseDto@return
+     */
+    @Override
+    public boolean checkTime(SecondCoursePlanGroupEntity secondCourseDto) {
         Date startTime = secondCourseDto.getStartTime();
         Date endTime = secondCourseDto.getEndTime();
         DateTime date = DateUtil.date();

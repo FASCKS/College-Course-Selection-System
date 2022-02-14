@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.pxx.collegecourseselectionsystem.dto.SecondCourseDto;
 import com.pxx.collegecourseselectionsystem.entity.ClassSchedule;
 import com.pxx.collegecourseselectionsystem.entity.SecondCourse;
+import com.pxx.collegecourseselectionsystem.entity.SecondCoursePlanGroupEntity;
 
 import java.util.List;
 
@@ -23,6 +24,12 @@ public interface SecondCourseService extends IService<SecondCourse> {
      * @return
      */
     boolean checkTime(SecondCourseDto secondCourseDto);
+    /**
+     * 检查课程是否在时间之内
+     * @param secondCourseId
+     * @return
+     */
+    boolean checkTime(SecondCoursePlanGroupEntity secondCourseDto);
 
     /**
      * 新增数据

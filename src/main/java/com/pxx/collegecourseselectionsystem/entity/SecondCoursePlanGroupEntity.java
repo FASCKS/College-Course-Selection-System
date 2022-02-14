@@ -28,7 +28,7 @@ import java.util.Date;
 @Getter
 @Setter
 @ToString
-@TableName(value = "second_course_plan")
+@TableName(value = "second_course_plan_group")
 public class SecondCoursePlanGroupEntity {
     @Null(groups = Insert.class)
     @NotNull(groups = Update.class)
@@ -56,7 +56,7 @@ public class SecondCoursePlanGroupEntity {
      * 开始时间
      */
     @NotNull
-    @JsonFormat(pattern = DatePattern.NORM_DATETIME_PATTERN)
+    @JsonFormat(pattern = DatePattern.NORM_DATETIME_PATTERN,timezone = "GMT+8")
     @TableField(value = "start_time")
     @ApiModelProperty(value="开始时间")
     private Date startTime;
@@ -65,7 +65,7 @@ public class SecondCoursePlanGroupEntity {
      * 结束时间
      */
     @NotNull
-    @JsonFormat(pattern = DatePattern.NORM_DATETIME_PATTERN)
+    @JsonFormat(pattern = DatePattern.NORM_DATETIME_PATTERN,timezone = "GMT+8")
     @TableField(value = "end_time")
     @ApiModelProperty(value="结束时间")
     private Date endTime;

@@ -15,8 +15,8 @@ public enum SecondCoursePlanGroupEnum {
     NOT_STARTED(0,"未开始"),
     STARTED(1,"进行中"),
     END(2,"已结束"),
-    UP(9,"上学期"),
-    DOWN(10,"下学期");
+    UP(9,"第一学期"),
+    DOWN(10,"第二学期");
 
     SecondCoursePlanGroupEnum(int code, String descp) {
         this.code = code;
