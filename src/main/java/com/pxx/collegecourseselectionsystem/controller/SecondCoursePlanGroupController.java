@@ -8,6 +8,7 @@ import com.pxx.collegecourseselectionsystem.common.validator.group.Update;
 import com.pxx.collegecourseselectionsystem.entity.SecondCoursePlanGroupEntity;
 import com.pxx.collegecourseselectionsystem.service.SecondCoursePlanGroupService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 @Api(tags = "抢课计划分组")
 @Validated
 @RestController
-
 @RequestMapping("/plan/group")
 public class SecondCoursePlanGroupController {
     @Autowired
@@ -28,6 +28,7 @@ public class SecondCoursePlanGroupController {
     /**
      * 分组列表
      */
+    @ApiOperation("分组列表")
     @GetMapping("/list")
     public R list(Pagination pagination) {
         PageUtils allGroupPlan = secondCoursePlanGroupService.findAllGroupPlan(pagination);
@@ -37,6 +38,7 @@ public class SecondCoursePlanGroupController {
     /**
      * 编辑
      */
+    @ApiOperation("编辑")
     @PostMapping("/update")
     public R update(@RequestBody @Validated(Update.class) SecondCoursePlanGroupEntity secondCoursePlanGroupEntity) {
         boolean update = secondCoursePlanGroupService.updateById(secondCoursePlanGroupEntity);
@@ -46,6 +48,7 @@ public class SecondCoursePlanGroupController {
     /**
      * 新增
      */
+    @ApiOperation("新增")
     @PostMapping("/insert")
     public R insert(@RequestBody @Validated(Insert.class) SecondCoursePlanGroupEntity secondCoursePlanGroupEntity) {
         boolean save = secondCoursePlanGroupService.save(secondCoursePlanGroupEntity);
@@ -55,15 +58,17 @@ public class SecondCoursePlanGroupController {
     /**
      * 详情
      */
+    @ApiOperation("详情")
     @GetMapping("/info")
     public R info(@RequestParam("id") Integer id) {
-        SecondCoursePlanGroupEntity secondCoursePlanGroupEntity = secondCoursePlanGroupService.getById(id);
+        SecondCoursePlanGroupEntity secondCoursePlanGroupEntity = secondCoursePlanGroupService.findOneById(id);
         return R.ok().put("data", secondCoursePlanGroupEntity);
     }
 
     /**
      * 删除
      */
+    @ApiOperation("删除")
     @PostMapping("/delete")
     public R delete(@RequestParam("id") Integer id) {
         SecondCoursePlanGroupEntity secondCoursePlanGroupEntity = secondCoursePlanGroupService.getById(id);

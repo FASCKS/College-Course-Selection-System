@@ -17,15 +17,8 @@ import java.util.List;
  */
 @Mapper
 public interface SecondCourseMapper extends BaseMapper<SecondCourse> {
-    int updateBatch(List<SecondCourse> list);
 
-    int batchInsert(@Param("list") List<SecondCourse> list);
-
-    int insertOrUpdate(SecondCourse record);
-
-    int insertOrUpdateSelective(SecondCourse record);
-
-    List<SecondCourseDto> findAllSecondCourse();
+    List<SecondCourseDto> findAllSecondCourse(Integer planGroupId);
 
     /**
      * 是否重复

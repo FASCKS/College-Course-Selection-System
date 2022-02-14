@@ -27,29 +27,10 @@ public class SecondCourseServiceImpl extends ServiceImpl<SecondCourseMapper, Sec
     @Autowired
     private RedisUtil redisUtil;
 
-    @Override
-    public int updateBatch(List<SecondCourse> list) {
-        return baseMapper.updateBatch(list);
-    }
 
     @Override
-    public int batchInsert(List<SecondCourse> list) {
-        return baseMapper.batchInsert(list);
-    }
-
-    @Override
-    public int insertOrUpdate(SecondCourse record) {
-        return baseMapper.insertOrUpdate(record);
-    }
-
-    @Override
-    public int insertOrUpdateSelective(SecondCourse record) {
-        return baseMapper.insertOrUpdateSelective(record);
-    }
-
-    @Override
-    public List<SecondCourseDto> findAllSecondCourse() {
-        return secondCourseMapper.findAllSecondCourse();
+    public List<SecondCourseDto> findAllSecondCourse(Integer planGroupId) {
+        return secondCourseMapper.findAllSecondCourse(planGroupId);
     }
 
     /**

@@ -166,19 +166,6 @@ public class SecondCourseController {
         return R.ok();
     }
 
-    /**
-     * 删除抢课计划
-     */
-    @ApiOperation("删除抢课计划")
-    @GetMapping("/del")
-    public R del() {
-        boolean hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE + "all");
-        if (!hasKey){
-            return R.ok("没有课程计划可以删除");
-        }
-        redisUtil.del(Global.KILL_SECOND_COURSE+"all");
-        return R.error("删除成功");
-    }
 
 
 

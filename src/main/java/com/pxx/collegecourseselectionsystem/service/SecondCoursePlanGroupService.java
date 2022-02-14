@@ -16,4 +16,11 @@ public interface SecondCoursePlanGroupService extends IService<SecondCoursePlanG
          * @return
          */
         PageUtils findAllGroupPlan(Pagination pagination);
+
+        /**
+         * 查询一条通过id
+         * @param id
+         * @return
+         */
+        SecondCoursePlanGroupEntity findOneById(Integer id);
     }

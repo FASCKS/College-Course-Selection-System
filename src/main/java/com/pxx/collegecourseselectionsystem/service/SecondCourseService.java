@@ -14,15 +14,8 @@ import java.util.List;
 public interface SecondCourseService extends IService<SecondCourse> {
 
 
-    int updateBatch(List<SecondCourse> list);
 
-    int batchInsert(List<SecondCourse> list);
-
-    int insertOrUpdate(SecondCourse record);
-
-    int insertOrUpdateSelective(SecondCourse record);
-
-    List<SecondCourseDto> findAllSecondCourse();
+    List<SecondCourseDto> findAllSecondCourse(Integer planGroupId);
 
     /**
      * 检查课程是否在时间之内

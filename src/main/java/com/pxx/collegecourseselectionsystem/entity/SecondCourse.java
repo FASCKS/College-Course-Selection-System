@@ -102,7 +102,13 @@ public class SecondCourse {
     @TableField(value = "state")
     @ApiModelProperty(value = "发布状态")
     private Integer state;
-
+    /**
+     * 发布状态
+     */
+    @JsonIgnore
+    @TableField(value = "plan_group_id")
+    @ApiModelProperty(value = "计划分组id")
+    private Integer planGroupId;
 
     public static final String COL_ID = "id";
 

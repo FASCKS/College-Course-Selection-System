@@ -20,6 +20,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Iterator;
 import java.util.List;
 
@@ -72,8 +73,8 @@ public class SecondCoursePlanController {
      * 发布抢课内容
      */
     @ApiOperation("发布抢课计划")
-    @GetMapping("/put")
-    public R put() {
+    @GetMapping("/put/{id}")
+    public R put(@PathVariable("id") @NotNull  Integer planGroupId) {
         //判断是否已经发布
         boolean hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE + "all");
         if (hasKey) {
@@ -104,7 +105,7 @@ public class SecondCoursePlanController {
             });
         }
         //缓存课程
-        List<SecondCourseDto> allSecondCourse = secondCourseService.findAllSecondCourse();
+        List<SecondCourseDto> allSecondCourse = secondCourseService.findAllSecondCourse(planGroupId);
         //添加全部
         redisUtil.set(Global.KILL_SECOND_COURSE + "all", allSecondCourse);
         //添加单个
@@ -152,4 +153,18 @@ public class SecondCoursePlanController {
         boolean update = secondCourseService.updateById(secondCourseDto);
         return R.ok().put("data", update);
     }
+    /**
+     * 删除抢课计划
+     */
+    @ApiOperation("删除抢课计划")
+    @GetMapping("/del")
+    public R del() {
+        boolean hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE + "all");
+        if (!hasKey){
+            return R.ok("没有课程计划可以删除");
+        }
+        redisUtil.del(Global.KILL_SECOND_COURSE+"all");
+        return R.error("删除成功");
+    }
+
 }

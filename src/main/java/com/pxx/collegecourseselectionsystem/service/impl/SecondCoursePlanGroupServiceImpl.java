@@ -33,4 +33,15 @@ public class SecondCoursePlanGroupServiceImpl extends ServiceImpl<SecondCoursePl
         );
         return new PageUtils(secondCoursePlanEntityIPage);
     }
+
+    /**
+     * 查询一条通过id
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public SecondCoursePlanGroupEntity findOneById(Integer id) {
+        return secondCoursePlanMapper.findOneById(id);
+    }
 }

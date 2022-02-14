@@ -13,4 +13,11 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface SecondCoursePlanGroupMapper extends BaseMapper<SecondCoursePlanGroupEntity> {
     IPage<SecondCoursePlanGroupEntity> findAllGroupPlan(Page<SecondCoursePlanGroupEntity> secondCoursePlanEntityPage);
+
+    /**
+     * 查询一条通过id
+     * @param id
+     * @return
+     */
+    SecondCoursePlanGroupEntity findOneById(Integer id);
 }
