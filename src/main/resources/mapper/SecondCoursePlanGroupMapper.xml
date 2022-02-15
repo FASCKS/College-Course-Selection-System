@@ -43,6 +43,7 @@
         <result column="start_time" jdbcType="TIMESTAMP" property="startTime"/>
         <result column="end_time" jdbcType="TIMESTAMP" property="endTime"/>
         <result column="state" jdbcType="INTEGER" property="state"/>
+        <result column="sum" property="sum"/>
         <collection property="secondCourseDtoList" ofType="com.pxx.collegecourseselectionsystem.dto.SecondCourseDto">
             <id column="sc_id" property="id"/>
             <result column="course_id" property="courseId"/>
@@ -53,10 +54,13 @@
             <result column="teacher_name" property="teacherName"/>
             <result column="course_name" property="courseName"/>
             <result column="type" property="type"/>
+            <result column="plan_group_id" property="planGroupId"/>
         </collection>
+
     </resultMap>
     <select id="findOneById" resultMap="findOneByIdMap">
         select scpg.*
+        ,   scpg.id as plan_group_id
              , sc.id as sc_id
              , sc.course_id
              , sc.teacher

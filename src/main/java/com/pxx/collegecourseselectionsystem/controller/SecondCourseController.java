@@ -26,6 +26,8 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author pxx
@@ -80,7 +82,7 @@ public class SecondCourseController {
         //如果是退课
         if (state == 0) {
             //检查学生是否已经抢到课程
-            boolean hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE + userId + "course:" + secondCourseId);
+            boolean hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE +"_"+ userId + "_course:" + secondCourseId);
             if (!hasKey) {
                 return R.error("无可课程可退");
             }
@@ -92,7 +94,7 @@ public class SecondCourseController {
             //递增加一
             long decr = redisUtil.incr(Global.KILL_SECOND_COURSE + "sum:" + secondCourseId, 1);
             //先删除缓存
-            redisUtil.del(Global.KILL_SECOND_COURSE + userId + "course:" + secondCourseId);
+            redisUtil.del(Global.KILL_SECOND_COURSE +"_"+ userId + "_course:"+ secondCourseId);
             //同步数据库
             JSONObject jsonObject = new JSONObject();
             jsonObject.putOpt("secondCourseId", secondCourseId);
@@ -103,23 +105,34 @@ public class SecondCourseController {
                 message.getMessageProperties().setHeader("x-delay", 3000);
                 return message;
             });
-            return R.ok("退课成功");
+            SecondCourseDto secondCourseDto = (SecondCourseDto) redisUtil.get(Global.KILL_SECOND_COURSE + "entity:" + secondCourseId + "_" + planGroupId);
+            //删除之前抢课成功缓存在临时课程表中的信息
+            Integer up_time = secondCourseDto.getUpTime().getCode();
+            Integer week = secondCourseDto.getWeek().getCode();
+            Integer courseId = secondCourseDto.getCourseId();
+            SimpleClassBook simpleClassBook = this.getSimpleClassBook(up_time, week, courseId);
+            long lRemove = redisUtil.lRemove(Global.KILL_SECOND_COURSE + "class:temp_schedule:" + userId, 0, simpleClassBook);
+
+            if (lRemove==1){
+                return R.ok("退课成功");
+            }
+            return R.ok("退课失败");
         }
         //判断是否重复抢购
         {
-            Object course = redisUtil.get(Global.KILL_SECOND_COURSE +"_"+ userId + "_course:" + secondCourseId);
+            Object course = redisUtil.get(Global.KILL_SECOND_COURSE + "_" + userId + "_course:" + secondCourseId);
             if (course != null) {
                 return R.error("重复抢课");
             }
         }
         //判断库存
         Integer courseSum = (Integer) redisUtil.get(Global.KILL_SECOND_COURSE + "sum:" + secondCourseId);
-        if ( courseSum==null || courseSum <= 0) {
+        if (courseSum == null || courseSum <= 0) {
             return R.error("课程无空余");
         }
         //判断是否课程冲突
+        SecondCourseDto secondCourseDto = (SecondCourseDto) redisUtil.get(Global.KILL_SECOND_COURSE + "entity:" + secondCourseId + "_" + planGroupId);
         {
-            SecondCourseDto secondCourseDto = (SecondCourseDto) redisUtil.get(Global.KILL_SECOND_COURSE + "entity:" + secondCourseId+"_" + planGroupId);
             SimpleClassScheduleVo simpleClassScheduleVo = (SimpleClassScheduleVo) redisUtil.get(Global.KILL_SECOND_COURSE + "class:schedule:" + userId);
             Integer courseId = secondCourseDto.getCourseId();
             Integer week = secondCourseDto.getWeek().getCode();
@@ -147,7 +160,7 @@ public class SecondCourseController {
             return R.ok("课程已经被抢完了.");
         }
         //用户抢课成功   redis标记
-        redisUtil.set(Global.KILL_SECOND_COURSE +"_"+ userId + "_course:" + secondCourseId, "");
+        redisUtil.set(Global.KILL_SECOND_COURSE + "_" + userId + "_course:" + secondCourseId, secondCourseId);
         //异步添加到mysql
         JSONObject jsonObject = new JSONObject();
         jsonObject.putOpt("secondCourseId", secondCourseId);
@@ -159,11 +172,36 @@ public class SecondCourseController {
             return message;
         });
         //将学生抢到的课表信息放到redis中，让前端可以动态查看
+        Integer up_time = secondCourseDto.getUpTime().getCode();
+        Integer week = secondCourseDto.getWeek().getCode();
+        Integer courseId = secondCourseDto.getCourseId();
+        SimpleClassBook simpleClassBook = this.getSimpleClassBook(up_time, week, courseId);
 
+        //存放临时课表
+        redisUtil.lSet(Global.KILL_SECOND_COURSE + "class:temp_schedule:" + userId, simpleClassBook);
 
         return R.ok().put("data", true);
     }
 
+    /**
+     * 获取SimpleClassBook
+     */
+    private SimpleClassBook getSimpleClassBook(Integer up_time, Integer week, Integer courseId) {
+        SimpleClassBook simpleClassBook = new SimpleClassBook();
+
+        simpleClassBook.setCourseId(courseId);
+
+        SimpleClassScheduleTime simpleClassScheduleTime = new SimpleClassScheduleTime();
+        simpleClassScheduleTime.setCourseId(courseId);
+        simpleClassScheduleTime.setUpTime(up_time);
+        simpleClassScheduleTime.setWeek(week);
+
+        List<SimpleClassScheduleTime> simpleClassScheduleTimeList = new ArrayList<>();
+        simpleClassScheduleTimeList.add(simpleClassScheduleTime);
+
+        simpleClassBook.setClassScheduleTimes(simpleClassScheduleTimeList);
+        return simpleClassBook;
+    }
 
     /**
      * 学生当前课表
@@ -176,9 +214,10 @@ public class SecondCourseController {
         if (!hasKey) {
             return R.error("当前不是抢课时间");
         }
-
         Long userId = SpringSecurityUtil.getUserId();
-        return R.ok();
+        SimpleClassScheduleVo simpleClassScheduleVo = redisUtil.get(Global.KILL_SECOND_COURSE + "class:schedule:" + userId);
+
+        return R.ok().put("data", simpleClassScheduleVo);
     }
 
 

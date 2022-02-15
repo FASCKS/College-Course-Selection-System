@@ -10,6 +10,7 @@ import com.pxx.collegecourseselectionsystem.common.validator.group.Update;
 import com.pxx.collegecourseselectionsystem.dto.SecondCourseDto;
 import com.pxx.collegecourseselectionsystem.dto.SecondCoursePlanGroupEntityDto;
 import com.pxx.collegecourseselectionsystem.entity.SecondCoursePlanGroupEntity;
+import com.pxx.collegecourseselectionsystem.entity.enums.SecondCoursePlanGroupEnum;
 import com.pxx.collegecourseselectionsystem.service.SecondCoursePlanGroupService;
 import com.pxx.collegecourseselectionsystem.util.Global;
 import io.swagger.annotations.Api;
@@ -99,11 +100,15 @@ public class SecondCoursePlanGroupController {
         }
         List<SecondCourseDto> secondCourseDtoList = secondCoursePlanGroupEntity.getSecondCourseDtoList();
         //同步库存
-        for (SecondCourseDto secondCourseDto : secondCourseDtoList) {
-            Integer Integer = (Integer) redisUtil.get(Global.KILL_SECOND_COURSE + "sum:" + secondCourseDto.getId());
-            secondCourseDto.setCourseSum(Integer);
+        //如果是正在进行中的
+        if (secondCoursePlanGroupEntity.getState()== SecondCoursePlanGroupEnum.STARTED){
+            for (SecondCourseDto secondCourseDto : secondCourseDtoList) {
+                Integer courseSum = (Integer) redisUtil.get(Global.KILL_SECOND_COURSE + "sum:" + secondCourseDto.getId());
+                if (courseSum!=null){
+                    secondCourseDto.setCourseSum(courseSum);
+                }
+            }
         }
-
 
         return R.ok().put("data", secondCoursePlanGroupEntity);
     }
