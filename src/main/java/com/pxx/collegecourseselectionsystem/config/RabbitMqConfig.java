@@ -53,6 +53,20 @@ public class RabbitMqConfig {
         return new Queue("course.kill.cancel.del.mysql");
     }
     /**
+     * 删除redis—key队列
+     */
+    @Bean
+    public Queue redisDelKey(){
+        return new Queue("mall.order.cancel.plugin.del.redis.key");
+    }
+    @Bean
+    public Binding redisDelKeyBinding(DirectExchange directExchange,Queue redisDelKey){
+        return BindingBuilder
+                .bind(redisDelKey)
+                .to(directExchange)
+                .with("mall.order.cancel.plugin.del.redis.key");
+    }
+    /**
      * 绑定
      */
     @Bean

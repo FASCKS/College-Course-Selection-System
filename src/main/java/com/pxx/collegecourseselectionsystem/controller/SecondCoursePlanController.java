@@ -94,32 +94,42 @@ public class SecondCoursePlanController {
         //缓存课程计划
         SecondCoursePlanGroupEntity secondCoursePlanGroupEntity = secondCoursePlanGroupService.getById(planGroupId);
         redisUtil.set(Global.KILL_SECOND_COURSE + "plan_group:" + planGroupId, secondCoursePlanGroupEntity);
-
+        Long endTime = Convert.toLong(secondCoursePlanGroupEntity.getEndTime());
+        Long stateTime = Convert.toLong(secondCoursePlanGroupEntity.getStartTime());
         for (SecondCourseDto secondCours : allSecondCourse) {
-            Long endTime = Convert.toLong(secondCoursePlanGroupEntity.getEndTime());
-            Long stateTime = Convert.toLong(secondCoursePlanGroupEntity.getStartTime());
             //缓存库存
             redisUtil.set(Global.KILL_SECOND_COURSE + "sum:" + secondCours.getId(), secondCours.getCourseSum(), (endTime - stateTime) / 1000 + 60 * 4);
             //给延迟队列发送消息
-            amqpTemplate.convertAndSend(QueueEnum.QUEUE_ORDER_PLUGIN_CANCEL.getExchange(), QueueEnum.QUEUE_ORDER_PLUGIN_CANCEL.getRouteKey(), secondCours.getId(), message -> {
-                //给消息设置延迟毫秒值
-                //活动结束延迟两分钟
-                message.getMessageProperties().setHeader("x-delay", (endTime - stateTime) / 1000 + 60 * 8);
-                return message;
-            });
+            amqpTemplate.convertAndSend(QueueEnum.QUEUE_ORDER_PLUGIN_CANCEL.getExchange(), QueueEnum.QUEUE_ORDER_PLUGIN_CANCEL.getRouteKey(),
+                    secondCours.getId(),
+                    message -> {
+                        //给消息设置延迟毫秒值
+                        //活动结束延迟两分钟
+                        message.getMessageProperties().setHeader("x-delay", (endTime - stateTime) / 1000 + 60 * 8);
+                        return message;
+                    });
         }
+
         //添加全部
         redisUtil.set(Global.KILL_SECOND_COURSE + "all:" + planGroupId, allSecondCourse);
         //添加单个
         for (SecondCourseDto secondCourseDto : allSecondCourse) {
-            redisUtil.set(Global.KILL_SECOND_COURSE + "entity:" + secondCourseDto.getId()+"_" + planGroupId, secondCourseDto);
+            redisUtil.set(Global.KILL_SECOND_COURSE + "entity:" + secondCourseDto.getId() + "_" + planGroupId, secondCourseDto);
         }
         //缓存学生课程表
         List<SimpleClassScheduleVo> simpleMyClassSchedule = classScheduleService.findSimpleMyClassSchedule();
         for (SimpleClassScheduleVo simpleClassScheduleVo : simpleMyClassSchedule) {
             redisUtil.set(Global.KILL_SECOND_COURSE + "class:schedule:" + simpleClassScheduleVo.getUserId(), simpleClassScheduleVo);
+            //活动结束几分钟后删除和该用户相关的缓存
+            amqpTemplate.convertAndSend(QueueEnum.QUEUE_ORDER_PLUGIN_CANCEL.getExchange(),"mall.order.cancel.plugin.del.redis.key",
+                    simpleClassScheduleVo.getUserId(),
+                    message -> {
+                        //给消息设置延迟毫秒值
+                        //活动结束延迟两分钟
+                        message.getMessageProperties().setHeader("x-delay", (endTime - stateTime) / 1000 + 60 * 8);
+                        return message;
+                    });
         }
-
 
 
         return R.ok("发布成功");

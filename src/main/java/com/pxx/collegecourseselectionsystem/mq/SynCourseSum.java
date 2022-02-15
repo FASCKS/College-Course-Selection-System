@@ -46,7 +46,7 @@ public class SynCourseSum {
     public void handle(Integer secondCourseId) {
         SecondCourse secondCourse = new SecondCourse();
         secondCourse.setId(secondCourseId);
-        secondCourse.setCourseSum(redisUtil.get(Global.KILL_SECOND_COURSE +"sum:"+ secondCourseId));
+        secondCourse.setCourseSum(redisUtil.get(Global.KILL_SECOND_COURSE + "sum:" + secondCourseId));
         boolean updateBatchById = secondCourseService.updateById(secondCourse);
         //获取临时表中的数据添加进课程表中
         List<ClassSchedule> classSchedule = secondCourseService.findAllOrderCourseAndSecondCourseData();
@@ -56,12 +56,33 @@ public class SynCourseSum {
         boolean saveBatch = classScheduleService.saveBatch(classSchedule);
 
         orderCourseService.deleteAll();
+
+        secondCourse = secondCourseService.getById(secondCourseId);
         //删除redis选课相关缓存
-        redisUtil.del(Global.KILL_SECOND_COURSE+"*");
+        redisUtil.del(
+                Global.KILL_SECOND_COURSE + "all:" + secondCourse.getPlanGroupId(),
+                Global.KILL_SECOND_COURSE + "sum:" + secondCourse.getId(),
+                Global.KILL_SECOND_COURSE + "entity:" + secondCourse.getId() + "_" + secondCourse.getCourseId(),
+                Global.KILL_SECOND_COURSE + "plan_group:" + secondCourse.getPlanGroupId());
+        //删除学生临时课表
+
+
         log.info("redis库存同步mysql---->{},同步课程表----->{}", updateBatchById, saveBatch);
 
         //
     }
+
+    /**
+     * 删除redis数据
+     */
+    @RabbitListener(queues = "mall.order.cancel.plugin.del.redis.key")
+    @RabbitHandler
+    public void handle(Long userId) {
+        redisUtil.del(Global.KILL_SECOND_COURSE + "class:temp_schedule:" + userId,
+                Global.KILL_SECOND_COURSE + "class:schedule:" + userId);
+        log.info("redis删除用户相关---》{} key成功", userId);
+    }
+
 
     /**
      * 增加订单
@@ -93,7 +114,7 @@ public class SynCourseSum {
         orderCourseQueryWrapper
                 .eq(OrderCourse.COL_USER_ID, userId)
                 .eq(OrderCourse.COL_SECOND_COURSE_ID, secondCourseId)
-                .eq("plan_group_id",planGroupId);
+                .eq("plan_group_id", planGroupId);
         boolean removeById = orderCourseService.remove(orderCourseQueryWrapper);
         log.info("退课成功---》{}", removeById);
     }
