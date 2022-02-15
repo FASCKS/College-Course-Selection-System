@@ -131,23 +131,19 @@ public class SecondCourseController {
             return R.error("课程无空余");
         }
         //判断是否课程冲突
-        SecondCourseDto secondCourseDto = (SecondCourseDto) redisUtil.get(Global.KILL_SECOND_COURSE + "entity:" + secondCourseId + "_" + planGroupId);
+        SecondCourseDto secondCourseDto =  redisUtil.get(Global.KILL_SECOND_COURSE + "entity:" + secondCourseId + "_" + planGroupId);
         {
-            SimpleClassScheduleVo simpleClassScheduleVo = (SimpleClassScheduleVo) redisUtil.get(Global.KILL_SECOND_COURSE + "class:schedule:" + userId);
-            Integer courseId = secondCourseDto.getCourseId();
+            SimpleClassScheduleVo simpleClassScheduleVo = redisUtil.get(Global.KILL_SECOND_COURSE + "class:schedule:" + userId);
             Integer week = secondCourseDto.getWeek().getCode();
             Integer upTime = secondCourseDto.getUpTime().getCode();
             //如果课程表不为空才进行课程冲突检测
             if (simpleClassScheduleVo != null) {
                 for (SimpleClassBook simpleClassBook : simpleClassScheduleVo.getClassBook()) {
-                    //如果课程相同
-                    if (courseId.equals(simpleClassBook.getCourseId())) {
-                        //如果时间相同
-                        for (SimpleClassScheduleTime classScheduleTime : simpleClassBook.getClassScheduleTimes()) {
-                            if (week.equals(classScheduleTime.getWeek()) && upTime.equals(classScheduleTime.getUpTime())) {
-                                //如果相等
-                                return R.error("课程冲突");
-                            }
+                    //如果时间相同
+                    for (SimpleClassScheduleTime classScheduleTime : simpleClassBook.getClassScheduleTimes()) {
+                        if (week.equals(classScheduleTime.getWeek()) && upTime.equals(classScheduleTime.getUpTime())) {
+                            //如果相等
+                            return R.error("课程冲突");
                         }
                     }
                 }
@@ -176,7 +172,6 @@ public class SecondCourseController {
         Integer week = secondCourseDto.getWeek().getCode();
         Integer courseId = secondCourseDto.getCourseId();
         SimpleClassBook simpleClassBook = this.getSimpleClassBook(up_time, week, courseId);
-//        SimpleClassBook simpleClassBook = this.getSimpleClassBook(up_time, week, courseId);
 
         //存放临时课表
         redisUtil.lSet(Global.KILL_SECOND_COURSE + "class:temp_schedule:" + userId, simpleClassBook);
