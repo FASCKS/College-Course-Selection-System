@@ -29,7 +29,8 @@
                scpg.start_time,
                scpg.end_time,
                cs.course_sum,
-                cs.plan_group_id
+                cs.plan_group_id,
+        cs.up_time_two
 
         FROM second_course cs
                      LEFT JOIN course co ON co.id = cs.course_id
@@ -51,7 +52,7 @@
     </select>
 
     <select id="findAllOrderCourseAndSecondCourseData" resultType="com.pxx.collegecourseselectionsystem.entity.ClassSchedule">
-        select sc.course_id, sc.up_time, sc.week, oc.user_id, su.unit_id as unit, sc.teacher,now() as create_time
+        select sc.course_id, sc.up_time, sc.week, oc.user_id, su.unit_id as unit, sc.teacher,now() as create_time,sc.up_time_two
         from second_course sc
                      left join order_course oc on sc.id = oc.second_course_id
                      left join sys_user su on oc.user_id = su.user_id

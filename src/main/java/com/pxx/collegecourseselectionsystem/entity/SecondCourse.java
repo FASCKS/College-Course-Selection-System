@@ -67,7 +67,12 @@ public class SecondCourse {
     @TableField(value = "up_time")
     @ApiModelProperty(value = "上课时间")
     private CourseUpTimeEnum upTime;
-
+    /**
+     * 上课时间 如果是 第一节课和第二节课连在一起，则需要填写该值，如果默认一节课，则默认0
+     */
+    @TableField(value = "up_time_two")
+    @ApiModelProperty(value = "上课时间 如果是 第一节课和第二节课连在一起，则需要填写该值，如果默认一节课，则默认0")
+    private CourseUpTimeEnum upTimeTwo;
     /**
      * 星期几
      */

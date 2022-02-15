@@ -9,6 +9,7 @@ import lombok.Getter;
  */
 @Getter
 public enum CourseUpTimeEnum {
+    ZERO(0,""),
     ONE(1,"第一节"),
     TWO(2,"第二节"),
     THREE(3,"第三节"),

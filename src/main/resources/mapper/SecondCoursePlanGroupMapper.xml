@@ -55,6 +55,7 @@
             <result column="course_name" property="courseName"/>
             <result column="type" property="type"/>
             <result column="plan_group_id" property="planGroupId"/>
+            <result column="up_time_two" property="upTimeTwo"/>
         </collection>
 
     </resultMap>
@@ -74,6 +75,7 @@
         , co.`name` as course_name
         , su.name   as teacher_name
         , co.type   as type
+        , sc.up_time_two
 
                 from second_course_plan_group scpg
                              left join second_course sc on scpg.id = sc.plan_group_id
