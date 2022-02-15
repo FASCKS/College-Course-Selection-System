@@ -43,5 +43,6 @@ public interface SecondCourseService extends IService<SecondCourse> {
      * @return
      */
     List<ClassSchedule> findAllOrderCourseAndSecondCourseData();
+    List<ClassSchedule> findAllOrderCourseAndSecondCourseDataTwo();
 }
 

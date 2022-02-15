@@ -131,17 +131,24 @@ public class SecondCourseController {
             return R.error("课程无空余");
         }
         //判断是否课程冲突
-        SecondCourseDto secondCourseDto =  redisUtil.get(Global.KILL_SECOND_COURSE + "entity:" + secondCourseId + "_" + planGroupId);
+        SecondCourseDto secondCourseDto = redisUtil.get(Global.KILL_SECOND_COURSE + "entity:" + secondCourseId + "_" + planGroupId);
         {
             SimpleClassScheduleVo simpleClassScheduleVo = redisUtil.get(Global.KILL_SECOND_COURSE + "class:schedule:" + userId);
             Integer week = secondCourseDto.getWeek().getCode();
             Integer upTime = secondCourseDto.getUpTime().getCode();
+            Integer upTimeTwo = secondCourseDto.getUpTimeTwo().getCode();
             //如果课程表不为空才进行课程冲突检测
             if (simpleClassScheduleVo != null) {
                 for (SimpleClassBook simpleClassBook : simpleClassScheduleVo.getClassBook()) {
                     //如果时间相同
                     for (SimpleClassScheduleTime classScheduleTime : simpleClassBook.getClassScheduleTimes()) {
-                        if (week.equals(classScheduleTime.getWeek()) && upTime.equals(classScheduleTime.getUpTime())) {
+                        if (
+                                //判断第几天
+                                week.equals(classScheduleTime.getWeek()) && (
+                                        //判断第一节
+                                        upTime.equals(classScheduleTime.getUpTime()) ||
+                                                //判断第二节课是否存在 和 是否和其它课程冲突
+                                                upTimeTwo.equals(classScheduleTime.getUpTime()))) {
                             //如果相等
                             return R.error("课程冲突");
                         }

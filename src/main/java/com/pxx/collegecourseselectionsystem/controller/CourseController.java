@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.pxx.collegecourseselectionsystem.common.utils.PageUtils;
 import com.pxx.collegecourseselectionsystem.common.utils.Pagination;
 import com.pxx.collegecourseselectionsystem.common.utils.R;
+import com.pxx.collegecourseselectionsystem.common.validator.group.Insert;
+import com.pxx.collegecourseselectionsystem.common.validator.group.Update;
 import com.pxx.collegecourseselectionsystem.entity.CourseEntity;
 import com.pxx.collegecourseselectionsystem.service.CourseService;
 import io.swagger.annotations.Api;
@@ -43,14 +45,14 @@ public class CourseController {
     @ApiOperation("课程更新")
     @PreAuthorize("hasAnyAuthority('user:course:update')")
     @PostMapping("/update")
-    public R update(@RequestBody @Validated CourseEntity courseEntity) {
+    public R update(@RequestBody @Validated(Update.class) CourseEntity courseEntity) {
         boolean updateById = courseService.updateById(courseEntity);
         return R.ok().put("data", updateById);
     }
     @ApiOperation("课程新增")
     @PreAuthorize("hasAnyAuthority('user:course:insert')")
     @PostMapping("/insert")
-    public R insert(@RequestBody CourseEntity courseEntity) {
+    public R insert(@RequestBody @Validated(Insert.class) CourseEntity courseEntity) {
         courseEntity.setId(null);
         boolean save = courseService.save(courseEntity);
         return R.ok().put("data", save);

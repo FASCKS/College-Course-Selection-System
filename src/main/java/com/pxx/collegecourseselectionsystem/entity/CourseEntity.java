@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.pxx.collegecourseselectionsystem.common.validator.group.Insert;
+import com.pxx.collegecourseselectionsystem.common.validator.group.Update;
 import com.pxx.collegecourseselectionsystem.entity.enums.CourseEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -13,6 +15,7 @@ import lombok.ToString;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 
 @Getter
 @Setter
@@ -23,6 +26,8 @@ public class CourseEntity {
     /**
      * 课程id
      */
+    @NotNull(groups = Update.class)
+    @Null(groups = Insert.class)
     @ApiModelProperty("课程id")
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
@@ -50,6 +55,14 @@ public class CourseEntity {
     @ApiModelProperty(value = "学分",example = "2")
     @TableField(value = "credit")
     private Integer credit;
+    /**
+     * 课程编号
+     */
+    @Null(groups = Update.class)
+    @NotNull(groups = Insert.class)
+    @ApiModelProperty(value = "课程代码",example = "A00001")
+    @TableField(value = "number")
+    private String number;
 
     public static final String COL_ID = "id";
 
@@ -58,4 +71,7 @@ public class CourseEntity {
     public static final String COL_TYPE = "type";
 
     public static final String COL_CREDIT = "credit";
+
+    public static final String COL_NUMBER = "number";
+
 }

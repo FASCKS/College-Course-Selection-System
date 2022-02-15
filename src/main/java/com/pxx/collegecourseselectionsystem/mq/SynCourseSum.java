@@ -50,6 +50,9 @@ public class SynCourseSum {
         boolean updateBatchById = secondCourseService.updateById(secondCourse);
         //获取临时表中的数据添加进课程表中
         List<ClassSchedule> classSchedule = secondCourseService.findAllOrderCourseAndSecondCourseData();
+        //获取第二节课
+        List<ClassSchedule> classSchedule_two = secondCourseService.findAllOrderCourseAndSecondCourseDataTwo();
+        classSchedule.addAll(classSchedule_two);
         boolean saveBatch = classScheduleService.saveBatch(classSchedule);
 
         orderCourseService.deleteAll();

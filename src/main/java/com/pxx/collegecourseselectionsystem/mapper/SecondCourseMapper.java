@@ -31,4 +31,5 @@ public interface SecondCourseMapper extends BaseMapper<SecondCourse> {
     SecondCourse findOneByCourseIdAndUpTimeAndWeek(@Param("courseId") Integer courseId, @Param("upTime") CourseUpTimeEnum upTime, @Param("week") CourseWeekEnum week);
 
     List<ClassSchedule> findAllOrderCourseAndSecondCourseData();
+    List<ClassSchedule> findAllOrderCourseAndSecondCourseDataTwo();
 }

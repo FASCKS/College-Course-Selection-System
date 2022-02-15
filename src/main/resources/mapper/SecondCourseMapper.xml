@@ -21,25 +21,25 @@
     <select id="findAllSecondCourse" resultType="com.pxx.collegecourseselectionsystem.dto.SecondCourseDto">
         SELECT cs.id,
                co.`name` as course_name,
-               co.id   as course_id,
-               su.name as teacher_name,
-               co.type as type,
+               co.id     as course_id,
+               su.name   as teacher_name,
+               co.type   as type,
                cs.up_time,
                cs.week,
                scpg.start_time,
                scpg.end_time,
                cs.course_sum,
-                cs.plan_group_id,
-        cs.up_time_two
+               cs.plan_group_id,
+               cs.up_time_two
 
         FROM second_course cs
                      LEFT JOIN course co ON co.id = cs.course_id
                      LEFT JOIN sys_user su on su.user_id = cs.teacher
-            left join  second_course_plan_group scpg on cs.plan_group_id = scpg.id
+                     left join second_course_plan_group scpg on cs.plan_group_id = scpg.id
 
         where su.type = 2
           and cs.state = 1
-        and scpg.id=#{planGroupId,jdbcType=INTEGER}
+          and scpg.id = #{planGroupId,jdbcType=INTEGER}
     </select>
 
     <select id="findOneByCourseIdAndUpTimeAndWeek"
@@ -51,13 +51,30 @@
           and week = #{week}
     </select>
 
-    <select id="findAllOrderCourseAndSecondCourseData" resultType="com.pxx.collegecourseselectionsystem.entity.ClassSchedule">
-        select sc.course_id, sc.up_time, sc.week, oc.user_id, su.unit_id as unit, sc.teacher,now() as create_time,sc.up_time_two
+    <select id="findAllOrderCourseAndSecondCourseData"
+            resultType="com.pxx.collegecourseselectionsystem.entity.ClassSchedule">
+        select sc.course_id, sc.up_time, sc.week, oc.user_id, su.unit_id as unit, sc.teacher, now() as create_time
         from second_course sc
                      left join order_course oc on sc.id = oc.second_course_id
                      left join sys_user su on oc.user_id = su.user_id
                      left join sys_unit s on su.unit_id = s.unit_id
 
-        where su.type in (0,1, 2)
+        where su.type in (0, 1, 2)
+    </select>
+    <select id="findAllOrderCourseAndSecondCourseDataTwo"
+            resultType="com.pxx.collegecourseselectionsystem.entity.ClassSchedule">
+        select sc.course_id,
+               sc.up_time_two as up_time,
+               sc.week,
+               oc.user_id,
+               su.unit_id     as unit,
+               sc.teacher,
+               now()          as create_time
+        from second_course sc
+                     left join order_course oc on sc.id = oc.second_course_id
+                     left join sys_user su on oc.user_id = su.user_id
+                     left join sys_unit s on su.unit_id = s.unit_id
+        where su.type in (0, 1, 2)
+          and sc.up_time_two > 0
     </select>
 </mapper>

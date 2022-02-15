@@ -106,5 +106,10 @@ public class SecondCourseServiceImpl extends ServiceImpl<SecondCourseMapper, Sec
 
         return secondCourseMapper.findAllOrderCourseAndSecondCourseData();
     }
+    @Override
+    public List<ClassSchedule> findAllOrderCourseAndSecondCourseDataTwo() {
+
+        return secondCourseMapper.findAllOrderCourseAndSecondCourseDataTwo();
+    }
 }
 
