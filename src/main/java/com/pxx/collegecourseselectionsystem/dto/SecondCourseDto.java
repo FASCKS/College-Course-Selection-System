@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * @author Gpxx
  * @Date 2022/2/10 14:56
@@ -34,6 +36,7 @@ public class SecondCourseDto extends SecondCourse {
     /**
      * 课程类型
      */
+    @NotNull
     @TableField(exist = false)
     @ApiModelProperty("课程类型")
     private CourseEnum type;

@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pxx.collegecourseselectionsystem.common.validator.group.Insert;
+import com.pxx.collegecourseselectionsystem.common.validator.group.Update;
 import com.pxx.collegecourseselectionsystem.entity.enums.CourseUpTimeEnum;
 import com.pxx.collegecourseselectionsystem.entity.enums.CourseWeekEnum;
 import io.swagger.annotations.ApiModel;
@@ -15,6 +16,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import java.util.Date;
 
 /**
@@ -31,6 +33,8 @@ public class SecondCourse {
     /**
      * 抢课自增id
      */
+    @Null(groups = Insert.class)
+    @NotNull(groups = Update.class)
     @TableId(value = "id", type = IdType.AUTO)
     @ApiModelProperty(value = "抢课自增id")
     private Integer id;

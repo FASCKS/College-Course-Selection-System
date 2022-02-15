@@ -4,6 +4,7 @@ import cn.hutool.core.convert.Convert;
 import com.pxx.collegecourseselectionsystem.common.utils.R;
 import com.pxx.collegecourseselectionsystem.common.utils.RedisUtil;
 import com.pxx.collegecourseselectionsystem.common.validator.group.Insert;
+import com.pxx.collegecourseselectionsystem.common.validator.group.Update;
 import com.pxx.collegecourseselectionsystem.dto.SecondCourseDto;
 import com.pxx.collegecourseselectionsystem.entity.SecondCoursePlanGroupEntity;
 import com.pxx.collegecourseselectionsystem.entity.enums.CourseEnum;
@@ -32,6 +33,7 @@ import java.util.List;
  */
 @Api(tags = "选课管理")
 @RestController
+@Validated
 @RequestMapping("/plan")
 public class SecondCoursePlanController {
     @Autowired
@@ -164,7 +166,7 @@ public class SecondCoursePlanController {
      */
     @ApiOperation("编辑抢课课程")
     @PostMapping("/update")
-    public R update(@RequestBody @Validated SecondCourseDto secondCourseDto) {
+    public R update(@RequestBody @Validated(Update.class) SecondCourseDto secondCourseDto) {
         boolean update = secondCourseService.updateById(secondCourseDto);
         return R.ok().put("data", update);
     }
