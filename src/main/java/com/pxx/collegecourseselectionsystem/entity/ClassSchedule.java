@@ -61,6 +61,9 @@ public class ClassSchedule {
     @TableField(value = "create_time", fill = FieldFill.INSERT)
     @ApiModelProperty(value = "创建时间")
     private Date createTime;
+    @TableField(value = "teacher")
+    @ApiModelProperty("老师id")
+    private Integer teacher;
 
     public static final String COL_ID = "id";
 

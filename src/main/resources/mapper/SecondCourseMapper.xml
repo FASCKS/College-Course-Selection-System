@@ -51,7 +51,7 @@
     </select>
 
     <select id="findAllOrderCourseAndSecondCourseData" resultType="com.pxx.collegecourseselectionsystem.entity.ClassSchedule">
-        select sc.course_id, sc.up_time, sc.week, oc.user_id, su.unit_id, sc.teacher
+        select sc.course_id, sc.up_time, sc.week, oc.user_id, su.unit_id as unit, sc.teacher,now() as create_time
         from second_course sc
                      left join order_course oc on sc.id = oc.second_course_id
                      left join sys_user su on oc.user_id = su.user_id

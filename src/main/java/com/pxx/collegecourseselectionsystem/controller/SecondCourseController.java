@@ -176,6 +176,7 @@ public class SecondCourseController {
         Integer week = secondCourseDto.getWeek().getCode();
         Integer courseId = secondCourseDto.getCourseId();
         SimpleClassBook simpleClassBook = this.getSimpleClassBook(up_time, week, courseId);
+//        SimpleClassBook simpleClassBook = this.getSimpleClassBook(up_time, week, courseId);
 
         //存放临时课表
         redisUtil.lSet(Global.KILL_SECOND_COURSE + "class:temp_schedule:" + userId, simpleClassBook);
@@ -203,7 +204,9 @@ public class SecondCourseController {
         List<SimpleClassBook> classBook = simpleClassScheduleVo.getClassBook();
         if (classBook != null) {
             for (Object objectClassBook : classBookList) {
-               classBook.add((SimpleClassBook)objectClassBook);
+                SimpleClassBook simpleClassBook = (SimpleClassBook) objectClassBook;
+                simpleClassBook.setState(1);
+                classBook.add(simpleClassBook);
             }
         }
 
