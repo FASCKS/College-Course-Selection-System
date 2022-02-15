@@ -33,6 +33,7 @@
         </include>
 
         from second_course_plan_group scpg
+        order by year desc ,sum desc
     </select>
     <resultMap id="findOneByIdMap" type="com.pxx.collegecourseselectionsystem.dto.SecondCoursePlanGroupEntityDto">
         <!--@mbg.generated-->
@@ -44,6 +45,9 @@
         <result column="end_time" jdbcType="TIMESTAMP" property="endTime"/>
         <result column="state" jdbcType="INTEGER" property="state"/>
         <result column="sum" property="sum"/>
+        <result column="up_time_number" property="upTimeNumber"/>
+        <result column="week_number" property="weekNumber"/>
+
         <collection property="secondCourseDtoList" ofType="com.pxx.collegecourseselectionsystem.dto.SecondCourseDto">
             <id column="sc_id" property="id"/>
             <result column="course_id" property="courseId"/>
@@ -57,16 +61,17 @@
             <result column="plan_group_id" property="planGroupId"/>
             <result column="up_time_two" property="upTimeTwo"/>
         </collection>
-
     </resultMap>
     <select id="findOneById" resultMap="findOneByIdMap">
         select scpg.*
-        ,   scpg.id as plan_group_id
-             , sc.id as sc_id
+             , scpg.id    as plan_group_id
+             , sc.id      as sc_id
              , sc.course_id
              , sc.teacher
              , sc.course_sum
              , sc.up_time
+             , sc.up_time as up_time_number
+             , sc.week    as week_number
              , sc.week
              , sum
              ,

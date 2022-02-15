@@ -143,14 +143,14 @@ public class SecondCourseController {
                     //如果时间相同
                     for (SimpleClassScheduleTime classScheduleTime : simpleClassBook.getClassScheduleTimes()) {
                         if (
-                                //判断第几天
+                            //判断第几天
                                 week.equals(classScheduleTime.getWeek()) && (
                                         //判断第一节
                                         upTime.equals(classScheduleTime.getUpTime()) ||
                                                 //判断第二节课是否存在 和 是否和其它课程冲突
                                                 upTimeTwo.equals(classScheduleTime.getUpTime()))) {
                             //如果相等
-                            return R.error("课程冲突");
+                            return R.error("第" + week + "天的第" + upTime + "或" + upTimeTwo + "课程冲突。");
                         }
                     }
                 }

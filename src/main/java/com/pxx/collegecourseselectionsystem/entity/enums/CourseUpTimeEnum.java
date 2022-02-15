@@ -30,4 +30,6 @@ public enum CourseUpTimeEnum {
     @JsonValue
     private final String describe;
 
+
+
 }

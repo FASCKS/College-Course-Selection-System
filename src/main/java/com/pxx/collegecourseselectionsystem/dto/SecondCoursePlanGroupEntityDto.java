@@ -12,9 +12,18 @@ import java.util.List;
 /**
  * @author Gpxx
  * @Date 2022/2/14 11:10
- */@Getter@Setter@ToString
+ */
+@Getter
+@Setter
+@ToString
 public class SecondCoursePlanGroupEntityDto extends SecondCoursePlanGroupEntity {
-     @TableField(exist = false)
-     @ApiModelProperty("计划集合")
+    @TableField(exist = false)
+    @ApiModelProperty("计划集合")
     private List<SecondCourseDto> secondCourseDtoList;
+    @TableField(exist = false)
+    @ApiModelProperty("上课时间")
+    private Integer upTimeNumber;
+    @TableField(exist = false)
+    @ApiModelProperty("星期几")
+    private Integer weekNumber;
 }
