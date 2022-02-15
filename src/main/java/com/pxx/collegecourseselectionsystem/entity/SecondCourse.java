@@ -1,11 +1,9 @@
 package com.pxx.collegecourseselectionsystem.entity;
 
-import cn.hutool.core.date.DatePattern;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pxx.collegecourseselectionsystem.common.validator.group.Insert;
 import com.pxx.collegecourseselectionsystem.entity.enums.CourseUpTimeEnum;
@@ -81,19 +79,18 @@ public class SecondCourse {
     /**
      * 开始得时间
      */
-    @NotNull
-
-    @JsonFormat(pattern = DatePattern.NORM_DATETIME_PATTERN)
-    @TableField(value = "start_time")
+    @JsonIgnore
+    @Deprecated
+    @TableField(exist = false)
     @ApiModelProperty(value = "开始得时间")
     private Date startTime;
 
     /**
      * 结束时间
      */
-    @NotNull
-    @JsonFormat(pattern = DatePattern.NORM_DATETIME_PATTERN)
-    @TableField(value = "end_time")
+    @JsonIgnore
+    @Deprecated
+    @TableField(exist = false)
     @ApiModelProperty(value = "结束时间")
     private Date endTime;
     /**

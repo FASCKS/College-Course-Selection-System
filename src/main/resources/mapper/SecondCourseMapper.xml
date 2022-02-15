@@ -10,8 +10,6 @@
         <result column="course_sum" jdbcType="INTEGER" property="courseSum"/>
         <result column="up_time" jdbcType="INTEGER" property="upTime"/>
         <result column="week" jdbcType="INTEGER" property="week"/>
-        <result column="start_time" jdbcType="TIMESTAMP" property="startTime"/>
-        <result column="end_time" jdbcType="TIMESTAMP" property="endTime"/>
         <result column="plan_group_id" jdbcType="INTEGER" property="planGroupId"/>
     </resultMap>
     <sql id="Base_Column_List">

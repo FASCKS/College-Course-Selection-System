@@ -91,9 +91,13 @@ public class SecondCoursePlanController {
         if (allSecondCourse.isEmpty()) {
             return R.ok("没有需要发布的课程计划");
         }
+        //缓存课程计划
+        SecondCoursePlanGroupEntity secondCoursePlanGroupEntity = secondCoursePlanGroupService.getById(planGroupId);
+        redisUtil.set(Global.KILL_SECOND_COURSE + "plan_group:" + planGroupId, secondCoursePlanGroupEntity);
+
         for (SecondCourseDto secondCours : allSecondCourse) {
-            Long endTime = Convert.toLong(secondCours.getEndTime());
-            Long stateTime = Convert.toLong(secondCours.getStartTime());
+            Long endTime = Convert.toLong(secondCoursePlanGroupEntity.getEndTime());
+            Long stateTime = Convert.toLong(secondCoursePlanGroupEntity.getStartTime());
             //缓存库存
             redisUtil.set(Global.KILL_SECOND_COURSE + "sum:" + secondCours.getId(), secondCours.getCourseSum(), (endTime - stateTime) / 1000 + 60 * 4);
             //给延迟队列发送消息
@@ -108,16 +112,14 @@ public class SecondCoursePlanController {
         redisUtil.set(Global.KILL_SECOND_COURSE + "all:" + planGroupId, allSecondCourse);
         //添加单个
         for (SecondCourseDto secondCourseDto : allSecondCourse) {
-            redisUtil.set(Global.KILL_SECOND_COURSE + "entity:" + secondCourseDto.getId() + planGroupId, secondCourseDto);
+            redisUtil.set(Global.KILL_SECOND_COURSE + "entity:" + secondCourseDto.getId()+"_" + planGroupId, secondCourseDto);
         }
         //缓存学生课程表
         List<SimpleClassScheduleVo> simpleMyClassSchedule = classScheduleService.findSimpleMyClassSchedule();
         for (SimpleClassScheduleVo simpleClassScheduleVo : simpleMyClassSchedule) {
             redisUtil.set(Global.KILL_SECOND_COURSE + "class:schedule:" + simpleClassScheduleVo.getUserId(), simpleClassScheduleVo);
         }
-        //缓存课程计划
-        SecondCoursePlanGroupEntity secondCoursePlanGroupEntity = secondCoursePlanGroupService.getById(planGroupId);
-        redisUtil.set(Global.KILL_SECOND_COURSE + "plan_group:" + planGroupId, secondCoursePlanGroupEntity);
+
 
 
         return R.ok("发布成功");

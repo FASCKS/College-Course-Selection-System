@@ -114,12 +114,12 @@ public class SecondCourseController {
         }
         //判断库存
         Integer courseSum = (Integer) redisUtil.get(Global.KILL_SECOND_COURSE + "sum:" + secondCourseId);
-        if (courseSum <= 0) {
+        if ( courseSum==null || courseSum <= 0) {
             return R.error("课程无空余");
         }
         //判断是否课程冲突
         {
-            SecondCourseDto secondCourseDto = (SecondCourseDto) redisUtil.get(Global.KILL_SECOND_COURSE + "entity:" + secondCourseId + planGroupId);
+            SecondCourseDto secondCourseDto = (SecondCourseDto) redisUtil.get(Global.KILL_SECOND_COURSE + "entity:" + secondCourseId+"_" + planGroupId);
             SimpleClassScheduleVo simpleClassScheduleVo = (SimpleClassScheduleVo) redisUtil.get(Global.KILL_SECOND_COURSE + "class:schedule:" + userId);
             Integer courseId = secondCourseDto.getCourseId();
             Integer week = secondCourseDto.getWeek().getCode();
@@ -160,6 +160,7 @@ public class SecondCourseController {
         });
         //将学生抢到的课表信息放到redis中，让前端可以动态查看
 
+
         return R.ok().put("data", true);
     }
 
@@ -168,7 +169,7 @@ public class SecondCourseController {
      * 学生当前课表
      */
     @ApiImplicitParam(name = "id", value = "分组id")
-    @ApiOperation("学生当前课表")
+    @ApiOperation("学生当前简单课表")
     @GetMapping("/get/class/course/{id}")
     public R getClassCourse(@PathVariable("id") Integer planGroupId) {
         boolean hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE + "all:" + planGroupId);
