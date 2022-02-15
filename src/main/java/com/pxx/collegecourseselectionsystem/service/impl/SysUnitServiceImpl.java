@@ -91,7 +91,8 @@ public class SysUnitServiceImpl extends ServiceImpl<SysUnitMapper, SysUnitEntity
 
         return true;
     }
-    private void getSonDtId(List<SysUnitEntity> departmentList, Integer dtId, List<Integer> dtIds) {
+    @Override
+    public void getSonDtId(List<SysUnitEntity> departmentList, Integer dtId, List<Integer> dtIds) {
         for (SysUnitEntity department : departmentList) {
             if (dtId.equals(department.getPid())) {
                 dtIds.add(department.getUnitId());

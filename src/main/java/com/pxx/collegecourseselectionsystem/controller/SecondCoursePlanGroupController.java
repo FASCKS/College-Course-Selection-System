@@ -1,6 +1,5 @@
 package com.pxx.collegecourseselectionsystem.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.pxx.collegecourseselectionsystem.common.utils.PageUtils;
 import com.pxx.collegecourseselectionsystem.common.utils.Pagination;
 import com.pxx.collegecourseselectionsystem.common.utils.R;
@@ -52,7 +51,7 @@ public class SecondCoursePlanGroupController {
      */
     @ApiOperation("编辑")
     @PostMapping("/update")
-    public R update(@RequestBody @Validated(Update.class) SecondCoursePlanGroupEntity secondCoursePlanGroupEntity) {
+    public R update(@RequestBody @Validated(Update.class) SecondCoursePlanGroupEntityDto secondCoursePlanGroupEntity) {
         if (secondCoursePlanGroupEntity.getState().getCode() != 0) {
             return R.ok("只能编辑未开始的计划");
         }
@@ -63,9 +62,10 @@ public class SecondCoursePlanGroupController {
             sum = 0;
         }
         secondCoursePlanGroupEntity.setSum(++sum);
-        QueryWrapper<SecondCoursePlanGroupEntity> secondCoursePlanGroupEntityQueryWrapper = new QueryWrapper<>();
-        secondCoursePlanGroupEntityQueryWrapper.eq("state", 0);
-        boolean update = secondCoursePlanGroupService.update(secondCoursePlanGroupEntity, secondCoursePlanGroupEntityQueryWrapper);
+
+
+
+        boolean update = secondCoursePlanGroupService.updateOne(secondCoursePlanGroupEntity);
         return R.ok().put("data", update);
     }
 
@@ -74,7 +74,7 @@ public class SecondCoursePlanGroupController {
      */
     @ApiOperation("新增")
     @PostMapping("/insert")
-    public R insert(@RequestBody @Validated(Insert.class) SecondCoursePlanGroupEntity secondCoursePlanGroupEntity) {
+    public R insert(@RequestBody @Validated(Insert.class) SecondCoursePlanGroupEntityDto secondCoursePlanGroupEntity) {
         Integer year = secondCoursePlanGroupEntity.getYear();
         Integer code = secondCoursePlanGroupEntity.getUpOrDown().getCode();
         Integer sum = secondCoursePlanGroupService.findEndDataSum(year, code);
@@ -82,7 +82,7 @@ public class SecondCoursePlanGroupController {
             sum = 0;
         }
         secondCoursePlanGroupEntity.setSum(++sum);
-        boolean save = secondCoursePlanGroupService.save(secondCoursePlanGroupEntity);
+        boolean save = secondCoursePlanGroupService.saveOne(secondCoursePlanGroupEntity);
         return R.ok().put("data", save);
     }
 

@@ -30,4 +30,8 @@ public interface SecondCoursePlanGroupService extends IService<SecondCoursePlanG
          * @return
          */
         Integer findEndDataSum(Integer year,Integer code);
+
+        boolean saveOne(SecondCoursePlanGroupEntityDto secondCoursePlanGroupEntity);
+
+        boolean updateOne(SecondCoursePlanGroupEntityDto secondCoursePlanGroupEntity);
     }

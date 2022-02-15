@@ -31,4 +31,6 @@ public interface SysUnitService extends IService<SysUnitEntity>{
     boolean updateOneById(SysUnitEntity sysUnitEntity);
 
     boolean deleteOneById(Integer unitId);
+
+     void getSonDtId(List<SysUnitEntity> departmentList, Integer dtId, List<Integer> dtIds);
 }
