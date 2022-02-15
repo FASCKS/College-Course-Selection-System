@@ -12,9 +12,6 @@ import com.pxx.collegecourseselectionsystem.vo.course.ClassScheduleTime;
 import com.pxx.collegecourseselectionsystem.vo.course.ClassScheduleVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,39 +42,18 @@ public class ClassScheduleController {
         return R.ok().put("data", classScheduleVo);
     }
 
-    @ApiOperation("导出课程表")
+    @ApiOperation("导出课程表 Excel 表格")
     @GetMapping("/get/classSchedule")
     public void getClassSchedule(HttpServletResponse httpServletResponse) throws IOException {
         ClassScheduleVo classScheduleVo = classScheduleService.findMyClassSchedule();
         List<ClassBook> classBook = classScheduleVo.getClassBook();
-        @Getter
-        @Setter
-        @ToString
-        class Temp {
-            private String teacherName;
-            private String weekName;
-            private String upTimeName;
-            private String courseName;
 
-            public Temp(String teacherName, String weekName, String upTimeName, String courseName) {
-                this.teacherName = teacherName;
-                this.weekName = weekName;
-                this.upTimeName = upTimeName;
-                this.courseName = courseName;
-            }
-        }
         String[][] temps = new String[9][7];
         for (ClassBook simpleClassBook : classBook) {
             List<ClassScheduleTime> classScheduleTimes = simpleClassBook.getClassScheduleTimes();
             for (ClassScheduleTime classScheduleTime : classScheduleTimes) {
                 Integer upTime = classScheduleTime.getUpTime();
                 Integer week = classScheduleTime.getWeek();
-/*                Temp temp = new Temp(
-                        classScheduleTime.getTeacherName(),
-                        classScheduleTime.getWeekName().getDescribe(),
-                        classScheduleTime.getUpTimeName().getDescribe(),
-                        simpleClassBook.getCourseName()
-                );*/
                 //给空间空出空间
                 if (upTime >= 5) {
                     upTime++;
@@ -85,6 +61,7 @@ public class ClassScheduleController {
                 temps[upTime - 1][week] = simpleClassBook.getCourseName();
             }
         }
+
         int sum = 0;
         //给左边加上序号
         for (int i = 0; i < 9; i++) {
