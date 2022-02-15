@@ -47,9 +47,8 @@ public class SecondCourse {
      * 授课老师
      */
     @NotNull
-    @JsonIgnore
     @TableField(value = "teacher")
-    @ApiModelProperty(value = "授课老师")
+    @ApiModelProperty(value = "授课老师 id")
     private Long teacher;
 
     /**

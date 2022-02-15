@@ -33,7 +33,7 @@
         </include>
 
         from second_course_plan_group scpg
-        order by year desc ,sum desc
+        order by year desc, sum desc
     </select>
     <resultMap id="findOneByIdMap" type="com.pxx.collegecourseselectionsystem.dto.SecondCoursePlanGroupEntityDto">
         <!--@mbg.generated-->
@@ -55,41 +55,59 @@
             <result column="up_time" property="upTime"/>
             <result column="week" property="week"/>
             <result column="state" property="state"/>
+            <result column="teacher" property="teacher"/>
             <result column="teacher_name" property="teacherName"/>
             <result column="course_name" property="courseName"/>
             <result column="type" property="type"/>
             <result column="plan_group_id" property="planGroupId"/>
             <result column="up_time_two" property="upTimeTwo"/>
         </collection>
+        <collection property="secondCoursePlanGroupAndUnitDto"
+                    ofType="com.pxx.collegecourseselectionsystem.dto.SecondCoursePlanGroupAndUnitDto">
+            <id column="scpgau_unit_id" property="unitId"/>
+            <result column="unit_name" property="unitName"/>
+            <result column="sc_id" property="scpgId"/>
+            <result column="scpgau_id" property="id"/>
+        </collection>
     </resultMap>
     <select id="findOneById" resultMap="findOneByIdMap">
         select scpg.*
-             , scpg.id    as plan_group_id
-             , sc.id      as sc_id
+             , scpg.id        as plan_group_id
+             , sc.id          as sc_id
              , sc.course_id
              , sc.teacher
              , sc.course_sum
              , sc.up_time
-             , sc.up_time as up_time_number
-             , sc.week    as week_number
+             , sc.up_time     as up_time_number
+             , sc.week        as week_number
              , sc.week
              , sum
+             , co.`name`      as course_name
+             , su.user_id     as teacher
+             , su.name        as teacher_name
+             , co.type        as type
+             , sc.up_time_two
+             , s.unit_id
+             , s.name         as unit_name
+             , scpgau.unit_id as scpgau_unit_id
+             , scpgau.id      as scpgau_id
              ,
-        <include refid="state_time">
-        </include>
-        , co.`name` as course_name
-        , su.name   as teacher_name
-        , co.type   as type
-        , sc.up_time_two
+        <include refid="state_time"/>
 
-                from second_course_plan_group scpg
-                             left join second_course sc on scpg.id = sc.plan_group_id
-                             LEFT JOIN course co ON co.id = sc.course_id
-                             LEFT JOIN sys_user su on su.user_id = sc.teacher
 
-                where su.type = 2
-                  and sc.state = 1
-                  and scpg.id = #{id,jdbcType=INTEGER}
+        from second_course_plan_group scpg
+                     LEFT JOIN second_course sc
+                ON scpg.id = sc.plan_group_id
+                     LEFT JOIN course co ON co.id = sc.course_id
+                     LEFT JOIN sys_user su ON su.user_id = sc.teacher
+                     left join second_course_plan_group_and_unit scpgau on scpgau.scpg_id = scpg.id
+                     left join sys_unit s on s.unit_id = scpgau.unit_id
+
+
+        where su.type = 2
+<!--          and sc.state = 1-->
+          and scpgau.scpg_id = #{id,jdbcType=INTEGER}
+          and scpg.id = #{id,jdbcType=INTEGER}
     </select>
 
     <select id="findEndDataSum" resultType="java.lang.Integer">

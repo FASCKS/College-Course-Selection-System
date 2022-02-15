@@ -144,9 +144,6 @@ public class SecondCoursePlanController {
     @ApiOperation("添加抢课课程")
     @PostMapping("/insert")
     public R insert(@RequestBody @Validated(Insert.class) SecondCourseDto secondCourseDto) {
-        if (secondCourseDto.getStartTime().compareTo(secondCourseDto.getEndTime()) <= 0) {
-            return R.error("开始时间不能小于结束时间");
-        }
         secondCourseDto.setState(0);
         boolean insert = secondCourseService.insertOne(secondCourseDto);
         return R.ok().put("data", insert);

@@ -1,6 +1,7 @@
 package com.pxx.collegecourseselectionsystem.dto;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.pxx.collegecourseselectionsystem.entity.SecondCoursePlanGroupEntity;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -26,4 +27,17 @@ public class SecondCoursePlanGroupEntityDto extends SecondCoursePlanGroupEntity 
     @TableField(exist = false)
     @ApiModelProperty("星期几")
     private Integer weekNumber;
+    /**
+     * 影响部门
+     */
+    @TableField(exist = false)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private List<SecondCoursePlanGroupAndUnitDto> secondCoursePlanGroupAndUnitDto;
+    /**
+     * 影响部门
+     */
+    @TableField(exist = false)
+    @ApiModelProperty("影响部门的id集合")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private List<Integer> unitIds;
 }
