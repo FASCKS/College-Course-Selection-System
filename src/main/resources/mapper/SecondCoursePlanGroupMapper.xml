@@ -91,6 +91,7 @@
             <result column="plan_group_id" property="planGroupId"/>
             <result column="up_time_two" property="upTimeTwo"/>
             <result column="up_time_number" property="upTimeNumber"/>
+            <result column="up_time_two_number" property="upTimeTwoNumber"/>
             <result column="week_number" property="weekNumber"/>
         </collection>
         <collection property="secondCoursePlanGroupAndUnitDto"
@@ -117,6 +118,7 @@
              , su.user_id     as teacher
              , su.name        as teacher_name
              , co.type        as type
+             , sc.up_time_two as up_time_two_number
              , sc.up_time_two
              , s.unit_id
              , s.name         as unit_name

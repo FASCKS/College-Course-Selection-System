@@ -1,5 +1,6 @@
 package com.pxx.collegecourseselectionsystem.controller;
 
+import cn.hutool.core.date.DateUtil;
 import com.pxx.collegecourseselectionsystem.common.utils.PageUtils;
 import com.pxx.collegecourseselectionsystem.common.utils.Pagination;
 import com.pxx.collegecourseselectionsystem.common.utils.R;
@@ -20,6 +21,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -53,8 +55,9 @@ public class SecondCoursePlanGroupController {
     @ApiOperation("编辑")
     @PostMapping("/update")
     public R update(@RequestBody @Validated(Update.class) SecondCoursePlanGroupEntityDto secondCoursePlanGroupEntity) {
-        if (secondCoursePlanGroupEntity.getState().getCode() != 0) {
-            return R.ok("只能编辑未开始的计划");
+        boolean hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE + "plan_group:" + secondCoursePlanGroupEntity.getId());
+        if (hasKey) {
+            return R.ok("计划正在进行中,无法编辑.");
         }
         boolean update = secondCoursePlanGroupService.updateOne(secondCoursePlanGroupEntity);
         return R.ok().put("data", update);
@@ -66,6 +69,15 @@ public class SecondCoursePlanGroupController {
     @ApiOperation("新增")
     @PostMapping("/insert")
     public R insert(@RequestBody @Validated(Insert.class) SecondCoursePlanGroupEntityDto secondCoursePlanGroupEntity) {
+        Date startTime = secondCoursePlanGroupEntity.getStartTime();
+        Date endTime = secondCoursePlanGroupEntity.getEndTime();
+/*        if (startTime.compareTo(DateUtil.date()) <= 0) {
+            return R.error("开始时间小于当前时间");
+        }*/
+        if (DateUtil.betweenDay(startTime, endTime, true) < 7) {
+            return R.error("计划开始时间和结束时间间隔不能小于一个星期");
+        }
+
         Integer year = secondCoursePlanGroupEntity.getYear();
         Integer code = secondCoursePlanGroupEntity.getUpOrDown().getCode();
         Integer sum = secondCoursePlanGroupService.findEndDataSum(year, code);
@@ -111,12 +123,11 @@ public class SecondCoursePlanGroupController {
     @ApiOperation("删除")
     @PostMapping("/delete")
     public R delete(@RequestParam("id") Integer planGroupId) {
-      boolean  hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE + "plan_group:" + planGroupId);
+        boolean hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE + "plan_group:" + planGroupId);
         if (hasKey) {
             return R.ok("计划正在进行中,无法删除。");
         }
 
-        redisUtil.del(Global.KILL_SECOND_COURSE + "all:" + planGroupId);
         SecondCoursePlanGroupEntity secondCoursePlanGroupEntity = secondCoursePlanGroupService.getById(planGroupId);
         return R.ok().put("data", secondCoursePlanGroupEntity);
 

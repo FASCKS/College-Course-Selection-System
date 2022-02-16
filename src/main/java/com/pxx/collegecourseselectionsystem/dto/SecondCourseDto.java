@@ -40,10 +40,15 @@ public class SecondCourseDto extends SecondCourse {
     @TableField(exist = false)
     @ApiModelProperty("课程类型")
     private CourseEnum type;
-
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @TableField(exist = false)
-    @ApiModelProperty("上课时间")
+    @ApiModelProperty("第一节上课时间")
     private Integer upTimeNumber;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @TableField(exist = false)
+    @ApiModelProperty("第二节上课时间")
+    private Integer upTimeTwoNumber;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @TableField(exist = false)
     @ApiModelProperty("星期几")
     private Integer weekNumber;

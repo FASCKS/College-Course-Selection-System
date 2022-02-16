@@ -103,14 +103,14 @@ public class SecondCoursePlanController {
         Long stateTime = Convert.toLong(secondCoursePlanGroupEntity.getStartTime());
         for (SecondCourseDto secondCours : allSecondCourse) {
             //缓存库存
-            redisUtil.set(Global.KILL_SECOND_COURSE + "sum:" + secondCours.getId(), secondCours.getCourseSum(), (endTime - stateTime) / 1000 + 60 * 4);
+            redisUtil.set(Global.KILL_SECOND_COURSE + "sum:" + secondCours.getId(), secondCours.getCourseSum(), (endTime - stateTime) / 1000 + 60000 * 4);
             //给延迟队列发送消息
             amqpTemplate.convertAndSend(QueueEnum.QUEUE_ORDER_PLUGIN_CANCEL.getExchange(), QueueEnum.QUEUE_ORDER_PLUGIN_CANCEL.getRouteKey(),
                     secondCours.getId(),
                     message -> {
                         //给消息设置延迟毫秒值
                         //活动结束延迟两分钟
-                        message.getMessageProperties().setHeader("x-delay", (endTime - stateTime) / 1000 + 60 * 8);
+                        message.getMessageProperties().setHeader("x-delay", (endTime - stateTime) / 1000 + 60000 * 8);
                         return message;
                     });
         }
@@ -131,7 +131,7 @@ public class SecondCoursePlanController {
                     message -> {
                         //给消息设置延迟毫秒值
                         //活动结束延迟两分钟
-                        message.getMessageProperties().setHeader("x-delay", (endTime - stateTime) / 1000 + 60 * 8);
+                        message.getMessageProperties().setHeader("x-delay", (endTime - stateTime) / 1000 + 60000 * 10);
                         return message;
                     });
         }
@@ -159,7 +159,7 @@ public class SecondCoursePlanController {
     @PostMapping("/delete{groupId}")
     public R delete(@NotEmpty @RequestBody List<Integer> course ,@NotNull @PathVariable("groupId") Integer groupId) {
         for (Integer secondCourseId : course) {
-            boolean hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE + secondCourseId + "_" + groupId);
+            boolean hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE +"entity:"+ secondCourseId + "_" + groupId);
             if (hasKey){
                 return R.error("课程正在进行中,无法删除.");
             }
