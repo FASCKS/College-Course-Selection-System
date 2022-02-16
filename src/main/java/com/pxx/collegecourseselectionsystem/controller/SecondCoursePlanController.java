@@ -1,11 +1,14 @@
 package com.pxx.collegecourseselectionsystem.controller;
 
 import cn.hutool.core.convert.Convert;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.pxx.collegecourseselectionsystem.common.utils.R;
 import com.pxx.collegecourseselectionsystem.common.utils.RedisUtil;
 import com.pxx.collegecourseselectionsystem.common.validator.group.Insert;
 import com.pxx.collegecourseselectionsystem.common.validator.group.Update;
 import com.pxx.collegecourseselectionsystem.dto.SecondCourseDto;
+import com.pxx.collegecourseselectionsystem.entity.SecondCourse;
 import com.pxx.collegecourseselectionsystem.entity.SecondCoursePlanGroupEntity;
 import com.pxx.collegecourseselectionsystem.entity.SysUserEntity;
 import com.pxx.collegecourseselectionsystem.entity.enums.CourseEnum;
@@ -157,6 +160,11 @@ public class SecondCoursePlanController {
     @PostMapping("/insert")
     public R insert(@RequestBody @Validated(Insert.class) SecondCourseDto secondCourseDto) {
         secondCourseDto.setState(0);
+        //判断是否冲突
+        boolean courseCheck = courseCheck(secondCourseDto);
+        if (!courseCheck){
+            return R.error("上课时间冲突");
+        }
         boolean insert = secondCourseService.insertOne(secondCourseDto);
         return R.ok().put("data", insert);
     }
@@ -189,9 +197,30 @@ public class SecondCoursePlanController {
         if (hasKey) {
             return R.error("课程正在进行中,无法编辑.");
         }
+        //判断是否冲突
+        boolean courseCheck = courseCheck(secondCourseDto);
+        if (!courseCheck){
+            return R.error("上课时间冲突");
+        }
         boolean update = secondCourseService.updateById(secondCourseDto);
         return R.ok().put("data", update);
     }
 
+    /**
+     * 检测是否课程冲突
+     */
+    private boolean courseCheck(SecondCourseDto secondCourseDto) {
 
+        QueryWrapper<SecondCourse> sq = new QueryWrapper<>();
+        sq.eq(SecondCourseDto.COL_UP_TIME, secondCourseDto.getUpTime())
+                .eq(SecondCourseDto.COL_WEEK, secondCourseDto.getWeek());
+        BaseMapper<SecondCourse> baseMapper = secondCourseService.getBaseMapper();
+        SecondCourse secondCourse = baseMapper.selectOne(sq);
+
+        if (secondCourse != null) {
+            return false;
+        }
+
+        return true;
+    }
 }
