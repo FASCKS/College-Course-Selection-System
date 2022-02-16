@@ -113,6 +113,7 @@ public class SecondCourse {
     /**
      * 计划分组
      */
+    @NotNull(groups = Update.class)
     @NotNull(groups = Insert.class)
     @TableField(value = "plan_group_id")
     @ApiModelProperty(value = "计划分组")

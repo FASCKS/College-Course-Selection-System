@@ -111,12 +111,7 @@ public class SecondCoursePlanGroupController {
     @ApiOperation("删除")
     @PostMapping("/delete")
     public R delete(@RequestParam("id") Integer planGroupId) {
-        boolean hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE + "all:" + planGroupId);
-        if (!hasKey) {
-            return R.ok("没有课程计划可以删除");
-        }
-
-        hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE + "plan_group:" + planGroupId);
+      boolean  hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE + "plan_group:" + planGroupId);
         if (hasKey) {
             return R.ok("计划正在进行中,无法删除。");
         }

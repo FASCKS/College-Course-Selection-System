@@ -108,6 +108,7 @@ public class SecondCoursePlanGroupServiceImpl extends ServiceImpl<SecondCoursePl
         getUnitIdSonDtId(secondCoursePlanGroupEntity, myUnitId);
         List<Integer> collectUnitIds = myUnitId.stream().distinct().collect(Collectors.toList());
         List<SecondCoursePlanGroupAndUnit> secondCoursePlanGroupEntityList = new ArrayList<>();
+
         for (Integer collectUnitId : collectUnitIds) {
             SecondCoursePlanGroupAndUnit secondCoursePlanGroupAndUnit = new SecondCoursePlanGroupAndUnit();
             secondCoursePlanGroupAndUnit.setUnitId(collectUnitId);
@@ -127,6 +128,7 @@ public class SecondCoursePlanGroupServiceImpl extends ServiceImpl<SecondCoursePl
         List<SysUnitEntity> sysUnitEntityList = sysUnitService.list();
         List<Integer> unitIds = secondCoursePlanGroupEntity.getUnitIds();
         for (Integer unitId : unitIds) {
+            myUnitId.add(unitId);
             sysUnitService.getSonDtId(sysUnitEntityList, unitId, myUnitId);
         }
     }

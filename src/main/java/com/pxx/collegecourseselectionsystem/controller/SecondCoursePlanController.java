@@ -154,9 +154,16 @@ public class SecondCoursePlanController {
     /**
      * 删除选课
      */
+    @ApiImplicitParam(name = "groupId",value = "要删除的分组id")
     @ApiOperation("删除抢课课程")
-    @PostMapping("/delete")
-    public R delete(@NotEmpty @RequestBody List<Integer> course) {
+    @PostMapping("/delete{groupId}")
+    public R delete(@NotEmpty @RequestBody List<Integer> course ,@NotNull @PathVariable("groupId") Integer groupId) {
+        for (Integer secondCourseId : course) {
+            boolean hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE + secondCourseId + "_" + groupId);
+            if (hasKey){
+                return R.error("课程正在进行中,无法删除.");
+            }
+        }
         boolean removeBatchByIds = secondCourseService.removeBatchByIds(course);
         return R.ok().put("data", removeBatchByIds);
     }
@@ -167,6 +174,11 @@ public class SecondCoursePlanController {
     @ApiOperation("编辑抢课课程")
     @PostMapping("/update")
     public R update(@RequestBody @Validated(Update.class) SecondCourseDto secondCourseDto) {
+        Integer planGroupId = secondCourseDto.getPlanGroupId();
+        boolean hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE + secondCourseDto.getId() + "_" + planGroupId);
+        if (hasKey){
+            return R.error("课程正在进行中,无法编辑.");
+        }
         boolean update = secondCourseService.updateById(secondCourseDto);
         return R.ok().put("data", update);
     }
