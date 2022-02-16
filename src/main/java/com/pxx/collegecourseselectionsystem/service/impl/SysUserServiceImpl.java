@@ -164,6 +164,18 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
         return sysUserDto;
     }
 
+    /**
+     * 获取这些部门下得学生
+     *
+     * @param unitId
+     * @return
+     */
+    @Override
+    public List<SysUserEntity> findUserByUnitId(List<Integer> unitId) {
+
+        return baseMapper.findUserByUnitId(unitId);
+    }
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

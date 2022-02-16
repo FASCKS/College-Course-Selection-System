@@ -45,7 +45,6 @@
             <result column="sc_id" property="scpgId"/>
             <result column="scpgau_id" property="id"/>
         </collection>
-
     </resultMap>
     <select id="findAllGroupPlan" resultMap="findAllGroupPlanMap">
         select scpg.id,
@@ -136,9 +135,8 @@
                      left join sys_unit s on s.unit_id = scpgau.unit_id
 
 
-                where
-         scpgau.scpg_id = #{id,jdbcType=INTEGER}
-        and scpg.id = #{id,jdbcType=INTEGER}
+        where scpgau.scpg_id = #{id,jdbcType=INTEGER}
+          and scpg.id = #{id,jdbcType=INTEGER}
     </select>
 
     <select id="findEndDataSum" resultType="java.lang.Integer">
@@ -148,5 +146,12 @@
           and up_or_down = #{code,jdbcType=INTEGER}
         order by sum desc
         limit 1
+    </select>
+
+    <select id="findUnitIdByPlanGroupId" resultType="java.lang.Integer">
+        select scpgau.unit_id
+        from second_course_plan_group scpg
+                     left join second_course_plan_group_and_unit scpgau on scpg.id = scpgau.scpg_id
+        where scpg.id = #{planGroupId,jdbcType=INTEGER}
     </select>
 </mapper>

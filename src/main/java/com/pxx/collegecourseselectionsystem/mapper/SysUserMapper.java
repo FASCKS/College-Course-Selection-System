@@ -44,4 +44,12 @@ public interface SysUserMapper extends BaseMapper<SysUserEntity> {
      * @return
      */
     SysUserDto findOneByUserId(@Param("userId") Long userId);
+
+    /**
+     * 通过部门查询学生
+     *
+     * @param unitId
+     * @return
+     */
+    List<SysUserEntity> findUserByUnitId(@Param("unitId") List<Integer> unitId);
 }

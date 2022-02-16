@@ -5,7 +5,10 @@ import com.pxx.collegecourseselectionsystem.common.utils.PageUtils;
 import com.pxx.collegecourseselectionsystem.common.utils.Pagination;
 import com.pxx.collegecourseselectionsystem.dto.SecondCoursePlanGroupEntityDto;
 import com.pxx.collegecourseselectionsystem.entity.SecondCoursePlanGroupEntity;
-    /**
+
+import java.util.List;
+
+/**
  *  @author Gpxx
  *  @Date 2022/2/14 10:25
  */
@@ -34,4 +37,11 @@ public interface SecondCoursePlanGroupService extends IService<SecondCoursePlanG
         boolean saveOne(SecondCoursePlanGroupEntityDto secondCoursePlanGroupEntity);
 
         boolean updateOne(SecondCoursePlanGroupEntityDto secondCoursePlanGroupEntity);
+
+        /**
+         * 查询该分组下得部门id
+         * @param planGroupId
+         * @return
+         */
+        List<Integer> findUnitIdByPlanGroupId(Integer planGroupId);
     }

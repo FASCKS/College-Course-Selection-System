@@ -6,6 +6,8 @@ import com.pxx.collegecourseselectionsystem.common.utils.PageUtils;
 import com.pxx.collegecourseselectionsystem.dto.SysUserDto;
 import com.pxx.collegecourseselectionsystem.entity.SysUserEntity;
 
+import java.util.List;
+
 public interface SysUserService extends IService<SysUserEntity> {
 
 
@@ -46,6 +48,13 @@ public interface SysUserService extends IService<SysUserEntity> {
      * @return
      */
     SysUserDto findOneByUserId(Long userId);
+
+    /**
+     * 获取这些部门下得学生
+     * @param unitId
+     * @return
+     */
+    List<SysUserEntity> findUserByUnitId(List<Integer> unitId);
 }
 
 

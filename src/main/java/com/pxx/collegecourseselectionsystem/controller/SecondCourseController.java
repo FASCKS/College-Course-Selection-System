@@ -79,6 +79,17 @@ public class SecondCourseController {
                 return R.error("时间未开始或已经结束");
             }
         }
+        //判断学生是否进行跨组选课
+        {
+            boolean hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE + "group:userId_" + userId);
+            if (!hasKey){
+                return R.error("非法抢课");
+            }
+            Integer planGroup = redisUtil.get(Global.KILL_SECOND_COURSE + "group:userId_" + userId);
+            if (!planGroup.equals(planGroupId)){
+                return R.error("禁止非法访问");
+            }
+        }
         //如果是退课
         if (state == 0) {
             //检查学生是否已经抢到课程

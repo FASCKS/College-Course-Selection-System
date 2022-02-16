@@ -79,14 +79,14 @@
                number,
                age,
                tel,
-        password,
+               password,
                email,
                address,
                avatar,
                state,
                lock_time,
                enable,
-                s.name as unit_name,
+               s.name as unit_name,
                sr.role_id,
                sr.role_name,
                sr.remark,
@@ -99,7 +99,7 @@
                      left join sys_role sr on sur.role_id = sr.role_id
                      left join sys_role_menu srm on sr.role_id = srm.role_id
                      left join sys_menu sm on srm.menu_id = sm.menu_id
-                    left join  sys_unit s on su.unit_id = s.unit_id
+                     left join sys_unit s on su.unit_id = s.unit_id
         <where>
             <if test="number != null">
                 and `number` = #{number,jdbcType=VARCHAR}
@@ -113,7 +113,7 @@
                su.number,
                su.age,
                su.tel,
-                su.sex,
+               su.sex,
                su.type,
                su.email,
                su.address,
@@ -122,48 +122,57 @@
                su.revision,
                su.lock_time,
                su.enable,
-        s.name as unit_name
+               s.name as unit_name
         from sys_user su
                      left join sys_unit s on su.unit_id = s.unit_id
         <where>
             <if test="type != null">
-                and type=#{type,jdbcType=INTEGER}
+                and type = #{type,jdbcType=INTEGER}
             </if>
             <if test="name != null and name != ''">
-                and su.name like CONCAT('%',#{name,jdbcType=VARCHAR},'%')
+                and su.name like CONCAT('%', #{name,jdbcType=VARCHAR}, '%')
             </if>
             <if test="unitId != null">
-                and s.unit_id=#{unitId,jdbcType=INTEGER}
+                and s.unit_id = #{unitId,jdbcType=INTEGER}
             </if>
         </where>
     </select>
 
     <select id="findOneByUserId" resultType="com.pxx.collegecourseselectionsystem.dto.SysUserDto">
         select su.user_id,
-        su.name,
-        su.number,
-        su.age,
-        su.tel,
-        su.sex,
-        su.type,
-        su.email,
-        su.address,
-        su.avatar,
-        su.state,
-        su.revision,
-        su.enable,
-        s.unit_id as unit_id,
-        s.name as unit_name,
-        sr.role_id,
-        sr.role_name
+               su.name,
+               su.number,
+               su.age,
+               su.tel,
+               su.sex,
+               su.type,
+               su.email,
+               su.address,
+               su.avatar,
+               su.state,
+               su.revision,
+               su.enable,
+               s.unit_id as unit_id,
+               s.name    as unit_name,
+               sr.role_id,
+               sr.role_name
         from sys_user su
-        left join sys_unit s on su.unit_id = s.unit_id
-        left join sys_user_role sur on su.user_id = sur.user_id
-        left join sys_role sr on sur.role_id = sr.role_id
+                     left join sys_unit s on su.unit_id = s.unit_id
+                     left join sys_user_role sur on su.user_id = sur.user_id
+                     left join sys_role sr on sur.role_id = sr.role_id
         <where>
             <if test="userId != null">
-                and su.user_id=#{userId,jdbcType=BIGINT}
+                and su.user_id = #{userId,jdbcType=BIGINT}
             </if>
         </where>
+    </select>
+
+    <select id="findUserByUnitId" resultMap="BaseResultMap">
+        select *
+        from sys_user su
+                where unit_id in
+        <foreach collection="unitId" index="index" separator="," item="item" open="(" close=")">
+            #{item,jdbcType=INTEGER}
+        </foreach>
     </select>
 </mapper>

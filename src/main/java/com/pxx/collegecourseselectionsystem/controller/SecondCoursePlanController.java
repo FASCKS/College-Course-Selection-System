@@ -7,11 +7,13 @@ import com.pxx.collegecourseselectionsystem.common.validator.group.Insert;
 import com.pxx.collegecourseselectionsystem.common.validator.group.Update;
 import com.pxx.collegecourseselectionsystem.dto.SecondCourseDto;
 import com.pxx.collegecourseselectionsystem.entity.SecondCoursePlanGroupEntity;
+import com.pxx.collegecourseselectionsystem.entity.SysUserEntity;
 import com.pxx.collegecourseselectionsystem.entity.enums.CourseEnum;
 import com.pxx.collegecourseselectionsystem.entity.enums.QueueEnum;
 import com.pxx.collegecourseselectionsystem.service.ClassScheduleService;
 import com.pxx.collegecourseselectionsystem.service.SecondCoursePlanGroupService;
 import com.pxx.collegecourseselectionsystem.service.SecondCourseService;
+import com.pxx.collegecourseselectionsystem.service.SysUserService;
 import com.pxx.collegecourseselectionsystem.util.Global;
 import com.pxx.collegecourseselectionsystem.vo.course.SimpleClassScheduleVo;
 import io.swagger.annotations.Api;
@@ -46,6 +48,9 @@ public class SecondCoursePlanController {
     private SecondCoursePlanGroupService secondCoursePlanGroupService;
     @Autowired
     private SecondCourseService secondCourseService;
+    @Autowired
+    private SysUserService sysUserService;
+
     private static final String courseSum = Global.KILL_SECOND_COURSE + "sum:";
 
     @ApiImplicitParam(name = "id", value = "分组id")
@@ -103,14 +108,12 @@ public class SecondCoursePlanController {
         Long stateTime = Convert.toLong(secondCoursePlanGroupEntity.getStartTime());
         for (SecondCourseDto secondCours : allSecondCourse) {
             //缓存库存
-            redisUtil.set(Global.KILL_SECOND_COURSE + "sum:" + secondCours.getId(), secondCours.getCourseSum(), (endTime - stateTime) / 1000 + 60000 * 4);
+            redisUtil.set(Global.KILL_SECOND_COURSE + "sum:" + secondCours.getId(), secondCours.getCourseSum(), (endTime - stateTime) / 1000 + 60 * 3);
             //给延迟队列发送消息
             amqpTemplate.convertAndSend(QueueEnum.QUEUE_ORDER_PLUGIN_CANCEL.getExchange(), QueueEnum.QUEUE_ORDER_PLUGIN_CANCEL.getRouteKey(),
                     secondCours.getId(),
                     message -> {
-                        //给消息设置延迟毫秒值
-                        //活动结束延迟两分钟
-                        message.getMessageProperties().setHeader("x-delay", (endTime - stateTime) / 1000 + 60000 * 8);
+                        message.getMessageProperties().setHeader("x-delay", (endTime - stateTime) + 60000 * 5);
                         return message;
                     });
         }
@@ -126,17 +129,19 @@ public class SecondCoursePlanController {
         for (SimpleClassScheduleVo simpleClassScheduleVo : simpleMyClassSchedule) {
             redisUtil.set(Global.KILL_SECOND_COURSE + "class:schedule:" + simpleClassScheduleVo.getUserId(), simpleClassScheduleVo);
             //活动结束几分钟后删除和该用户相关的缓存
-            amqpTemplate.convertAndSend(QueueEnum.QUEUE_ORDER_PLUGIN_CANCEL.getExchange(),"mall.order.cancel.plugin.del.redis.key",
+            amqpTemplate.convertAndSend(QueueEnum.QUEUE_ORDER_PLUGIN_CANCEL.getExchange(), "mall.order.cancel.plugin.del.redis.key",
                     simpleClassScheduleVo.getUserId(),
                     message -> {
-                        //给消息设置延迟毫秒值
-                        //活动结束延迟两分钟
-                        message.getMessageProperties().setHeader("x-delay", (endTime - stateTime) / 1000 + 60000 * 10);
+                        message.getMessageProperties().setHeader("x-delay", (endTime - stateTime)  + 60000 * 10);
                         return message;
                     });
         }
-
-
+        //缓存该分组下可以抢课得学生
+        List<Integer> unitId = secondCoursePlanGroupService.findUnitIdByPlanGroupId(planGroupId);
+       List<SysUserEntity> sysUserEntityList= sysUserService.findUserByUnitId(unitId);
+        for (SysUserEntity sysUserEntity : sysUserEntityList) {
+            redisUtil.set(Global.KILL_SECOND_COURSE+"group:userId_"+sysUserEntity.getUserId(),planGroupId);
+        }
         return R.ok("发布成功");
     }
 
@@ -154,13 +159,13 @@ public class SecondCoursePlanController {
     /**
      * 删除选课
      */
-    @ApiImplicitParam(name = "groupId",value = "要删除的分组id")
+    @ApiImplicitParam(name = "groupId", value = "要删除的分组id")
     @ApiOperation("删除抢课课程")
     @PostMapping("/delete{groupId}")
-    public R delete(@NotEmpty @RequestBody List<Integer> course ,@NotNull @PathVariable("groupId") Integer groupId) {
+    public R delete(@NotEmpty @RequestBody List<Integer> course, @NotNull @PathVariable("groupId") Integer groupId) {
         for (Integer secondCourseId : course) {
-            boolean hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE +"entity:"+ secondCourseId + "_" + groupId);
-            if (hasKey){
+            boolean hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE + "entity:" + secondCourseId + "_" + groupId);
+            if (hasKey) {
                 return R.error("课程正在进行中,无法删除.");
             }
         }
@@ -176,13 +181,12 @@ public class SecondCoursePlanController {
     public R update(@RequestBody @Validated(Update.class) SecondCourseDto secondCourseDto) {
         Integer planGroupId = secondCourseDto.getPlanGroupId();
         boolean hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE + secondCourseDto.getId() + "_" + planGroupId);
-        if (hasKey){
+        if (hasKey) {
             return R.error("课程正在进行中,无法编辑.");
         }
         boolean update = secondCourseService.updateById(secondCourseDto);
         return R.ok().put("data", update);
     }
-
 
 
 }
