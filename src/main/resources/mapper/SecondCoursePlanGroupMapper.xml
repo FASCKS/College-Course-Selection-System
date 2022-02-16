@@ -22,18 +22,46 @@
            if((now() > scpg.start_time and now() &lt;
                                            scpg.end_time), 1, 2)) as state
     </sql>
-    <select id="findAllGroupPlan" resultMap="BaseResultMap">
-        select id,
+    <!--统计总数-->
+    <select id="findAllGroupPlanCount" resultType="java.lang.Integer">
+        select count(1)
+        from second_course_plan_group scpg
+        order by year desc, sum desc
+    </select>
+    <resultMap id="findAllGroupPlanMap" type="com.pxx.collegecourseselectionsystem.dto.SecondCoursePlanGroupEntityDto">
+        <!--@mbg.generated-->
+        <!--@Table second_course_plan_group-->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="year" jdbcType="INTEGER" property="year"/>
+        <result column="up_or_down" jdbcType="INTEGER" property="upOrDown"/>
+        <result column="start_time" jdbcType="TIMESTAMP" property="startTime"/>
+        <result column="end_time" jdbcType="TIMESTAMP" property="endTime"/>
+        <result column="state" jdbcType="INTEGER" property="state"/>
+        <collection property="secondCoursePlanGroupAndUnitDto"
+                    ofType="com.pxx.collegecourseselectionsystem.dto.SecondCoursePlanGroupAndUnitDto">
+            <id column="scpgau_unit_id" property="unitId"/>
+            <result column="unit_name" property="unitName"/>
+            <result column="sc_id" property="scpgId"/>
+            <result column="scpgau_id" property="id"/>
+        </collection>
+    </resultMap>
+    <select id="findAllGroupPlan" resultMap="findAllGroupPlanMap">
+        select scpg.id,
                year,
                up_or_down,
                start_time,
                end_time,
                sum,
-        <include refid="state_time">
-        </include>
-
+               scpgau.scpg_id as scpgau_id,
+               scpgau.scpg_id as sc_id,
+               s.name         as unit_name,
+               scpgau.unit_id as scpgau_unit_id,
+        <include refid="state_time"/>
         from second_course_plan_group scpg
+                     left join second_course_plan_group_and_unit scpgau on scpgau.scpg_id = scpg.id
+                     left join sys_unit s on s.unit_id = scpgau.unit_id
         order by year desc, sum desc
+        LIMIT #{index},#{size}
     </select>
     <resultMap id="findOneByIdMap" type="com.pxx.collegecourseselectionsystem.dto.SecondCoursePlanGroupEntityDto">
         <!--@mbg.generated-->
@@ -96,18 +124,17 @@
 
 
         from second_course_plan_group scpg
-                     LEFT JOIN second_course sc
-                ON scpg.id = sc.plan_group_id
+                     LEFT JOIN second_course sc ON scpg.id = sc.plan_group_id
                      LEFT JOIN course co ON co.id = sc.course_id
                      LEFT JOIN sys_user su ON su.user_id = sc.teacher
                      left join second_course_plan_group_and_unit scpgau on scpgau.scpg_id = scpg.id
                      left join sys_unit s on s.unit_id = scpgau.unit_id
 
 
-        where su.type = 2
-<!--          and sc.state = 1-->
-          and scpgau.scpg_id = #{id,jdbcType=INTEGER}
-          and scpg.id = #{id,jdbcType=INTEGER}
+                where su.type = 2
+        <!--          and sc.state = 1-->
+        and scpgau.scpg_id = #{id,jdbcType=INTEGER}
+        and scpg.id = #{id,jdbcType=INTEGER}
     </select>
 
     <select id="findEndDataSum" resultType="java.lang.Integer">

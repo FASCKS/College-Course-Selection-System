@@ -1,12 +1,12 @@
 package com.pxx.collegecourseselectionsystem.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.pxx.collegecourseselectionsystem.dto.SecondCoursePlanGroupEntityDto;
 import com.pxx.collegecourseselectionsystem.entity.SecondCoursePlanGroupEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * @author Gpxx
@@ -14,7 +14,7 @@ import org.apache.ibatis.annotations.Param;
  */
 @Mapper
 public interface SecondCoursePlanGroupMapper extends BaseMapper<SecondCoursePlanGroupEntity> {
-    IPage<SecondCoursePlanGroupEntity> findAllGroupPlan(Page<SecondCoursePlanGroupEntity> secondCoursePlanEntityPage);
+
 
     /**
      * 查询一条通过id
@@ -32,4 +32,13 @@ public interface SecondCoursePlanGroupMapper extends BaseMapper<SecondCoursePlan
      * @return
      */
     Integer findEndDataSum(@Param("year") Integer year, @Param("code") Integer code);
+
+    /**
+     * 查询数据总数
+     *
+     * @return
+     */
+    Integer findAllGroupPlanCount();
+
+    List<SecondCoursePlanGroupEntityDto> findAllGroupPlan(@Param("index") Long index, @Param("size") Long size);
 }

@@ -1,7 +1,6 @@
 package com.pxx.collegecourseselectionsystem.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.pxx.collegecourseselectionsystem.common.utils.PageUtils;
@@ -39,10 +38,17 @@ public class SecondCoursePlanGroupServiceImpl extends ServiceImpl<SecondCoursePl
      */
     @Override
     public PageUtils findAllGroupPlan(Pagination pagination) {
-        IPage<SecondCoursePlanGroupEntity> secondCoursePlanEntityIPage = secondCoursePlanMapper.findAllGroupPlan(
-                new Page<SecondCoursePlanGroupEntity>(pagination.getPage(), pagination.getLimit())
-        );
-        return new PageUtils(secondCoursePlanEntityIPage);
+        Page<SecondCoursePlanGroupEntityDto> page = new Page<>(pagination.getPage(), pagination.getLimit());
+        //先查询一次总数
+        page.setTotal(secondCoursePlanMapper.findAllGroupPlanCount());//总数
+        Long current = page.getCurrent();//当前页
+        Long size = page.getSize();//每页大小
+        Long index = (current-1)*size;//数据库分布下标
+
+
+        List<SecondCoursePlanGroupEntityDto> allGroupPlan = secondCoursePlanMapper.findAllGroupPlan(index, size);
+        page.setRecords(allGroupPlan);
+        return new PageUtils(page);
     }
 
     /**

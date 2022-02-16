@@ -63,8 +63,6 @@ public class SecondCoursePlanGroupController {
         }
         secondCoursePlanGroupEntity.setSum(++sum);
 
-
-
         boolean update = secondCoursePlanGroupService.updateOne(secondCoursePlanGroupEntity);
         return R.ok().put("data", update);
     }
