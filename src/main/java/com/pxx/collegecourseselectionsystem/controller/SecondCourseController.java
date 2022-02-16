@@ -1,5 +1,6 @@
 package com.pxx.collegecourseselectionsystem.controller;
 
+import cn.hutool.core.convert.Convert;
 import cn.hutool.json.JSONObject;
 import com.pxx.collegecourseselectionsystem.common.utils.R;
 import com.pxx.collegecourseselectionsystem.common.utils.RedisUtil;
@@ -72,8 +73,10 @@ public class SecondCourseController {
             }
         }
         //检验活动是否开始
+        SecondCoursePlanGroupEntity secondCoursePlanGroupEntity = redisUtil.get(Global.KILL_SECOND_COURSE + "plan_group:" + planGroupId);
+        Long endTime = Convert.toLong(secondCoursePlanGroupEntity.getEndTime());
+        Long startTime = Convert.toLong(secondCoursePlanGroupEntity.getStartTime());
         {
-            SecondCoursePlanGroupEntity secondCoursePlanGroupEntity = redisUtil.get(Global.KILL_SECOND_COURSE + "plan_group:" + planGroupId);
             boolean checkTime = secondCourseService.checkTime(secondCoursePlanGroupEntity);
             if (!checkTime) {
                 return R.error("时间未开始或已经结束");
@@ -82,11 +85,11 @@ public class SecondCourseController {
         //判断学生是否进行跨组选课
         {
             boolean hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE + "group:userId_" + userId);
-            if (!hasKey){
+            if (!hasKey) {
                 return R.error("非法抢课");
             }
             Integer planGroup = redisUtil.get(Global.KILL_SECOND_COURSE + "group:userId_" + userId);
-            if (!planGroup.equals(planGroupId)){
+            if (!planGroup.equals(planGroupId)) {
                 return R.error("禁止非法访问");
             }
         }
@@ -174,7 +177,7 @@ public class SecondCourseController {
             return R.ok("课程已经被抢完了.");
         }
         //用户抢课成功   redis标记
-        redisUtil.set(Global.KILL_SECOND_COURSE + "_" + userId + "_course:" + secondCourseId, secondCourseId);
+        redisUtil.set(Global.KILL_SECOND_COURSE + "_" + userId + "_course:" + secondCourseId, secondCourseId, (endTime - startTime) / 1000 + 60 * 5);
         //异步添加到mysql
         JSONObject jsonObject = new JSONObject();
         jsonObject.putOpt("secondCourseId", secondCourseId);
@@ -192,7 +195,7 @@ public class SecondCourseController {
         SimpleClassBook simpleClassBook = this.getSimpleClassBook(up_time, week, courseId);
 
         //存放临时课表
-        redisUtil.lSet(Global.KILL_SECOND_COURSE + "class:temp_schedule:" + userId, simpleClassBook);
+        redisUtil.lSet(Global.KILL_SECOND_COURSE + "class:temp_schedule:" + userId, simpleClassBook,(endTime - startTime) / 1000 + 60 * 5);
 
         return R.ok().put("data", true);
     }

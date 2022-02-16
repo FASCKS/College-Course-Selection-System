@@ -232,5 +232,6 @@
             #{item}
         </foreach>
         )
+                and status = 1
     </select>
 </mapper>

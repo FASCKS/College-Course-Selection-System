@@ -53,6 +53,13 @@ public class SecondCoursePlanController {
 
     private static final String courseSum = Global.KILL_SECOND_COURSE + "sum:";
 
+    private static final Long SECOND = 1000L;
+    private static final Long MINUTE = 60L * SECOND;
+    private static final Long HOUR = 60L * 60L * MINUTE;
+    private static final Long DAY = 24L * HOUR;
+    public static final Long REDIS_EXPIRED = 60L * 10L;
+    public static final Long RABBITMQ_EXPIRED = MINUTE * 5;
+
     @ApiImplicitParam(name = "id", value = "分组id")
     @ApiOperation("抢课计划列表")
     @GetMapping("/plan/list/{id}")
@@ -103,44 +110,45 @@ public class SecondCoursePlanController {
         }
         //缓存课程计划
         SecondCoursePlanGroupEntity secondCoursePlanGroupEntity = secondCoursePlanGroupService.getById(planGroupId);
-        redisUtil.set(Global.KILL_SECOND_COURSE + "plan_group:" + planGroupId, secondCoursePlanGroupEntity);
         Long endTime = Convert.toLong(secondCoursePlanGroupEntity.getEndTime());
         Long stateTime = Convert.toLong(secondCoursePlanGroupEntity.getStartTime());
+
+        redisUtil.set(Global.KILL_SECOND_COURSE + "plan_group:" + planGroupId, secondCoursePlanGroupEntity, (endTime - stateTime) / 1000 + REDIS_EXPIRED);
         for (SecondCourseDto secondCours : allSecondCourse) {
             //缓存库存
-            redisUtil.set(Global.KILL_SECOND_COURSE + "sum:" + secondCours.getId(), secondCours.getCourseSum(), (endTime - stateTime) / 1000 + 60 * 3);
+            redisUtil.set(Global.KILL_SECOND_COURSE + "sum:" + secondCours.getId(), secondCours.getCourseSum(), (endTime - stateTime) / 1000 + REDIS_EXPIRED);
             //给延迟队列发送消息
             amqpTemplate.convertAndSend(QueueEnum.QUEUE_ORDER_PLUGIN_CANCEL.getExchange(), QueueEnum.QUEUE_ORDER_PLUGIN_CANCEL.getRouteKey(),
                     secondCours.getId(),
                     message -> {
-                        message.getMessageProperties().setHeader("x-delay", (endTime - stateTime) + 60000 * 5);
+                        message.getMessageProperties().setHeader("x-delay", (endTime - stateTime) + RABBITMQ_EXPIRED);
                         return message;
                     });
         }
 
         //添加全部
-        redisUtil.set(Global.KILL_SECOND_COURSE + "all:" + planGroupId, allSecondCourse);
+        redisUtil.set(Global.KILL_SECOND_COURSE + "all:" + planGroupId, allSecondCourse, (endTime - stateTime) / 1000 + REDIS_EXPIRED);
         //添加单个
         for (SecondCourseDto secondCourseDto : allSecondCourse) {
-            redisUtil.set(Global.KILL_SECOND_COURSE + "entity:" + secondCourseDto.getId() + "_" + planGroupId, secondCourseDto);
+            redisUtil.set(Global.KILL_SECOND_COURSE + "entity:" + secondCourseDto.getId() + "_" + planGroupId, secondCourseDto, (endTime - stateTime) / 1000 + REDIS_EXPIRED);
         }
         //缓存学生课程表
         List<SimpleClassScheduleVo> simpleMyClassSchedule = classScheduleService.findSimpleMyClassSchedule();
         for (SimpleClassScheduleVo simpleClassScheduleVo : simpleMyClassSchedule) {
-            redisUtil.set(Global.KILL_SECOND_COURSE + "class:schedule:" + simpleClassScheduleVo.getUserId(), simpleClassScheduleVo);
+            redisUtil.set(Global.KILL_SECOND_COURSE + "class:schedule:" + simpleClassScheduleVo.getUserId(), simpleClassScheduleVo, (endTime - stateTime) / 1000 + REDIS_EXPIRED);
             //活动结束几分钟后删除和该用户相关的缓存
             amqpTemplate.convertAndSend(QueueEnum.QUEUE_ORDER_PLUGIN_CANCEL.getExchange(), "mall.order.cancel.plugin.del.redis.key",
                     simpleClassScheduleVo.getUserId(),
                     message -> {
-                        message.getMessageProperties().setHeader("x-delay", (endTime - stateTime)  + 60000 * 10);
+                        message.getMessageProperties().setHeader("x-delay", (endTime - stateTime) + RABBITMQ_EXPIRED);
                         return message;
                     });
         }
         //缓存该分组下可以抢课得学生
         List<Integer> unitId = secondCoursePlanGroupService.findUnitIdByPlanGroupId(planGroupId);
-       List<SysUserEntity> sysUserEntityList= sysUserService.findUserByUnitId(unitId);
+        List<SysUserEntity> sysUserEntityList = sysUserService.findUserByUnitId(unitId);
         for (SysUserEntity sysUserEntity : sysUserEntityList) {
-            redisUtil.set(Global.KILL_SECOND_COURSE+"group:userId_"+sysUserEntity.getUserId(),planGroupId);
+            redisUtil.set(Global.KILL_SECOND_COURSE + "group:userId_" + sysUserEntity.getUserId(), planGroupId, (endTime - stateTime) / 1000 + REDIS_EXPIRED);
         }
         return R.ok("发布成功");
     }
