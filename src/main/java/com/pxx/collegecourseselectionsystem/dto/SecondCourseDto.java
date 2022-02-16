@@ -41,4 +41,10 @@ public class SecondCourseDto extends SecondCourse {
     @ApiModelProperty("课程类型")
     private CourseEnum type;
 
+    @TableField(exist = false)
+    @ApiModelProperty("上课时间")
+    private Integer upTimeNumber;
+    @TableField(exist = false)
+    @ApiModelProperty("星期几")
+    private Integer weekNumber;
 }

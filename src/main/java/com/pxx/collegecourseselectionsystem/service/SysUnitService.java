@@ -32,5 +32,11 @@ public interface SysUnitService extends IService<SysUnitEntity>{
 
     boolean deleteOneById(Integer unitId);
 
+    /**
+     * 查找儿子  不包含自己
+     * @param departmentList
+     * @param dtId
+     * @param dtIds
+     */
      void getSonDtId(List<SysUnitEntity> departmentList, Integer dtId, List<Integer> dtIds);
 }

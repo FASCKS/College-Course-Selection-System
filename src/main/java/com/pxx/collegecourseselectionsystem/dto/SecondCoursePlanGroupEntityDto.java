@@ -22,12 +22,6 @@ public class SecondCoursePlanGroupEntityDto extends SecondCoursePlanGroupEntity 
     @TableField(exist = false)
     @ApiModelProperty("计划集合")
     private List<SecondCourseDto> secondCourseDtoList;
-    @TableField(exist = false)
-    @ApiModelProperty("上课时间")
-    private Integer upTimeNumber;
-    @TableField(exist = false)
-    @ApiModelProperty("星期几")
-    private Integer weekNumber;
     /**
      * 影响部门
      */

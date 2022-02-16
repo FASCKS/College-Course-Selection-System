@@ -75,8 +75,7 @@
         <result column="end_time" jdbcType="TIMESTAMP" property="endTime"/>
         <result column="state" jdbcType="INTEGER" property="state"/>
         <result column="sum" property="sum"/>
-        <result column="up_time_number" property="upTimeNumber"/>
-        <result column="week_number" property="weekNumber"/>
+
 
         <collection property="secondCourseDtoList" ofType="com.pxx.collegecourseselectionsystem.dto.SecondCourseDto">
             <id column="sc_id" property="id"/>
@@ -91,6 +90,8 @@
             <result column="type" property="type"/>
             <result column="plan_group_id" property="planGroupId"/>
             <result column="up_time_two" property="upTimeTwo"/>
+            <result column="up_time_number" property="upTimeNumber"/>
+            <result column="week_number" property="weekNumber"/>
         </collection>
         <collection property="secondCoursePlanGroupAndUnitDto"
                     ofType="com.pxx.collegecourseselectionsystem.dto.SecondCoursePlanGroupAndUnitDto">
