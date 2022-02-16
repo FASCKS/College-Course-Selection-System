@@ -136,6 +136,17 @@ public class SecondCoursePlanGroupServiceImpl extends ServiceImpl<SecondCoursePl
         return secondCoursePlanMapper.findUnitIdByPlanGroupId(planGroupId);
     }
 
+    /**
+     * 查询一条并且包含用户id
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public SecondCoursePlanGroupEntity findOneAndUnitById(Integer id) {
+        return baseMapper.findOneAndUnitById(id);
+    }
+
     private void getUnitIdSonDtId(SecondCoursePlanGroupEntityDto secondCoursePlanGroupEntity, List<Integer> myUnitId) {
         List<SysUnitEntity> sysUnitEntityList = sysUnitService.list();
         List<Integer> unitIds = secondCoursePlanGroupEntity.getUnitIds();

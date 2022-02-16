@@ -174,7 +174,7 @@ public class SecondCoursePlanController {
      */
     @ApiImplicitParam(name = "groupId", value = "要删除的分组id")
     @ApiOperation("删除抢课课程")
-    @PostMapping("/delete{groupId}")
+    @PostMapping("/delete/{groupId}")
     public R delete(@NotEmpty @RequestBody List<Integer> course, @NotNull @PathVariable("groupId") Integer groupId) {
         for (Integer secondCourseId : course) {
             boolean hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE + "entity:" + secondCourseId + "_" + groupId);

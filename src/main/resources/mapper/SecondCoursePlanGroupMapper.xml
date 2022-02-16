@@ -135,7 +135,9 @@
                      left join sys_unit s on s.unit_id = scpgau.unit_id
 
 
-        where scpgau.scpg_id = #{id,jdbcType=INTEGER}
+        where
+        su.type=2
+        and  scpgau.scpg_id = #{id,jdbcType=INTEGER}
           and scpg.id = #{id,jdbcType=INTEGER}
     </select>
 
@@ -153,5 +155,52 @@
         from second_course_plan_group scpg
                      left join second_course_plan_group_and_unit scpgau on scpg.id = scpgau.scpg_id
         where scpg.id = #{planGroupId,jdbcType=INTEGER}
+    </select>
+    <resultMap id="findOneAndUnitByIdMap" type="com.pxx.collegecourseselectionsystem.dto.SecondCoursePlanGroupEntityDto">
+        <!--@mbg.generated-->
+        <!--@Table second_course_plan_group-->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="year" jdbcType="INTEGER" property="year"/>
+        <result column="up_or_down" jdbcType="INTEGER" property="upOrDown"/>
+        <result column="start_time" jdbcType="TIMESTAMP" property="startTime"/>
+        <result column="end_time" jdbcType="TIMESTAMP" property="endTime"/>
+        <result column="state" jdbcType="INTEGER" property="state"/>
+        <result column="sum" property="sum"/>
+        <collection property="secondCoursePlanGroupAndUnitDto"
+                    ofType="com.pxx.collegecourseselectionsystem.dto.SecondCoursePlanGroupAndUnitDto">
+            <id column="scpgau_unit_id" property="unitId"/>
+            <result column="unit_name" property="unitName"/>
+            <result column="plan_group_id" property="scpgId"/>
+            <result column="scpgau_id" property="id"/>
+        </collection>
+    </resultMap>
+    <select id="findOneAndUnitById" resultMap="findOneAndUnitByIdMap">
+        select scpg.*
+        , scpg.id        as plan_group_id
+        , sc.id          as sc_id
+        , sc.course_id
+        , sc.teacher
+        , sc.course_sum
+        , sc.up_time
+        , sc.up_time     as up_time_number
+        , sc.week        as week_number
+        , sc.week
+        , sum
+        , co.`name`      as course_name
+        , co.type        as type
+        , sc.up_time_two as up_time_two_number
+        , sc.up_time_two
+        , scpgau.unit_id as scpgau_unit_id
+        , scpgau.id      as scpgau_id,
+        su.name as unit_name,
+        <include refid="state_time"/>
+        from second_course_plan_group scpg
+        LEFT JOIN second_course sc ON scpg.id = sc.plan_group_id
+        LEFT JOIN course co ON co.id = sc.course_id
+        left join second_course_plan_group_and_unit scpgau on scpgau.scpg_id = scpg.id
+        left join  sys_unit su on scpgau.unit_id = su.unit_id
+        where
+          scpgau.scpg_id = #{planGroupId,jdbcType=INTEGER}
+        and scpg.id =#{planGroupId,jdbcType=INTEGER}
     </select>
 </mapper>

@@ -98,7 +98,7 @@ public class SecondCoursePlanGroupController {
     public R info(@RequestParam("id") @NotNull Integer id) {
         SecondCoursePlanGroupEntityDto secondCoursePlanGroupEntity = secondCoursePlanGroupService.findOneById(id);
         if (secondCoursePlanGroupEntity == null) {
-            SecondCoursePlanGroupEntity secondCoursePlanGroup = secondCoursePlanGroupService.getById(id);
+            SecondCoursePlanGroupEntity secondCoursePlanGroup = secondCoursePlanGroupService.findOneAndUnitById(id);
             return R.ok().put("data", secondCoursePlanGroup);
         }
         List<SecondCourseDto> secondCourseDtoList = secondCoursePlanGroupEntity.getSecondCourseDtoList();

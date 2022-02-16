@@ -44,4 +44,11 @@ public interface SecondCoursePlanGroupService extends IService<SecondCoursePlanG
          * @return
          */
         List<Integer> findUnitIdByPlanGroupId(Integer planGroupId);
-    }
+
+        /**
+         * 查询一条并且包含用户id
+         * @param id
+         * @return
+         */
+        SecondCoursePlanGroupEntity findOneAndUnitById(Integer id);
+}

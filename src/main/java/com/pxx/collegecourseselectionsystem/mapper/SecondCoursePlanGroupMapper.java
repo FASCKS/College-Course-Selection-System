@@ -43,4 +43,6 @@ public interface SecondCoursePlanGroupMapper extends BaseMapper<SecondCoursePlan
     List<SecondCoursePlanGroupEntityDto> findAllGroupPlan(@Param("index") Long index, @Param("size") Long size);
 
     List<Integer> findUnitIdByPlanGroupId(@Param("planGroupId") Integer planGroupId);
+
+    SecondCoursePlanGroupEntity findOneAndUnitById(@Param("planGroupId") Integer planGroupId);
 }
