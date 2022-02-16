@@ -12,4 +12,9 @@
     <!--@mbg.generated-->
     id, unit_id, scpg_id
   </sql>
+
+  <delete id="removeByScpgId">
+    delete from second_course_plan_group_and_unit
+    where scpg_id=#{scpgId,jdbcType=INTEGER}
+    </delete>
 </mapper>

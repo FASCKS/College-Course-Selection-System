@@ -22,7 +22,7 @@ public interface SecondCoursePlanGroupMapper extends BaseMapper<SecondCoursePlan
      * @param id
      * @return
      */
-    SecondCoursePlanGroupEntityDto findOneById(Integer id);
+    SecondCoursePlanGroupEntityDto findOneById(@Param("id") Integer id);
 
     /**
      * 最后一条数据

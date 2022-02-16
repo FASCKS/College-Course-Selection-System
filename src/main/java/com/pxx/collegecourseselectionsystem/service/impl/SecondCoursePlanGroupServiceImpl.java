@@ -6,9 +6,11 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.pxx.collegecourseselectionsystem.common.utils.PageUtils;
 import com.pxx.collegecourseselectionsystem.common.utils.Pagination;
 import com.pxx.collegecourseselectionsystem.dto.SecondCoursePlanGroupEntityDto;
+import com.pxx.collegecourseselectionsystem.entity.SecondCoursePlanGroupAndUnit;
 import com.pxx.collegecourseselectionsystem.entity.SecondCoursePlanGroupEntity;
 import com.pxx.collegecourseselectionsystem.entity.SysUnitEntity;
 import com.pxx.collegecourseselectionsystem.mapper.SecondCoursePlanGroupMapper;
+import com.pxx.collegecourseselectionsystem.service.SecondCoursePlanGroupAndUnitService;
 import com.pxx.collegecourseselectionsystem.service.SecondCoursePlanGroupService;
 import com.pxx.collegecourseselectionsystem.service.SysUnitService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,8 @@ public class SecondCoursePlanGroupServiceImpl extends ServiceImpl<SecondCoursePl
     @Autowired
     private SecondCoursePlanGroupMapper secondCoursePlanMapper;
     @Autowired
+    private SecondCoursePlanGroupAndUnitService secondCoursePlanGroupAndUnitService;
+    @Autowired
     private SysUnitService sysUnitService;
 
     /**
@@ -43,7 +47,7 @@ public class SecondCoursePlanGroupServiceImpl extends ServiceImpl<SecondCoursePl
         page.setTotal(secondCoursePlanMapper.findAllGroupPlanCount());//总数
         Long current = page.getCurrent();//当前页
         Long size = page.getSize();//每页大小
-        Long index = (current-1)*size;//数据库分布下标
+        Long index = (current - 1) * size;//数据库分布下标
 
 
         List<SecondCoursePlanGroupEntityDto> allGroupPlan = secondCoursePlanMapper.findAllGroupPlan(index, size);
@@ -78,25 +82,44 @@ public class SecondCoursePlanGroupServiceImpl extends ServiceImpl<SecondCoursePl
     @Transactional
     @Override
     public boolean saveOne(SecondCoursePlanGroupEntityDto secondCoursePlanGroupEntity) {
+        boolean save = this.save(secondCoursePlanGroupEntity);
         List<Integer> myUnitId = new ArrayList<>();
         getUnitIdSonDtId(secondCoursePlanGroupEntity, myUnitId);
-
         List<Integer> collectUnitIds = myUnitId.stream().distinct().collect(Collectors.toList());
-        secondCoursePlanGroupEntity.setUnitIds(collectUnitIds);
-        boolean save = this.save(secondCoursePlanGroupEntity);
+        List<SecondCoursePlanGroupAndUnit> secondCoursePlanGroupEntityList = new ArrayList<>();
+        for (Integer collectUnitId : collectUnitIds) {
+            SecondCoursePlanGroupAndUnit secondCoursePlanGroupAndUnit = new SecondCoursePlanGroupAndUnit();
+            secondCoursePlanGroupAndUnit.setUnitId(collectUnitId);
+            secondCoursePlanGroupAndUnit.setScpgId(secondCoursePlanGroupEntity.getId());
+            secondCoursePlanGroupEntityList.add(secondCoursePlanGroupAndUnit);
+        }
+        secondCoursePlanGroupAndUnitService.saveBatch(secondCoursePlanGroupEntityList);
+
         return save;
     }
 
+    @Transactional
     @Override
     public boolean updateOne(SecondCoursePlanGroupEntityDto secondCoursePlanGroupEntity) {
         List<Integer> myUnitId = new ArrayList<>();
+        //先删除所有
+        Integer removeByScpgId = secondCoursePlanGroupAndUnitService.removeByScpgId(secondCoursePlanGroupEntity.getId());
+        //添加关系
         getUnitIdSonDtId(secondCoursePlanGroupEntity, myUnitId);
         List<Integer> collectUnitIds = myUnitId.stream().distinct().collect(Collectors.toList());
-        secondCoursePlanGroupEntity.setUnitIds(collectUnitIds);
+        List<SecondCoursePlanGroupAndUnit> secondCoursePlanGroupEntityList = new ArrayList<>();
+        for (Integer collectUnitId : collectUnitIds) {
+            SecondCoursePlanGroupAndUnit secondCoursePlanGroupAndUnit = new SecondCoursePlanGroupAndUnit();
+            secondCoursePlanGroupAndUnit.setUnitId(collectUnitId);
+            secondCoursePlanGroupAndUnit.setScpgId(secondCoursePlanGroupEntity.getId());
+            secondCoursePlanGroupEntityList.add(secondCoursePlanGroupAndUnit);
+        }
+        secondCoursePlanGroupAndUnitService.saveBatch(secondCoursePlanGroupEntityList);
+
 
         UpdateWrapper<SecondCoursePlanGroupEntity> secondCoursePlanGroupEntityDtoUpdateWrapper = new UpdateWrapper<>();
         secondCoursePlanGroupEntityDtoUpdateWrapper.eq("state", 0);
-        int update = secondCoursePlanMapper.update( secondCoursePlanGroupEntity, secondCoursePlanGroupEntityDtoUpdateWrapper);
+        int update = secondCoursePlanMapper.update(secondCoursePlanGroupEntity, secondCoursePlanGroupEntityDtoUpdateWrapper);
         return update > 0;
     }
 

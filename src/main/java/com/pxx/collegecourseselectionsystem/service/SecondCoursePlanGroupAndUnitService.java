@@ -8,5 +8,9 @@ import com.pxx.collegecourseselectionsystem.entity.SecondCoursePlanGroupAndUnit;
  */
 public interface SecondCoursePlanGroupAndUnitService extends IService<SecondCoursePlanGroupAndUnit>{
 
-
-}
+        /**
+         * 删除所有通过 scpgid
+         * @param id
+         */
+        Integer removeByScpgId(Integer scpgId);
+    }

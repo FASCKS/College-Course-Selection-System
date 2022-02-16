@@ -12,4 +12,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class SecondCoursePlanGroupAndUnitServiceImpl extends ServiceImpl<SecondCoursePlanGroupAndUnitMapper, SecondCoursePlanGroupAndUnit> implements SecondCoursePlanGroupAndUnitService{
 
+    /**
+     * 删除所有通过 scpgid
+     *
+     * @param scpgId
+     */
+    @Override
+    public Integer removeByScpgId(Integer scpgId) {
+       return baseMapper.removeByScpgId(scpgId);
+    }
 }

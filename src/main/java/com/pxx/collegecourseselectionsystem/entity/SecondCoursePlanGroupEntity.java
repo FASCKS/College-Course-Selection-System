@@ -33,7 +33,7 @@ public class SecondCoursePlanGroupEntity {
     @Null(groups = Insert.class)
     @NotNull(groups = Update.class)
     @TableId(value = "id", type = IdType.AUTO)
-    @ApiModelProperty(value="")
+    @ApiModelProperty(value="分组id")
     private Integer id;
 
     /**

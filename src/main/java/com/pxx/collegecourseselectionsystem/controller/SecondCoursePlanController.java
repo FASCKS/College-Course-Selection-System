@@ -171,19 +171,6 @@ public class SecondCoursePlanController {
         return R.ok().put("data", update);
     }
 
-    /**
-     * 删除抢课计划
-     */
-    @ApiImplicitParam(name = "id", value = "分组id")
-    @ApiOperation("删除抢课计划")
-    @GetMapping("/del/{id}")
-    public R del(@PathVariable("id") @NotNull Integer planGroupId) {
-        boolean hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE + "all:" + planGroupId);
-        if (!hasKey) {
-            return R.ok("没有课程计划可以删除");
-        }
-        redisUtil.del(Global.KILL_SECOND_COURSE + "all:" + planGroupId);
-        return R.error("删除成功");
-    }
+
 
 }

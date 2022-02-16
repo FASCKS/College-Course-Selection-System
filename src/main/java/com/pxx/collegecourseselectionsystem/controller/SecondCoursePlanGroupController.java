@@ -36,6 +36,7 @@ public class SecondCoursePlanGroupController {
     @Autowired
     private RedisUtil redisUtil;
 
+
     /**
      * 分组列表
      */
@@ -55,14 +56,6 @@ public class SecondCoursePlanGroupController {
         if (secondCoursePlanGroupEntity.getState().getCode() != 0) {
             return R.ok("只能编辑未开始的计划");
         }
-        Integer year = secondCoursePlanGroupEntity.getYear();
-        Integer code = secondCoursePlanGroupEntity.getUpOrDown().getCode();
-        Integer sum = secondCoursePlanGroupService.findEndDataSum(year, code);
-        if (sum == null) {
-            sum = 0;
-        }
-        secondCoursePlanGroupEntity.setSum(++sum);
-
         boolean update = secondCoursePlanGroupService.updateOne(secondCoursePlanGroupEntity);
         return R.ok().put("data", update);
     }
@@ -99,10 +92,10 @@ public class SecondCoursePlanGroupController {
         List<SecondCourseDto> secondCourseDtoList = secondCoursePlanGroupEntity.getSecondCourseDtoList();
         //同步库存
         //如果是正在进行中的
-        if (secondCoursePlanGroupEntity.getState()== SecondCoursePlanGroupEnum.STARTED){
+        if (secondCoursePlanGroupEntity.getState() == SecondCoursePlanGroupEnum.STARTED) {
             for (SecondCourseDto secondCourseDto : secondCourseDtoList) {
                 Integer courseSum = (Integer) redisUtil.get(Global.KILL_SECOND_COURSE + "sum:" + secondCourseDto.getId());
-                if (courseSum!=null){
+                if (courseSum != null) {
                     secondCourseDto.setCourseSum(courseSum);
                 }
             }
@@ -117,12 +110,19 @@ public class SecondCoursePlanGroupController {
     @ApiImplicitParam(name = "id", value = "分组id")
     @ApiOperation("删除")
     @PostMapping("/delete")
-    public R delete(@RequestParam("id") Integer id) {
-        boolean hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE + "plan_group:" + id);
-        if (hasKey){
+    public R delete(@RequestParam("id") Integer planGroupId) {
+        boolean hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE + "all:" + planGroupId);
+        if (!hasKey) {
+            return R.ok("没有课程计划可以删除");
+        }
+
+        hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE + "plan_group:" + planGroupId);
+        if (hasKey) {
             return R.ok("计划正在进行中,无法删除。");
         }
-        SecondCoursePlanGroupEntity secondCoursePlanGroupEntity = secondCoursePlanGroupService.getById(id);
+
+        redisUtil.del(Global.KILL_SECOND_COURSE + "all:" + planGroupId);
+        SecondCoursePlanGroupEntity secondCoursePlanGroupEntity = secondCoursePlanGroupService.getById(planGroupId);
         return R.ok().put("data", secondCoursePlanGroupEntity);
 
     }

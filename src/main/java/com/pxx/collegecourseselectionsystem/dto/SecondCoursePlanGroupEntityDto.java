@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 /**
@@ -36,6 +37,7 @@ public class SecondCoursePlanGroupEntityDto extends SecondCoursePlanGroupEntity 
     /**
      * 影响部门
      */
+    @NotEmpty
     @TableField(exist = false)
     @ApiModelProperty("影响部门的id集合")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)

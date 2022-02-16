@@ -37,6 +37,7 @@
         <result column="start_time" jdbcType="TIMESTAMP" property="startTime"/>
         <result column="end_time" jdbcType="TIMESTAMP" property="endTime"/>
         <result column="state" jdbcType="INTEGER" property="state"/>
+        <result column="sum" property="sum"/>
         <collection property="secondCoursePlanGroupAndUnitDto"
                     ofType="com.pxx.collegecourseselectionsystem.dto.SecondCoursePlanGroupAndUnitDto">
             <id column="scpgau_unit_id" property="unitId"/>
@@ -44,6 +45,7 @@
             <result column="sc_id" property="scpgId"/>
             <result column="scpgau_id" property="id"/>
         </collection>
+
     </resultMap>
     <select id="findAllGroupPlan" resultMap="findAllGroupPlanMap">
         select scpg.id,
@@ -94,7 +96,7 @@
                     ofType="com.pxx.collegecourseselectionsystem.dto.SecondCoursePlanGroupAndUnitDto">
             <id column="scpgau_unit_id" property="unitId"/>
             <result column="unit_name" property="unitName"/>
-            <result column="sc_id" property="scpgId"/>
+            <result column="plan_group_id" property="scpgId"/>
             <result column="scpgau_id" property="id"/>
         </collection>
     </resultMap>
@@ -131,9 +133,8 @@
                      left join sys_unit s on s.unit_id = scpgau.unit_id
 
 
-                where su.type = 2
-        <!--          and sc.state = 1-->
-        and scpgau.scpg_id = #{id,jdbcType=INTEGER}
+                where
+         scpgau.scpg_id = #{id,jdbcType=INTEGER}
         and scpg.id = #{id,jdbcType=INTEGER}
     </select>
 
