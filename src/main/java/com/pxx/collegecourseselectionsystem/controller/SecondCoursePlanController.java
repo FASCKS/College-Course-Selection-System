@@ -85,9 +85,6 @@ public class SecondCoursePlanController {
         }
         return R.ok().put("data", secondCourseDtos);
     }
-    /**
-     * 学生抢课入口
-     */
 
     /**
      * 发布抢课内容

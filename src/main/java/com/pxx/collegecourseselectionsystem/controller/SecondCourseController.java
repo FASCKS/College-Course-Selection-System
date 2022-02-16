@@ -195,11 +195,24 @@ public class SecondCourseController {
         SimpleClassBook simpleClassBook = this.getSimpleClassBook(up_time, week, courseId);
 
         //存放临时课表
-        redisUtil.lSet(Global.KILL_SECOND_COURSE + "class:temp_schedule:" + userId, simpleClassBook,(endTime - startTime) / 1000 + 60 * 5);
+        redisUtil.lSet(Global.KILL_SECOND_COURSE + "class:temp_schedule:" + userId, simpleClassBook, (endTime - startTime) / 1000 + 60 * 5);
 
         return R.ok().put("data", true);
     }
 
+    /**
+     * 学生抢课入口 获取学生抢课范围组
+     */
+    @ApiOperation("学生抢课入口,获取学生抢课组")
+    @GetMapping("/entrance")
+    public R entrance() {
+        Long userId = SpringSecurityUtil.getUserId();
+        Integer groupId = redisUtil.get(Global.KILL_SECOND_COURSE + "group:userId_" + userId);
+        if (groupId == null) {
+            return R.error("当前没有抢课计划");
+        }
+        return R.ok().put("data", groupId);
+    }
 
     /**
      * 学生当前课表
