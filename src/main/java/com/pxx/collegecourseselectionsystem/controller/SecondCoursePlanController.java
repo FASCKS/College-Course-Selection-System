@@ -64,7 +64,7 @@ public class SecondCoursePlanController {
     public static final Long RABBITMQ_EXPIRED = MINUTE * 5;
 
     @ApiImplicitParam(name = "id", value = "分组id")
-    @ApiOperation("抢课计划列表")
+    @ApiOperation("管理员抢课计划列表")
     @GetMapping("/plan/list/{id}")
     public R list(@RequestParam(required = false) CourseEnum courseEnum, @PathVariable("id") @NotNull Integer planGroupId) {
 
@@ -213,7 +213,8 @@ public class SecondCoursePlanController {
 
         QueryWrapper<SecondCourse> sq = new QueryWrapper<>();
         sq.eq(SecondCourseDto.COL_UP_TIME, secondCourseDto.getUpTime())
-                .eq(SecondCourseDto.COL_WEEK, secondCourseDto.getWeek());
+                .eq(SecondCourseDto.COL_WEEK, secondCourseDto.getWeek())
+                .eq("plan_group_id",secondCourseDto.getPlanGroupId());
         BaseMapper<SecondCourse> baseMapper = secondCourseService.getBaseMapper();
         SecondCourse secondCourse = baseMapper.selectOne(sq);
 

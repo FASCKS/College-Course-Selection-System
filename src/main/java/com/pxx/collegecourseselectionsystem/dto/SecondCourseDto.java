@@ -1,7 +1,6 @@
 package com.pxx.collegecourseselectionsystem.dto;
 
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.pxx.collegecourseselectionsystem.entity.SecondCourse;
 import com.pxx.collegecourseselectionsystem.entity.enums.CourseEnum;
 import io.swagger.annotations.ApiModelProperty;
@@ -22,14 +21,12 @@ public class SecondCourseDto extends SecondCourse {
     /**
      * 老师名称
      */
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @TableField(exist = false)
     @ApiModelProperty("老师名字")
     private String teacherName;
     /**
      * 课程名字
      */
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @TableField(exist = false)
     @ApiModelProperty("课程名称")
     private String courseName;
@@ -40,16 +37,15 @@ public class SecondCourseDto extends SecondCourse {
     @TableField(exist = false)
     @ApiModelProperty("课程类型")
     private CourseEnum type;
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @TableField(exist = false)
     @ApiModelProperty("第一节上课时间")
     private Integer upTimeNumber;
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @TableField(exist = false)
     @ApiModelProperty("第二节上课时间")
     private Integer upTimeTwoNumber;
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @TableField(exist = false)
     @ApiModelProperty("星期几")
     private Integer weekNumber;
+    @TableField(exist = false)
+    private Integer totalSum;
 }

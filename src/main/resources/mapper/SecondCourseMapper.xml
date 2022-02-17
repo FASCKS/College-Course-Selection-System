@@ -20,17 +20,22 @@
 
     <select id="findAllSecondCourse" resultType="com.pxx.collegecourseselectionsystem.dto.SecondCourseDto">
         SELECT cs.id,
-               co.`name` as course_name,
-               co.id     as course_id,
-               su.name   as teacher_name,
-               co.type   as type,
+               co.`name`      as course_name,
+               co.id          as course_id,
+               su.name        as teacher_name,
+               co.type        as type,
                cs.up_time,
+               su.user_id     as teacher,
+               cs.up_time     as up_time_number,
+               cs.up_time_two as up_time_two_number,
+               cs.week        as week_number,
                cs.week,
                scpg.start_time,
                scpg.end_time,
                cs.course_sum,
                cs.plan_group_id,
-               cs.up_time_two
+               cs.up_time_two,
+        cs.course_sum as total_sum
 
         FROM second_course cs
                      LEFT JOIN course co ON co.id = cs.course_id

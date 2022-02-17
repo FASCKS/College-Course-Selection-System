@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.pxx.collegecourseselectionsystem.common.validator.group.Insert;
 import com.pxx.collegecourseselectionsystem.common.validator.group.Update;
 import com.pxx.collegecourseselectionsystem.entity.enums.SecondCoursePlanGroupEnum;
@@ -81,7 +80,6 @@ public class SecondCoursePlanGroupEntity {
     /**
      * 计划状态  0 未开始  1  进行中  2 已结束
      */
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @TableField(value = "sum")
     @ApiModelProperty(value="第几次选课")
     private Integer sum;

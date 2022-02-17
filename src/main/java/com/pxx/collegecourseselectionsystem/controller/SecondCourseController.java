@@ -1,12 +1,15 @@
 package com.pxx.collegecourseselectionsystem.controller;
 
 import cn.hutool.core.convert.Convert;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.json.JSONObject;
 import com.pxx.collegecourseselectionsystem.common.utils.R;
 import com.pxx.collegecourseselectionsystem.common.utils.RedisUtil;
 import com.pxx.collegecourseselectionsystem.common.utils.SpringSecurityUtil;
 import com.pxx.collegecourseselectionsystem.dto.SecondCourseDto;
 import com.pxx.collegecourseselectionsystem.entity.SecondCoursePlanGroupEntity;
+import com.pxx.collegecourseselectionsystem.entity.enums.CourseEnum;
+import com.pxx.collegecourseselectionsystem.service.SecondCoursePlanGroupService;
 import com.pxx.collegecourseselectionsystem.service.SecondCourseService;
 import com.pxx.collegecourseselectionsystem.util.Global;
 import com.pxx.collegecourseselectionsystem.vo.course.SimpleClassBook;
@@ -19,15 +22,13 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -41,7 +42,8 @@ import java.util.List;
 public class SecondCourseController {
     @Autowired
     private SecondCourseService secondCourseService;
-
+    @Autowired
+    private SecondCoursePlanGroupService secondCoursePlanGroupService;
     @Autowired
     private RedisUtil redisUtil;
     @Autowired
@@ -200,6 +202,47 @@ public class SecondCourseController {
         return R.ok().put("data", true);
     }
 
+    @ApiImplicitParam(name = "id", value = "分组id")
+    @ApiOperation("学生抢课计划列表")
+    @GetMapping("/plan/list/{id}")
+    public R list(@RequestParam(required = false) CourseEnum courseEnum, @PathVariable("id") @NotNull Integer planGroupId) {
+
+        boolean hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE + "all:" + planGroupId);
+        if (!hasKey) {
+            return R.ok("未发布抢课计划");
+        }
+        Long userId = SpringSecurityUtil.getUserId();
+        Integer userGroupId = redisUtil.get(Global.KILL_SECOND_COURSE + "group:userId_" + userId);
+        if (userGroupId==null || !userGroupId.equals(planGroupId)){
+            return R.error("非法访问");
+        }
+
+        List<SecondCourseDto> secondCourseDtos = redisUtil.get(Global.KILL_SECOND_COURSE + "all:" + planGroupId);
+        Iterator<SecondCourseDto> iterator = secondCourseDtos.iterator();
+
+        while (iterator.hasNext()) {
+            SecondCourseDto secondCourseDto = iterator.next();
+            secondCourseDto.setCourseSum(redisUtil.get( Global.KILL_SECOND_COURSE + "sum:" + secondCourseDto.getId()));
+            if (courseEnum != null) {
+                String describe = secondCourseDto.getType().getDescribe();
+                String describe1 = courseEnum.getDescribe();
+                if (!describe.contains(describe1)) {
+                    iterator.remove();
+                }
+            }
+        }
+        return R.ok().put("data", secondCourseDtos);
+    }
+    /**
+     * 详情
+     */
+    @ApiImplicitParam(name = "id", value = "分组id")
+    @ApiOperation("学生获取组信息")
+    @GetMapping("/info")
+    public R info(@RequestParam("id") @NotNull Integer id) {
+        SecondCoursePlanGroupEntity secondCoursePlanGroup = redisUtil.get(Global.KILL_SECOND_COURSE + "plan_group:" + id);
+        return R.ok().put("data", secondCoursePlanGroup);
+    }
     /**
      * 学生抢课入口 获取学生抢课范围组
      */
@@ -211,7 +254,10 @@ public class SecondCourseController {
         if (groupId == null) {
             return R.error("当前没有抢课计划");
         }
-        return R.ok().put("data", groupId);
+        JSONObject jsonObject=new JSONObject();
+        jsonObject.putOpt("date", DateUtil.date());
+        jsonObject.putOpt("group",groupId);
+        return R.ok().put("data", jsonObject);
     }
 
     /**
