@@ -119,7 +119,7 @@ public class SecondCoursePlanGroupServiceImpl extends ServiceImpl<SecondCoursePl
 
 
         UpdateWrapper<SecondCoursePlanGroupEntity> secondCoursePlanGroupEntityDtoUpdateWrapper = new UpdateWrapper<>();
-        secondCoursePlanGroupEntityDtoUpdateWrapper.eq("state", 0);
+        secondCoursePlanGroupEntityDtoUpdateWrapper.eq("state", 0).eq(SecondCoursePlanGroupEntity.COL_ID,secondCoursePlanGroupEntity.getId());
         int update = secondCoursePlanMapper.update(secondCoursePlanGroupEntity, secondCoursePlanGroupEntityDtoUpdateWrapper);
         return update > 0;
     }

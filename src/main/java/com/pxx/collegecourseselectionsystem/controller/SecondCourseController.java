@@ -126,7 +126,7 @@ public class SecondCourseController {
             Integer up_time = secondCourseDto.getUpTime().getCode();
             Integer week = secondCourseDto.getWeek().getCode();
             Integer courseId = secondCourseDto.getCourseId();
-            SimpleClassBook simpleClassBook = this.getSimpleClassBook(up_time, week, courseId);
+            SimpleClassBook simpleClassBook = this.getSimpleClassBook(up_time, week, courseId,secondCourseDto);
             long lRemove = redisUtil.lRemove(Global.KILL_SECOND_COURSE + "class:temp_schedule:" + userId, 0, simpleClassBook);
 
             if (lRemove == 1) {
@@ -194,10 +194,12 @@ public class SecondCourseController {
         Integer up_time = secondCourseDto.getUpTime().getCode();
         Integer week = secondCourseDto.getWeek().getCode();
         Integer courseId = secondCourseDto.getCourseId();
-        SimpleClassBook simpleClassBook = this.getSimpleClassBook(up_time, week, courseId);
+
+        SimpleClassBook simpleClassBook = this.getSimpleClassBook(up_time, week, courseId,secondCourseDto);
 
         //存放临时课表
         redisUtil.lSet(Global.KILL_SECOND_COURSE + "class:temp_schedule:" + userId, simpleClassBook, (endTime - startTime) / 1000 + 60 * 5);
+
 
         return R.ok().put("data", true);
     }
@@ -213,7 +215,7 @@ public class SecondCourseController {
         }
         Long userId = SpringSecurityUtil.getUserId();
         Integer userGroupId = redisUtil.get(Global.KILL_SECOND_COURSE + "group:userId_" + userId);
-        if (userGroupId==null || !userGroupId.equals(planGroupId)){
+        if (userGroupId == null || !userGroupId.equals(planGroupId)) {
             return R.error("非法访问");
         }
 
@@ -222,7 +224,7 @@ public class SecondCourseController {
 
         while (iterator.hasNext()) {
             SecondCourseDto secondCourseDto = iterator.next();
-            secondCourseDto.setCourseSum(redisUtil.get( Global.KILL_SECOND_COURSE + "sum:" + secondCourseDto.getId()));
+            secondCourseDto.setCourseSum(redisUtil.get(Global.KILL_SECOND_COURSE + "sum:" + secondCourseDto.getId()));
             if (courseEnum != null) {
                 String describe = secondCourseDto.getType().getDescribe();
                 String describe1 = courseEnum.getDescribe();
@@ -233,6 +235,7 @@ public class SecondCourseController {
         }
         return R.ok().put("data", secondCourseDtos);
     }
+
     /**
      * 详情
      */
@@ -243,6 +246,7 @@ public class SecondCourseController {
         SecondCoursePlanGroupEntity secondCoursePlanGroup = redisUtil.get(Global.KILL_SECOND_COURSE + "plan_group:" + id);
         return R.ok().put("data", secondCoursePlanGroup);
     }
+
     /**
      * 学生抢课入口 获取学生抢课范围组
      */
@@ -254,9 +258,9 @@ public class SecondCourseController {
         if (groupId == null) {
             return R.error("当前没有抢课计划");
         }
-        JSONObject jsonObject=new JSONObject();
+        JSONObject jsonObject = new JSONObject();
         jsonObject.putOpt("date", DateUtil.date());
-        jsonObject.putOpt("group",groupId);
+        jsonObject.putOpt("group", groupId);
         return R.ok().put("data", jsonObject);
     }
 
@@ -291,17 +295,31 @@ public class SecondCourseController {
     /**
      * 获取SimpleClassBook
      */
-    private SimpleClassBook getSimpleClassBook(Integer up_time, Integer week, Integer courseId) {
-        SimpleClassBook simpleClassBook = new SimpleClassBook();
+    private SimpleClassBook getSimpleClassBook(Integer up_time, Integer week, Integer courseId,SecondCourseDto secondCourseDto) {
 
+
+        SimpleClassBook simpleClassBook = new SimpleClassBook();
+        List<SimpleClassScheduleTime> simpleClassScheduleTimeList = new ArrayList<>();
         simpleClassBook.setCourseId(courseId);
 
         SimpleClassScheduleTime simpleClassScheduleTime = new SimpleClassScheduleTime();
         simpleClassScheduleTime.setCourseId(courseId);
         simpleClassScheduleTime.setUpTime(up_time);
         simpleClassScheduleTime.setWeek(week);
+        //如果是同一节课程
+        if (courseId.equals(secondCourseDto.getCourseId())) {
+            int code = secondCourseDto.getUpTimeTwo().getCode();
+            //表示有第二节课程
+            if (code != 0) {
+                SimpleClassScheduleTime simpleClassScheduleTimeTwo = new SimpleClassScheduleTime();
+                simpleClassScheduleTimeTwo.setCourseId(courseId);
+                simpleClassScheduleTimeTwo.setUpTime(code);
+                simpleClassScheduleTimeTwo.setWeek(week);
+                simpleClassScheduleTimeList.add(simpleClassScheduleTimeTwo);
+            }
+        }
 
-        List<SimpleClassScheduleTime> simpleClassScheduleTimeList = new ArrayList<>();
+
         simpleClassScheduleTimeList.add(simpleClassScheduleTime);
 
         simpleClassBook.setClassScheduleTimes(simpleClassScheduleTimeList);

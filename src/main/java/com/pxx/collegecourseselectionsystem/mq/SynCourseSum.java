@@ -57,14 +57,6 @@ public class SynCourseSum {
 
         orderCourseService.deleteAll();
 
-        secondCourse = secondCourseService.getById(secondCourseId);
-        //删除redis选课相关缓存
-        redisUtil.del(
-                Global.KILL_SECOND_COURSE + "all:" + secondCourse.getPlanGroupId(),
-                Global.KILL_SECOND_COURSE + "sum:" + secondCourse.getId(),
-                Global.KILL_SECOND_COURSE + "entity:" + secondCourse.getId() + "_" + secondCourse.getCourseId(),
-                Global.KILL_SECOND_COURSE + "plan_group:" + secondCourse.getPlanGroupId());
-        //删除学生临时课表
 
 
         log.info("redis库存同步mysql---->{},同步课程表----->{}", updateBatchById, saveBatch);
