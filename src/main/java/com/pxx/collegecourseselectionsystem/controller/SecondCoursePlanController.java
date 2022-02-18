@@ -100,13 +100,13 @@ public class SecondCoursePlanController {
         {
             boolean hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE + "all:" + planGroupId);
             if (hasKey) {
-                return R.ok("抢课计划已经发布.");
+                return R.error("抢课计划已经发布.");
             }
         }
         //缓存课程
         List<SecondCourseDto> allSecondCourse = secondCourseService.findAllSecondCourse(planGroupId);
         if (allSecondCourse.isEmpty()) {
-            return R.ok("没有需要发布的课程计划");
+            return R.error("没有需要发布的课程计划");
         }
         //缓存课程计划
         SecondCoursePlanGroupEntity secondCoursePlanGroupEntity = secondCoursePlanGroupService.getById(planGroupId);
