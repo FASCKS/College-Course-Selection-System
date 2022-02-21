@@ -60,7 +60,7 @@ public class SysMenuEntity {
     /**
      * 类型   0：目录   1：菜单   2：按钮
      */
-    @ApiModelProperty("菜单类型")
+    @ApiModelProperty("菜单类型   0：目录   1：菜单   2：按钮")
     @NotNull
     @TableField(value = "`type`")
     private Integer type;
@@ -82,7 +82,7 @@ public class SysMenuEntity {
     private Integer orderNum;
 
 
-    @ApiModelProperty("状态")
+    @ApiModelProperty("状态   1   开启  0  关闭")
     @NotNull
     @TableField(value = "`status`")
     private Integer status;

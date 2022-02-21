@@ -1,6 +1,7 @@
 package com.pxx.collegecourseselectionsystem.dto;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.pxx.collegecourseselectionsystem.entity.SecondCourse;
 import com.pxx.collegecourseselectionsystem.entity.enums.CourseEnum;
 import io.swagger.annotations.ApiModelProperty;
@@ -48,4 +49,10 @@ public class SecondCourseDto extends SecondCourse {
     private Integer weekNumber;
     @TableField(exist = false)
     private Integer totalSum;
+    @ApiModelProperty("学生id")
+    @JsonProperty(access = JsonProperty.Access.READ_WRITE)
+    private Long userId;
+    @ApiModelProperty("单位id")
+    @JsonProperty(access = JsonProperty.Access.READ_WRITE)
+    private Integer unitId;
 }

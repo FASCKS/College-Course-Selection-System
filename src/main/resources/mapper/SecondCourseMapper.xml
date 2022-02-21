@@ -43,7 +43,7 @@
                      left join second_course_plan_group scpg on cs.plan_group_id = scpg.id
 
         where su.type = 2
-          and cs.state = 1
+<!--          and cs.state = 1-->
           and scpg.id = #{planGroupId,jdbcType=INTEGER}
     </select>
 

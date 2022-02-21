@@ -20,6 +20,6 @@ public class SimpleClassBook {
     @ApiModelProperty("简单课程id")
     private Integer courseId;
     private List<SimpleClassScheduleTime> classScheduleTimes;
-    @ApiModelProperty("课程状态，是临时课程还是学生已有课程    1 临时课程 0 已有课程 当这个值不为空时，是临时课程")
+    @ApiModelProperty("课程状态，是临时课程还是学生已有课程    1 临时课程 0 已有课程")
     private int state;
 }

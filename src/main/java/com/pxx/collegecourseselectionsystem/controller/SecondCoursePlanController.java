@@ -61,7 +61,7 @@ public class SecondCoursePlanController {
     private static final Long HOUR = 60L * 60L * MINUTE;
     private static final Long DAY = 24L * HOUR;
     public static final Long REDIS_EXPIRED = 60L * 10L;
-    public static final Long RABBITMQ_EXPIRED = MINUTE * 5*1000;
+    public static final Long RABBITMQ_EXPIRED = MINUTE * 5 * 1000;
 
     @ApiImplicitParam(name = "id", value = "分组id")
     @ApiOperation("管理员抢课计划列表")
@@ -117,15 +117,15 @@ public class SecondCoursePlanController {
         for (SecondCourseDto secondCours : allSecondCourse) {
             //缓存库存
             redisUtil.set(Global.KILL_SECOND_COURSE + "sum:" + secondCours.getId(), secondCours.getCourseSum(), (endTime - stateTime) / 1000 + REDIS_EXPIRED);
-            //给延迟队列发送消息
-            amqpTemplate.convertAndSend(QueueEnum.QUEUE_ORDER_PLUGIN_CANCEL.getExchange(), QueueEnum.QUEUE_ORDER_PLUGIN_CANCEL.getRouteKey(),
-                    secondCours.getId(),
-                    message -> {
-                        message.getMessageProperties().setHeader("x-delay", (endTime - stateTime) + RABBITMQ_EXPIRED);
-                        return message;
-                    });
-        }
 
+        }
+        //给延迟队列发送消息
+        amqpTemplate.convertAndSend(QueueEnum.QUEUE_ORDER_PLUGIN_CANCEL.getExchange(), QueueEnum.QUEUE_ORDER_PLUGIN_CANCEL.getRouteKey(),
+                planGroupId,
+                message -> {
+                    message.getMessageProperties().setHeader("x-delay", (endTime - stateTime) + RABBITMQ_EXPIRED);
+                    return message;
+                });
         //添加全部
         redisUtil.set(Global.KILL_SECOND_COURSE + "all:" + planGroupId, allSecondCourse, (endTime - stateTime) / 1000 + REDIS_EXPIRED);
         //添加单个
@@ -162,7 +162,7 @@ public class SecondCoursePlanController {
         secondCourseDto.setState(0);
         //判断是否冲突
         boolean courseCheck = courseCheck(secondCourseDto);
-        if (!courseCheck){
+        if (!courseCheck) {
             return R.error("上课时间冲突");
         }
         boolean insert = secondCourseService.insertOne(secondCourseDto);
@@ -199,7 +199,7 @@ public class SecondCoursePlanController {
         }
         //判断是否冲突
         boolean courseCheck = courseCheck(secondCourseDto);
-        if (!courseCheck){
+        if (!courseCheck) {
             return R.error("上课时间冲突");
         }
         boolean update = secondCourseService.updateById(secondCourseDto);
@@ -214,7 +214,7 @@ public class SecondCoursePlanController {
         QueryWrapper<SecondCourse> sq = new QueryWrapper<>();
         sq.eq(SecondCourseDto.COL_UP_TIME, secondCourseDto.getUpTime())
                 .eq(SecondCourseDto.COL_WEEK, secondCourseDto.getWeek())
-                .eq("plan_group_id",secondCourseDto.getPlanGroupId());
+                .eq("plan_group_id", secondCourseDto.getPlanGroupId());
         BaseMapper<SecondCourse> baseMapper = secondCourseService.getBaseMapper();
         SecondCourse secondCourse = baseMapper.selectOne(sq);
 

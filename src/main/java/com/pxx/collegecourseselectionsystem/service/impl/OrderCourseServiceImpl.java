@@ -1,11 +1,14 @@
 package com.pxx.collegecourseselectionsystem.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.pxx.collegecourseselectionsystem.dto.SecondCourseDto;
 import com.pxx.collegecourseselectionsystem.entity.OrderCourse;
 import com.pxx.collegecourseselectionsystem.mapper.OrderCourseMapper;
 import com.pxx.collegecourseselectionsystem.service.OrderCourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @author Galen
@@ -23,5 +26,16 @@ public class OrderCourseServiceImpl extends ServiceImpl<OrderCourseMapper, Order
     @Override
     public void deleteAll() {
         orderCourseMapper.deleteAll();
+    }
+
+    /**
+     * 通过分组获取所有抢课订单
+     *
+     * @param planGroupId
+     * @return
+     */
+    @Override
+    public List<SecondCourseDto> findAllByPlanGroupId(Integer planGroupId) {
+        return orderCourseMapper.findAllByPlanGroupId(planGroupId);
     }
 }

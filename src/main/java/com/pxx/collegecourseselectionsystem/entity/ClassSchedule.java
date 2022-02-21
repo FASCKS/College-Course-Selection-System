@@ -63,7 +63,7 @@ public class ClassSchedule {
     private Date createTime;
     @TableField(value = "teacher")
     @ApiModelProperty("老师id")
-    private Integer teacher;
+    private Long teacher;
 
     public static final String COL_ID = "id";
 

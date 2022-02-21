@@ -280,6 +280,9 @@ public class SecondCourseController {
         List<Object> classBookList = redisUtil.lGet(Global.KILL_SECOND_COURSE + "class:temp_schedule:" + userId, 0, -1);
         //学生当前课程表
         SimpleClassScheduleVo simpleClassScheduleVo = redisUtil.get(Global.KILL_SECOND_COURSE + "class:schedule:" + userId);
+        if (simpleClassScheduleVo==null){
+            return R.error("无临时课表");
+        }
         List<SimpleClassBook> classBook = simpleClassScheduleVo.getClassBook();
         if (classBook != null) {
             for (Object objectClassBook : classBookList) {
@@ -299,6 +302,7 @@ public class SecondCourseController {
 
 
         SimpleClassBook simpleClassBook = new SimpleClassBook();
+        simpleClassBook.setState(1);//标记为临时课程
         List<SimpleClassScheduleTime> simpleClassScheduleTimeList = new ArrayList<>();
         simpleClassBook.setCourseId(courseId);
 
