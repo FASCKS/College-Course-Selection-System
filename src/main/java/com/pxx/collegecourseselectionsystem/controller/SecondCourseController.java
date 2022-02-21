@@ -9,7 +9,6 @@ import com.pxx.collegecourseselectionsystem.common.utils.SpringSecurityUtil;
 import com.pxx.collegecourseselectionsystem.dto.SecondCourseDto;
 import com.pxx.collegecourseselectionsystem.entity.SecondCoursePlanGroupEntity;
 import com.pxx.collegecourseselectionsystem.entity.enums.CourseEnum;
-import com.pxx.collegecourseselectionsystem.service.SecondCoursePlanGroupService;
 import com.pxx.collegecourseselectionsystem.service.SecondCourseService;
 import com.pxx.collegecourseselectionsystem.util.Global;
 import com.pxx.collegecourseselectionsystem.vo.course.SimpleClassBook;
@@ -42,8 +41,7 @@ import java.util.List;
 public class SecondCourseController {
     @Autowired
     private SecondCourseService secondCourseService;
-    @Autowired
-    private SecondCoursePlanGroupService secondCoursePlanGroupService;
+
     @Autowired
     private RedisUtil redisUtil;
     @Autowired

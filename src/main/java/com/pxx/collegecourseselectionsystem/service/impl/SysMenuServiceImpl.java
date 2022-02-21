@@ -47,8 +47,24 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenuEntity
      * @return
      */
     @Override
-    public List<Tree<Integer>> findMenuByType(Integer ...type) {
+    public List<Tree<Integer>> findMenuByType(Integer... type) {
         List<SysMenuEntity> sysMenuEntities = sysMenuMapper.findMenuByType(type);
+        return createMenu(sysMenuEntities);
+    }
+
+    /**
+     * 返回菜单和权限
+     *
+     * @param type
+     * @return
+     */
+    @Override
+    public List<Tree<Integer>> findAllMenuByType(Integer... type) {
+        List<SysMenuEntity> sysMenuEntities = sysMenuMapper.findAllMenuByType(type);
+        return createMenu(sysMenuEntities);
+    }
+
+    private List<Tree<Integer>> createMenu(List<SysMenuEntity> sysMenuEntities) {
         List<MenuTreeNode<Integer>> nodeList = CollUtil.newArrayList();
         for (SysMenuEntity sysMenuEntity : sysMenuEntities) {
             nodeList.add(new MenuTreeNode<>(
@@ -67,9 +83,10 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenuEntity
                     tree.setWeight(treeNode.getWeight());
                     tree.setName(treeNode.getName());
                     tree.putExtra("url", treeNode.getUrl());
-                    tree.putExtra("status",treeNode.getStatus());
-                    tree.putExtra("type",treeNode.getType());}
-                );
+                    tree.putExtra("status", treeNode.getStatus());
+                    tree.putExtra("type", treeNode.getType());
+                }
+        );
         return buildTreeList;
     }
 

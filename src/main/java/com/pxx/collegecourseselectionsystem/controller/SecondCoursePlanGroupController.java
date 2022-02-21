@@ -8,7 +8,6 @@ import com.pxx.collegecourseselectionsystem.common.validator.group.Insert;
 import com.pxx.collegecourseselectionsystem.common.validator.group.Update;
 import com.pxx.collegecourseselectionsystem.dto.SecondCourseDto;
 import com.pxx.collegecourseselectionsystem.dto.SecondCoursePlanGroupEntityDto;
-import com.pxx.collegecourseselectionsystem.entity.SecondCoursePlanGroupEntity;
 import com.pxx.collegecourseselectionsystem.entity.enums.SecondCoursePlanGroupEnum;
 import com.pxx.collegecourseselectionsystem.service.SecondCoursePlanGroupService;
 import com.pxx.collegecourseselectionsystem.util.Global;
@@ -127,8 +126,8 @@ public class SecondCoursePlanGroupController {
             return R.ok("计划正在进行中,无法删除。");
         }
 
-        SecondCoursePlanGroupEntity secondCoursePlanGroupEntity = secondCoursePlanGroupService.getById(planGroupId);
-        return R.ok().put("data", secondCoursePlanGroupEntity);
+        boolean removeById = secondCoursePlanGroupService.removeById(planGroupId);
+        return R.ok().put("data",removeById);
 
     }
 

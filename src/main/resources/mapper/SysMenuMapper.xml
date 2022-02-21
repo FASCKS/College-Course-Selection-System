@@ -234,4 +234,20 @@
         )
                 and status = 1
     </select>
+
+    <select id="findAllMenuByType" resultMap="BaseResultMap">
+        select menu_id,
+        parent_id,
+        `name`,
+        url,
+        perms,
+        status,
+        type
+        from sys_menu where type in (
+        <foreach collection="type" item="item" index="index" separator=",">
+            #{item}
+        </foreach>
+        )
+
+    </select>
 </mapper>

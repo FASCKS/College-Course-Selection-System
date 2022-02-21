@@ -24,5 +24,12 @@ public interface SysMenuService extends IService<SysMenuEntity>{
      */
     List<Tree<Integer>> findMenuByType(Integer ...type);
 
+    /**
+     * 返回菜单和权限
+     * @param type
+     * @return
+     */
+    List<Tree<Integer>> findAllMenuByType(Integer ...type);
+
     List<SysMenuDto> createTree(List<SysMenuDto> menuEntityList, int pid);
 }

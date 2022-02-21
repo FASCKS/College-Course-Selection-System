@@ -44,8 +44,9 @@ public class SysMenuController {
      */
     @ApiOperation("菜单新增")
     @PostMapping("/insert")
-    public R insert(@RequestBody  SysMenuEntity sysMenuEntity) {
+    public R insert(@RequestBody @Validated SysMenuEntity sysMenuEntity) {
         boolean save = sysMenuService.save(sysMenuEntity);
+
         return R.ok().put("data", save);
     }
 
@@ -54,7 +55,7 @@ public class SysMenuController {
      */
     @ApiOperation("菜单编辑")
     @PostMapping("/update")
-    public R update(@RequestBody  SysMenuEntity sysMenuEntity) {
+    public R update(@RequestBody @Validated SysMenuEntity sysMenuEntity) {
         boolean update = sysMenuService.updateById(sysMenuEntity);
         return R.ok().put("data", update);
     }

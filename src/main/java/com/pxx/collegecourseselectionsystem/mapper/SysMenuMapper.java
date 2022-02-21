@@ -23,5 +23,13 @@ public interface SysMenuMapper extends BaseMapper<SysMenuEntity> {
      * @param type 1
      * @return
      */
-    List<SysMenuEntity> findMenuByType(@Param("type") Integer [] type);
+    List<SysMenuEntity> findMenuByType(@Param("type") Integer[] type);
+
+    /**
+     * 返回所有菜单 和权限
+     *
+     * @param type 1
+     * @return
+     */
+    List<SysMenuEntity> findAllMenuByType(@Param("type") Integer[] type);
 }
