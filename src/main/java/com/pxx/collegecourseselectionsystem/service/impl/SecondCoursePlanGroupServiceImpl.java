@@ -143,7 +143,7 @@ public class SecondCoursePlanGroupServiceImpl extends ServiceImpl<SecondCoursePl
      * @return
      */
     @Override
-    public SecondCoursePlanGroupEntity findOneAndUnitById(Integer id) {
+    public SecondCoursePlanGroupEntityDto findOneAndUnitById(Integer id) {
         return baseMapper.findOneAndUnitById(id);
     }
 

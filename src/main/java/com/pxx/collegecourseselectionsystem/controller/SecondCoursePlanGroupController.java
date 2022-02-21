@@ -7,10 +7,8 @@ import com.pxx.collegecourseselectionsystem.common.utils.R;
 import com.pxx.collegecourseselectionsystem.common.utils.RedisUtil;
 import com.pxx.collegecourseselectionsystem.common.validator.group.Insert;
 import com.pxx.collegecourseselectionsystem.common.validator.group.Update;
-import com.pxx.collegecourseselectionsystem.dto.SecondCourseDto;
 import com.pxx.collegecourseselectionsystem.dto.SecondCoursePlanGroupEntityDto;
 import com.pxx.collegecourseselectionsystem.entity.SecondCoursePlanGroupEntity;
-import com.pxx.collegecourseselectionsystem.entity.enums.SecondCoursePlanGroupEnum;
 import com.pxx.collegecourseselectionsystem.service.SecondCoursePlanGroupService;
 import com.pxx.collegecourseselectionsystem.util.Global;
 import io.swagger.annotations.Api;
@@ -22,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
 import java.util.Date;
-import java.util.List;
 
 /**
  * @author Gpxx
@@ -98,20 +95,10 @@ public class SecondCoursePlanGroupController {
     public R info(@RequestParam("id") @NotNull Integer id) {
         SecondCoursePlanGroupEntityDto secondCoursePlanGroupEntity = secondCoursePlanGroupService.findOneById(id);
         if (secondCoursePlanGroupEntity == null) {
-            SecondCoursePlanGroupEntity secondCoursePlanGroup = secondCoursePlanGroupService.findOneAndUnitById(id);
-            return R.ok().put("data", secondCoursePlanGroup);
+             secondCoursePlanGroupEntity = secondCoursePlanGroupService.findOneAndUnitById(id);
+            return R.ok().put("data", secondCoursePlanGroupEntity);
         }
-        List<SecondCourseDto> secondCourseDtoList = secondCoursePlanGroupEntity.getSecondCourseDtoList();
-        //同步库存
-        //如果是正在进行中的
-        if (secondCoursePlanGroupEntity.getState() == SecondCoursePlanGroupEnum.STARTED) {
-            for (SecondCourseDto secondCourseDto : secondCourseDtoList) {
-                Integer courseSum = (Integer) redisUtil.get(Global.KILL_SECOND_COURSE + "sum:" + secondCourseDto.getId());
-                if (courseSum != null) {
-                    secondCourseDto.setCourseSum(courseSum);
-                }
-            }
-        }
+        secondCoursePlanGroupEntity.setSecondCourseDtoList(redisUtil.get(Global.KILL_SECOND_COURSE+"all:"+id));
 
         return R.ok().put("data", secondCoursePlanGroupEntity);
     }

@@ -92,6 +92,7 @@
             <result column="up_time_number" property="upTimeNumber"/>
             <result column="up_time_two_number" property="upTimeTwoNumber"/>
             <result column="week_number" property="weekNumber"/>
+            <result column="total_sum" property="totalSum"/>
         </collection>
         <collection property="secondCoursePlanGroupAndUnitDto"
                     ofType="com.pxx.collegecourseselectionsystem.dto.SecondCoursePlanGroupAndUnitDto">
@@ -113,6 +114,7 @@
              , sc.week        as week_number
              , sc.week
              , sum
+        ,sum as total_sum
              , co.`name`      as course_name
              , su.user_id     as teacher
              , su.name        as teacher_name

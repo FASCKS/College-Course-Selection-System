@@ -50,5 +50,5 @@ public interface SecondCoursePlanGroupService extends IService<SecondCoursePlanG
          * @param id
          * @return
          */
-        SecondCoursePlanGroupEntity findOneAndUnitById(Integer id);
+        SecondCoursePlanGroupEntityDto findOneAndUnitById(Integer id);
 }
