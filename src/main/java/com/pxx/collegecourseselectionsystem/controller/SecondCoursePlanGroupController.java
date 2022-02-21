@@ -9,6 +9,7 @@ import com.pxx.collegecourseselectionsystem.common.validator.group.Update;
 import com.pxx.collegecourseselectionsystem.dto.SecondCourseDto;
 import com.pxx.collegecourseselectionsystem.dto.SecondCoursePlanGroupEntityDto;
 import com.pxx.collegecourseselectionsystem.entity.SecondCoursePlanGroupEntity;
+import com.pxx.collegecourseselectionsystem.entity.enums.SecondCoursePlanGroupEnum;
 import com.pxx.collegecourseselectionsystem.service.SecondCoursePlanGroupService;
 import com.pxx.collegecourseselectionsystem.util.Global;
 import io.swagger.annotations.Api;
@@ -56,6 +57,12 @@ public class SecondCoursePlanGroupController {
         if (hasKey) {
             return R.ok("计划正在进行中,无法编辑.");
         }
+        Integer state = secondCoursePlanGroupService.getOneByState(secondCoursePlanGroupEntity.getId());
+        if (SecondCoursePlanGroupEnum.END.getCode() == state) {
+           return R.error("计划已经结束");
+        }
+
+
         boolean update = secondCoursePlanGroupService.updateOne(secondCoursePlanGroupEntity);
         return R.ok().put("data", update);
     }
@@ -95,12 +102,12 @@ public class SecondCoursePlanGroupController {
     public R info(@RequestParam("id") @NotNull Integer id) {
         SecondCoursePlanGroupEntityDto secondCoursePlanGroupEntity = secondCoursePlanGroupService.findOneById(id);
         if (secondCoursePlanGroupEntity == null) {
-             secondCoursePlanGroupEntity = secondCoursePlanGroupService.findOneAndUnitById(id);
+            secondCoursePlanGroupEntity = secondCoursePlanGroupService.findOneAndUnitById(id);
             return R.ok().put("data", secondCoursePlanGroupEntity);
         }
         for (SecondCourseDto secondCourseDto : secondCoursePlanGroupEntity.getSecondCourseDtoList()) {
             Integer sum = redisUtil.get(Global.KILL_SECOND_COURSE + "sum:" + secondCourseDto.getId());
-            if (sum!=null){
+            if (sum != null) {
                 secondCourseDto.setCourseSum(sum);
             }
 

@@ -193,7 +193,7 @@ public class SecondCoursePlanController {
     @PostMapping("/update")
     public R update(@RequestBody @Validated(Update.class) SecondCourseDto secondCourseDto) {
         Integer planGroupId = secondCourseDto.getPlanGroupId();
-        boolean hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE + secondCourseDto.getId() + "_" + planGroupId);
+        boolean hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE +"entity:"+ secondCourseDto.getId() + "_" + planGroupId);
         if (hasKey) {
             return R.error("课程正在进行中,无法编辑.");
         }

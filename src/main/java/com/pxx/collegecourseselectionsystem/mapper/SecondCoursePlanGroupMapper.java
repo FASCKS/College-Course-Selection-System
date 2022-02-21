@@ -45,4 +45,11 @@ public interface SecondCoursePlanGroupMapper extends BaseMapper<SecondCoursePlan
     List<Integer> findUnitIdByPlanGroupId(@Param("planGroupId") Integer planGroupId);
 
     SecondCoursePlanGroupEntityDto findOneAndUnitById(@Param("planGroupId") Integer planGroupId);
+
+    /**
+     * 查询状态
+     *
+     * @param id
+     */
+    Integer getOneByState(@Param("id") Integer id);
 }

@@ -204,4 +204,8 @@
         where scpgau.scpg_id = #{planGroupId,jdbcType=INTEGER}
           and scpg.id = #{planGroupId,jdbcType=INTEGER}
     </select>
+
+    <select id="getOneByState" resultType="java.lang.Integer">
+        select <include refid="state_time"/> from second_course_plan_group scpg where id=#{id,jdbcType=INTEGER}
+    </select>
 </mapper>

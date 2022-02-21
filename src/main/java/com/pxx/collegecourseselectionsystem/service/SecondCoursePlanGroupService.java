@@ -51,4 +51,8 @@ public interface SecondCoursePlanGroupService extends IService<SecondCoursePlanG
          * @return
          */
         SecondCoursePlanGroupEntityDto findOneAndUnitById(Integer id);
+        /**
+         * 查询状态
+         */
+        Integer getOneByState(Integer id);
 }
