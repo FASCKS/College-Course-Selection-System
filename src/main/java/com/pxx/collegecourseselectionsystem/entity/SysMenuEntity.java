@@ -53,6 +53,7 @@ public class SysMenuEntity {
     /**
      * 授权(多个用逗号分隔，如：user:list,user:create)
      */
+
     @ApiModelProperty("菜单权限符")
     @TableField(value = "perms")
     private String perms;
