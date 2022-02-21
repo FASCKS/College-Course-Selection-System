@@ -10,6 +10,7 @@ import com.pxx.collegecourseselectionsystem.mapper.SysMenuMapper;
 import com.pxx.collegecourseselectionsystem.service.SysMenuService;
 import com.pxx.collegecourseselectionsystem.vo.course.MenuTreeNode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -46,6 +47,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenuEntity
      *
      * @return
      */
+    @Cacheable(value = "menu_details", key = "'_menu'", unless = "#result == null")
     @Override
     public List<Tree<Integer>> findMenuByType(Integer... type) {
         List<SysMenuEntity> sysMenuEntities = sysMenuMapper.findMenuByType(type);
@@ -74,7 +76,8 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenuEntity
                     sysMenuEntity.getOrderNum(),
                     sysMenuEntity.getUrl(),
                     sysMenuEntity.getStatus(),
-                    sysMenuEntity.getType()));
+                    sysMenuEntity.getType(),
+                    sysMenuEntity.getPerms()));
         }
         List<Tree<Integer>> buildTreeList = TreeUtil.build(nodeList, 0,
                 (treeNode, tree) -> {
@@ -85,6 +88,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenuEntity
                     tree.putExtra("url", treeNode.getUrl());
                     tree.putExtra("status", treeNode.getStatus());
                     tree.putExtra("type", treeNode.getType());
+                    tree.putExtra("perms",treeNode.getPerms());
                 }
         );
         return buildTreeList;
