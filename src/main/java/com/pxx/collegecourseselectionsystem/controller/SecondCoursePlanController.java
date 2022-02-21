@@ -62,7 +62,7 @@ public class SecondCoursePlanController {
     private static final Long HOUR = 60L * 60L * MINUTE;
     private static final Long DAY = 24L * HOUR;
     public static final Long REDIS_EXPIRED = 60L * 10L;
-    public static final Long RABBITMQ_EXPIRED = MINUTE * 5 * 1000;
+    public static final Long RABBITMQ_EXPIRED = MINUTE * 5 ;
 
     @ApiImplicitParam(name = "id", value = "分组id")
     @ApiOperation("管理员抢课计划列表")
