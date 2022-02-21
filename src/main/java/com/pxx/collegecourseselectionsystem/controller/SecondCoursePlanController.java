@@ -1,6 +1,7 @@
 package com.pxx.collegecourseselectionsystem.controller;
 
 import cn.hutool.core.convert.Convert;
+import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.pxx.collegecourseselectionsystem.common.utils.R;
@@ -119,11 +120,13 @@ public class SecondCoursePlanController {
             redisUtil.set(Global.KILL_SECOND_COURSE + "sum:" + secondCours.getId(), secondCours.getCourseSum(), (endTime - stateTime) / 1000 + REDIS_EXPIRED);
 
         }
+        System.out.println("----------"+ DateUtil.date());
+        System.out.println((endTime - stateTime) + RABBITMQ_EXPIRED);
         //给延迟队列发送消息
         amqpTemplate.convertAndSend(QueueEnum.QUEUE_ORDER_PLUGIN_CANCEL.getExchange(), QueueEnum.QUEUE_ORDER_PLUGIN_CANCEL.getRouteKey(),
                 planGroupId,
                 message -> {
-                    message.getMessageProperties().setHeader("x-delay", (endTime - stateTime) + RABBITMQ_EXPIRED);
+                    message.getMessageProperties().setHeader("x-delay",Convert.toInt( (endTime - stateTime) + RABBITMQ_EXPIRED));
                     return message;
                 });
         //添加全部
@@ -140,7 +143,7 @@ public class SecondCoursePlanController {
             amqpTemplate.convertAndSend(QueueEnum.QUEUE_ORDER_PLUGIN_CANCEL.getExchange(), "mall.order.cancel.plugin.del.redis.key",
                     simpleClassScheduleVo.getUserId(),
                     message -> {
-                        message.getMessageProperties().setHeader("x-delay", (endTime - stateTime) + RABBITMQ_EXPIRED);
+                        message.getMessageProperties().setHeader("x-delay", Convert.toInt( (endTime - stateTime) + RABBITMQ_EXPIRED));
                         return message;
                     });
         }
