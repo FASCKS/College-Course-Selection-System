@@ -164,7 +164,7 @@ public class SecondCourseController {
                                                 //判断第二节课是否存在 和 是否和其它课程冲突
                                                 upTimeTwo.equals(classScheduleTime.getUpTime()))) {
                             //如果相等
-                            return R.error("第" + week + "天的第" + upTime + "或" + upTimeTwo + "课程冲突。");
+                            return R.error("第" + week + "天的第" + upTime+1 + "或" + upTimeTwo+1 + "课程冲突。");
                         }
                     }
                 }
