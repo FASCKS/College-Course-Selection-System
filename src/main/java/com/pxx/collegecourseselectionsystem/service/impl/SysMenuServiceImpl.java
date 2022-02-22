@@ -12,6 +12,7 @@ import com.pxx.collegecourseselectionsystem.vo.course.MenuTreeNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,25 +23,6 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenuEntity
     @Autowired
     private SysMenuMapper sysMenuMapper;
 
-    @Override
-    public int updateBatch(List<SysMenuEntity> list) {
-        return baseMapper.updateBatch(list);
-    }
-
-    @Override
-    public int batchInsert(List<SysMenuEntity> list) {
-        return baseMapper.batchInsert(list);
-    }
-
-    @Override
-    public int insertOrUpdate(SysMenuEntity record) {
-        return baseMapper.insertOrUpdate(record);
-    }
-
-    @Override
-    public int insertOrUpdateSelective(SysMenuEntity record) {
-        return baseMapper.insertOrUpdateSelective(record);
-    }
 
     /**
      * 返回所有菜单
@@ -106,7 +88,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenuEntity
         }
         return newTree;
     }
-
+    @Transactional
     @Override
     public boolean deleteOneByMenuId(Integer id) {
         List<SysMenuEntity> sysMenuEntityList = this.list();

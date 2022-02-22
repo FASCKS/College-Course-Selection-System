@@ -15,6 +15,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,7 +40,8 @@ public class SecondCoursePlanGroupController {
     /**
      * 分组列表
      */
-    @ApiOperation("分组列表")
+    @ApiOperation("列表")
+    @PreAuthorize("hasAnyAuthority('plan:gorup:list')")
     @GetMapping("/list")
     public R list(Pagination pagination) {
         PageUtils allGroupPlan = secondCoursePlanGroupService.findAllGroupPlan(pagination);
@@ -50,6 +52,7 @@ public class SecondCoursePlanGroupController {
      * 编辑
      */
     @ApiOperation("编辑")
+    @PreAuthorize("hasAnyAuthority('plan:gorup:update')")
     @PostMapping("/update")
     public R update(@RequestBody @Validated(Update.class) SecondCoursePlanGroupEntityDto secondCoursePlanGroupEntity) {
         boolean hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE + "plan_group:" + secondCoursePlanGroupEntity.getId());

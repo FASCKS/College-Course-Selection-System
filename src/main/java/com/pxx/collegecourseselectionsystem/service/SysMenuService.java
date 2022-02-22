@@ -10,13 +10,6 @@ import java.util.List;
 public interface SysMenuService extends IService<SysMenuEntity>{
 
 
-    int updateBatch(List<SysMenuEntity> list);
-
-    int batchInsert(List<SysMenuEntity> list);
-
-    int insertOrUpdate(SysMenuEntity record);
-
-    int insertOrUpdateSelective(SysMenuEntity record);
 
     /**
      * 返回所有菜单

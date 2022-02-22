@@ -9,13 +9,6 @@ import java.util.List;
 
 @Mapper
 public interface SysMenuMapper extends BaseMapper<SysMenuEntity> {
-    int updateBatch(List<SysMenuEntity> list);
-
-    int batchInsert(@Param("list") List<SysMenuEntity> list);
-
-    int insertOrUpdate(SysMenuEntity record);
-
-    int insertOrUpdateSelective(SysMenuEntity record);
 
     /**
      * 返回所有菜单
