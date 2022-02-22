@@ -88,7 +88,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenuEntity
                     tree.putExtra("url", treeNode.getUrl());
                     tree.putExtra("status", treeNode.getStatus());
                     tree.putExtra("type", treeNode.getType());
-                    tree.putExtra("perms",treeNode.getPerms());
+                    tree.putExtra("perms", treeNode.getPerms());
                 }
         );
         return buildTreeList;
@@ -105,5 +105,32 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenuEntity
             }
         }
         return newTree;
+    }
+
+    @Override
+    public boolean deleteOneByMenuId(Integer id) {
+        List<SysMenuEntity> sysMenuEntityList = this.list();
+        List<Integer> menuIds = new ArrayList<>();
+        this.getSonDtId(sysMenuEntityList, id, menuIds);
+
+        boolean removeBatchByIds = this.removeBatchByIds(menuIds);
+        return removeBatchByIds;
+    }
+
+    /**
+     * 查找儿子  不包含自己
+     *
+     * @param departmentList
+     * @param dtId
+     * @param dtIds
+     */
+    @Override
+    public void getSonDtId(List<SysMenuEntity> departmentList, Integer dtId, List<Integer> dtIds) {
+        for (SysMenuEntity department : departmentList) {
+            if (dtId.equals(department.getParentId())) {
+                dtIds.add(department.getMenuId());
+                getSonDtId(departmentList, department.getMenuId(), dtIds);
+            }
+        }
     }
 }

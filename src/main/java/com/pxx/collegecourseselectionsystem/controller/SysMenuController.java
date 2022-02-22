@@ -7,9 +7,11 @@ import com.pxx.collegecourseselectionsystem.service.SysMenuService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Api(tags = "菜单")
@@ -34,6 +36,7 @@ public class SysMenuController {
      * 返回菜单和权限
      */
     @ApiOperation("返回菜单和权限")
+    @PreAuthorize("hasAnyAuthority('sys:menu:list:menu')")
     @GetMapping("/list/menu")
     public R listMenu() {
         List<Tree<Integer>> list = sysMenuService.findAllMenuByType(0,1,2);
@@ -43,6 +46,7 @@ public class SysMenuController {
      * 新增菜单
      */
     @ApiOperation("菜单新增")
+    @PreAuthorize("hasAnyAuthority('sys:menu:insert')")
     @PostMapping("/insert")
     public R insert(@RequestBody @Validated SysMenuEntity sysMenuEntity) {
         boolean save = sysMenuService.save(sysMenuEntity);
@@ -53,11 +57,25 @@ public class SysMenuController {
     /**
      * 菜单编辑
      */
+    @PreAuthorize("hasAnyAuthority('sys:menu:update')")
     @ApiOperation("菜单编辑")
     @PostMapping("/update")
     public R update(@RequestBody @Validated SysMenuEntity sysMenuEntity) {
         boolean update = sysMenuService.updateById(sysMenuEntity);
         return R.ok().put("data", update);
+    }
+
+    /**
+     * 菜单删除
+     */
+    @ApiOperation("菜单删除")
+    @PreAuthorize("hasAnyAuthority('sys:menu:delete')")
+    @PostMapping("/delete")
+    public R delete(@RequestParam("id") @NotNull  Integer id) {
+
+       boolean delete= sysMenuService.deleteOneByMenuId(id);
+
+        return R.ok().put("data", delete);
     }
 
 }

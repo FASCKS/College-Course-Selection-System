@@ -32,4 +32,13 @@ public interface SysMenuService extends IService<SysMenuEntity>{
     List<Tree<Integer>> findAllMenuByType(Integer ...type);
 
     List<SysMenuDto> createTree(List<SysMenuDto> menuEntityList, int pid);
+
+    boolean deleteOneByMenuId(Integer id);
+    /**
+     * 查找儿子  不包含自己
+     * @param departmentList
+     * @param dtId
+     * @param dtIds
+     */
+    void getSonDtId(List<SysMenuEntity> departmentList, Integer dtId, List<Integer> dtIds);
 }
