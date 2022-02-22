@@ -79,6 +79,12 @@ public class SecondCoursePlanGroupEntity {
     @TableField(value = "`state`")
     @ApiModelProperty(value="计划状态  0 未开始  1  进行中  2 已结束")
     private SecondCoursePlanGroupEnum state;
+    /**
+     * 发布状态  0 未发布 1 发布
+     */
+    @TableField(value = "`state`")
+    @ApiModelProperty(value="发布状态  0 未发布 1 发布")
+    private Integer releaseState;
 
     /**
      * 计划状态  0 未开始  1  进行中  2 已结束

@@ -111,6 +111,7 @@ public class SecondCoursePlanController {
         }
         //缓存课程计划
         SecondCoursePlanGroupEntity secondCoursePlanGroupEntity = secondCoursePlanGroupService.getById(planGroupId);
+        secondCoursePlanGroupEntity.setReleaseState(1);
         Long endTime = Convert.toLong(secondCoursePlanGroupEntity.getEndTime());
         Long stateTime = Convert.toLong(secondCoursePlanGroupEntity.getStartTime());
 
@@ -151,6 +152,8 @@ public class SecondCoursePlanController {
         for (SysUserEntity sysUserEntity : sysUserEntityList) {
             redisUtil.set(Global.KILL_SECOND_COURSE + "group:userId_" + sysUserEntity.getUserId(), planGroupId, (endTime - stateTime) / 1000 + REDIS_EXPIRED);
         }
+        //将计划修改为发布状态
+        secondCoursePlanGroupService.updateById(secondCoursePlanGroupEntity);
         return R.ok("发布成功");
     }
 
