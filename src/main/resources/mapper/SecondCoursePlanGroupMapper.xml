@@ -112,8 +112,7 @@
              , sc.up_time     as up_time_number
              , sc.week        as week_number
              , sc.week
-             , sum
-             , sum            as total_sum
+             , sc.course_sum            as total_sum
              , co.`name`      as course_name
              , su.user_id     as teacher
              , su.name        as teacher_name

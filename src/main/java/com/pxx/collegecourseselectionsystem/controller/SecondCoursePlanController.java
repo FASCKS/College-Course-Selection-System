@@ -1,5 +1,6 @@
 package com.pxx.collegecourseselectionsystem.controller;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.convert.Convert;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -202,7 +203,9 @@ public class SecondCoursePlanController {
         if (!courseCheck) {
             return R.error("上课时间冲突");
         }
-        boolean update = secondCourseService.updateById(secondCourseDto);
+        SecondCourse secondCourse=new SecondCourse();
+        BeanUtil.copyProperties(secondCourseDto,secondCourse);
+        boolean update = secondCourseService.updateById(secondCourse);
         return R.ok().put("data", update);
     }
 
@@ -214,7 +217,8 @@ public class SecondCoursePlanController {
         QueryWrapper<SecondCourse> sq = new QueryWrapper<>();
         sq.eq(SecondCourseDto.COL_UP_TIME, secondCourseDto.getUpTime())
                 .eq(SecondCourseDto.COL_WEEK, secondCourseDto.getWeek())
-                .eq("plan_group_id", secondCourseDto.getPlanGroupId());
+                .eq("plan_group_id", secondCourseDto.getPlanGroupId())
+                .notIn("id",secondCourseDto.getId());
         BaseMapper<SecondCourse> baseMapper = secondCourseService.getBaseMapper();
         SecondCourse secondCourse = baseMapper.selectOne(sq);
 
