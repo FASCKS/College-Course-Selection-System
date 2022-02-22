@@ -73,6 +73,7 @@ public class SecondCoursePlanGroupController {
      * 新增
      */
     @ApiOperation("新增")
+    @PreAuthorize("hasAnyAuthority('plan:gorup:insert')")
     @PostMapping("/insert")
     public R insert(@RequestBody @Validated(Insert.class) SecondCoursePlanGroupEntityDto secondCoursePlanGroupEntity) {
         Date startTime = secondCoursePlanGroupEntity.getStartTime();
@@ -100,6 +101,7 @@ public class SecondCoursePlanGroupController {
      */
     @ApiImplicitParam(name = "id", value = "分组id")
     @ApiOperation("详情")
+    @PreAuthorize("hasAnyAuthority('plan:gorup:info')")
     @GetMapping("/info")
     public R info(@RequestParam("id") @NotNull Integer id) {
         SecondCoursePlanGroupEntityDto secondCoursePlanGroupEntity = secondCoursePlanGroupService.findOneById(id);
@@ -122,6 +124,7 @@ public class SecondCoursePlanGroupController {
      */
     @ApiImplicitParam(name = "id", value = "分组id")
     @ApiOperation("删除")
+    @PreAuthorize("hasAnyAuthority('plan:gorup:delete')")
     @PostMapping("/delete")
     public R delete(@RequestParam("id") Integer planGroupId) {
         boolean hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE + "plan_group:" + planGroupId);

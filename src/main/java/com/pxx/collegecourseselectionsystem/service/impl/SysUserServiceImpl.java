@@ -98,6 +98,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
         if (password != null && password.equals(newPassword)) {
             throw new RRException("原密码和新密码不能相同");
         }
+        if (userId==null){
+            userId=SpringSecurityUtil.getUserId();
+        }
         SysUserEntity sysUserEntity;
         if (userId != null) {
             //指定用户

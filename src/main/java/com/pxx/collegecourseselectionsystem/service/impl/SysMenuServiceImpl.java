@@ -93,6 +93,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenuEntity
     public boolean deleteOneByMenuId(Integer id) {
         List<SysMenuEntity> sysMenuEntityList = this.list();
         List<Integer> menuIds = new ArrayList<>();
+        menuIds.add(id);
         this.getSonDtId(sysMenuEntityList, id, menuIds);
 
         boolean removeBatchByIds = this.removeBatchByIds(menuIds);
