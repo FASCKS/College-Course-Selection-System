@@ -43,6 +43,7 @@ public class ClassScheduleController {
     }
 
     @ApiOperation("导出课程表 Excel 表格")
+    @PreAuthorize("hasAnyAuthority('course:classSchedule:get:user:course')")
     @GetMapping("/get/classSchedule")
     public void getClassSchedule(HttpServletResponse httpServletResponse) throws IOException {
         ClassScheduleVo classScheduleVo = classScheduleService.findMyClassSchedule();

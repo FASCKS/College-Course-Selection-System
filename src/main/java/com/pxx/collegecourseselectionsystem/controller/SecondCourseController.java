@@ -20,6 +20,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -55,6 +56,7 @@ public class SecondCourseController {
      * @return
      */
     @ApiOperation("抢课接口")
+    @PreAuthorize("hasAnyAuthority('second:go:course')")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "要抢课课程id"),
             @ApiImplicitParam(name = "state", value = "1 抢课   0  退课"),
@@ -201,7 +203,7 @@ public class SecondCourseController {
 
         return R.ok().put("data", true);
     }
-
+    @PreAuthorize("hasAnyAuthority('second:plan:list')")
     @ApiImplicitParam(name = "id", value = "分组id")
     @ApiOperation("学生抢课计划列表")
     @GetMapping("/plan/list/{id}")
@@ -237,6 +239,7 @@ public class SecondCourseController {
     /**
      * 详情
      */
+    @PreAuthorize("hasAnyAuthority('second:plan:info')")
     @ApiImplicitParam(name = "id", value = "分组id")
     @ApiOperation("学生获取组信息")
     @GetMapping("/info")
@@ -248,6 +251,7 @@ public class SecondCourseController {
     /**
      * 学生抢课入口 获取学生抢课范围组
      */
+    @PreAuthorize("hasAnyAuthority('second:plan:entrance')")
     @ApiOperation("学生抢课入口,获取学生抢课组")
     @GetMapping("/entrance")
     public R entrance() {
@@ -265,8 +269,9 @@ public class SecondCourseController {
     /**
      * 学生当前课表
      */
+    @PreAuthorize("hasAnyAuthority('second:get:class:course')")
     @ApiImplicitParam(name = "id", value = "分组id")
-    @ApiOperation("学生当前简单课表")
+    @ApiOperation("学生简单课表")
     @GetMapping("/get/class/course/{id}")
     public R getClassCourse(@PathVariable("id") Integer planGroupId) {
         boolean hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE + "all:" + planGroupId);
