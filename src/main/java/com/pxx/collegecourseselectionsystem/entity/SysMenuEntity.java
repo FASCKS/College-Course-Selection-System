@@ -11,6 +11,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -90,6 +92,8 @@ public class SysMenuEntity {
 
     @ApiModelProperty("增 1 删 2 改 3 查 4 详情 5 其它 6")
     @NotNull
+    @Min(1)
+    @Max(6)
     @TableField(value = "`menu_type`")
     private Integer menuType;
 
