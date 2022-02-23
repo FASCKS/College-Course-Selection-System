@@ -13,10 +13,11 @@
         <result column="icon" jdbcType="VARCHAR" property="icon"/>
         <result column="order_num" jdbcType="INTEGER" property="orderNum"/>
         <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="menu_type" property="menuType"/>
     </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
-        menu_id, parent_id, `name`, url, perms, `type`, icon, order_num, `status`
+        menu_id, parent_id, `name`, url, perms, `type`, icon, order_num, `status`,menu_type
     </sql>
 
     <select id="findMenuByType" parameterType="int" resultMap="BaseResultMap">
@@ -26,7 +27,8 @@
                url,
                perms,
                status,
-               type
+               type,
+        menu_type
         from sys_menu
         
 
@@ -45,7 +47,8 @@
         url,
         perms,
         status,
-        type
+        type,
+        menu_type
         from sys_menu where type in (
         <foreach collection="type" item="item" index="index" separator=",">
             #{item}

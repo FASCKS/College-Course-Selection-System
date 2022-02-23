@@ -88,8 +88,13 @@ public class SysMenuEntity {
     @TableField(value = "`status`")
     private Integer status;
 
+    @ApiModelProperty("增 1 删 2 改 3 查 4 详情 5 其它 6")
+    @NotNull
+    @TableField(value = "`menu_type`")
+    private Integer menuType;
 
     public static final String COL_MENU_ID = "menu_id";
+    public static final String COL_MENU_TYPE = "menu_type";
 
     public static final String COL_PARENT_ID = "parent_id";
 

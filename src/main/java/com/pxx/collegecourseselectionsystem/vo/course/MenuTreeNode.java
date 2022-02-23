@@ -18,6 +18,7 @@ public class MenuTreeNode<T> extends TreeNode<T> {
     private Integer status;
     private Integer type;
     private String perms;
+    private Integer menuType;
 
 
 
@@ -29,11 +30,12 @@ public class MenuTreeNode<T> extends TreeNode<T> {
      * @param name     名称
      * @param weight   权重
      */
-    public MenuTreeNode(T id, T parentId, String name, Comparable<?> weight, String url, Integer status, Integer type, String perms) {
+    public MenuTreeNode(T id, T parentId, String name, Comparable<?> weight, String url, Integer status, Integer type, String perms, Integer menuType) {
         super(id, parentId, name, weight);
         this.url = url;
         this.status = status;
         this.type = type;
         this.perms = perms;
+        this.menuType = menuType;
     }
 }
