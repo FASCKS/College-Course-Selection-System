@@ -140,4 +140,8 @@
         </where>
 
     </select>
+
+    <select id="findAllByUnitId" resultMap="BaseResultMap">
+        select * from sys_unit
+    </select>
 </mapper>

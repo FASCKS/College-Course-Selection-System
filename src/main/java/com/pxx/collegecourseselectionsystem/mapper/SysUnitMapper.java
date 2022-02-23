@@ -27,4 +27,11 @@ public interface SysUnitMapper extends BaseMapper<SysUnitEntity> {
      */
 
     Set<Integer> findUnitIdByUserId(@Param("userId") Long userId);
+
+    /**
+     * 查找所有部门
+     * @return
+     */
+    @InterceptorIgnore(tenantLine = "false")
+    List<SysUnitEntity> findAllByUnitId();
 }

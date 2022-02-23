@@ -6,6 +6,7 @@ import cn.hutool.core.lang.tree.TreeNode;
 import cn.hutool.core.lang.tree.TreeUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.pxx.collegecourseselectionsystem.common.utils.RedisUtil;
 import com.pxx.collegecourseselectionsystem.entity.SysUnitEntity;
 import com.pxx.collegecourseselectionsystem.mapper.SysUnitMapper;
 import com.pxx.collegecourseselectionsystem.service.SysUnitService;
@@ -13,15 +14,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class SysUnitServiceImpl extends ServiceImpl<SysUnitMapper, SysUnitEntity> implements SysUnitService {
     @Autowired
     private SysUnitMapper sysUnitMapper;
+    @Autowired
+    private RedisUtil redisUtil;
 
     @Override
     public int updateBatch(List<SysUnitEntity> list) {
@@ -51,17 +51,38 @@ public class SysUnitServiceImpl extends ServiceImpl<SysUnitMapper, SysUnitEntity
      */
     @Override
     public List<Tree<Integer>> findAllUnit() {
-        List<SysUnitEntity> sysUnitEntities = this.list();
+        List<SysUnitEntity> sysUnitEntities = baseMapper.findAllByUnitId();
         List<TreeNode<Integer>> nodeList = CollUtil.newArrayList();
         for (SysUnitEntity sysUnitEntity : sysUnitEntities) {
             nodeList.add(new TreeNode<Integer>(sysUnitEntity.getUnitId(),
                     sysUnitEntity.getPid(),
                     sysUnitEntity.getName(), 1));
         }
-        List<Tree<Integer>> buildTree = TreeUtil.build(nodeList, 0);
+        //获取最上层节点
+        Integer unitIdUp = this.getUnitIdUp(sysUnitEntities);
 
+        List<Tree<Integer>> buildTree = TreeUtil.build(nodeList, unitIdUp);
 
         return buildTree;
+    }
+
+    /**
+     * 获取当前部门最高节点
+     */
+    private Integer getUnitIdUp(List<SysUnitEntity> sysUnitEntities) {
+        Map<Integer,Integer> integerIntegerMap=new HashMap<>(sysUnitEntities.size());
+        for (SysUnitEntity sysUnitEntity : sysUnitEntities) {
+            integerIntegerMap.put(sysUnitEntity.getUnitId(),sysUnitEntity.getPid());
+        }
+        for (SysUnitEntity sysUnitEntity : sysUnitEntities) {
+            Integer pid = sysUnitEntity.getPid();
+            Integer integer = integerIntegerMap.get(pid);
+            if (integer==null){
+                return pid;
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -85,14 +106,15 @@ public class SysUnitServiceImpl extends ServiceImpl<SysUnitMapper, SysUnitEntity
         // 级联删除部门
         List<SysUnitEntity> sysUnitEntities = this.list();
         List<Integer> ids = new ArrayList<>();
-        getSonDtId(sysUnitEntities,unitId,ids);
-        if (!ids.isEmpty()){
+        getSonDtId(sysUnitEntities, unitId, ids);
+        if (!ids.isEmpty()) {
             boolean removeByIds = this.removeByIds(ids);
         }
         boolean removeById = this.removeById(unitId);
 
         return true;
     }
+
     @Override
     public void getSonDtId(List<SysUnitEntity> departmentList, Integer dtId, List<Integer> dtIds) {
         for (SysUnitEntity department : departmentList) {
@@ -124,7 +146,7 @@ public class SysUnitServiceImpl extends ServiceImpl<SysUnitMapper, SysUnitEntity
         Set<Integer> newUnitId = new HashSet<>(unitIdByUserId);
         List<SysUnitEntity> sysUnitEntityList = this.list();
         for (Integer integer : unitIdByUserId) {
-            getSonDtId(sysUnitEntityList,integer,newUnitId);
+            getSonDtId(sysUnitEntityList, integer, newUnitId);
         }
 
         return newUnitId;

@@ -61,7 +61,7 @@ public class MyTenantLineHandler implements TenantLineHandler {
      */
     @Override
     public boolean ignoreTable(String tableName) {
-        return "sys_unit".equalsIgnoreCase(tableName);
+        return false;
     }
 }
 
