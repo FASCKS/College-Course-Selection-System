@@ -1,131 +1,137 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.pxx.collegecourseselectionsystem.mapper.SysUnitMapper">
-  <resultMap id="BaseResultMap" type="com.pxx.collegecourseselectionsystem.entity.SysUnitEntity">
-    <!--@mbg.generated-->
-    <!--@Table sys_unit-->
-    <id column="unit_id" jdbcType="INTEGER" property="unitId" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="pid" jdbcType="INTEGER" property="pid" />
-    <result column="code" jdbcType="VARCHAR" property="code" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    <!--@mbg.generated-->
-    unit_id, `name`, pid, code
-  </sql>
-  <update id="updateBatch" parameterType="java.util.List">
-    <!--@mbg.generated-->
-    update sys_unit
-    <trim prefix="set" suffixOverrides=",">
-      <trim prefix="`name` = case" suffix="end,">
-        <foreach collection="list" index="index" item="item">
-          when unit_id = #{item.unitId,jdbcType=INTEGER} then #{item.name,jdbcType=VARCHAR}
+    <resultMap id="BaseResultMap" type="com.pxx.collegecourseselectionsystem.entity.SysUnitEntity">
+        <!--@mbg.generated-->
+        <!--@Table sys_unit-->
+        <id column="unit_id" jdbcType="INTEGER" property="unitId"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="pid" jdbcType="INTEGER" property="pid"/>
+        <result column="code" jdbcType="VARCHAR" property="code"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        unit_id, `name`, pid, code
+    </sql>
+    <update id="updateBatch" parameterType="java.util.List">
+        <!--@mbg.generated-->
+        update sys_unit
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="`name` = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when unit_id = #{item.unitId,jdbcType=INTEGER} then #{item.name,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="pid = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when unit_id = #{item.unitId,jdbcType=INTEGER} then #{item.pid,jdbcType=INTEGER}
+                </foreach>
+            </trim>
+            <trim prefix="code = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when unit_id = #{item.unitId,jdbcType=INTEGER} then #{item.code,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+        </trim>
+        where unit_id in
+        <foreach close=")" collection="list" item="item" open="(" separator=", ">
+            #{item.unitId,jdbcType=INTEGER}
         </foreach>
-      </trim>
-      <trim prefix="pid = case" suffix="end,">
-        <foreach collection="list" index="index" item="item">
-          when unit_id = #{item.unitId,jdbcType=INTEGER} then #{item.pid,jdbcType=INTEGER}
+    </update>
+    <insert id="batchInsert" keyColumn="unit_id" keyProperty="unitId" parameterType="map" useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into sys_unit
+                (`name`, pid, code)
+                values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.name,jdbcType=VARCHAR}, #{item.pid,jdbcType=INTEGER}, #{item.code,jdbcType=VARCHAR})
         </foreach>
-      </trim>
-      <trim prefix="code = case" suffix="end,">
-        <foreach collection="list" index="index" item="item">
-          when unit_id = #{item.unitId,jdbcType=INTEGER} then #{item.code,jdbcType=VARCHAR}
-        </foreach>
-      </trim>
-    </trim>
-    where unit_id in
-    <foreach close=")" collection="list" item="item" open="(" separator=", ">
-      #{item.unitId,jdbcType=INTEGER}
-    </foreach>
-  </update>
-  <insert id="batchInsert" keyColumn="unit_id" keyProperty="unitId" parameterType="map" useGeneratedKeys="true">
-    <!--@mbg.generated-->
-    insert into sys_unit
-    (`name`, pid, code)
-    values
-    <foreach collection="list" item="item" separator=",">
-      (#{item.name,jdbcType=VARCHAR}, #{item.pid,jdbcType=INTEGER}, #{item.code,jdbcType=VARCHAR}
-        )
-    </foreach>
-  </insert>
-  <insert id="insertOrUpdate" keyColumn="unit_id" keyProperty="unitId" parameterType="com.pxx.collegecourseselectionsystem.entity.SysUnitEntity" useGeneratedKeys="true">
-    <!--@mbg.generated-->
-    insert into sys_unit
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="unitId != null">
-        unit_id,
-      </if>
-      `name`,
-      pid,
-      code,
-    </trim>
-    values
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="unitId != null">
-        #{unitId,jdbcType=INTEGER},
-      </if>
-      #{name,jdbcType=VARCHAR},
-      #{pid,jdbcType=INTEGER},
-      #{code,jdbcType=VARCHAR},
-    </trim>
-    on duplicate key update 
-    <trim suffixOverrides=",">
-      <if test="unitId != null">
-        unit_id = #{unitId,jdbcType=INTEGER},
-      </if>
-      `name` = #{name,jdbcType=VARCHAR},
-      pid = #{pid,jdbcType=INTEGER},
-      code = #{code,jdbcType=VARCHAR},
-    </trim>
-  </insert>
-  <insert id="insertOrUpdateSelective" keyColumn="unit_id" keyProperty="unitId" parameterType="com.pxx.collegecourseselectionsystem.entity.SysUnitEntity" useGeneratedKeys="true">
-    <!--@mbg.generated-->
-    insert into sys_unit
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="unitId != null">
-        unit_id,
-      </if>
-      <if test="name != null">
-        `name`,
-      </if>
-      <if test="pid != null">
-        pid,
-      </if>
-      <if test="code != null">
-        code,
-      </if>
-    </trim>
-    values
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="unitId != null">
-        #{unitId,jdbcType=INTEGER},
-      </if>
-      <if test="name != null">
-        #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="pid != null">
-        #{pid,jdbcType=INTEGER},
-      </if>
-      <if test="code != null">
-        #{code,jdbcType=VARCHAR},
-      </if>
-    </trim>
-    on duplicate key update 
-    <trim suffixOverrides=",">
-      <if test="unitId != null">
-        unit_id = #{unitId,jdbcType=INTEGER},
-      </if>
-      <if test="name != null">
-        `name` = #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="pid != null">
-        pid = #{pid,jdbcType=INTEGER},
-      </if>
-      <if test="code != null">
-        code = #{code,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
+    </insert>
+    <insert id="insertOrUpdate" keyColumn="unit_id" keyProperty="unitId"
+            parameterType="com.pxx.collegecourseselectionsystem.entity.SysUnitEntity" useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into sys_unit
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="unitId != null">
+                unit_id,
+            </if>
+            `name`,
+            pid,
+            code,
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="unitId != null">
+                #{unitId,jdbcType=INTEGER},
+            </if>
+            #{name,jdbcType=VARCHAR},
+            #{pid,jdbcType=INTEGER},
+            #{code,jdbcType=VARCHAR},
+        </trim>
+        on duplicate key update
+        <trim suffixOverrides=",">
+            <if test="unitId != null">
+                unit_id = #{unitId,jdbcType=INTEGER},
+            </if>
+            `name` = #{name,jdbcType=VARCHAR},
+            pid    = #{pid,jdbcType=INTEGER},
+            code   = #{code,jdbcType=VARCHAR},
+        </trim>
+    </insert>
+    <insert id="insertOrUpdateSelective" keyColumn="unit_id" keyProperty="unitId"
+            parameterType="com.pxx.collegecourseselectionsystem.entity.SysUnitEntity" useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into sys_unit
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="unitId != null">
+                unit_id,
+            </if>
+            <if test="name != null">
+                `name`,
+            </if>
+            <if test="pid != null">
+                pid,
+            </if>
+            <if test="code != null">
+                code,
+            </if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="unitId != null">
+                #{unitId,jdbcType=INTEGER},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="pid != null">
+                #{pid,jdbcType=INTEGER},
+            </if>
+            <if test="code != null">
+                #{code,jdbcType=VARCHAR},
+            </if>
+        </trim>
+        on duplicate key update
+        <trim suffixOverrides=",">
+            <if test="unitId != null">
+                unit_id = #{unitId,jdbcType=INTEGER},
+            </if>
+            <if test="name != null">
+                `name` = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="pid != null">
+                pid = #{pid,jdbcType=INTEGER},
+            </if>
+            <if test="code != null">
+                code = #{code,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
 
-
+    <select id="findUnitIdByUserId" resultType="java.lang.Integer">
+        select su.unit_id
+        from sys_unit su
+                     left join sys_user s on su.unit_id = s.unit_id
+        where user_id = #{userId,jdbcType=BIGINT}
+    </select>
 </mapper>

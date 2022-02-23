@@ -1,12 +1,13 @@
 package com.pxx.collegecourseselectionsystem.mapper;
 
+import com.baomidou.mybatisplus.annotation.InterceptorIgnore;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.pxx.collegecourseselectionsystem.entity.SysUnitEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-
+@InterceptorIgnore(tenantLine = "1")
 @Mapper
 public interface SysUnitMapper extends BaseMapper<SysUnitEntity> {
     int updateBatch(List<SysUnitEntity> list);
@@ -17,5 +18,11 @@ public interface SysUnitMapper extends BaseMapper<SysUnitEntity> {
 
     int insertOrUpdateSelective(SysUnitEntity record);
 
+    /**
+     * 通过用户id查询用户能查询的范围
+     *
+     * @param userId
+     */
 
+    List<Integer> findUnitIdByUserId(@Param("userId") Long userId);
 }

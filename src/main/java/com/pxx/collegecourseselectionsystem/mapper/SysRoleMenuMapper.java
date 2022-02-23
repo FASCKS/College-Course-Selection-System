@@ -1,12 +1,13 @@
 package com.pxx.collegecourseselectionsystem.mapper;
 
+import com.baomidou.mybatisplus.annotation.InterceptorIgnore;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.pxx.collegecourseselectionsystem.entity.SysRoleMenuEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-
+@InterceptorIgnore(tenantLine = "1")
 @Mapper
 public interface SysRoleMenuMapper extends BaseMapper<SysRoleMenuEntity> {
     int updateBatch(List<SysRoleMenuEntity> list);

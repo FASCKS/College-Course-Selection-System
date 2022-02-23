@@ -1,5 +1,6 @@
 package com.pxx.collegecourseselectionsystem.mapper;
 
+import com.baomidou.mybatisplus.annotation.InterceptorIgnore;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.pxx.collegecourseselectionsystem.dto.SysUserDto;
@@ -8,6 +9,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+
 
 @Mapper
 public interface SysUserMapper extends BaseMapper<SysUserEntity> {
@@ -25,6 +27,7 @@ public interface SysUserMapper extends BaseMapper<SysUserEntity> {
      * @param username
      * @return
      */
+
     SysUserEntity findOneByNumber(@Param("number") String username);
 
     /**
@@ -32,6 +35,7 @@ public interface SysUserMapper extends BaseMapper<SysUserEntity> {
      *
      * @return
      */
+    @InterceptorIgnore(tenantLine = "false")
     IPage<SysUserDto> findAllUser(@Param("iPage") IPage<SysUserDto> iPage,
                                   @Param("type") Integer type,
                                   @Param("name") String name,

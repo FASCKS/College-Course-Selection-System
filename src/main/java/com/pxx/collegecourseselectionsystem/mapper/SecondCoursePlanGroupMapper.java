@@ -1,5 +1,6 @@
 package com.pxx.collegecourseselectionsystem.mapper;
 
+import com.baomidou.mybatisplus.annotation.InterceptorIgnore;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.pxx.collegecourseselectionsystem.dto.SecondCoursePlanGroupEntityDto;
 import com.pxx.collegecourseselectionsystem.entity.SecondCoursePlanGroupEntity;
@@ -7,12 +8,11 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-
 /**
  * @author Gpxx
  * @Date 2022/2/14 10:25
  */
-@Mapper
+@Mapper@InterceptorIgnore(tenantLine = "1")
 public interface SecondCoursePlanGroupMapper extends BaseMapper<SecondCoursePlanGroupEntity> {
 
 

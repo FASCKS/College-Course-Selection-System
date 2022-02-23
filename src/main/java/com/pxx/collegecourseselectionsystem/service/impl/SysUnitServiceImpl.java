@@ -100,4 +100,15 @@ public class SysUnitServiceImpl extends ServiceImpl<SysUnitMapper, SysUnitEntity
             }
         }
     }
+
+    /**
+     * 通过用户id查询用户能查询的范围
+     *
+     * @param userId
+     */
+    @Override
+    public List<Integer> findUnitIdByUserId(Long userId) {
+
+        return baseMapper.findUnitIdByUserId(userId);
+    }
 }

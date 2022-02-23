@@ -10,8 +10,10 @@ import com.pxx.collegecourseselectionsystem.common.utils.*;
 import com.pxx.collegecourseselectionsystem.entity.SysLogEntity;
 import com.pxx.collegecourseselectionsystem.entity.SysUserEntity;
 import com.pxx.collegecourseselectionsystem.service.SysLogService;
+import com.pxx.collegecourseselectionsystem.service.SysUnitService;
 import com.pxx.collegecourseselectionsystem.service.SysUserService;
 import com.pxx.collegecourseselectionsystem.service.impl.SysLogServiceImpl;
+import com.pxx.collegecourseselectionsystem.service.impl.SysUnitServiceImpl;
 import com.pxx.collegecourseselectionsystem.service.impl.SysUserServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
@@ -32,6 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -42,6 +45,7 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
     public static final String SPRING_SECURITY_FORM_PASSWORD_KEY = "password";
     private  SysLogService sysLogService ;
     private  SysUserService sysUserService ;
+    private SysUnitService sysUnitService=SpringUtil.getBean(SysUnitServiceImpl.class);
 
 
     public TokenLoginFilter(AuthenticationManager authenticationManager, TokenManager tokenManager) {
@@ -101,13 +105,16 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
                                             Authentication auth) throws IOException, ServletException {
         RedisUtil cache = SpringUtil.getBean(RedisUtil.class);//redis工具
 
+
         Map<String, Object> redisMap = new HashMap<>(4);
 
 
         SysUserEntity user = (SysUserEntity) auth.getPrincipal();
         String accessIdToken = tokenManager.createAccessIdToken(user.getUsername());
         String refreshToken = tokenManager.createRefreshIdToken(user.getUsername());
-
+        //缓存用户所能看到部门
+        List<Integer> unitIdByUserId = sysUnitService.findUnitIdByUserId(user.getUserId());
+        redisMap.put("unit_ids",unitIdByUserId);
         //缓存用户权限
         redisMap.put("authorities", user.getAuthorities());
         //缓存用户当前的 access_token

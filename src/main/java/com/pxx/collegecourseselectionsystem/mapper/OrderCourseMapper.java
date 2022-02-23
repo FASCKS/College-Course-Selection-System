@@ -1,5 +1,6 @@
 package com.pxx.collegecourseselectionsystem.mapper;
 
+import com.baomidou.mybatisplus.annotation.InterceptorIgnore;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.pxx.collegecourseselectionsystem.dto.SecondCourseDto;
 import com.pxx.collegecourseselectionsystem.entity.OrderCourse;
@@ -12,7 +13,7 @@ import java.util.List;
  * @author Galen
  * @Date 2022/2/10 14:49
  */
-@Mapper
+@Mapper@InterceptorIgnore(tenantLine = "1")
 public interface OrderCourseMapper extends BaseMapper<OrderCourse> {
     void deleteAll();
 

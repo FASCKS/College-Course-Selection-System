@@ -1,5 +1,6 @@
 package com.pxx.collegecourseselectionsystem.mapper;
 
+import com.baomidou.mybatisplus.annotation.InterceptorIgnore;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.pxx.collegecourseselectionsystem.dto.SecondCourseDto;
 import com.pxx.collegecourseselectionsystem.entity.ClassSchedule;
@@ -15,7 +16,7 @@ import java.util.List;
  * @author Galen
  * @Date 2022/2/10 14:48
  */
-@Mapper
+@Mapper@InterceptorIgnore(tenantLine = "1")
 public interface SecondCourseMapper extends BaseMapper<SecondCourse> {
 
     List<SecondCourseDto> findAllSecondCourse(Integer planGroupId);

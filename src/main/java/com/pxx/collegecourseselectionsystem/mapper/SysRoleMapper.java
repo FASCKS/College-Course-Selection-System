@@ -1,5 +1,6 @@
 package com.pxx.collegecourseselectionsystem.mapper;
 
+import com.baomidou.mybatisplus.annotation.InterceptorIgnore;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -10,6 +11,7 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
+@InterceptorIgnore(tenantLine = "1")
 @Mapper
 public interface SysRoleMapper extends BaseMapper<SysRoleEntity> {
 

@@ -39,4 +39,8 @@ public interface SysUnitService extends IService<SysUnitEntity>{
      * @param dtIds
      */
      void getSonDtId(List<SysUnitEntity> departmentList, Integer dtId, List<Integer> dtIds);
+    /**
+     * 通过用户id查询用户能查询的范围
+     */
+    List<Integer> findUnitIdByUserId(Long userId);
 }

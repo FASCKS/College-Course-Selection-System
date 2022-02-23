@@ -190,6 +190,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
         //如果是超级管理员
         if (Global.SUPER_ADMINISTRATOR_NAME.equals(sysUserEntity.getNumber())) {
             //所有角色
+
             List<SysRoleEntity> roleEntityList = sysRoleService.list();
             sysUserEntity.setRoleEntityList(roleEntityList);
             //菜单对应的权限
