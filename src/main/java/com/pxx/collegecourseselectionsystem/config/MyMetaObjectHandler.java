@@ -2,11 +2,13 @@ package com.pxx.collegecourseselectionsystem.config;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.pxx.collegecourseselectionsystem.common.utils.SpringSecurityUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
+@Slf4j
 @Component
 public class MyMetaObjectHandler implements MetaObjectHandler {
 
@@ -24,7 +26,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         this.setFieldValByName(updatedBy, getUserName(), metaObject);
         this.setFieldValByName(updateTime, new Date(), metaObject);
         this.setFieldValByName(createTime, new Date(), metaObject);
-        this.setFieldValByName(unitId,getUnitId() , metaObject);
+        this.setFieldValByName(unitId, getUnitId(), metaObject);
     }
 
     @Override
@@ -42,8 +44,14 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
 //        final String username = SpringSecurityUtil.getUsername();
         return "admin";
     }
+
     private Integer getUnitId() {
-        Integer unitId = SpringSecurityUtil.getEntity().getUnitId();
+        Integer unitId = 1;
+        try {
+            unitId = SpringSecurityUtil.getEntity().getUnitId();
+        } catch (Exception e) {
+            log.error("当前链接没有用户实体");
+        }
         return unitId;
     }
 }
