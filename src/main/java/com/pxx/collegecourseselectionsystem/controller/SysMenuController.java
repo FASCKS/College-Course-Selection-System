@@ -81,7 +81,7 @@ public class SysMenuController {
     @ApiOperation("菜单编辑")
     @PostMapping("/update")
     public R update(@RequestBody @Validated SysMenuEntity sysMenuEntity) {
-        boolean update = sysMenuService.updateById(sysMenuEntity);
+        boolean update = sysMenuService.updateOneById(sysMenuEntity);
         return R.ok().put("data", update);
     }
 

@@ -36,4 +36,11 @@ public interface SysMenuService extends IService<SysMenuEntity>{
     void getSonDtId(List<SysMenuEntity> departmentList, Integer dtId, List<Integer> dtIds);
 
     List<Tree<Integer>> findMenuByUrl(String url);
+
+    /**
+     * 通过id编辑
+     * @param sysMenuEntity
+     * @return
+     */
+    boolean updateOneById(SysMenuEntity sysMenuEntity);
 }

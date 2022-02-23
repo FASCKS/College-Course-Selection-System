@@ -34,7 +34,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenuEntity
     @Override
     public List<Tree<Integer>> findMenuByType(Integer... type) {
         List<SysMenuEntity> sysMenuEntities = sysMenuMapper.findMenuByType(type);
-        return createMenu(sysMenuEntities,0);
+        return createMenu(sysMenuEntities, 0);
     }
 
     /**
@@ -46,10 +46,10 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenuEntity
     @Override
     public List<Tree<Integer>> findAllMenuByType(Integer... type) {
         List<SysMenuEntity> sysMenuEntities = sysMenuMapper.findAllMenuByType(type);
-        return createMenu(sysMenuEntities,0);
+        return createMenu(sysMenuEntities, 0);
     }
 
-    private List<Tree<Integer>> createMenu(List<SysMenuEntity> sysMenuEntities,Integer pid) {
+    private List<Tree<Integer>> createMenu(List<SysMenuEntity> sysMenuEntities, Integer pid) {
         List<MenuTreeNode<Integer>> nodeList = CollUtil.newArrayList();
         for (SysMenuEntity sysMenuEntity : sysMenuEntities) {
             nodeList.add(new MenuTreeNode<>(
@@ -89,6 +89,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenuEntity
         }
         return newTree;
     }
+
     @Transactional
     @Override
     public boolean deleteOneByMenuId(Integer id) {
@@ -117,22 +118,37 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenuEntity
             }
         }
     }
+
     @Cacheable(value = "menu_details", key = "'url_'+#url", unless = "#result == null")
     @Override
     public List<Tree<Integer>> findMenuByUrl(String url) {
-        SysMenuEntity sysMenuEntity=baseMapper.findMenuByUrl(url);
-        if (sysMenuEntity==null){
+        SysMenuEntity sysMenuEntity = baseMapper.findMenuByUrl(url);
+        if (sysMenuEntity == null) {
             throw new RRException("找不到这个菜单");
         }
         Integer menuId = sysMenuEntity.getMenuId();
-       List<Integer> menuIds=new ArrayList<>();
-       menuIds.add(menuId);
-       getSonDtId(this.list(),menuId,menuIds);
+        List<Integer> menuIds = new ArrayList<>();
+        menuIds.add(menuId);
+        getSonDtId(this.list(), menuId, menuIds);
 
-     List<SysMenuEntity> sysMenuEntityList=  baseMapper.findMenuById(menuIds);
-        List<Tree<Integer>> menuTree = createMenu(sysMenuEntityList,sysMenuEntity.getParentId());
+        List<SysMenuEntity> sysMenuEntityList = baseMapper.findMenuById(menuIds);
+        List<Tree<Integer>> menuTree = createMenu(sysMenuEntityList, sysMenuEntity.getParentId());
 
 
         return menuTree;
+    }
+
+    /**
+     * 通过id编辑
+     *
+     * @param sysMenuEntity
+     * @return
+     */
+    @Override
+    @Transactional
+    public boolean updateOneById(SysMenuEntity sysMenuEntity) {
+
+        int updateById = baseMapper.updateById(sysMenuEntity);
+        return updateById > 0;
     }
 }
