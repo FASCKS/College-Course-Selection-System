@@ -1,6 +1,7 @@
 package com.pxx.collegecourseselectionsystem.config;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
+import com.pxx.collegecourseselectionsystem.common.utils.SpringSecurityUtil;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +15,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
     private static final String updatedBy = "updatedBy"; //更新人
     private static final String updateTime = "updatedTime"; //更新时间
     private static final String revision = "revision"; //乐观锁
+    private static final String unitId = "unit_id"; //权限范围
 
     @Override
     public void insertFill(MetaObject metaObject) {
@@ -22,6 +24,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         this.setFieldValByName(updatedBy, getUserName(), metaObject);
         this.setFieldValByName(updateTime, new Date(), metaObject);
         this.setFieldValByName(createTime, new Date(), metaObject);
+        this.setFieldValByName(unitId,getUnitId() , metaObject);
     }
 
     @Override
@@ -39,5 +42,8 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
 //        final String username = SpringSecurityUtil.getUsername();
         return "admin";
     }
-
+    private Integer getUnitId() {
+        Integer unitId = SpringSecurityUtil.getEntity().getUnitId();
+        return unitId;
+    }
 }

@@ -1,11 +1,9 @@
 package com.pxx.collegecourseselectionsystem.entity;
 
 import cn.hutool.core.date.DatePattern;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pxx.collegecourseselectionsystem.common.validator.group.Insert;
 import com.pxx.collegecourseselectionsystem.common.validator.group.Update;
 import com.pxx.collegecourseselectionsystem.entity.enums.SecondCoursePlanGroupEnum;
@@ -93,6 +91,10 @@ public class SecondCoursePlanGroupEntity {
     @ApiModelProperty(value="第几次选课")
     private Integer sum;
 
+    @JsonIgnore
+    @TableField(value = "unit_id",fill = FieldFill.INSERT_UPDATE)
+    @ApiModelProperty(value="部门id")
+    private Integer unitId;
     public static final String COL_ID = "id";
 
     public static final String COL_YEAR = "year";

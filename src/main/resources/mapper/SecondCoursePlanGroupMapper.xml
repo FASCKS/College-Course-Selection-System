@@ -10,10 +10,11 @@
         <result column="start_time" jdbcType="TIMESTAMP" property="startTime"/>
         <result column="end_time" jdbcType="TIMESTAMP" property="endTime"/>
         <result column="state" jdbcType="INTEGER" property="state"/>
+        <result column="unit_id" property="unitId"/>
     </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
-        id, `year`, up_or_down, start_time, end_time, `state`
+        id, `year`, up_or_down, start_time, end_time, `state`,unit_id
     </sql>
     <!--状态时间判断-->
     <sql id="state_time">
