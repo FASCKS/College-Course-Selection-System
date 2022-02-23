@@ -35,6 +35,16 @@ public class SysMenuController {
     }
 
     /**
+     * 通过url返回菜单
+     */
+    @ApiOperation("通过url返回菜单")
+    @GetMapping("/get/menu")
+    public R getMenuByUrl(@RequestParam("url") String url) {
+        List<Tree<Integer>> menuByUrl = sysMenuService.findMenuByUrl(url);
+        return R.ok().put("data",menuByUrl);
+    }
+
+    /**
      * 返回菜单和权限
      */
     @ApiOperation("返回菜单和权限")
@@ -87,5 +97,6 @@ public class SysMenuController {
 
         return R.ok().put("data", delete);
     }
+
 
 }

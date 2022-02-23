@@ -34,4 +34,6 @@ public interface SysMenuService extends IService<SysMenuEntity>{
      * @param dtIds
      */
     void getSonDtId(List<SysMenuEntity> departmentList, Integer dtId, List<Integer> dtIds);
+
+    List<Tree<Integer>> findMenuByUrl(String url);
 }

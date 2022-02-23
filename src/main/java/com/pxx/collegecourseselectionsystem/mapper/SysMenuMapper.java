@@ -25,4 +25,14 @@ public interface SysMenuMapper extends BaseMapper<SysMenuEntity> {
      * @return
      */
     List<SysMenuEntity> findAllMenuByType(@Param("type") Integer[] type);
+
+    /**
+     * 通过url查找
+     *
+     * @param url
+     * @return
+     */
+    SysMenuEntity findMenuByUrl(@Param("url") String url);
+
+    List<SysMenuEntity> findMenuById(@Param("menuIds") List<Integer> menuIds);
 }

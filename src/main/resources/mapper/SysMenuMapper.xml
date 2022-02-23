@@ -53,4 +53,17 @@
         )
 
     </select>
+
+    <select id="findMenuByUrl" resultMap="BaseResultMap">
+        select * from sys_menu where url=#{url,jdbcType=VARCHAR}
+    </select>
+
+    <select id="findMenuById" resultMap="BaseResultMap">
+        select * from sys_menu
+        where sys_menu.menu_id in (
+        <foreach collection="menuIds" item="item" index="index" separator=",">
+            #{item}
+        </foreach>
+        )
+    </select>
 </mapper>

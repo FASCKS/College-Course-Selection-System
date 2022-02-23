@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.pxx.collegecourseselectionsystem.common.exception.RRException;
 import com.pxx.collegecourseselectionsystem.dto.SysMenuDto;
 import com.pxx.collegecourseselectionsystem.entity.SysMenuEntity;
 import com.pxx.collegecourseselectionsystem.mapper.SysMenuMapper;
@@ -29,11 +30,11 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenuEntity
      *
      * @return
      */
-    @Cacheable(value = "menu_details", key = "'_menu'", unless = "#result == null")
+//    @Cacheable(value = "menu_details", key = "'_menu'", unless = "#result == null")
     @Override
     public List<Tree<Integer>> findMenuByType(Integer... type) {
         List<SysMenuEntity> sysMenuEntities = sysMenuMapper.findMenuByType(type);
-        return createMenu(sysMenuEntities);
+        return createMenu(sysMenuEntities,0);
     }
 
     /**
@@ -45,10 +46,10 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenuEntity
     @Override
     public List<Tree<Integer>> findAllMenuByType(Integer... type) {
         List<SysMenuEntity> sysMenuEntities = sysMenuMapper.findAllMenuByType(type);
-        return createMenu(sysMenuEntities);
+        return createMenu(sysMenuEntities,0);
     }
 
-    private List<Tree<Integer>> createMenu(List<SysMenuEntity> sysMenuEntities) {
+    private List<Tree<Integer>> createMenu(List<SysMenuEntity> sysMenuEntities,Integer pid) {
         List<MenuTreeNode<Integer>> nodeList = CollUtil.newArrayList();
         for (SysMenuEntity sysMenuEntity : sysMenuEntities) {
             nodeList.add(new MenuTreeNode<>(
@@ -61,7 +62,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenuEntity
                     sysMenuEntity.getType(),
                     sysMenuEntity.getPerms()));
         }
-        List<Tree<Integer>> buildTreeList = TreeUtil.build(nodeList, 0,
+        List<Tree<Integer>> buildTreeList = TreeUtil.build(nodeList, pid,
                 (treeNode, tree) -> {
                     tree.setId(treeNode.getId());
                     tree.setParentId(treeNode.getParentId());
@@ -115,5 +116,23 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenuEntity
                 getSonDtId(departmentList, department.getMenuId(), dtIds);
             }
         }
+    }
+    @Cacheable(value = "menu_details", key = "'url_'+#url", unless = "#result == null")
+    @Override
+    public List<Tree<Integer>> findMenuByUrl(String url) {
+        SysMenuEntity sysMenuEntity=baseMapper.findMenuByUrl(url);
+        if (sysMenuEntity==null){
+            throw new RRException("找不到这个菜单");
+        }
+        Integer menuId = sysMenuEntity.getMenuId();
+       List<Integer> menuIds=new ArrayList<>();
+       menuIds.add(menuId);
+       getSonDtId(this.list(),menuId,menuIds);
+
+     List<SysMenuEntity> sysMenuEntityList=  baseMapper.findMenuById(menuIds);
+        List<Tree<Integer>> menuTree = createMenu(sysMenuEntityList,sysMenuEntity.getParentId());
+
+
+        return menuTree;
     }
 }
