@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class SysUnitServiceImpl extends ServiceImpl<SysUnitMapper, SysUnitEntity> implements SysUnitService {
@@ -107,7 +108,7 @@ public class SysUnitServiceImpl extends ServiceImpl<SysUnitMapper, SysUnitEntity
      * @param userId
      */
     @Override
-    public List<Integer> findUnitIdByUserId(Long userId) {
+    public Set<Integer> findUnitIdByUserId(Long userId) {
 
         return baseMapper.findUnitIdByUserId(userId);
     }

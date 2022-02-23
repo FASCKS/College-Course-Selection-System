@@ -132,6 +132,12 @@
         select su.unit_id
         from sys_unit su
                      left join sys_user s on su.unit_id = s.unit_id
-        where user_id = #{userId,jdbcType=BIGINT}
+        <where>
+            <if test="userId !=null and userId != 1">
+                user_id = #{userId,jdbcType=BIGINT}
+            </if>
+
+        </where>
+
     </select>
 </mapper>

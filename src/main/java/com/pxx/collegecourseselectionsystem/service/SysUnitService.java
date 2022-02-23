@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.pxx.collegecourseselectionsystem.entity.SysUnitEntity;
 
 import java.util.List;
+import java.util.Set;
+
 public interface SysUnitService extends IService<SysUnitEntity>{
 
 
@@ -42,5 +44,5 @@ public interface SysUnitService extends IService<SysUnitEntity>{
     /**
      * 通过用户id查询用户能查询的范围
      */
-    List<Integer> findUnitIdByUserId(Long userId);
+    Set<Integer> findUnitIdByUserId(Long userId);
 }

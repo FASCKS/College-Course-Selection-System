@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author ：hzz
@@ -31,7 +32,7 @@ public class MyTenantLineHandler implements TenantLineHandler {
     @Override
     public Expression getTenantId() {
         String username = SpringSecurityUtil.getUsername();
-        List<Integer> unit_ids = (List<Integer>) redisUtil.hget("UserDetail:" + username, "unit_ids");
+        Set<Integer> unit_ids = (Set<Integer>) redisUtil.hget(RedisKey.UserDetail + username, "unit_ids");
 
         List<LongValue> longValues = new ArrayList<>();
         List<Expression> childlist = new ArrayList<>(longValues);

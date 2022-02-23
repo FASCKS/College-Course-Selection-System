@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
-
+@InterceptorIgnore(tenantLine = "true")
 @Mapper
 public interface SysUserMapper extends BaseMapper<SysUserEntity> {
 

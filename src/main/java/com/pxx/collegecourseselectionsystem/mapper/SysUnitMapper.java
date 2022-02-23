@@ -7,7 +7,9 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-@InterceptorIgnore(tenantLine = "1")
+import java.util.Set;
+
+@InterceptorIgnore(tenantLine = "true")
 @Mapper
 public interface SysUnitMapper extends BaseMapper<SysUnitEntity> {
     int updateBatch(List<SysUnitEntity> list);
@@ -24,5 +26,5 @@ public interface SysUnitMapper extends BaseMapper<SysUnitEntity> {
      * @param userId
      */
 
-    List<Integer> findUnitIdByUserId(@Param("userId") Long userId);
+    Set<Integer> findUnitIdByUserId(@Param("userId") Long userId);
 }

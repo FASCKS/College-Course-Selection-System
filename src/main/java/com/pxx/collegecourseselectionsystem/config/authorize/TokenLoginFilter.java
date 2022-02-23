@@ -34,8 +34,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Slf4j
 public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
@@ -113,7 +113,7 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
         String accessIdToken = tokenManager.createAccessIdToken(user.getUsername());
         String refreshToken = tokenManager.createRefreshIdToken(user.getUsername());
         //缓存用户所能看到部门
-        List<Integer> unitIdByUserId = sysUnitService.findUnitIdByUserId(user.getUserId());
+        Set<Integer> unitIdByUserId = sysUnitService.findUnitIdByUserId(user.getUserId());
         redisMap.put("unit_ids",unitIdByUserId);
         //缓存用户权限
         redisMap.put("authorities", user.getAuthorities());
