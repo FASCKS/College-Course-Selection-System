@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -102,6 +103,16 @@ public class SysUnitServiceImpl extends ServiceImpl<SysUnitMapper, SysUnitEntity
         }
     }
 
+    @Override
+    public void getSonDtId(List<SysUnitEntity> departmentList, Integer dtId, Set<Integer> dtIds) {
+        for (SysUnitEntity department : departmentList) {
+            if (dtId.equals(department.getPid())) {
+                dtIds.add(department.getUnitId());
+                getSonDtId(departmentList, department.getUnitId(), dtIds);
+            }
+        }
+    }
+
     /**
      * 通过用户id查询用户能查询的范围
      *
@@ -109,7 +120,13 @@ public class SysUnitServiceImpl extends ServiceImpl<SysUnitMapper, SysUnitEntity
      */
     @Override
     public Set<Integer> findUnitIdByUserId(Long userId) {
+        Set<Integer> unitIdByUserId = baseMapper.findUnitIdByUserId(userId);
+        Set<Integer> newUnitId = new HashSet<>(unitIdByUserId);
+        List<SysUnitEntity> sysUnitEntityList = this.list();
+        for (Integer integer : unitIdByUserId) {
+            getSonDtId(sysUnitEntityList,integer,newUnitId);
+        }
 
-        return baseMapper.findUnitIdByUserId(userId);
+        return newUnitId;
     }
 }
