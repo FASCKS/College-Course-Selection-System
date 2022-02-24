@@ -80,7 +80,7 @@ public class SecondCoursePlanGroupEntity {
     /**
      * 发布状态  0 未发布 1 发布
      */
-    @TableField(value = "`state`")
+    @TableField(value = "release_state")
     @ApiModelProperty(value="发布状态  0 未发布 1 发布")
     private Integer releaseState;
 
