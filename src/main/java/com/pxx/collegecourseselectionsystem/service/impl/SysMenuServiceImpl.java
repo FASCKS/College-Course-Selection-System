@@ -126,7 +126,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenuEntity
     public List<Tree<Integer>> findMenuByUrl(String url) {
         SysMenuEntity sysMenuEntity = baseMapper.findMenuByUrl(url);
         if (sysMenuEntity == null) {
-            throw new RRException("找不到这个菜单");
+            throw new RRException("没有url为 "+url+" 的菜单");
         }
         Integer menuId = sysMenuEntity.getMenuId();
         List<Integer> menuIds = new ArrayList<>();
