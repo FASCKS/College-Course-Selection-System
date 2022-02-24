@@ -50,6 +50,7 @@
         <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime"/>
         <result column="unit_id" jdbcType="INTEGER" property="unitId"/>
         <result column="updated_by" jdbcType="INTEGER" property="updatedBy"/>
+
         <collection ofType="com.pxx.collegecourseselectionsystem.entity.SysRoleEntity" property="roleEntityList">
             <id column="role_id" jdbcType="INTEGER" property="roleId"/>
             <result column="role_name" property="roleName"/>

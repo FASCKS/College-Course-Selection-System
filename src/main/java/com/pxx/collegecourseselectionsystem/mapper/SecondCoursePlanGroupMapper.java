@@ -2,6 +2,8 @@ package com.pxx.collegecourseselectionsystem.mapper;
 
 import com.baomidou.mybatisplus.annotation.InterceptorIgnore;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.pxx.collegecourseselectionsystem.dto.SecondCoursePlanGroupEntityDto;
 import com.pxx.collegecourseselectionsystem.entity.SecondCoursePlanGroupEntity;
 import org.apache.ibatis.annotations.Mapper;
@@ -39,12 +41,13 @@ public interface SecondCoursePlanGroupMapper extends BaseMapper<SecondCoursePlan
      * @return
      */
     @InterceptorIgnore(tenantLine = "false")
+    @Deprecated
     Integer findAllGroupPlanCount();
     @InterceptorIgnore(tenantLine = "false")
-    List<SecondCoursePlanGroupEntityDto> findAllGroupPlan(@Param("index") Long index, @Param("size") Long size);
+    IPage<SecondCoursePlanGroupEntity> findAllGroupPlan(Page<SecondCoursePlanGroupEntity> planGroupEntityDtoPage);
 
     List<Integer> findUnitIdByPlanGroupId(@Param("planGroupId") Integer planGroupId);
-
+    @InterceptorIgnore(tenantLine = "false")
     SecondCoursePlanGroupEntityDto findOneAndUnitById(@Param("planGroupId") Integer planGroupId);
 
     /**

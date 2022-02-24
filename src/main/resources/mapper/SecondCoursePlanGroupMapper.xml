@@ -29,7 +29,7 @@
         from second_course_plan_group scpg
         order by year desc, sum desc
     </select>
-    <resultMap id="findAllGroupPlanMap" type="com.pxx.collegecourseselectionsystem.dto.SecondCoursePlanGroupEntityDto">
+    <resultMap id="findAllGroupPlanMap" type="com.pxx.collegecourseselectionsystem.entity.SecondCoursePlanGroupEntity">
         <!--@mbg.generated-->
         <!--@Table second_course_plan_group-->
         <id column="id" jdbcType="INTEGER" property="id"/>
@@ -39,13 +39,6 @@
         <result column="end_time" jdbcType="TIMESTAMP" property="endTime"/>
         <result column="state" jdbcType="INTEGER" property="state"/>
         <result column="sum" property="sum"/>
-        <collection property="secondCoursePlanGroupAndUnitDto"
-                    ofType="com.pxx.collegecourseselectionsystem.dto.SecondCoursePlanGroupAndUnitDto">
-            <id column="scpgau_unit_id" property="unitId"/>
-            <result column="unit_name" property="unitName"/>
-            <result column="sc_id" property="scpgId"/>
-            <result column="scpgau_id" property="id"/>
-        </collection>
     </resultMap>
     <select id="findAllGroupPlan" resultMap="findAllGroupPlanMap">
         select scpg.id,
@@ -54,14 +47,8 @@
                start_time,
                end_time,
                sum,
-               scpgau.scpg_id as scpgau_id,
-               scpgau.scpg_id as sc_id,
-               s.name         as unit_name,
-               scpgau.unit_id as scpgau_unit_id,
         <include refid="state_time"/>
-        from (select * from second_course_plan_group LIMIT #{index},#{size}) scpg
-                     left join second_course_plan_group_and_unit scpgau on scpgau.scpg_id = scpg.id
-                     left join sys_unit s on s.unit_id = scpgau.unit_id
+        from second_course_plan_group scpg
         order by year desc, sum desc
     </select>
     <resultMap id="findOneByIdMap" type="com.pxx.collegecourseselectionsystem.dto.SecondCoursePlanGroupEntityDto">
@@ -94,12 +81,9 @@
             <result column="week_number" property="weekNumber"/>
             <result column="total_sum" property="totalSum"/>
         </collection>
-        <collection property="secondCoursePlanGroupAndUnitDto"
-                    ofType="com.pxx.collegecourseselectionsystem.dto.SecondCoursePlanGroupAndUnitDto">
-            <id column="scpgau_unit_id" property="unitId"/>
-            <result column="unit_name" property="unitName"/>
-            <result column="plan_group_id" property="scpgId"/>
-            <result column="scpgau_id" property="id"/>
+        <collection property="unitIds" ofType="java.lang.Integer">
+            <id column="plan_group_id"/>
+            <result column="unit_id" property="value"/>
         </collection>
     </resultMap>
     <select id="findOneById" resultMap="findOneByIdMap">
@@ -113,17 +97,16 @@
              , sc.up_time     as up_time_number
              , sc.week        as week_number
              , sc.week
-             , sc.course_sum            as total_sum
+             , sc.course_sum  as total_sum
              , co.`name`      as course_name
              , su.user_id     as teacher
              , su.name        as teacher_name
              , co.type        as type
              , sc.up_time_two as up_time_two_number
              , sc.up_time_two
-             , s.unit_id
-             , s.name         as unit_name
              , scpgau.unit_id as scpgau_unit_id
              , scpgau.id      as scpgau_id
+             , scpgau.unit_id as unit_id
              ,
         <include refid="state_time"/>
 
@@ -133,8 +116,6 @@
                      LEFT JOIN course co ON co.id = sc.course_id
                      LEFT JOIN sys_user su ON su.user_id = sc.teacher
                      left join second_course_plan_group_and_unit scpgau on scpgau.scpg_id = scpg.id
-                     left join sys_unit s on s.unit_id = scpgau.unit_id
-
 
         where su.type = 2
           and scpgau.scpg_id = #{id,jdbcType=INTEGER}
@@ -167,12 +148,9 @@
         <result column="end_time" jdbcType="TIMESTAMP" property="endTime"/>
         <result column="state" jdbcType="INTEGER" property="state"/>
         <result column="sum" property="sum"/>
-        <collection property="secondCoursePlanGroupAndUnitDto"
-                    ofType="com.pxx.collegecourseselectionsystem.dto.SecondCoursePlanGroupAndUnitDto">
-            <id column="scpgau_unit_id" property="unitId"/>
-            <result column="unit_name" property="unitName"/>
-            <result column="plan_group_id" property="scpgId"/>
-            <result column="scpgau_id" property="id"/>
+        <collection property="unitIds" ofType="java.lang.Integer">
+            <id column="plan_group_id"/>
+            <result column="unit_id" property="value"/>
         </collection>
     </resultMap>
     <select id="findOneAndUnitById" resultMap="findOneAndUnitByIdMap">
@@ -193,19 +171,20 @@
              , sc.up_time_two
              , scpgau.unit_id as scpgau_unit_id
              , scpgau.id      as scpgau_id
-             , su.name        as unit_name
              ,
         <include refid="state_time"/>
         from second_course_plan_group scpg
                      LEFT JOIN second_course sc ON scpg.id = sc.plan_group_id
                      LEFT JOIN course co ON co.id = sc.course_id
                      left join second_course_plan_group_and_unit scpgau on scpgau.scpg_id = scpg.id
-                     left join sys_unit su on scpgau.unit_id = su.unit_id
         where scpgau.scpg_id = #{planGroupId,jdbcType=INTEGER}
           and scpg.id = #{planGroupId,jdbcType=INTEGER}
     </select>
 
     <select id="getOneByState" resultType="java.lang.Integer">
-        select <include refid="state_time"/> from second_course_plan_group scpg where id=#{id,jdbcType=INTEGER}
+        select
+        <include refid="state_time"/>
+        from second_course_plan_group scpg
+        where id = #{id,jdbcType=INTEGER}
     </select>
 </mapper>

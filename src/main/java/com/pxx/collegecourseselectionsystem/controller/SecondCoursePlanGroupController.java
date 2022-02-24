@@ -106,6 +106,7 @@ public class SecondCoursePlanGroupController {
     public R info(@RequestParam("id") @NotNull Integer id) {
         SecondCoursePlanGroupEntityDto secondCoursePlanGroupEntity = secondCoursePlanGroupService.findOneById(id);
         if (secondCoursePlanGroupEntity == null) {
+            //如果没有课程
             secondCoursePlanGroupEntity = secondCoursePlanGroupService.findOneAndUnitById(id);
             return R.ok().put("data", secondCoursePlanGroupEntity);
         }
