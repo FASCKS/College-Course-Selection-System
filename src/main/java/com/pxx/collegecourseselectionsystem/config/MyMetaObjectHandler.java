@@ -17,7 +17,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
     private static final String updatedBy = "updatedBy"; //更新人
     private static final String updateTime = "updatedTime"; //更新时间
     private static final String revision = "revision"; //乐观锁
-    private static final String unitId = "unit_id"; //权限范围
+    private static final String unitId = "unitId"; //权限范围
 
     @Override
     public void insertFill(MetaObject metaObject) {
