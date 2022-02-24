@@ -39,6 +39,7 @@
         <result column="end_time" jdbcType="TIMESTAMP" property="endTime"/>
         <result column="state" jdbcType="INTEGER" property="state"/>
         <result column="sum" property="sum"/>
+        <result column="release_state" property="releaseState"/>
     </resultMap>
     <select id="findAllGroupPlan" resultMap="findAllGroupPlanMap">
         select scpg.id,
@@ -47,6 +48,7 @@
                start_time,
                end_time,
                sum,
+        release_state,
         <include refid="state_time"/>
         from second_course_plan_group scpg
         order by year desc, sum desc
@@ -61,6 +63,7 @@
         <result column="end_time" jdbcType="TIMESTAMP" property="endTime"/>
         <result column="state" jdbcType="INTEGER" property="state"/>
         <result column="sum" property="sum"/>
+        <result column="release_state" property="releaseState"/>
 
 
         <collection property="secondCourseDtoList" ofType="com.pxx.collegecourseselectionsystem.dto.SecondCourseDto">
@@ -106,6 +109,7 @@
              , scpgau.unit_id as scpgau_unit_id
              , scpgau.scpg_id      as scpgau_id
              ,
+        scpg.release_state,
         <include refid="state_time"/>
 
 
