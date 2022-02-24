@@ -47,7 +47,7 @@ public class SysMenuController {
     /**
      * 返回菜单和权限
      */
-    @ApiOperation("返回菜单和权限")
+    @ApiOperation("返回菜单列表")
     @PreAuthorize("hasAnyAuthority('sys:menu:list:menu')")
     @GetMapping("/list/menu")
     public R listMenu() {
@@ -73,7 +73,17 @@ public class SysMenuController {
 
         return R.ok().put("data", save);
     }
+    /**
+     * 菜单详情
+     */
+    @ApiOperation("菜单详情")
+    @PreAuthorize("hasAnyAuthority('sys:menu:info')")
+    @GetMapping("/insert/{menuId}")
+    public R info(@PathVariable("menuId") Integer menuId) {
+        SysMenuEntity sysMenuEntity = sysMenuService.getById(menuId);
+        return R.ok().put("data",sysMenuEntity);
 
+    }
     /**
      * 菜单编辑
      */
