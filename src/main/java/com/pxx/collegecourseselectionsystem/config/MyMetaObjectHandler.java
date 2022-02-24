@@ -33,6 +33,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
     public void updateFill(MetaObject metaObject) {
         this.setFieldValByName(updatedBy, getUserName(), metaObject);
         this.setFieldValByName(updateTime, new Date(), metaObject);
+        this.setFieldValByName(unitId, getUnitId(), metaObject);
     }
 
     private Long getUserId() {

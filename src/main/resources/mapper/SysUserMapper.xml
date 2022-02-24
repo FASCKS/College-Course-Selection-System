@@ -86,6 +86,7 @@
                state,
                lock_time,
                enable,
+        s.unit_id,
                s.name as unit_name,
                sr.role_id,
                sr.role_name,

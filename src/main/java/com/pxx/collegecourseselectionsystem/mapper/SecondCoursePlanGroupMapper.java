@@ -52,5 +52,6 @@ public interface SecondCoursePlanGroupMapper extends BaseMapper<SecondCoursePlan
      *
      * @param id
      */
+    @InterceptorIgnore(tenantLine = "false")
     Integer getOneByState(@Param("id") Integer id);
 }
