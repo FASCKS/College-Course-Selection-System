@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pxx.collegecourseselectionsystem.mapper.ClassroomMapper">
+    <resultMap id="BaseResultMap" type="com.pxx.collegecourseselectionsystem.entity.Classroom">
+        <!--@mbg.generated-->
+        <!--@Table classroom-->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="roof" jdbcType="INTEGER" property="roof"/>
+        <result column="floor" jdbcType="INTEGER" property="floor"/>
+        <result column="between" jdbcType="INTEGER" property="between"/>
+        <result column="roof_type_id" jdbcType="INTEGER" property="roofTypeId"/>
+        <result column="between_type_id" jdbcType="INTEGER" property="betweenTypeId"/>
+        <result column="number" jdbcType="INTEGER" property="number"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id, roof, `floor`, `between`, roof_type_id, between_type_id, `number`
+    </sql>
+    <resultMap id="findAllClassroomMap" type="com.pxx.collegecourseselectionsystem.dto.ClassroomDto">
+        <!--@mbg.generated-->
+        <!--@Table classroom-->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="roof" jdbcType="INTEGER" property="roof"/>
+        <result column="floor" jdbcType="INTEGER" property="floor"/>
+        <result column="between" jdbcType="INTEGER" property="between"/>
+        <result column="roof_type_id" jdbcType="INTEGER" property="roofTypeId"/>
+        <result column="between_type_id" jdbcType="INTEGER" property="betweenTypeId"/>
+        <result column="number" jdbcType="INTEGER" property="number"/>
+        <result column="classroom_between_name" property="ClassroomBetweenName"/>
+        <result column="classroom_roof" property="ClassroomRoof"/>
+    </resultMap>
+    <select id="findAllClassroom" resultMap="findAllClassroomMap">
+        select c.id,
+               roof,
+               floor,
+               `between`,
+               roof_type_id,
+               between_type_id,
+               number,
+               cr.name_type    as classroom_roof,
+               cb.between_type as classroom_between_name
+        from classroom c
+                     left join classroom_roof cr on c.roof_type_id = cr.id
+                     left join classroom_between cb on cb.id = c.between_type_id
+    </select>
+</mapper>
