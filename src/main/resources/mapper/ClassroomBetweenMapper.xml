@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pxx.collegecourseselectionsystem.mapper.ClassroomBetweenMapper">
+  <resultMap id="BaseResultMap" type="com.pxx.collegecourseselectionsystem.entity.ClassroomBetween">
+    <!--@mbg.generated-->
+    <!--@Table classroom_between-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="between_type" jdbcType="VARCHAR" property="betweenType" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, between_type
+  </sql>
+</mapper>
