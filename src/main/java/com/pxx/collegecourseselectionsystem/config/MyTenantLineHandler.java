@@ -61,7 +61,7 @@ public class MyTenantLineHandler implements TenantLineHandler {
      */
     @Override
     public boolean ignoreTable(String tableName) {
-        return false;
+        return !"second_course_plan_group_and_unit".equals(tableName);
     }
 }
 

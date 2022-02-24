@@ -81,9 +81,8 @@
             <result column="week_number" property="weekNumber"/>
             <result column="total_sum" property="totalSum"/>
         </collection>
-        <collection property="unitIds" ofType="java.lang.Integer">
-            <id column="plan_group_id"/>
-            <result column="unit_id" property="value"/>
+        <collection property="unitIds" ofType="integer">
+            <result column="scpgau_unit_id" property="value"/>
         </collection>
     </resultMap>
     <select id="findOneById" resultMap="findOneByIdMap">
@@ -105,8 +104,7 @@
              , sc.up_time_two as up_time_two_number
              , sc.up_time_two
              , scpgau.unit_id as scpgau_unit_id
-             , scpgau.id      as scpgau_id
-             , scpgau.unit_id as unit_id
+             , scpgau.scpg_id      as scpgau_id
              ,
         <include refid="state_time"/>
 
@@ -148,9 +146,8 @@
         <result column="end_time" jdbcType="TIMESTAMP" property="endTime"/>
         <result column="state" jdbcType="INTEGER" property="state"/>
         <result column="sum" property="sum"/>
-        <collection property="unitIds" ofType="java.lang.Integer">
-            <id column="plan_group_id"/>
-            <result column="unit_id" property="value"/>
+        <collection property="unitIds" ofType="integer">
+            <result column="scpgau_unit_id" property="value"/>
         </collection>
     </resultMap>
     <select id="findOneAndUnitById" resultMap="findOneAndUnitByIdMap">
@@ -170,7 +167,7 @@
              , sc.up_time_two as up_time_two_number
              , sc.up_time_two
              , scpgau.unit_id as scpgau_unit_id
-             , scpgau.id      as scpgau_id
+             , scpgau.scpg_id      as scpgau_id
              ,
         <include refid="state_time"/>
         from second_course_plan_group scpg

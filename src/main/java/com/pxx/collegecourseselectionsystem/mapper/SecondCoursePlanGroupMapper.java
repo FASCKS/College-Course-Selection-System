@@ -14,7 +14,7 @@ import java.util.List;
  * @author Gpxx
  * @Date 2022/2/14 10:25
  */
-@Mapper@InterceptorIgnore(tenantLine = "1")
+@Mapper
 public interface SecondCoursePlanGroupMapper extends BaseMapper<SecondCoursePlanGroupEntity> {
 
 
@@ -40,14 +40,11 @@ public interface SecondCoursePlanGroupMapper extends BaseMapper<SecondCoursePlan
      *
      * @return
      */
-    @InterceptorIgnore(tenantLine = "false")
     @Deprecated
     Integer findAllGroupPlanCount();
-    @InterceptorIgnore(tenantLine = "false")
     IPage<SecondCoursePlanGroupEntity> findAllGroupPlan(Page<SecondCoursePlanGroupEntity> planGroupEntityDtoPage);
 
     List<Integer> findUnitIdByPlanGroupId(@Param("planGroupId") Integer planGroupId);
-    @InterceptorIgnore(tenantLine = "false")
     SecondCoursePlanGroupEntityDto findOneAndUnitById(@Param("planGroupId") Integer planGroupId);
 
     /**
@@ -57,4 +54,6 @@ public interface SecondCoursePlanGroupMapper extends BaseMapper<SecondCoursePlan
      */
     @InterceptorIgnore(tenantLine = "false")
     Integer getOneByState(@Param("id") Integer id);
+
+
 }
