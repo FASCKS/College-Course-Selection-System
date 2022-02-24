@@ -43,7 +43,7 @@ public class SecondCoursePlanGroupController {
     @ApiOperation("列表")
     @PreAuthorize("hasAnyAuthority('plan:gorup:list')")
     @GetMapping("/list")
-    public R list(Pagination pagination) {
+    public R list(@Validated Pagination pagination) {
         PageUtils allGroupPlan = secondCoursePlanGroupService.findAllGroupPlan(pagination);
         return R.ok().put("data", allGroupPlan);
     }
@@ -99,7 +99,7 @@ public class SecondCoursePlanGroupController {
     /**
      * 详情
      */
-    @ApiImplicitParam(name = "id", value = "分组id")
+    @ApiImplicitParam(name = "id", value = "分组id",dataTypeClass = Integer.class)
     @ApiOperation("详情")
     @PreAuthorize("hasAnyAuthority('plan:gorup:info')")
     @GetMapping("/info")

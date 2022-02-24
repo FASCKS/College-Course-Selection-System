@@ -25,6 +25,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,7 +38,7 @@ import java.util.List;
  * @author Gpxx
  * @Date 2022/2/14 10:26
  */
-@Api(tags = "选课管理")
+@Api(tags = "计划管理")
 @RestController
 @Validated
 @RequestMapping("/plan")
@@ -65,7 +66,8 @@ public class SecondCoursePlanController {
     public static final Long RABBITMQ_EXPIRED = MINUTE * 5;
 
     @ApiImplicitParam(name = "id", value = "分组id")
-    @ApiOperation("管理员抢课计划列表")
+    @ApiOperation("管理员计划列表")
+    @PreAuthorize("hasAnyAuthority('plan:plan:list')")
     @GetMapping("/plan/list/{id}")
     public R list(@RequestParam(required = false) CourseEnum courseEnum, @PathVariable("id") @NotNull Integer planGroupId) {
 
@@ -93,8 +95,9 @@ public class SecondCoursePlanController {
     /**
      * 发布抢课内容
      */
+    @PreAuthorize("hasAnyAuthority('plan:plan:put')")
     @ApiImplicitParam(name = "id", value = "分组id")
-    @ApiOperation("发布抢课计划")
+    @ApiOperation("发布计划")
     @GetMapping("/put/{id}")
     public R put(@PathVariable("id") @NotNull Integer planGroupId) {
         //判断是否已经发布
@@ -160,6 +163,7 @@ public class SecondCoursePlanController {
     /**
      * 添加选课
      */
+    @PreAuthorize("hasAnyAuthority('plan:plan:insert')")
     @ApiOperation("添加抢课课程")
     @PostMapping("/insert")
     public R insert(@RequestBody @Validated(Insert.class) SecondCourseDto secondCourseDto) {
@@ -176,6 +180,7 @@ public class SecondCoursePlanController {
     /**
      * 删除选课
      */
+    @PreAuthorize("hasAnyAuthority('plan:plan:delete')")
     @ApiImplicitParam(name = "groupId", value = "要删除的分组id")
     @ApiOperation("删除抢课课程")
     @PostMapping("/delete/{groupId}")
@@ -193,6 +198,7 @@ public class SecondCoursePlanController {
     /**
      * 编辑
      */
+    @PreAuthorize("hasAnyAuthority('plan:plan:update')")
     @ApiOperation("编辑抢课课程")
     @PostMapping("/update")
     public R update(@RequestBody @Validated(Update.class) SecondCourseDto secondCourseDto) {

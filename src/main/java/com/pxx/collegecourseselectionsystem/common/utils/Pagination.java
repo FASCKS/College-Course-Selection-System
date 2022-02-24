@@ -10,6 +10,7 @@ import lombok.ToString;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 @ApiModel("分页类")
+
 @Getter@Setter@ToString
 public class Pagination {
     @ApiModelProperty(name = "limit",value = "每页显示数量",required = true,example = "10")
