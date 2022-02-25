@@ -34,11 +34,12 @@ public class ClassroomBetween {
     /**
      * 唯一标识码
      */
-    @TableField(value = "uuid",fill = FieldFill.INSERT)
+    @TableField(value = "`uuid`",fill = FieldFill.INSERT)
     @ApiModelProperty(value="唯一标识码")
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private String uuid;
     public static final String COL_ID = "id";
+    public static final String COL_UUID = "uuid";
 
     public static final String COL_BETWEEN_TYPE = "between_type";
 }
