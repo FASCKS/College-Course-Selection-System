@@ -93,7 +93,10 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRoleEntity
     @Override@Transactional
     public boolean deleteRoleById(List<Long> roleIds) {
         boolean removeBatchByIds = this.removeBatchByIds(roleIds);
-        boolean deleteByBatchRoleId =sysRoleMenuService.deleteByBatchRoleId(roleIds);
+        if (!roleIds.isEmpty()){
+            boolean deleteByBatchRoleId =sysRoleMenuService.deleteByBatchRoleId(roleIds);
+        }
+
         return removeBatchByIds;
     }
 

@@ -103,7 +103,10 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenuEntity
         boolean removeBatchByIds = this.removeBatchByIds(menuIds);
 
         //删除角色菜单表关联的菜单
-       sysRoleMenuService.deleteByMenuId(menuIds);
+        if (!menuIds.isEmpty()){
+            sysRoleMenuService.deleteByMenuId(menuIds);
+        }
+
         return removeBatchByIds;
     }
 
