@@ -91,6 +91,14 @@ public class SysMenuController {
     @ApiOperation("菜单编辑")
     @PostMapping("/update")
     public R update(@RequestBody @Validated SysMenuEntity sysMenuEntity) {
+        if (sysMenuEntity.getType() == 2) {
+            sysMenuEntity.setPerms(sysMenuEntity.getPerms().trim());
+            sysMenuEntity.setUrl(null);
+        }
+        if (sysMenuEntity.getType() == 1 || sysMenuEntity.getType() == 0) {
+            sysMenuEntity.setPerms(null);
+        }
+
         boolean update = sysMenuService.updateOneById(sysMenuEntity);
         return R.ok().put("data", update);
     }

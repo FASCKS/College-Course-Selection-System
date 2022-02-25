@@ -37,19 +37,19 @@ public class ClassroomRoofController {
         return R.ok().put("data",classroomRoof);
     }
     @ApiOperation("大楼类型新增")
-    @GetMapping("/insert")
+    @PostMapping("/insert")
     public R insert(@RequestBody ClassroomRoof classroomRoof){
         boolean save = classroomRoofService.save(classroomRoof);
         return R.ok().put("data",save);
     }
     @ApiOperation("大楼类型编辑")
-    @GetMapping("/update")
+    @PostMapping("/update")
     public R update(@RequestBody ClassroomRoof classroomRoof){
         boolean save = classroomRoofService.updateById(classroomRoof);
         return R.ok().put("data",save);
     }
     @ApiOperation("大楼类型删除")
-    @GetMapping("/delete")
+    @PostMapping("/delete")
     public R update(@RequestParam("id") Integer id){
         boolean save = classroomRoofService.removeOneById(id);
         return R.ok().put("data",save);

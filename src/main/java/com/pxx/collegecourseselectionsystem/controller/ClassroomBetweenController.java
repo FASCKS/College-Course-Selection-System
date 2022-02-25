@@ -37,19 +37,19 @@ public class ClassroomBetweenController {
         return R.ok().put("data",classroomBetween);
     }
     @ApiOperation("教室类型新增")
-    @GetMapping("/insert")
+    @PostMapping("/insert")
     public R insert(@RequestBody ClassroomBetween classroomBetween){
         boolean save = classroomBetweenService.save(classroomBetween);
         return R.ok().put("data",save);
     }
     @ApiOperation("教室类型编辑")
-    @GetMapping("/update")
+    @PostMapping("/update")
     public R update(@RequestBody ClassroomBetween classroomBetween){
         boolean save = classroomBetweenService.updateById(classroomBetween);
         return R.ok().put("data",save);
     }
     @ApiOperation("教室类型删除")
-    @GetMapping("/delete")
+    @PostMapping("/delete")
     public R update(@RequestParam("id") Integer id){
         boolean save = classroomBetweenService.removeOneById(id);
         return R.ok().put("data",save);
