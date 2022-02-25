@@ -31,26 +31,37 @@
                 <result column="week_name" property="weekName"/>
                 <result column="up_time" property="upTime"/>
                 <result column="up_time_name" property="upTimeName"/>
+                <result column="roof_name" property="roofName"/>
+                <result column="roof" property="roof"/>
+                <result column="floor" property="floor"/>
+                <result column="between" property="between"/>
             </collection>
         </collection>
     </resultMap>
     <select id="findMyClassSchedule" resultMap="findMyClassScheduleVo">
-        SELECT sun.unit_id AS unit_id,
-               sun.NAME    AS class_name,
-               su.user_id  AS user_id,
-               su.NAME     AS user_name,
-               co.id       AS course_id,
-               co.`name`   AS course_name,
-               st.NAME     AS teacher_name,
+        SELECT sun.unit_id  AS unit_id,
+               sun.NAME     AS class_name,
+               su.user_id   AS user_id,
+               su.NAME      AS user_name,
+               co.id        AS course_id,
+               co.`name`    AS course_name,
+               st.NAME      AS teacher_name,
                cs.`week`,
-               cs.`week`   as week_name,
+               cs.`week`    as week_name,
                cs.up_time,
-               cs.up_time  as up_time_name
+               cs.up_time   as up_time_name,
+               cr.name_type as roof_name,
+               c.roof,
+               c.floor,
+               c.`between`
         FROM class_schedule cs
                      LEFT JOIN sys_user su ON su.user_id = cs.user_id
                      LEFT JOIN course co ON co.id = cs.course_id
                      LEFT JOIN sys_unit sun ON sun.unit_id = cs.unit
                      LEFT JOIN sys_user st ON st.user_id = cs.teacher
+                     left join classroom c on cs.class_id = c.id
+                     left join classroom_roof cr on cr.id = c.roof_type_id
+
         <where>
             <if test="userId != null">
                 and su.user_id = #{userId,jdbcType=BIGINT}

@@ -20,4 +20,12 @@ public class ClassScheduleTime {
     private CourseWeekEnum weekName;
     private Integer upTime;
     private CourseUpTimeEnum upTimeName;
+    //大楼名字
+    private String roofName;
+    //大楼序号
+    private Integer roof;
+    //大楼层数
+    private Integer floor;
+    //哪一间教室
+    private Integer between;
 }
