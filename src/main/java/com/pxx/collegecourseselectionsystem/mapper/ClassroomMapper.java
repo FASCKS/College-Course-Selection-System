@@ -6,12 +6,28 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.pxx.collegecourseselectionsystem.entity.Classroom;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
- *  @author Gpxx
- *  @Date 2022/2/24 16:24
+ * @author Gpxx
+ * @Date 2022/2/24 16:24
  */
-@Mapper@InterceptorIgnore(tenantLine = "true")
+@Mapper
+@InterceptorIgnore(tenantLine = "true")
 public interface ClassroomMapper extends BaseMapper<Classroom> {
     IPage<Classroom> findAllClassroom(Page<Classroom> objectPage);
+
+    /**
+     * 查询一条
+     *
+     * @param roof
+     * @param between
+     * @param floor
+     * @return
+     */
+    Classroom findOneByRoofAndBetweenAndFloor(@Param("roof") Integer roof, @Param("between") Integer between, @Param("floor") Integer floor);
+
+    Classroom findOne(@Param("id") Integer id);
+
+
 }

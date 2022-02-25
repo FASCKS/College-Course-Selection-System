@@ -16,4 +16,25 @@ public interface ClassroomService extends IService<Classroom>{
          * @return
          */
         PageUtils findAllClassroom(Pagination pagination);
+
+        /**
+         * 新增个教室
+         * @param classroom
+         * @return
+         */
+        boolean insertOne(Classroom classroom);
+
+        /**
+         * 查询一条
+         * @param id
+         * @return
+         */
+        Classroom findOneById(Integer id);
+
+        /**
+         * 更新一条
+         * @param classroom
+         * @return
+         */
+        boolean updateOne(Classroom classroom);
     }
