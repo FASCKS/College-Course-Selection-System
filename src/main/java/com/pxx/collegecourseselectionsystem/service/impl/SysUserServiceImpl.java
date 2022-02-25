@@ -21,6 +21,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -39,6 +40,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
     private RedisUtil redisUtil;
     @Autowired
     private SysLogService sysLogService;
+    @Autowired
+    private SecondCourseService secondCourseService;
 
     /**
      * 添加一个用户
@@ -68,8 +71,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
      * @return
      */
     @Override
-    public PageUtils findAllUser(IPage<SysUserDto> iPage, Integer type,String name,Integer unitId) {
-        IPage<SysUserDto> allUser = sysUserMapper.findAllUser(iPage, type,name,unitId);
+    public PageUtils findAllUser(IPage<SysUserDto> iPage, Integer type, String name, Integer unitId) {
+        IPage<SysUserDto> allUser = sysUserMapper.findAllUser(iPage, type, name, unitId);
         PageUtils pageUtils = new PageUtils(allUser);
         return pageUtils;
     }
@@ -98,8 +101,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
         if (password != null && password.equals(newPassword)) {
             throw new RRException("原密码和新密码不能相同");
         }
-        if (userId==null){
-            userId=SpringSecurityUtil.getUserId();
+        if (userId == null) {
+            userId = SpringSecurityUtil.getUserId();
         }
         SysUserEntity sysUserEntity;
         if (userId != null) {
@@ -130,7 +133,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
 
 
             //密码更新成功需要重新验证授权
-            redisUtil.del(Global.REDIS_USER_DETAIL+sysUserEntity.getUsername());
+            redisUtil.del(Global.REDIS_USER_DETAIL + sysUserEntity.getUsername());
         }
 
         return updateById;
@@ -189,6 +192,29 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
         return baseMapper.CountUserByUnitId(unitIds);
     }
 
+    /**
+     * 批量删除(jdbc批量提交)
+     *
+     * @param list 主键ID或实体列表(主键ID类型必须与实体类型字段保持一致)
+     * @return 删除结果
+     * @since 3.5.0
+     */
+    @Override@Transactional
+    public boolean removeBatchByIds(Collection<?> list) {
+        int deleteBatchIds = baseMapper.deleteBatchIds(list);
+        check((Collection<Long>) list);
+        return deleteBatchIds==list.size();
+    }
+
+    /**
+     * 检查其它表的关联性
+     */
+    private void check(Collection<Long> list) {
+       Integer userCount= secondCourseService.findCountByUserId(list);
+       if (userCount!=null){
+           throw new RRException("该老师被授课课程关联");
+       }
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

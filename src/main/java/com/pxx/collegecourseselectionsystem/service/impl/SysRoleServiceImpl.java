@@ -39,8 +39,6 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRoleEntity
         SysRoleDto sysRoleEntity = sysRoleMapper.findRoleInfoByRoleId(roleId);
         List<Integer> integerList=sysRoleMenuService.findMenuIdByRoleId(roleId);
         sysRoleEntity.setMenuAuthorityIds(integerList);
-
-
         return sysRoleEntity;
     }
 

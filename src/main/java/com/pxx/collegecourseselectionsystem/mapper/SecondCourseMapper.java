@@ -10,6 +10,7 @@ import com.pxx.collegecourseselectionsystem.entity.enums.CourseWeekEnum;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -33,4 +34,11 @@ public interface SecondCourseMapper extends BaseMapper<SecondCourse> {
 
     List<ClassSchedule> findAllOrderCourseAndSecondCourseData();
     List<ClassSchedule> findAllOrderCourseAndSecondCourseDataTwo();
+    /**
+     * 通过用户id查询数量
+     *
+     * @param list
+     * @return
+     */
+    Integer findCountByUserId(Collection<Long> userIdList);
 }

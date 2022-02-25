@@ -82,4 +82,11 @@
         where su.type in (0, 1, 2)
           and sc.up_time_two > 0
     </select>
+
+    <select id="findCountByUserId" resultType="java.lang.Integer">
+        select count(1) from second_course sc  where sc.teacher in
+        <foreach collection="collection" close=")" open="(" item="item" separator="," index="index" nullable="true">
+            #{item,jdbcType=BIGINT}
+        </foreach>
+    </select>
 </mapper>

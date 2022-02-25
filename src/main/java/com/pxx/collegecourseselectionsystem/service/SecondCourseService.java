@@ -6,6 +6,7 @@ import com.pxx.collegecourseselectionsystem.entity.ClassSchedule;
 import com.pxx.collegecourseselectionsystem.entity.SecondCourse;
 import com.pxx.collegecourseselectionsystem.entity.SecondCoursePlanGroupEntity;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -44,5 +45,11 @@ public interface SecondCourseService extends IService<SecondCourse> {
      */
     List<ClassSchedule> findAllOrderCourseAndSecondCourseData();
     List<ClassSchedule> findAllOrderCourseAndSecondCourseDataTwo();
+
+    /**
+     * 通过用户id查询数量
+     * @return
+     */
+    Integer findCountByUserId(Collection<Long> list);
 }
 
