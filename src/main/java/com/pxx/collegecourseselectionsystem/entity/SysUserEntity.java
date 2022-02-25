@@ -41,7 +41,7 @@ public class SysUserEntity implements UserDetails {
     @Positive
     @NotNull(groups = Update.class)
     @ApiModelProperty(value = "用户id")
-    @TableId(value = "user_id", type = IdType.AUTO)
+    @TableId(value = "user_id", type = IdType.ASSIGN_ID)
     private Long userId;
     /**
      * 用户名称
@@ -210,6 +210,12 @@ public class SysUserEntity implements UserDetails {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @TableField(exist = false)
     private List<SysMenuEntity> menuEntityList;
+    /**
+     * 身份证
+     */
+    @ApiModelProperty("身份证")
+    @TableField("identity")
+    private String identity;
 
 
 
@@ -258,7 +264,7 @@ public class SysUserEntity implements UserDetails {
         if (roleEntityList != null) {
             for (SysRoleEntity role : roleEntityList) {
                 if (StrUtil.isNotBlank(role.getRoleName())) {
-                    authorities.add(new UserGrantedAuthority("ROLE_" + role.getRoleName()));
+                    authorities.add(new UserGrantedAuthority("ROLE_" + role.getRoleId()));
                 }
             }
         }
