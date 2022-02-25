@@ -158,6 +158,25 @@ public class SecondCoursePlanGroupServiceImpl extends ServiceImpl<SecondCoursePl
         return baseMapper.getOneByState(id);
     }
 
+    /**
+     * 删除一条
+     *
+     * @param planGroupId
+     * @return
+     */
+    @Override@Transactional
+    public boolean removeOneById(Integer planGroupId) {
+        boolean removeById = this.removeById(planGroupId);
+        check(planGroupId);
+        return removeById;
+    }
+    /**
+     * 删除影响部门
+     */
+    private void check(Integer planGroupId){
+        secondCoursePlanGroupAndUnitService.removeByScpgId(planGroupId);
+    }
+
     private void getUnitIdSonDtId(SecondCoursePlanGroupEntityDto secondCoursePlanGroupEntity, List<Integer> myUnitId) {
         List<SysUnitEntity> sysUnitEntityList = sysUnitService.list();
         List<Integer> unitIds = secondCoursePlanGroupEntity.getUnitIds();

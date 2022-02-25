@@ -55,4 +55,11 @@ public interface SecondCoursePlanGroupService extends IService<SecondCoursePlanG
          * 查询状态
          */
         Integer getOneByState(Integer id);
+
+        /**
+         * 删除一条
+         * @param planGroupId
+         * @return
+         */
+    boolean removeOneById(Integer planGroupId);
 }

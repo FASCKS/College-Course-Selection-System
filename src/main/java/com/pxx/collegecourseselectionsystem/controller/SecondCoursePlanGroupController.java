@@ -133,7 +133,7 @@ public class SecondCoursePlanGroupController {
             return R.ok("计划正在进行中,无法删除。");
         }
 
-        boolean removeById = secondCoursePlanGroupService.removeById(planGroupId);
+        boolean removeById = secondCoursePlanGroupService.removeOneById(planGroupId);
         return R.ok().put("data",removeById);
 
     }
