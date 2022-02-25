@@ -116,4 +116,18 @@
     select menu_id from sys_role_menu
         where role_id=#{roleId,jdbcType=BIGINT}
     </select>
+
+  <delete id="deleteByMenuId">
+    delete from sys_role_menu srm where menu_id in
+    <foreach collection="menuIds" close=")" open="(" item="item" separator="," index="index" nullable="true">
+      #{item,jdbcType=INTEGER}
+    </foreach>
+    </delete>
+
+  <delete id="deleteByBatchRoleId">
+    delete from sys_role_menu srm where srm.role_id in
+    <foreach collection="roleIds" close=")" open="(" item="item" separator="," index="index" nullable="true">
+      #{item,jdbcType=INTEGER}
+    </foreach>
+  </delete>
 </mapper>

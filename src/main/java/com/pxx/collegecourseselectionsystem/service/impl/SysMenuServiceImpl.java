@@ -9,6 +9,7 @@ import com.pxx.collegecourseselectionsystem.dto.SysMenuDto;
 import com.pxx.collegecourseselectionsystem.entity.SysMenuEntity;
 import com.pxx.collegecourseselectionsystem.mapper.SysMenuMapper;
 import com.pxx.collegecourseselectionsystem.service.SysMenuService;
+import com.pxx.collegecourseselectionsystem.service.SysRoleMenuService;
 import com.pxx.collegecourseselectionsystem.vo.course.MenuTreeNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -23,7 +24,8 @@ import java.util.Objects;
 public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenuEntity> implements SysMenuService {
     @Autowired
     private SysMenuMapper sysMenuMapper;
-
+    @Autowired
+    private SysRoleMenuService sysRoleMenuService;
 
     /**
      * 返回所有菜单
@@ -73,7 +75,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenuEntity
                     tree.putExtra("status", treeNode.getStatus());
                     tree.putExtra("type", treeNode.getType());
                     tree.putExtra("perms", treeNode.getPerms());
-                    tree.putExtra("menuType",treeNode.getMenuType());
+                    tree.putExtra("menuType", treeNode.getMenuType());
                 }
         );
         return buildTreeList;
@@ -99,8 +101,10 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenuEntity
         List<Integer> menuIds = new ArrayList<>();
         menuIds.add(id);
         this.getSonDtId(sysMenuEntityList, id, menuIds);
-
         boolean removeBatchByIds = this.removeBatchByIds(menuIds);
+
+        //删除角色菜单表关联的菜单
+       sysRoleMenuService.deleteByMenuId(menuIds);
         return removeBatchByIds;
     }
 
@@ -126,7 +130,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenuEntity
     public List<Tree<Integer>> findMenuByUrl(String url) {
         SysMenuEntity sysMenuEntity = baseMapper.findMenuByUrl(url);
         if (sysMenuEntity == null) {
-            throw new RRException("没有url为 "+url+" 的菜单");
+            throw new RRException("没有url为 " + url + " 的菜单");
         }
         Integer menuId = sysMenuEntity.getMenuId();
         List<Integer> menuIds = new ArrayList<>();

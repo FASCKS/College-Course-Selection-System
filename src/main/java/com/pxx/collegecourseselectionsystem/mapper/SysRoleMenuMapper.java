@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+
 @InterceptorIgnore(tenantLine = "1")
 @Mapper
 public interface SysRoleMenuMapper extends BaseMapper<SysRoleMenuEntity> {
@@ -22,4 +23,14 @@ public interface SysRoleMenuMapper extends BaseMapper<SysRoleMenuEntity> {
     int deleteByRoleId(@Param("roleId") Long roleId);
 
     List<Integer> findMenuIdByRoleId(@Param("roleId") Long roleId);
+
+    boolean deleteByMenuId(@Param("menuIds") List<Integer> menuIds);
+
+    /**
+     * 通过角色id删除
+     *
+     * @param roleIds
+     * @return
+     */
+    boolean deleteByBatchRoleId(@Param("roleIds") List<Long> roleIds);
 }

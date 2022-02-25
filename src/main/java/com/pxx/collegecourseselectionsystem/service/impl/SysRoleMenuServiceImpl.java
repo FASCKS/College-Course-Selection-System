@@ -52,4 +52,27 @@ private SysRoleMenuMapper sysRoleMenuMapper;
 
         return  sysRoleMenuMapper.findMenuIdByRoleId(roleId);
     }
+
+    /**
+     * 通过菜单id删除数据
+     *
+     * @param menuIds
+     * @return
+     */
+    @Override
+    public boolean deleteByMenuId(List<Integer> menuIds) {
+        return baseMapper.deleteByMenuId(menuIds);
+    }
+
+    /**
+     * 通过角色id删除
+     *
+     * @param roleIds
+     * @return
+     */
+    @Override
+    public boolean deleteByBatchRoleId(List<Long> roleIds) {
+
+        return baseMapper.deleteByBatchRoleId(roleIds);
+    }
 }

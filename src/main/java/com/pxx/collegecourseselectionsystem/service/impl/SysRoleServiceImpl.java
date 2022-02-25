@@ -10,7 +10,6 @@ import com.pxx.collegecourseselectionsystem.dto.SysRoleDto;
 import com.pxx.collegecourseselectionsystem.entity.SysRoleEntity;
 import com.pxx.collegecourseselectionsystem.entity.SysRoleMenuEntity;
 import com.pxx.collegecourseselectionsystem.mapper.SysRoleMapper;
-import com.pxx.collegecourseselectionsystem.service.SysMenuService;
 import com.pxx.collegecourseselectionsystem.service.SysRoleMenuService;
 import com.pxx.collegecourseselectionsystem.service.SysRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +23,7 @@ import java.util.List;
 public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRoleEntity> implements SysRoleService {
     @Autowired
     private SysRoleMapper sysRoleMapper;
-    @Autowired
-    private SysMenuService sysMenuService;
+
     @Autowired
     private SysRoleMenuService sysRoleMenuService;
 
@@ -84,6 +82,19 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRoleEntity
     public PageUtils findAllRole(Page<SysRoleEntity> page) {
         IPage<SysRoleEntity> entityIPage=sysRoleMapper.findAllRole(page);
         return new PageUtils(entityIPage);
+    }
+
+    /**
+     * 批量删除
+     *
+     * @param roleIds
+     * @return
+     */
+    @Override@Transactional
+    public boolean deleteRoleById(List<Long> roleIds) {
+        boolean removeBatchByIds = this.removeBatchByIds(roleIds);
+        boolean deleteByBatchRoleId =sysRoleMenuService.deleteByBatchRoleId(roleIds);
+        return removeBatchByIds;
     }
 
     /**

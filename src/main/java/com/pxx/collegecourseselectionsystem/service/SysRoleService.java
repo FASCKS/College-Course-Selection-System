@@ -5,6 +5,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.pxx.collegecourseselectionsystem.common.utils.PageUtils;
 import com.pxx.collegecourseselectionsystem.dto.SysRoleDto;
 import com.pxx.collegecourseselectionsystem.entity.SysRoleEntity;
+
+import java.util.List;
+
 public interface SysRoleService extends IService<SysRoleEntity>{
 
 
@@ -35,4 +38,11 @@ public interface SysRoleService extends IService<SysRoleEntity>{
      * @return
      */
     PageUtils findAllRole(Page<SysRoleEntity> page);
+
+    /**
+     * 批量删除
+     * @param roleIds
+     * @return
+     */
+    boolean deleteRoleById(List<Long> roleIds);
 }

@@ -6,7 +6,6 @@ import cn.hutool.core.lang.tree.TreeNode;
 import cn.hutool.core.lang.tree.TreeUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.pxx.collegecourseselectionsystem.common.utils.RedisUtil;
 import com.pxx.collegecourseselectionsystem.entity.SysUnitEntity;
 import com.pxx.collegecourseselectionsystem.mapper.SysUnitMapper;
 import com.pxx.collegecourseselectionsystem.service.SysUnitService;
@@ -20,8 +19,7 @@ import java.util.*;
 public class SysUnitServiceImpl extends ServiceImpl<SysUnitMapper, SysUnitEntity> implements SysUnitService {
     @Autowired
     private SysUnitMapper sysUnitMapper;
-    @Autowired
-    private RedisUtil redisUtil;
+
 
     @Override
     public int updateBatch(List<SysUnitEntity> list) {

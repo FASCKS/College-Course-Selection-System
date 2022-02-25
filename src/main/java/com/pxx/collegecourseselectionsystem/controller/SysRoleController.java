@@ -70,7 +70,7 @@ public class SysRoleController {
     @PreAuthorize("hasAnyAuthority('sys:role:delete')")
     @PostMapping("/delete")
     public R delete(@NotEmpty @RequestBody List<Long> roleIds){
-        boolean removeById = sysRoleService.removeBatchByIds(roleIds);
+        boolean removeById = sysRoleService.deleteRoleById(roleIds);
         return R.ok().put("data",removeById);
     }
     /**
