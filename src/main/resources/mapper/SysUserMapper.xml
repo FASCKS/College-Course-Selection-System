@@ -178,4 +178,11 @@
             #{item,jdbcType=INTEGER}
         </foreach>
     </select>
+
+    <select id="CountUserByUnitId" resultType="java.lang.Integer">
+        select count(1) from sys_user su where unit_id in
+        <foreach collection="unitIds" nullable="true" index="index" separator="," item="item" open="(" close=")">
+            #{item,jdbcType=INTEGER}
+        </foreach>
+    </select>
 </mapper>

@@ -56,4 +56,11 @@ public interface SysUserMapper extends BaseMapper<SysUserEntity> {
      * @return
      */
     List<SysUserEntity> findUserByUnitId(@Param("unitId") List<Integer> unitId);
+
+    /**
+     * 统计部门下有几个用户
+     *
+     * @param unitIds
+     */
+    Integer CountUserByUnitId(@Param("unitIds") List<Integer> unitIds);
 }

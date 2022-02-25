@@ -179,6 +179,16 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
         return baseMapper.findUserByUnitId(unitId);
     }
 
+    /**
+     * 统计部门下有几个用户
+     *
+     * @param unitIds
+     */
+    @Override
+    public Integer CountUserByUnitId(List<Integer> unitIds) {
+        return baseMapper.CountUserByUnitId(unitIds);
+    }
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

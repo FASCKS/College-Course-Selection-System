@@ -6,9 +6,11 @@ import cn.hutool.core.lang.tree.TreeNode;
 import cn.hutool.core.lang.tree.TreeUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.pxx.collegecourseselectionsystem.common.exception.RRException;
 import com.pxx.collegecourseselectionsystem.entity.SysUnitEntity;
 import com.pxx.collegecourseselectionsystem.mapper.SysUnitMapper;
 import com.pxx.collegecourseselectionsystem.service.SysUnitService;
+import com.pxx.collegecourseselectionsystem.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +21,8 @@ import java.util.*;
 public class SysUnitServiceImpl extends ServiceImpl<SysUnitMapper, SysUnitEntity> implements SysUnitService {
     @Autowired
     private SysUnitMapper sysUnitMapper;
-
+@Autowired
+private SysUserService sysUserService;
 
     @Override
     public int updateBatch(List<SysUnitEntity> list) {
@@ -101,6 +104,7 @@ public class SysUnitServiceImpl extends ServiceImpl<SysUnitMapper, SysUnitEntity
     @Override
     @Transactional
     public boolean deleteOneById(Integer unitId) {
+
         // 级联删除部门
         List<SysUnitEntity> sysUnitEntities = this.list();
         List<Integer> ids = new ArrayList<>();
@@ -110,9 +114,22 @@ public class SysUnitServiceImpl extends ServiceImpl<SysUnitMapper, SysUnitEntity
         }
         boolean removeById = this.removeById(unitId);
 
+        check(ids);
         return true;
     }
 
+    /**
+     * 检查部门下面是否有关联
+     */
+    private void check(List<Integer>  unitIds){
+        //检查是否有用户
+        {
+            Integer integer = sysUserService.CountUserByUnitId(unitIds);
+            if (integer != null) {
+                throw new RRException("部门下关联"+integer+"个用户");
+            }
+        }
+    }
     @Override
     public void getSonDtId(List<SysUnitEntity> departmentList, Integer dtId, List<Integer> dtIds) {
         for (SysUnitEntity department : departmentList) {
