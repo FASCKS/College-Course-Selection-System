@@ -1,5 +1,6 @@
 package com.pxx.collegecourseselectionsystem.config;
 
+import cn.hutool.core.util.IdUtil;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.pxx.collegecourseselectionsystem.common.utils.SpringSecurityUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
     private static final String updateTime = "updatedTime"; //更新时间
     private static final String revision = "revision"; //乐观锁
     private static final String unitId = "unitId"; //权限范围
+    private static final String uuid = "uuid"; //uuid
 
     @Override
     public void insertFill(MetaObject metaObject) {
@@ -27,6 +29,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         this.setFieldValByName(updateTime, new Date(), metaObject);
         this.setFieldValByName(createTime, new Date(), metaObject);
         this.setFieldValByName(unitId, getUnitId(), metaObject);
+        this.setFieldValByName(uuid, getUuid(), metaObject);
     }
 
     @Override
@@ -44,6 +47,9 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
     private String getUserName() {
 //        final String username = SpringSecurityUtil.getUsername();
         return "admin";
+    }
+    private String getUuid(){
+        return IdUtil.simpleUUID();
     }
 
     private Integer getUnitId() {

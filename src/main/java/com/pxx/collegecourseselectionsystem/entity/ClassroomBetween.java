@@ -1,9 +1,7 @@
 package com.pxx.collegecourseselectionsystem.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -33,7 +31,13 @@ public class ClassroomBetween {
     @TableField(value = "between_type")
     @ApiModelProperty(value="教室类型名称")
     private String betweenType;
-
+    /**
+     * 唯一标识码
+     */
+    @TableField(value = "uuid",fill = FieldFill.INSERT)
+    @ApiModelProperty(value="唯一标识码")
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private String uuid;
     public static final String COL_ID = "id";
 
     public static final String COL_BETWEEN_TYPE = "between_type";
