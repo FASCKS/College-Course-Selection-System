@@ -25,7 +25,7 @@ public class ClassroomRoofController {
     private ClassroomRoofService classroomRoofService;
 
     @ApiOperation("大楼类型列表")
-    @RequestMapping("/list")
+    @GetMapping("/list")
     public R list(@Validated Pagination pagination){
         Page<ClassroomRoof> classroomRoofPage = classroomRoofService.page(new Page<>(pagination.getPage(), pagination.getLimit()));
         return R.ok().put("data",new PageUtils(classroomRoofPage));

@@ -25,7 +25,7 @@ public class ClassroomBetweenController {
     private ClassroomBetweenService classroomBetweenService;
 
     @ApiOperation("教室类型列表")
-    @RequestMapping("/list")
+    @GetMapping("/list")
     public R list(@Validated Pagination pagination){
         Page<ClassroomBetween> classroomBetweenPage = classroomBetweenService.page(new Page<>(pagination.getPage(), pagination.getLimit()));
         return R.ok().put("data",new PageUtils(classroomBetweenPage));

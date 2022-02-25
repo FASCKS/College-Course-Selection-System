@@ -12,7 +12,6 @@ import com.pxx.collegecourseselectionsystem.service.SysMenuService;
 import com.pxx.collegecourseselectionsystem.service.SysRoleMenuService;
 import com.pxx.collegecourseselectionsystem.vo.course.MenuTreeNode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -125,7 +124,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenuEntity
         }
     }
 
-    @Cacheable(value = "menu_details", key = "'url_'+#url", unless = "#result == null")
+//    @Cacheable(value = "menu_details", key = "'url_'+#url", unless = "#result == null")
     @Override
     public List<Tree<Integer>> findMenuByUrl(String url) {
         SysMenuEntity sysMenuEntity = baseMapper.findMenuByUrl(url);
