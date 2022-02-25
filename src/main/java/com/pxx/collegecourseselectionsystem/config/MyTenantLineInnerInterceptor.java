@@ -1,6 +1,7 @@
 package com.pxx.collegecourseselectionsystem.config;
 
 
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.plugins.handler.TenantLineHandler;
 import com.baomidou.mybatisplus.extension.plugins.inner.TenantLineInnerInterceptor;
 import net.sf.jsqlparser.expression.Expression;
@@ -37,6 +38,11 @@ public class MyTenantLineInnerInterceptor extends TenantLineInnerInterceptor {
 
     @Override
     protected Expression builderExpression(Expression currentExpression, List<Table> tables) {
+        // 没有表需要处理直接返回
+        if (CollectionUtils.isEmpty(tables)) {
+            return currentExpression;
+        }
+        //只需要构造一张表的表达式
         Column aliasColumn = this.getAliasColumn(tables.get(0));
         boolean presenceOfField=true;
 
@@ -47,7 +53,9 @@ public class MyTenantLineInnerInterceptor extends TenantLineInnerInterceptor {
             if (currentExpression == null) {
                 return inExpression;
             } else {
-                return currentExpression instanceof OrExpression ? new AndExpression(new Parenthesis(currentExpression), inExpression) : new AndExpression(currentExpression, inExpression);
+                return currentExpression instanceof OrExpression ?
+                        new AndExpression(new Parenthesis(currentExpression), inExpression)
+                        : new AndExpression(currentExpression, inExpression);
             }
         }else{
             return currentExpression;

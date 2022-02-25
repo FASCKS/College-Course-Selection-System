@@ -1,9 +1,6 @@
 package com.pxx.collegecourseselectionsystem.config;
 
-/**
- * @author Gpxx
- * @Date 2022/2/23 13:25
- */
+
 
 import com.baomidou.mybatisplus.extension.plugins.handler.TenantLineHandler;
 import com.pxx.collegecourseselectionsystem.common.utils.RedisUtil;
@@ -18,11 +15,9 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
 /**
- * @author ：hzz
- * @description：TODO
- * @date ：2021/8/9 15:44
+ * @author Gpxx
+ * @Date 2022/2/23 13:25
  */
 @Component
 public class MyTenantLineHandler implements TenantLineHandler {
