@@ -17,38 +17,38 @@ import org.springframework.web.bind.annotation.*;
  * @Date 2022/2/24 16:12
  */
 @Validated
-@Api(tags = "大楼类型")
+@Api(tags = "大楼管理")
 @AllArgsConstructor
 @RestController
 @RequestMapping("/ClassroomRoof")
 public class ClassroomRoofController {
     private ClassroomRoofService classroomRoofService;
 
-    @ApiOperation("大楼类型列表")
+    @ApiOperation("大楼列表")
     @GetMapping("/list")
     public R list(@Validated Pagination pagination){
         Page<ClassroomRoof> classroomRoofPage = classroomRoofService.page(new Page<>(pagination.getPage(), pagination.getLimit()));
         return R.ok().put("data",new PageUtils(classroomRoofPage));
     }
-    @ApiOperation("大楼类型详情")
+    @ApiOperation("大楼详情")
     @GetMapping("/info")
     public R list(@RequestParam("id") Integer id){
         ClassroomRoof classroomRoof = classroomRoofService.getById(id);
         return R.ok().put("data",classroomRoof);
     }
-    @ApiOperation("大楼类型新增")
+    @ApiOperation("大楼新增")
     @PostMapping("/insert")
     public R insert(@RequestBody ClassroomRoof classroomRoof){
         boolean save = classroomRoofService.save(classroomRoof);
         return R.ok().put("data",save);
     }
-    @ApiOperation("大楼类型编辑")
+    @ApiOperation("大楼编辑")
     @PostMapping("/update")
     public R update(@RequestBody ClassroomRoof classroomRoof){
         boolean save = classroomRoofService.updateById(classroomRoof);
         return R.ok().put("data",save);
     }
-    @ApiOperation("大楼类型删除")
+    @ApiOperation("大楼删除")
     @PostMapping("/delete")
     public R update(@RequestParam("id") Integer id){
         boolean save = classroomRoofService.removeOneById(id);

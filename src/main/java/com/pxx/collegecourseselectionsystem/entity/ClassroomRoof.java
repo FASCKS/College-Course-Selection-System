@@ -38,6 +38,13 @@ public class ClassroomRoof {
     @ApiModelProperty(value="唯一标识码")
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private String uuid;
+    /**
+     * 编号
+     */
+    @NotBlank
+    @TableField(value = "number")
+    @ApiModelProperty("编号")
+    private String number;
 
     public static final String COL_ID = "id";
     public static final String COL_UUID = "uuid";
