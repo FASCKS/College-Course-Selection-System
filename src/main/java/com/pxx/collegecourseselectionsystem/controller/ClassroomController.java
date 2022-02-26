@@ -11,6 +11,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * @author Gpxx
  * @Date 2022/2/24 16:25
@@ -37,18 +39,18 @@ public class ClassroomController {
     }
     @ApiOperation("删除")
     @PostMapping("/delete")
-    public R delete(@RequestParam("id") Integer id){
+    public R delete(@RequestParam("id") @NotNull Integer id){
         boolean removeById =classroomService.removeById(id);
         return R.ok().put("data",removeById);
     }
     @ApiOperation("详情")
     @GetMapping("/info")
-    public R info(@RequestParam("id") Integer id){
+    public R info(@RequestParam("id")@NotNull Integer id){
         Classroom classroom =classroomService.findOneById(id);
         return R.ok().put("data",classroom);
     }
     @ApiOperation("编辑")
-    @GetMapping("/update")
+    @PostMapping("/update")
     public R update(@Validated @RequestBody Classroom classroom){
         boolean updateOne =classroomService.updateOne(classroom);
         return R.ok().put("data",updateOne);

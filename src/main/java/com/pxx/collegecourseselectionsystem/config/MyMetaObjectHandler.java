@@ -40,13 +40,23 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
     }
 
     private Long getUserId() {
-//        final Long userId = SpringSecurityUtil.getUserId();
-        return 1L;
+         Long userId =1L;
+         try {
+             userId = SpringSecurityUtil.getUserId();
+         }catch (Exception e){
+             log.error("当前链接没有用户实体");
+         }
+        return userId;
     }
 
     private String getUserName() {
-//        final String username = SpringSecurityUtil.getUsername();
-        return "admin";
+         String username ="admin";
+        try {
+            username = SpringSecurityUtil.getUsername();
+        }catch (Exception e){
+            log.error("当前链接没有用户实体");
+        }
+        return username;
     }
     private String getUuid(){
         return IdUtil.simpleUUID();
