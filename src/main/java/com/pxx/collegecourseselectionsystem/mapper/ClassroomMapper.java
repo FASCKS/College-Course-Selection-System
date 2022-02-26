@@ -16,7 +16,7 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 @InterceptorIgnore(tenantLine = "true")
 public interface ClassroomMapper extends BaseMapper<Classroom> {
-    IPage<ClassroomRoofDto> findAllClassroom(Page<Classroom> objectPage);
+    IPage<ClassroomRoofDto> findAllClassroom(Page<Classroom> page);
 
     /**
      * 查询一条
