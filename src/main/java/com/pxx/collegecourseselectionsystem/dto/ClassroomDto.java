@@ -11,12 +11,5 @@ import lombok.ToString;
  */
 @Getter@Setter@ToString
 public class ClassroomDto extends Classroom {
-    /**
-     * 教室类型
-     */
-    private  String ClassroomBetweenName;
-    /**
-     * 大楼类型
-     */
-    private  String ClassroomRoof;
+
 }

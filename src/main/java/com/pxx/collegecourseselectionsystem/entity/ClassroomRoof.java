@@ -28,9 +28,9 @@ public class ClassroomRoof {
      * 类型名称
      */
     @NotBlank
-    @TableField(value = "name_type")
-    @ApiModelProperty(value="大楼类型名称")
-    private String nameType;
+    @TableField(value = "roof_name")
+    @ApiModelProperty(value="大楼名称")
+    private String roofName;
     /**
      * 唯一标识码
      */
@@ -42,9 +42,9 @@ public class ClassroomRoof {
      * 编号
      */
     @NotBlank
-    @TableField(value = "number")
+    @TableField(value = "roof_number")
     @ApiModelProperty("编号")
-    private String number;
+    private String roofNumber;
 
     public static final String COL_ID = "id";
     public static final String COL_UUID = "uuid";

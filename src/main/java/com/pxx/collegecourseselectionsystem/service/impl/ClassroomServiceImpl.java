@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.pxx.collegecourseselectionsystem.common.exception.RRException;
 import com.pxx.collegecourseselectionsystem.common.utils.PageUtils;
 import com.pxx.collegecourseselectionsystem.common.utils.Pagination;
+import com.pxx.collegecourseselectionsystem.dto.ClassroomRoofDto;
 import com.pxx.collegecourseselectionsystem.entity.Classroom;
 import com.pxx.collegecourseselectionsystem.entity.ClassroomBetween;
 import com.pxx.collegecourseselectionsystem.entity.ClassroomRoof;
@@ -36,7 +37,7 @@ public class ClassroomServiceImpl extends ServiceImpl<ClassroomMapper, Classroom
      */
     @Override
     public PageUtils findAllClassroom(Pagination pagination) {
-        IPage<Classroom> classroomIPage = baseMapper.findAllClassroom(new Page<>(pagination.getPage(), pagination.getLimit()));
+        IPage<ClassroomRoofDto> classroomIPage = baseMapper.findAllClassroom(new Page<>(pagination.getPage(), pagination.getLimit()));
         return new PageUtils(classroomIPage);
     }
 
