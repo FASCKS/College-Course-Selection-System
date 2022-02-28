@@ -40,22 +40,22 @@
         </collection>
     </resultMap>
     <select id="findMyClassSchedule" resultMap="findMyClassScheduleVo">
-        SELECT sun.unit_id  AS unit_id,
-               sun.NAME     AS class_name,
-               su.user_id   AS user_id,
-               su.NAME      AS user_name,
-               co.id        AS course_id,
-               co.`name`    AS course_name,
-               st.NAME      AS teacher_name,
+        SELECT sun.unit_id     AS unit_id,
+               sun.NAME        AS class_name,
+               su.user_id      AS user_id,
+               su.NAME         AS user_name,
+               co.id           AS course_id,
+               co.`name`       AS course_name,
+               st.NAME         AS teacher_name,
                cs.`week`,
-               cs.`week`    as week_name,
+               cs.`week`       as week_name,
                cs.up_time,
-               cs.up_time   as up_time_name,
-               cr.roof_name as roof_name,
+               cs.up_time      as up_time_name,
+               cr.roof_name    as roof_name,
                cr.roof_number,
                c.floor,
                c.`between`,
-                cb.between_type as between_name
+               cb.between_type as between_name
         FROM class_schedule cs
                      LEFT JOIN sys_user su ON su.user_id = cs.user_id
                      LEFT JOIN course co ON co.id = cs.course_id
@@ -63,7 +63,7 @@
                      LEFT JOIN sys_user st ON st.user_id = cs.teacher
                      left join classroom c on cs.classroom_id = c.id
                      left join classroom_roof cr on cr.id = c.roof_type_id
-        left join classroom_between cb on cb.id=c.between_type_id
+                     left join classroom_between cb on cb.id = c.between_type_id
 
         <where>
             <if test="userId != null">
@@ -81,6 +81,9 @@
                 <result column="course_id" property="courseId"/>
                 <result column="week" property="week"/>
                 <result column="up_time" property="upTime"/>
+                <result column="roof_number" property="roofNumber"/>
+                <result column="floor" property="floor"/>
+                <result column="between" property="between"/>
             </collection>
         </collection>
     </resultMap>
@@ -88,10 +91,15 @@
         SELECT su.user_id AS user_id,
                co.id      AS course_id,
                cs.`week`,
-               cs.up_time
+               cs.up_time,
+               cr.roof_number,
+               c.floor,
+               c.`between`
         FROM class_schedule cs
                      LEFT JOIN sys_user su ON su.user_id = cs.user_id
                      LEFT JOIN course co ON co.id = cs.course_id
+                     left join classroom c on cs.classroom_id = c.id
+                     left join classroom_roof cr on cr.id = c.roof_type_id
     </select>
 
     <select id="findMySimpleMyClassSchedule" resultMap="findSimpleMyClassScheduleVo">

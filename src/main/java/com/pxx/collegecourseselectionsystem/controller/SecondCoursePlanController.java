@@ -172,9 +172,10 @@ public class SecondCoursePlanController {
         //判断是否冲突
         boolean courseCheck = courseCheck(secondCourseDto);
         if (!courseCheck) {
-            return R.error(StrUtil.format("课程可能在 {}-{}楼 第 {} 间教室 的 星期 {} 第 {} {} 节课有冲突"
+            return R.error(StrUtil.format("课程可能在 {}-{}楼 第 {} 层 第 {} 间教室 的 星期 {} 第 {} {} 节课有冲突"
                     , secondCourseDto.getRoofName()
                     , secondCourseDto.getRoofNumber()
+                    , secondCourseDto.getFloor()
                     , secondCourseDto.getBetween()
                     , secondCourseDto.getWeek()
                     , secondCourseDto.getUpTimeNumber()
@@ -217,9 +218,10 @@ public class SecondCoursePlanController {
         //判断是否冲突
         boolean courseCheck = courseCheck(secondCourseDto);
         if (!courseCheck) {
-            return R.error(StrUtil.format("课程可能在 {}-{}楼 第 {} 间教室 的 星期 {} 第 {} {} 节课有冲突"
+            return R.error(StrUtil.format("课程可能在 {}-{}楼 第 {} 层 第 {} 间教室 的 星期 {} 第 {} {} 节课有冲突"
                     , secondCourseDto.getRoofName()
                     , secondCourseDto.getRoofNumber()
+                    , secondCourseDto.getFloor()
                     , secondCourseDto.getBetween()
                     , secondCourseDto.getWeek()
                     , secondCourseDto.getUpTimeNumber()

@@ -126,7 +126,7 @@ public class SecondCourseController {
             Integer up_time = secondCourseDto.getUpTime().getCode();
             Integer week = secondCourseDto.getWeek().getCode();
             Integer courseId = secondCourseDto.getCourseId();
-            SimpleClassBook simpleClassBook = this.getSimpleClassBook(up_time, week, courseId,secondCourseDto);
+            SimpleClassBook simpleClassBook = this.getSimpleClassBook(up_time, week, courseId, secondCourseDto);
             long lRemove = redisUtil.lRemove(Global.KILL_SECOND_COURSE + "class:temp_schedule:" + userId, 0, simpleClassBook);
 
             if (lRemove == 1) {
@@ -153,10 +153,14 @@ public class SecondCourseController {
             Integer week = secondCourseDto.getWeek().getCode();
             Integer upTime = secondCourseDto.getUpTime().getCode();
             Integer upTimeTwo = secondCourseDto.getUpTimeTwo().getCode();
+            Integer floor = secondCourseDto.getFloor();
+            Integer roofNumber = secondCourseDto.getRoofNumber();
+            Integer between = secondCourseDto.getBetween();
             //如果课程表不为空才进行课程冲突检测
             if (simpleClassScheduleVo != null) {
                 for (SimpleClassBook simpleClassBook : simpleClassScheduleVo.getClassBook()) {
                     //如果时间相同
+                    //如果教室相同
                     for (SimpleClassScheduleTime classScheduleTime : simpleClassBook.getClassScheduleTimes()) {
                         if (
                             //判断第几天
@@ -164,9 +168,16 @@ public class SecondCourseController {
                                         //判断第一节
                                         upTime.equals(classScheduleTime.getUpTime()) ||
                                                 //判断第二节课是否存在 和 是否和其它课程冲突
-                                                upTimeTwo.equals(classScheduleTime.getUpTime()))) {
+                                                upTimeTwo.equals(classScheduleTime.getUpTime())) && (
+                                        //判断大楼是否相同
+                                        roofNumber.equals(classScheduleTime.getRoofNumber()) &&
+                                                //判断楼层是否相同
+                                                floor.equals(classScheduleTime.getFloor()) &&
+                                                //判断教室是否相同
+                                                between.equals(classScheduleTime.getBetween())
+                                )) {
                             //如果相等
-                            return R.error("第" + week + "天的第" + upTime+1 + "或" + upTimeTwo+1 + "课程冲突。");
+                            return R.error("第" + week + "天的第" + upTime + 1 + "或" + upTimeTwo + 1 + "课程冲突。");
                         }
                     }
                 }
@@ -195,7 +206,7 @@ public class SecondCourseController {
         Integer week = secondCourseDto.getWeek().getCode();
         Integer courseId = secondCourseDto.getCourseId();
 
-        SimpleClassBook simpleClassBook = this.getSimpleClassBook(up_time, week, courseId,secondCourseDto);
+        SimpleClassBook simpleClassBook = this.getSimpleClassBook(up_time, week, courseId, secondCourseDto);
 
         //存放临时课表
         redisUtil.lSet(Global.KILL_SECOND_COURSE + "class:temp_schedule:" + userId, simpleClassBook, (endTime - startTime) / 1000 + 60 * 5);
@@ -203,6 +214,7 @@ public class SecondCourseController {
 
         return R.ok().put("data", true);
     }
+
     @PreAuthorize("hasAnyAuthority('second:plan:list')")
     @ApiImplicitParam(name = "id", value = "分组id")
     @ApiOperation("学生抢课计划列表")
@@ -283,7 +295,7 @@ public class SecondCourseController {
         List<Object> classBookList = redisUtil.lGet(Global.KILL_SECOND_COURSE + "class:temp_schedule:" + userId, 0, -1);
         //学生当前课程表
         SimpleClassScheduleVo simpleClassScheduleVo = redisUtil.get(Global.KILL_SECOND_COURSE + "class:schedule:" + userId);
-        if (simpleClassScheduleVo==null){
+        if (simpleClassScheduleVo == null) {
             return R.error("无临时课表");
         }
         List<SimpleClassBook> classBook = simpleClassScheduleVo.getClassBook();
@@ -301,7 +313,7 @@ public class SecondCourseController {
     /**
      * 获取SimpleClassBook
      */
-    private SimpleClassBook getSimpleClassBook(Integer up_time, Integer week, Integer courseId,SecondCourseDto secondCourseDto) {
+    private SimpleClassBook getSimpleClassBook(Integer up_time, Integer week, Integer courseId, SecondCourseDto secondCourseDto) {
 
 
         SimpleClassBook simpleClassBook = new SimpleClassBook();

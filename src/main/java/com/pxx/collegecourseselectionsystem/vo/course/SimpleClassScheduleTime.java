@@ -15,4 +15,11 @@ public class SimpleClassScheduleTime {
     private Integer courseId;
     private Integer week;
     private Integer upTime;
+    //大楼序号
+    private Integer roofNumber;
+    //大楼层数
+    private Integer floor;
+    //哪一间教室
+    private Integer between;
+
 }
