@@ -177,7 +177,7 @@ public class SecondCoursePlanController {
                     , secondCourseDto.getRoofNumber()
                     , secondCourseDto.getFloor()
                     , secondCourseDto.getBetween()
-                    , secondCourseDto.getWeek()
+                    , secondCourseDto.getWeek().getCode()
                     , secondCourseDto.getUpTimeNumber()
                     , secondCourseDto.getUpTimeTwoNumber()));
         }
@@ -223,7 +223,7 @@ public class SecondCoursePlanController {
                     , secondCourseDto.getRoofNumber()
                     , secondCourseDto.getFloor()
                     , secondCourseDto.getBetween()
-                    , secondCourseDto.getWeek()
+                    , secondCourseDto.getWeek().getCode()
                     , secondCourseDto.getUpTimeNumber()
                     , secondCourseDto.getUpTimeTwoNumber()));
         }

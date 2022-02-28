@@ -178,14 +178,18 @@ public class SecondCourseController {
                                                 between.equals(classScheduleTime.getBetween())
                                 )) {
                             //如果相等
-                            return R.error(StrUtil.format("课程可能在 {}-{}楼 第 {} 层 第 {} 间教室 的 星期 {} 第 {} {} 节课有冲突"
+                            return R.error(StrUtil.format("课程可能在 {}-{}楼 第 {} 层 第 {} 间教室 的 星期 {} 第 {}{} 节课有冲突"
                                     , secondCourseDto.getRoofName()
                                     , secondCourseDto.getRoofNumber()
                                     , secondCourseDto.getFloor()
                                     , secondCourseDto.getBetween()
-                                    , secondCourseDto.getWeek()
+                                    , secondCourseDto.getWeek().getCode()
                                     , secondCourseDto.getUpTimeNumber()
-                                    , secondCourseDto.getUpTimeTwoNumber()));
+                                    ,
+                                    secondCourseDto.getUpTimeTwoNumber() == 0 ? "" : " "+secondCourseDto.getUpTimeTwoNumber()
+
+
+                            ));
                         }
                     }
                 }
@@ -333,6 +337,9 @@ public class SecondCourseController {
         simpleClassScheduleTime.setCourseId(courseId);
         simpleClassScheduleTime.setUpTime(up_time);
         simpleClassScheduleTime.setWeek(week);
+        simpleClassScheduleTime.setRoofNumber(secondCourseDto.getRoofNumber());
+        simpleClassScheduleTime.setFloor(secondCourseDto.getFloor());
+        simpleClassScheduleTime.setBetween(secondCourseDto.getBetween());
         //如果是同一节课程
         if (courseId.equals(secondCourseDto.getCourseId())) {
             int code = secondCourseDto.getUpTimeTwo().getCode();
@@ -342,7 +349,11 @@ public class SecondCourseController {
                 simpleClassScheduleTimeTwo.setCourseId(courseId);
                 simpleClassScheduleTimeTwo.setUpTime(code);
                 simpleClassScheduleTimeTwo.setWeek(week);
+                simpleClassScheduleTimeTwo.setRoofNumber(secondCourseDto.getRoofNumber());
+                simpleClassScheduleTimeTwo.setFloor(secondCourseDto.getFloor());
+                simpleClassScheduleTimeTwo.setBetween(secondCourseDto.getBetween());
                 simpleClassScheduleTimeList.add(simpleClassScheduleTimeTwo);
+
             }
         }
 
