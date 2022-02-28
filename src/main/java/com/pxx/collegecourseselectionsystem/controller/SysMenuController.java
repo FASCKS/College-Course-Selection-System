@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -39,7 +40,7 @@ public class SysMenuController {
      */
     @ApiOperation("通过url返回菜单")
     @GetMapping("/get/menu")
-    public R getMenuByUrl(@RequestParam("url") String url) {
+    public R getMenuByUrl(@RequestParam("url") @NotBlank String url) {
         List<Tree<Integer>> menuByUrl = sysMenuService.findMenuByUrl(url);
         return R.ok().put("data",menuByUrl);
     }
@@ -79,7 +80,7 @@ public class SysMenuController {
     @ApiOperation("菜单详情")
     @PreAuthorize("hasAnyAuthority('sys:menu:info')")
     @GetMapping("/insert/{menuId}")
-    public R info(@PathVariable("menuId") Integer menuId) {
+    public R info(@PathVariable("menuId") @NotNull Integer menuId) {
         SysMenuEntity sysMenuEntity = sysMenuService.getById(menuId);
         return R.ok().put("data",sysMenuEntity);
 

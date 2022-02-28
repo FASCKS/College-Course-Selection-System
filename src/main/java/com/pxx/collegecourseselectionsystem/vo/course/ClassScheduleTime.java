@@ -23,7 +23,7 @@ public class ClassScheduleTime {
     //大楼名字
     private String roofName;
     //大楼序号
-    private Integer roof;
+    private Integer roofNumber;
     //大楼层数
     private Integer floor;
     //哪一间教室

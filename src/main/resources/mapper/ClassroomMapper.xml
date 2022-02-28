@@ -46,15 +46,30 @@
                cr.uuid         as roof_uuid,
                cb.between_type as between_name,
                cb.uuid         as between_uuid
-                from (select *
-                      from classroom_roof
-
-        <if test="total != 0">
-            limit #{current}, #{size}
-        </if>
-        ) cr
-                left join classroom c on c.roof_type_id = cr.id
-                left join classroom_between cb on cb.id = c.between_type_id
+        from (select * from classroom_roof limit #{current}, #{size}) cr
+                     left join classroom c on c.roof_type_id = cr.id
+                     left join classroom_between cb on cb.id = c.between_type_id
+    </select>
+    <!--查询所有总数-->
+    <select id="findAllClassroomCount" resultType="java.lang.Long">
+        select count(*)
+        from (select c.id,
+                     floor,
+                     `between`       as between_number,
+                     roof_type_id,
+                     between_type_id,
+                     c.number        as quantity,
+                     cr.roof_name    as roof_name,
+                     cr.roof_number  as roof_number,
+                     cr.id           as roof_id,
+                     cr.uuid         as roof_uuid,
+                     cb.between_type as between_name,
+                     cb.uuid         as between_uuid
+              from classroom_roof cr
+                           left join classroom c on c.roof_type_id = cr.id
+                           left join classroom_between cb on cb.id = c.between_type_id
+              group by cr.id
+                     ) as a
     </select>
 
     <select id="findOneByRoofAndBetweenAndFloor" resultMap="BaseResultMap">

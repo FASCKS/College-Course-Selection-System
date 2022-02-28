@@ -1,6 +1,5 @@
 package com.pxx.collegecourseselectionsystem.service.impl;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.pxx.collegecourseselectionsystem.common.exception.RRException;
@@ -17,6 +16,8 @@ import com.pxx.collegecourseselectionsystem.service.ClassroomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * @author Gpxx
@@ -37,8 +38,16 @@ public class ClassroomServiceImpl extends ServiceImpl<ClassroomMapper, Classroom
      */
     @Override
     public PageUtils findAllClassroom(Pagination pagination) {
-        IPage<ClassroomRoofDto> classroomIPage = baseMapper.findAllClassroom(new Page<>(pagination.getPage(), pagination.getLimit()));
-        return new PageUtils(classroomIPage);
+        Page<ClassroomRoofDto> classroomRoofDtoPage = new Page<>(pagination.getPage(), pagination.getLimit());
+
+        long size = classroomRoofDtoPage.getSize();
+        long current = (classroomRoofDtoPage.getCurrent() - 1) * size;
+
+        classroomRoofDtoPage.setTotal(baseMapper.findAllClassroomCount());
+        List<ClassroomRoofDto> allClassroom = baseMapper.findAllClassroom(current, size);
+
+        classroomRoofDtoPage.setRecords(allClassroom);
+        return new PageUtils(classroomRoofDtoPage);
     }
 
     /**

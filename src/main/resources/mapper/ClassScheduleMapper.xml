@@ -32,7 +32,7 @@
                 <result column="up_time" property="upTime"/>
                 <result column="up_time_name" property="upTimeName"/>
                 <result column="roof_name" property="roofName"/>
-                <result column="roof" property="roof"/>
+                <result column="roof_number" property="roofNumber"/>
                 <result column="floor" property="floor"/>
                 <result column="between" property="between"/>
             </collection>
@@ -50,8 +50,8 @@
                cs.`week`    as week_name,
                cs.up_time,
                cs.up_time   as up_time_name,
-               cr.name_type as roof_name,
-               c.roof,
+               cr.roof_name as roof_name,
+               cr.roof_number,
                c.floor,
                c.`between`
         FROM class_schedule cs

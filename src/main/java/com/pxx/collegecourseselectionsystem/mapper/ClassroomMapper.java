@@ -2,12 +2,12 @@ package com.pxx.collegecourseselectionsystem.mapper;
 
 import com.baomidou.mybatisplus.annotation.InterceptorIgnore;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.pxx.collegecourseselectionsystem.dto.ClassroomRoofDto;
 import com.pxx.collegecourseselectionsystem.entity.Classroom;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * @author Gpxx
@@ -16,7 +16,9 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 @InterceptorIgnore(tenantLine = "true")
 public interface ClassroomMapper extends BaseMapper<Classroom> {
-    IPage<ClassroomRoofDto> findAllClassroom(Page<Classroom> page);
+    Long findAllClassroomCount();
+
+    List<ClassroomRoofDto> findAllClassroom(@Param("current") long current, @Param("size") long size);
 
     /**
      * 查询一条
