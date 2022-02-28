@@ -35,6 +35,7 @@
                 <result column="roof_number" property="roofNumber"/>
                 <result column="floor" property="floor"/>
                 <result column="between" property="between"/>
+                <result column="between_name" property="betweenName"/>
             </collection>
         </collection>
     </resultMap>
@@ -53,14 +54,16 @@
                cr.roof_name as roof_name,
                cr.roof_number,
                c.floor,
-               c.`between`
+               c.`between`,
+                cb.between_type as between_name
         FROM class_schedule cs
                      LEFT JOIN sys_user su ON su.user_id = cs.user_id
                      LEFT JOIN course co ON co.id = cs.course_id
                      LEFT JOIN sys_unit sun ON sun.unit_id = cs.unit
                      LEFT JOIN sys_user st ON st.user_id = cs.teacher
-                     left join classroom c on cs.class_id = c.id
+                     left join classroom c on cs.classroom_id = c.id
                      left join classroom_roof cr on cr.id = c.roof_type_id
+        left join classroom_between cb on cb.id=c.between_type_id
 
         <where>
             <if test="userId != null">

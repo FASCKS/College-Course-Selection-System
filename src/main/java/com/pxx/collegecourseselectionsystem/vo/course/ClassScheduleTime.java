@@ -28,4 +28,6 @@ public class ClassScheduleTime {
     private Integer floor;
     //哪一间教室
     private Integer between;
+    //教室名称
+    private String betweenName;
 }

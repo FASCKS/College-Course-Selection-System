@@ -111,6 +111,11 @@ public class SecondCourse {
     @ApiModelProperty(value = "发布状态")
     private Integer state;
     /**
+     * 教室
+     */
+    @TableField(value = "classroom_id")
+    private Integer classroomId;
+    /**
      * 计划分组
      */
     @NotNull(groups = Update.class)

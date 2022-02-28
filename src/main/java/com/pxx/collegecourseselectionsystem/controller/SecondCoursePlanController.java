@@ -224,9 +224,10 @@ public class SecondCoursePlanController {
     private boolean courseCheck(SecondCourseDto secondCourseDto) {
 
         QueryWrapper<SecondCourse> sq = new QueryWrapper<>();
-        sq.eq(SecondCourseDto.COL_UP_TIME, secondCourseDto.getUpTime())
-                .eq(SecondCourseDto.COL_WEEK, secondCourseDto.getWeek())
-                .eq("plan_group_id", secondCourseDto.getPlanGroupId())
+        sq.eq(SecondCourseDto.COL_UP_TIME, secondCourseDto.getUpTime())//检查是否上课时间冲突
+                .eq(SecondCourseDto.COL_WEEK, secondCourseDto.getWeek())//检查星期几
+                .eq("plan_group_id", secondCourseDto.getPlanGroupId())//检查是不是一个分组
+                .eq("classroom_id",secondCourseDto.getClassroomId())//检查是不是一个教室
                 .notIn("id",secondCourseDto.getId());
         BaseMapper<SecondCourse> baseMapper = secondCourseService.getBaseMapper();
         SecondCourse secondCourse = baseMapper.selectOne(sq);

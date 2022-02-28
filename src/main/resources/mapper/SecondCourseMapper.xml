@@ -35,15 +35,22 @@
                cs.course_sum,
                cs.plan_group_id,
                cs.up_time_two,
-        cs.course_sum as total_sum
+               cs.course_sum  as total_sum,
+               cr.roof_name,
+               cr.roof_number,
+               cl.floor,
+               cl.`between`,
+               cb.between_type
 
         FROM second_course cs
                      LEFT JOIN course co ON co.id = cs.course_id
                      LEFT JOIN sys_user su on su.user_id = cs.teacher
                      left join second_course_plan_group scpg on cs.plan_group_id = scpg.id
-
+                     LEFT JOIN classroom cl ON cl.id = cs.classroom_id
+                     left join classroom_roof cr on cr.id = cl.roof_type_id
+                     left join classroom_between cb on cb.id = cl.between_type_id
         where su.type = 2
-<!--          and cs.state = 1-->
+
           and scpg.id = #{planGroupId,jdbcType=INTEGER}
     </select>
 
@@ -84,7 +91,8 @@
     </select>
 
     <select id="findCountByUserId" resultType="java.lang.Integer">
-        select count(1) from second_course sc  where sc.teacher in
+        select count(1)
+        from second_course sc  where sc.teacher in
         <foreach collection="collection" close=")" open="(" item="item" separator="," index="index" nullable="true">
             #{item,jdbcType=BIGINT}
         </foreach>

@@ -1,6 +1,5 @@
 package com.pxx.collegecourseselectionsystem.vo.course;
 
-import com.pxx.collegecourseselectionsystem.dto.ClassroomDto;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -21,10 +20,7 @@ public class ClassScheduleVo {
      */
     private String userName;
     private List<ClassBook> classBook;
-    /**
-     * 所在教室
-     */
-    private ClassroomDto classroomDto;
+
 }
 
 
