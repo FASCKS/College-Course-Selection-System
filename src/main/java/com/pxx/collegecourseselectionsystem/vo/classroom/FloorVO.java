@@ -1,4 +1,4 @@
-package com.pxx.collegecourseselectionsystem.dto.classroom;
+package com.pxx.collegecourseselectionsystem.vo.classroom;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -13,7 +13,7 @@ import java.util.List;
  * @Date 2022/2/26 13:49
  */
 @Getter@Setter@ToString@ApiModel("楼层")
-public class FloorDto {
+public class FloorVO {
     /**
      * 当前楼层
      */
@@ -23,5 +23,5 @@ public class FloorDto {
      * 教室集合
      */
     @ApiModelProperty("教室集合")
-    private List<BetweenDto> betweenDtoList;
+    private List<BetweenVO> betweenVOList;
 }

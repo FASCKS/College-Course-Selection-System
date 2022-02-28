@@ -21,10 +21,10 @@
         <result column="roof_name" property="roofName"/>
         <result column="roof_uuid" property="uuid"/>
         <result column="roof_number" property="roofNumber"/>
-        <collection property="floorDtoList" ofType="com.pxx.collegecourseselectionsystem.dto.classroom.FloorDto">
+        <collection property="floorVOList" ofType="com.pxx.collegecourseselectionsystem.vo.classroom.FloorVO">
             <id column="floor" property="floor"/>
-            <collection property="betweenDtoList"
-                        ofType="com.pxx.collegecourseselectionsystem.dto.classroom.BetweenDto">
+            <collection property="betweenVOList"
+                        ofType="com.pxx.collegecourseselectionsystem.vo.classroom.BetweenVO">
                 <id column="between_number" property="between"/>
                 <result column="between_name" property="betweenName"/>
                 <result column="between_uuid" property="uuid"/>

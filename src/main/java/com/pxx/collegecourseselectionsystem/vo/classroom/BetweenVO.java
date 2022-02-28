@@ -1,4 +1,4 @@
-package com.pxx.collegecourseselectionsystem.dto.classroom;
+package com.pxx.collegecourseselectionsystem.vo.classroom;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -14,7 +14,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @ApiModel("教室")
-public class BetweenDto {
+public class BetweenVO {
     /**
      * 教室编号
      */

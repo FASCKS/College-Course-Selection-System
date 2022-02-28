@@ -1,8 +1,8 @@
 package com.pxx.collegecourseselectionsystem.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.pxx.collegecourseselectionsystem.dto.classroom.FloorDto;
 import com.pxx.collegecourseselectionsystem.entity.ClassroomRoof;
+import com.pxx.collegecourseselectionsystem.vo.classroom.FloorVO;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -19,5 +19,5 @@ public class ClassroomRoofDto extends ClassroomRoof {
      * 层
      */
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private List<FloorDto> floorDtoList;
+    private List<FloorVO> floorVOList;
 }
