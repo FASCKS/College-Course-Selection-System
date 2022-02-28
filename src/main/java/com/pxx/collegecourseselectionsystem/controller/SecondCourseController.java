@@ -2,6 +2,7 @@ package com.pxx.collegecourseselectionsystem.controller;
 
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import com.pxx.collegecourseselectionsystem.common.utils.R;
 import com.pxx.collegecourseselectionsystem.common.utils.RedisUtil;
@@ -177,7 +178,14 @@ public class SecondCourseController {
                                                 between.equals(classScheduleTime.getBetween())
                                 )) {
                             //如果相等
-                            return R.error("第" + week + "天的第" + upTime + 1 + "或" + upTimeTwo + 1 + "课程冲突。");
+                            return R.error(StrUtil.format("课程可能在 {}-{}楼 第 {} 层 第 {} 间教室 的 星期 {} 第 {} {} 节课有冲突"
+                                    , secondCourseDto.getRoofName()
+                                    , secondCourseDto.getRoofNumber()
+                                    , secondCourseDto.getFloor()
+                                    , secondCourseDto.getBetween()
+                                    , secondCourseDto.getWeek()
+                                    , secondCourseDto.getUpTimeNumber()
+                                    , secondCourseDto.getUpTimeTwoNumber()));
                         }
                     }
                 }
