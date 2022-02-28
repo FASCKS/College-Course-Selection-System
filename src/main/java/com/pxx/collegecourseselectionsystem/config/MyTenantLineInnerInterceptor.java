@@ -31,6 +31,7 @@ public class MyTenantLineInnerInterceptor extends TenantLineInnerInterceptor {
 
     /**
      * 重构mybatispuls的多租户改为支持in
+     *
      * @param currentExpression
      * @param table
      * @return
@@ -38,15 +39,27 @@ public class MyTenantLineInnerInterceptor extends TenantLineInnerInterceptor {
 
     @Override
     protected Expression builderExpression(Expression currentExpression, List<Table> tables) {
+        //如果等号左右都有租户字段，则跳过
+        String sqlStr = currentExpression.toString();
+        int eq = sqlStr.indexOf('=');
+        TenantLineHandler tenantLineHandler = this.getTenantLineHandler();
+        String tenantIdColumn = tenantLineHandler.getTenantIdColumn();
+        if (eq == -1) {
+            return currentExpression;
+        }
+        if (sqlStr.substring(eq).contains(tenantIdColumn) ||
+                sqlStr.substring(eq + 1, sqlStr.length()).contains(tenantIdColumn)) {
+            return currentExpression;
+        }
         // 没有表需要处理直接返回
         if (CollectionUtils.isEmpty(tables)) {
             return currentExpression;
         }
         //只需要构造一张表的表达式
         Column aliasColumn = this.getAliasColumn(tables.get(0));
-        boolean presenceOfField=true;
+        boolean presenceOfField = true;
 
-        if(presenceOfField) {
+        if (presenceOfField) {
             InExpression inExpression = new InExpression();
             inExpression.setLeftExpression(aliasColumn);
             inExpression.setRightExpression(getTenantLineHandler().getTenantId());
@@ -57,11 +70,10 @@ public class MyTenantLineInnerInterceptor extends TenantLineInnerInterceptor {
                         new AndExpression(new Parenthesis(currentExpression), inExpression)
                         : new AndExpression(currentExpression, inExpression);
             }
-        }else{
+        } else {
             return currentExpression;
         }
     }
-
 
 
     @Override

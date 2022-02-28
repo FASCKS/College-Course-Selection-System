@@ -1,13 +1,11 @@
 package com.pxx.collegecourseselectionsystem.config;
 
 
-
 import com.baomidou.mybatisplus.extension.plugins.handler.TenantLineHandler;
 import com.pxx.collegecourseselectionsystem.common.utils.RedisUtil;
 import com.pxx.collegecourseselectionsystem.common.utils.SpringSecurityUtil;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.LongValue;
-import net.sf.jsqlparser.util.cnfexpression.MultipleExpression;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -36,13 +34,7 @@ public class MyTenantLineHandler implements TenantLineHandler {
         for (Integer unit_id : unit_ids) {
             childlist.add(new LongValue(unit_id));
         }
-        MultipleExpression multipleExpression = new MultipleExpression(childlist) {
-            @Override
-            public String getStringExpression() {
-                return ",";
-            }
-        };
-        return multipleExpression;
+        return new MultiCommaExpression(childlist);
     }
 
     @Override
@@ -58,7 +50,7 @@ public class MyTenantLineHandler implements TenantLineHandler {
      */
     @Override
     public boolean ignoreTable(String tableName) {
-        return !tables.contains(tableName);
+        return tables.contains(tableName);
     }
 }
 
