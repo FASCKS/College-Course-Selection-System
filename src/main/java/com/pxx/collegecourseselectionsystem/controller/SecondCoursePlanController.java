@@ -2,6 +2,7 @@ package com.pxx.collegecourseselectionsystem.controller;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.convert.Convert;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.pxx.collegecourseselectionsystem.common.utils.R;
@@ -128,7 +129,7 @@ public class SecondCoursePlanController {
         amqpTemplate.convertAndSend(QueueEnum.QUEUE_ORDER_PLUGIN_CANCEL.getExchange(), QueueEnum.QUEUE_ORDER_PLUGIN_CANCEL.getRouteKey(),
                 planGroupId,
                 message -> {
-                    message.getMessageProperties().setHeader("x-delay",Convert.toInt( (endTime - stateTime) + RABBITMQ_EXPIRED));
+                    message.getMessageProperties().setHeader("x-delay", Convert.toInt((endTime - stateTime) + RABBITMQ_EXPIRED));
                     return message;
                 });
         //添加全部
@@ -171,7 +172,13 @@ public class SecondCoursePlanController {
         //判断是否冲突
         boolean courseCheck = courseCheck(secondCourseDto);
         if (!courseCheck) {
-            return R.error("上课时间冲突");
+            return R.error(StrUtil.format("课程可能在 {}-{}楼 第 {} 间教室 的 星期 {} 第 {} {} 节课有冲突"
+                    , secondCourseDto.getRoofName()
+                    , secondCourseDto.getRoofNumber()
+                    , secondCourseDto.getBetween()
+                    , secondCourseDto.getWeek()
+                    , secondCourseDto.getUpTimeNumber()
+                    , secondCourseDto.getUpTimeTwoNumber()));
         }
         boolean insert = secondCourseService.insertOne(secondCourseDto);
         return R.ok().put("data", insert);
@@ -203,17 +210,23 @@ public class SecondCoursePlanController {
     @PostMapping("/update")
     public R update(@RequestBody @Validated(Update.class) SecondCourseDto secondCourseDto) {
         Integer planGroupId = secondCourseDto.getPlanGroupId();
-        boolean hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE +"entity:"+ secondCourseDto.getId() + "_" + planGroupId);
+        boolean hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE + "entity:" + secondCourseDto.getId() + "_" + planGroupId);
         if (hasKey) {
             return R.error("课程正在进行中,无法编辑.");
         }
         //判断是否冲突
         boolean courseCheck = courseCheck(secondCourseDto);
         if (!courseCheck) {
-            return R.error("上课时间冲突");
+            return R.error(StrUtil.format("课程可能在 {}-{}楼 第 {} 间教室 的 星期 {} 第 {} {} 节课有冲突"
+                    , secondCourseDto.getRoofName()
+                    , secondCourseDto.getRoofNumber()
+                    , secondCourseDto.getBetween()
+                    , secondCourseDto.getWeek()
+                    , secondCourseDto.getUpTimeNumber()
+                    , secondCourseDto.getUpTimeTwoNumber()));
         }
-        SecondCourse secondCourse=new SecondCourse();
-        BeanUtil.copyProperties(secondCourseDto,secondCourse);
+        SecondCourse secondCourse = new SecondCourse();
+        BeanUtil.copyProperties(secondCourseDto, secondCourse);
         boolean update = secondCourseService.updateById(secondCourse);
         return R.ok().put("data", update);
     }
@@ -226,9 +239,9 @@ public class SecondCoursePlanController {
         QueryWrapper<SecondCourse> sq = new QueryWrapper<>();
         sq.eq(SecondCourseDto.COL_UP_TIME, secondCourseDto.getUpTime())//检查是否上课时间冲突
                 .eq(SecondCourseDto.COL_WEEK, secondCourseDto.getWeek())//检查星期几
-                .eq("plan_group_id", secondCourseDto.getPlanGroupId())//检查是不是一个分组
-                .eq("classroom_id",secondCourseDto.getClassroomId())//检查是不是一个教室
-                .notIn("id",secondCourseDto.getId());
+//                .eq("plan_group_id", secondCourseDto.getPlanGroupId())//检查是不是一个分组
+                .eq("classroom_id", secondCourseDto.getClassroomId())//检查是不是一个教室
+                .notIn("id", secondCourseDto.getId());
         BaseMapper<SecondCourse> baseMapper = secondCourseService.getBaseMapper();
         SecondCourse secondCourse = baseMapper.selectOne(sq);
 
