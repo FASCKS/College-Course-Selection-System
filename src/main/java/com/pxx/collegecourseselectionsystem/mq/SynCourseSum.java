@@ -66,7 +66,7 @@ public class SynCourseSum {
 
         for (SecondCourseDto secondCourse : orderCourseList) {
             ClassSchedule classSchedule = new ClassSchedule();
-            //如果有第二节
+
             classSchedule.setCreateTime(DateUtil.date());
             classSchedule.setTeacher(secondCourse.getTeacher());
             classSchedule.setUserId(secondCourse.getUserId());
@@ -74,7 +74,11 @@ public class SynCourseSum {
             classSchedule.setWeek(secondCourse.getWeek());
             classSchedule.setCourseId(secondCourse.getCourseId());
             classSchedule.setUnit(secondCourse.getUnitId());
+            //关联教室
+            classSchedule.setClassroomId(secondCourse.getClassroomId());
             classScheduleList.add(classSchedule);
+
+            //如果有第二节
             if (secondCourse.getUpTimeTwo().getCode() != 0) {
                 ClassSchedule classScheduleTwo = new ClassSchedule();
                 BeanUtil.copyProperties(classSchedule,classScheduleTwo);
