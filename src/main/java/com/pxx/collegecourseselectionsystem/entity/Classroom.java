@@ -28,14 +28,7 @@ public class Classroom {
     @TableId(value = "id", type = IdType.AUTO)
     @ApiModelProperty(value="自增id")
     private Integer id;
-
-    /**
-     * 栋
-     */
-    @NotNull
-    @TableField(value = "roof")
-    @ApiModelProperty(value="栋")
-    private Integer roof;
+    
 
     /**
      * 层数

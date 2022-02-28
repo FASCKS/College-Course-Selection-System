@@ -97,7 +97,7 @@ public class ClassroomServiceImpl extends ServiceImpl<ClassroomMapper, Classroom
     private void check(Classroom classroom) {
         {
             //先检查是否有这个大楼类型
-            ClassroomRoof classroomRoof = classroomRoofService.getById(classroom.getRoof());
+            ClassroomRoof classroomRoof = classroomRoofService.getById(classroom.getRoofTypeId());
             if (classroomRoof == null) {
                 throw new RRException("大楼类型不存在");
             }
@@ -107,7 +107,7 @@ public class ClassroomServiceImpl extends ServiceImpl<ClassroomMapper, Classroom
             }
         }
         //检查是否重复添加
-        Classroom oneByRoofAndBetweenAndFloor = baseMapper.findOneByRoofAndBetweenAndFloor(classroom.getRoof(), classroom.getBetween(), classroom.getFloor());
+        Classroom oneByRoofAndBetweenAndFloor = baseMapper.findOneByRoofAndBetweenAndFloor(classroom.getRoofTypeId(), classroom.getBetween(), classroom.getFloor());
         if (oneByRoofAndBetweenAndFloor != null) {
             throw new RRException("教室已经存在");
         }

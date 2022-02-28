@@ -85,7 +85,7 @@
                 and `floor` = #{floor,jdbcType=INTEGER}
             </if>
             <if test="roof != null">
-                and cr.roof_number = #{roof,jdbcType=INTEGER}
+                and cr.id = #{roof,jdbcType=INTEGER}
             </if>
         </where>
     </select>
