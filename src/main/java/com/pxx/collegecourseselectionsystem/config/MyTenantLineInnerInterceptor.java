@@ -39,21 +39,23 @@ public class MyTenantLineInnerInterceptor extends TenantLineInnerInterceptor {
 
     @Override
     protected Expression builderExpression(Expression currentExpression, List<Table> tables) {
-        //如果等号左右都有租户字段，则跳过
-        String sqlStr = currentExpression.toString();
-        int eq = sqlStr.indexOf('=');
-        TenantLineHandler tenantLineHandler = this.getTenantLineHandler();
-        String tenantIdColumn = tenantLineHandler.getTenantIdColumn();
-        if (eq == -1) {
-            return currentExpression;
-        }
-        if (sqlStr.substring(eq).contains(tenantIdColumn) ||
-                sqlStr.substring(eq + 1, sqlStr.length()).contains(tenantIdColumn)) {
-            return currentExpression;
-        }
         // 没有表需要处理直接返回
         if (CollectionUtils.isEmpty(tables)) {
             return currentExpression;
+        }
+        //如果等号左右都有租户字段，则跳过
+        if (currentExpression!=null){
+            String sqlStr = currentExpression.toString();
+            int eq = sqlStr.indexOf('=');
+            TenantLineHandler tenantLineHandler = this.getTenantLineHandler();
+            String tenantIdColumn = tenantLineHandler.getTenantIdColumn();
+            if (eq == -1) {
+                return currentExpression;
+            }
+            if (sqlStr.substring(eq).contains(tenantIdColumn) ||
+                    sqlStr.substring(eq + 1, sqlStr.length()).contains(tenantIdColumn)) {
+                return currentExpression;
+            }
         }
         //只需要构造一张表的表达式
         Column aliasColumn = this.getAliasColumn(tables.get(0));
