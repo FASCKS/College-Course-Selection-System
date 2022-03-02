@@ -26,6 +26,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -56,15 +57,19 @@ public class SecondCoursePlanController {
     private SecondCourseService secondCourseService;
     @Autowired
     private SysUserService sysUserService;
+    @Value("${rabbitmq.course.kill.minute}")
+    private Long RABBITMQ_MINUTE;
+    @Value("${redis.course.kill.minute}")
+    private Long REDIS_MINUTE;
 
-    private static final String courseSum = Global.KILL_SECOND_COURSE + "sum:";
+    private final String courseSum = Global.KILL_SECOND_COURSE + "sum:";
 
-    private static final Long SECOND = 1000L;
-    private static final Long MINUTE = 60L * SECOND;
-    private static final Long HOUR = 60L * 60L * MINUTE;
-    private static final Long DAY = 24L * HOUR;
-    public static final Long REDIS_EXPIRED = 60L * 10L;
-    public static final Long RABBITMQ_EXPIRED = MINUTE * 5;
+    private final Long SECOND = 1000L;
+    private final Long MINUTE = 60L * SECOND;
+    private final Long HOUR = 60L * 60L * MINUTE;
+    private final Long DAY = 24L * HOUR;
+    public final Long REDIS_EXPIRED = 60L * REDIS_MINUTE;
+    public final Long RABBITMQ_EXPIRED = MINUTE * RABBITMQ_MINUTE;
 
     @ApiImplicitParam(name = "id", value = "分组id")
     @ApiOperation("管理员计划列表")

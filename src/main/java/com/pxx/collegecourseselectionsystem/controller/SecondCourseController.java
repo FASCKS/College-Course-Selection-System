@@ -308,7 +308,7 @@ public class SecondCourseController {
         //学生当前课程表
         SimpleClassScheduleVo simpleClassScheduleVo = redisUtil.get(Global.KILL_SECOND_COURSE + "class:schedule:" + userId);
         if (simpleClassScheduleVo == null) {
-            return R.error("无临时课表");
+            return R.ok("无临时课表");
         }
         List<SimpleClassBook> classBook = simpleClassScheduleVo.getClassBook();
         if (classBook != null) {
