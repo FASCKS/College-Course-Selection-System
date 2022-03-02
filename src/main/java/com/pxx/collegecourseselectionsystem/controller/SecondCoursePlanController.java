@@ -9,6 +9,7 @@ import com.pxx.collegecourseselectionsystem.common.utils.R;
 import com.pxx.collegecourseselectionsystem.common.utils.RedisUtil;
 import com.pxx.collegecourseselectionsystem.common.validator.group.Insert;
 import com.pxx.collegecourseselectionsystem.common.validator.group.Update;
+import com.pxx.collegecourseselectionsystem.config.MyPropertiesConfig;
 import com.pxx.collegecourseselectionsystem.dto.SecondCourseDto;
 import com.pxx.collegecourseselectionsystem.entity.SecondCourse;
 import com.pxx.collegecourseselectionsystem.entity.SecondCoursePlanGroupEntity;
@@ -26,7 +27,6 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -57,10 +57,6 @@ public class SecondCoursePlanController {
     private SecondCourseService secondCourseService;
     @Autowired
     private SysUserService sysUserService;
-    @Value("${rabbitmq.course.kill.minute}")
-    private  Long RABBITMQ_MINUTE;
-    @Value("${redis.course.kill.minute}")
-    private  Long REDIS_MINUTE;
 
     private final String courseSum = Global.KILL_SECOND_COURSE + "sum:";
 
@@ -68,8 +64,14 @@ public class SecondCoursePlanController {
     private final Long MINUTE = 60L * SECOND;
     private final Long HOUR = 60L * 60L * MINUTE;
     private final Long DAY = 24L * HOUR;
-    public final Long REDIS_EXPIRED = 60L * 3;
-    public final Long RABBITMQ_EXPIRED = MINUTE * 1;
+    private Long REDIS_EXPIRED = 60L;
+    private Long RABBITMQ_EXPIRED = MINUTE;
+
+    @Autowired
+    public void setMyPropertiesConfig(MyPropertiesConfig myPropertiesConfig) {
+        this.REDIS_EXPIRED = 60 * myPropertiesConfig.getRedisMinute();
+        this.RABBITMQ_EXPIRED = 60L * 1000L * myPropertiesConfig.getRabbitmqMinute();
+    }
 
     @ApiImplicitParam(name = "id", value = "分组id")
     @ApiOperation("管理员计划列表")

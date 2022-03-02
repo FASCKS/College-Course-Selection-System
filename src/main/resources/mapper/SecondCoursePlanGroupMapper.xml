@@ -23,7 +23,7 @@
         if(now() &lt;
            scpg.start_time, 0,
            if((now() > scpg.start_time and now() &lt;
-                                           scpg.end_time), 1, 2)) as state
+                                           scpg.end_time), 1, 2)) as conduct_state
     </sql>
     <!--统计总数-->
     <select id="findAllGroupPlanCount" resultType="java.lang.Integer">
@@ -37,7 +37,7 @@
         <result column="up_or_down" jdbcType="INTEGER" property="upOrDown"/>
         <result column="start_time" jdbcType="TIMESTAMP" property="startTime"/>
         <result column="end_time" jdbcType="TIMESTAMP" property="endTime"/>
-        <result column="state" jdbcType="INTEGER" property="state"/>
+        <result column="conduct_state" jdbcType="INTEGER" property="state"/>
         <result column="sum" property="sum"/>
         <result column="release_state" property="releaseState"/>
     </resultMap>
@@ -59,19 +59,16 @@
         <result column="up_or_down" jdbcType="INTEGER" property="upOrDown"/>
         <result column="start_time" jdbcType="TIMESTAMP" property="startTime"/>
         <result column="end_time" jdbcType="TIMESTAMP" property="endTime"/>
-        <result column="state" jdbcType="INTEGER" property="state"/>
+        <result column="conduct_state" jdbcType="INTEGER" property="state"/>
         <result column="sum" property="sum"/>
         <result column="release_state" property="releaseState"/>
-
-
-
         <collection property="secondCourseDtoList" ofType="com.pxx.collegecourseselectionsystem.dto.SecondCourseDto">
             <id column="sc_id" property="id"/>
             <result column="course_id" property="courseId"/>
             <result column="course_sum" property="courseSum"/>
             <result column="up_time" property="upTime"/>
             <result column="week" property="week"/>
-            <result column="state" property="state"/>
+            <result column="release_state" property="state"/>
             <result column="teacher" property="teacher"/>
             <result column="teacher_name" property="teacherName"/>
             <result column="course_name" property="courseName"/>
@@ -99,6 +96,7 @@
         select scpg.*
              , scpg.id         as plan_group_id
              , sc.id           as sc_id
+             , sc.state        as release_state
              , sc.course_id
              , sc.teacher
              , sc.course_sum
@@ -116,8 +114,8 @@
              , scpgau.unit_id  as scpgau_unit_id
              , scpgau.scpg_id  as scpgau_id
              , scpg.release_state
-        ,sc.classroom_id
-        ,c.`between` as number
+             , sc.classroom_id
+             , c.`between`     as number
              , cb.id           as between_id
              , cb.between_type as between_name
              , floor
@@ -164,7 +162,7 @@
         <result column="up_or_down" jdbcType="INTEGER" property="upOrDown"/>
         <result column="start_time" jdbcType="TIMESTAMP" property="startTime"/>
         <result column="end_time" jdbcType="TIMESTAMP" property="endTime"/>
-        <result column="state" jdbcType="INTEGER" property="state"/>
+        <result column="conduct_state" jdbcType="INTEGER" property="state"/>
         <result column="sum" property="sum"/>
         <result column="release_state" property="releaseState"/>
         <collection property="unitIds" ofType="integer">

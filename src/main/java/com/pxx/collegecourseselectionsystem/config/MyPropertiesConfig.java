@@ -15,4 +15,6 @@ import java.util.List;
 @ConfigurationProperties(prefix = "ccss")
 public class MyPropertiesConfig {
     private List<String> tables;
+    private Long rabbitmqMinute;
+    private Long redisMinute;
 }
