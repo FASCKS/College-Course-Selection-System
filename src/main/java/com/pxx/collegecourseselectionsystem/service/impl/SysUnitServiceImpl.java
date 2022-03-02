@@ -24,26 +24,6 @@ public class SysUnitServiceImpl extends ServiceImpl<SysUnitMapper, SysUnitEntity
 @Autowired
 private SysUserService sysUserService;
 
-    @Override
-    public int updateBatch(List<SysUnitEntity> list) {
-        return baseMapper.updateBatch(list);
-    }
-
-    @Override
-    public int batchInsert(List<SysUnitEntity> list) {
-        return baseMapper.batchInsert(list);
-    }
-
-    @Override
-    public int insertOrUpdate(SysUnitEntity record) {
-        return baseMapper.insertOrUpdate(record);
-    }
-
-    @Override
-    public int insertOrUpdateSelective(SysUnitEntity record) {
-        return baseMapper.insertOrUpdateSelective(record);
-    }
-
 
     /**
      * 所有部门

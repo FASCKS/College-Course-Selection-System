@@ -12,13 +12,7 @@ import java.util.Set;
 @InterceptorIgnore(tenantLine = "true")
 @Mapper
 public interface SysUnitMapper extends BaseMapper<SysUnitEntity> {
-    int updateBatch(List<SysUnitEntity> list);
 
-    int batchInsert(@Param("list") List<SysUnitEntity> list);
-
-    int insertOrUpdate(SysUnitEntity record);
-
-    int insertOrUpdateSelective(SysUnitEntity record);
 
     /**
      * 通过用户id查询用户能查询的范围

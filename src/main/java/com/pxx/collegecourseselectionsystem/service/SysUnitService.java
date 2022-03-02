@@ -10,13 +10,6 @@ import java.util.Set;
 public interface SysUnitService extends IService<SysUnitEntity>{
 
 
-    int updateBatch(List<SysUnitEntity> list);
-
-    int batchInsert(List<SysUnitEntity> list);
-
-    int insertOrUpdate(SysUnitEntity record);
-
-    int insertOrUpdateSelective(SysUnitEntity record);
 
 
     /**
