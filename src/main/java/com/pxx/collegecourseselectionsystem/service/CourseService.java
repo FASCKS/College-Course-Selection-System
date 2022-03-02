@@ -15,4 +15,13 @@ public interface CourseService extends IService<CourseEntity>{
     Integer CountByType(Integer type);
 
     Page<CourseDto> findAllCourse(Page<CourseEntity> objectPage);
+
+    /**
+     * 更新
+     * @param courseEntity
+     * @return
+     */
+    boolean updateOneById(CourseEntity courseEntity);
+
+    boolean saveOneById(CourseEntity courseEntity);
 }

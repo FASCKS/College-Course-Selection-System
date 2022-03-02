@@ -21,7 +21,7 @@ import javax.validation.constraints.Positive;
 /**
  * 课程类型
  */
-@Api(tags = "课程类型")
+@Api(tags = "课程")
 @Validated
 @RestController
 @RequestMapping("/user/course")
@@ -47,7 +47,7 @@ public class CourseController {
     @PreAuthorize("hasAnyAuthority('user:course:update')")
     @PostMapping("/update")
     public R update(@RequestBody @Validated(Update.class) CourseEntity courseEntity) {
-        boolean updateById = courseService.updateById(courseEntity);
+        boolean updateById = courseService.updateOneById(courseEntity);
         return R.ok().put("data", updateById);
     }
     @ApiOperation("课程新增")
@@ -55,7 +55,7 @@ public class CourseController {
     @PostMapping("/insert")
     public R insert(@RequestBody @Validated(Insert.class) CourseEntity courseEntity) {
         courseEntity.setId(null);
-        boolean save = courseService.save(courseEntity);
+        boolean save = courseService.saveOneById(courseEntity);
         return R.ok().put("data", save);
     }
     @ApiOperation("课程删除")
