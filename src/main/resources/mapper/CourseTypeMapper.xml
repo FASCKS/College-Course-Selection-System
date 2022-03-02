@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pxx.collegecourseselectionsystem.mapper.CourseTypeMapper">
+  <resultMap id="BaseResultMap" type="com.pxx.collegecourseselectionsystem.entity.CourseType">
+    <!--@mbg.generated-->
+    <!--@Table course_type-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="uuid" jdbcType="VARCHAR" property="uuid" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, `name`, uuid
+  </sql>
+</mapper>

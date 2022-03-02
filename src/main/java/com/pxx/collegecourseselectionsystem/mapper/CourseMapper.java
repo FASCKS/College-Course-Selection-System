@@ -6,15 +6,10 @@ import com.pxx.collegecourseselectionsystem.entity.CourseEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import java.util.List;
-
-@Mapper@InterceptorIgnore(tenantLine = "1")
+@Mapper
+@InterceptorIgnore(tenantLine = "1")
 public interface CourseMapper extends BaseMapper<CourseEntity> {
-    int updateBatch(List<CourseEntity> list);
 
-    int batchInsert(@Param("list") List<CourseEntity> list);
 
-    int insertOrUpdate(CourseEntity record);
-
-    int insertOrUpdateSelective(CourseEntity record);
+    Integer countByType(@Param("type") Integer type);
 }

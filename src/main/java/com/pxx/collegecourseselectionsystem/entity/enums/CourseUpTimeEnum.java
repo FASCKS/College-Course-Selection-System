@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 
 /**
- * one、two 、three 、four 、five 、six 、seven 、eight 、nine、 ten 。
+ * one、two 、three 、four 、five 、six 、seven 、eight 、nine、 ten 。eleven
  */
 @Getter
 public enum CourseUpTimeEnum {
@@ -18,7 +18,10 @@ public enum CourseUpTimeEnum {
     SEX(6,"第六节"),
     SEVEN(7,"第七节"),
     EIGHT(8,"第八节"),
-    ;
+    //晚自习范围
+    NINE(9,"第九节"),
+    TEN(10,"第十节"),
+    ELEVEN(11,"第十一节");
 
     CourseUpTimeEnum(int code, String describe) {
         this.code = code;
