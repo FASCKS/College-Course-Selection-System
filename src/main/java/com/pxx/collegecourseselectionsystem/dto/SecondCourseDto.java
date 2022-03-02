@@ -49,7 +49,7 @@ public class SecondCourseDto extends SecondCourse {
     private Integer totalSum;
 
     @ApiModelProperty("大楼Id")
-    private String roofId;
+    private Integer roofId;
     @ApiModelProperty("大楼名称")
     private String roofName;
     @ApiModelProperty("编号")
