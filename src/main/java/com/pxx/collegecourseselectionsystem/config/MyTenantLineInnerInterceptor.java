@@ -20,7 +20,6 @@ import net.sf.jsqlparser.statement.select.SelectBody;
 import net.sf.jsqlparser.statement.update.Update;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author Gpxx
@@ -47,37 +46,35 @@ public class MyTenantLineInnerInterceptor extends TenantLineInnerInterceptor {
         if (CollectionUtils.isEmpty(tables)) {
             return currentExpression;
         }
-        // 租户
-        Expression tenantId = this.getTenantLineHandler().getTenantId();
-
-        // 构造每张表的条件
-        List<InExpression> equalsTos = tables.stream()
-                .map(item -> {
-                            InExpression inExpression = new InExpression();
-                            inExpression.setLeftExpression(getAliasColumn(item));
-                            inExpression.setRightExpression(tenantId);
-                            return inExpression;
-                        }
-                )
-                .collect(Collectors.toList());
-        // 注入的表达式
-        Expression injectExpression = equalsTos.get(0);
-        // 如果有多表，则用 and 连接
-        if (equalsTos.size() > 1) {
-            for (int i = 1; i < equalsTos.size(); i++) {
-                injectExpression = new AndExpression(injectExpression, equalsTos.get(i));
+        //如果等号左右都有租户字段，则跳过
+/*        if (currentExpression != null) {
+            String sqlStr = currentExpression.toString();
+            int eq = sqlStr.indexOf('=');
+            TenantLineHandler tenantLineHandler = this.getTenantLineHandler();
+            String tenantIdColumn = tenantLineHandler.getTenantIdColumn();
+            if (eq == -1 || sqlStr.substring(eq).contains(tenantIdColumn) ||
+                    sqlStr.substring(eq + 1, sqlStr.length()).contains(tenantIdColumn)) {
+                return currentExpression;
             }
-        }
+        }*/
+        //只需要构造一张表的表达式
+        Column aliasColumn = this.getAliasColumn(tables.get(0));
+        boolean presenceOfField = true;
 
-        if (currentExpression == null) {
-            return injectExpression;
+        if (presenceOfField) {
+            InExpression inExpression = new InExpression();
+            inExpression.setLeftExpression(aliasColumn);
+            inExpression.setRightExpression(getTenantLineHandler().getTenantId());
+            if (currentExpression == null) {
+                return inExpression;
+            } else {
+                return currentExpression instanceof OrExpression ?
+                        new AndExpression(new Parenthesis(currentExpression), inExpression)
+                        : new AndExpression(currentExpression, inExpression);
+            }
+        } else {
+            return currentExpression;
         }
-        if (currentExpression instanceof OrExpression) {
-            return new AndExpression(new Parenthesis(currentExpression), injectExpression);
-        }  else {
-            return new AndExpression(currentExpression, injectExpression);
-        }
-
     }
 
 

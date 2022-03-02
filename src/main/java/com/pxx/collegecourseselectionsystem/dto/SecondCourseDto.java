@@ -55,13 +55,16 @@ public class SecondCourseDto extends SecondCourse {
     @ApiModelProperty("单位id")
     @JsonProperty(access = JsonProperty.Access.READ_WRITE)
     private Integer unitId;
-
+    @ApiModelProperty("大楼Id")
+    private String roofId;
     @ApiModelProperty("大楼名称")
     private String roofName;
     @ApiModelProperty("编号")
     private Integer roofNumber;
     @ApiModelProperty("层")
     private Integer floor;
+    @ApiModelProperty("教室id")
+    private Integer betweenId;
     @ApiModelProperty("间")
     private Integer between;
     @ApiModelProperty("教室名称")

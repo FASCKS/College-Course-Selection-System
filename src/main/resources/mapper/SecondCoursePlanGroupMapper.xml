@@ -48,7 +48,7 @@
                start_time,
                end_time,
                sum,
-        release_state,
+               release_state,
         <include refid="state_time"/>
         from second_course_plan_group scpg
         order by year desc, sum desc
@@ -62,6 +62,7 @@
         <result column="state" jdbcType="INTEGER" property="state"/>
         <result column="sum" property="sum"/>
         <result column="release_state" property="releaseState"/>
+
 
 
         <collection property="secondCourseDtoList" ofType="com.pxx.collegecourseselectionsystem.dto.SecondCourseDto">
@@ -81,6 +82,14 @@
             <result column="up_time_two_number" property="upTimeTwoNumber"/>
             <result column="week_number" property="weekNumber"/>
             <result column="total_sum" property="totalSum"/>
+            <result column="roof_name" property="roofName"/>
+            <result column="roof_number" property="roofNumber"/>
+            <result column="floor" property="floor"/>
+            <result column="between_id" property="betweenId"/>
+            <result column="number" property="between"/>
+            <result column="between_name" property="betweenType"/>
+            <result column="roof_id" property="roofId"/>
+            <result column="classroom_id" property="classroomId"/>
         </collection>
         <collection property="unitIds" ofType="integer">
             <result column="scpgau_unit_id" property="value"/>
@@ -88,26 +97,34 @@
     </resultMap>
     <select id="findOneById" resultMap="findOneByIdMap">
         select scpg.*
-             , scpg.id        as plan_group_id
-             , sc.id          as sc_id
+             , scpg.id         as plan_group_id
+             , sc.id           as sc_id
              , sc.course_id
              , sc.teacher
              , sc.course_sum
              , sc.up_time
-             , sc.up_time     as up_time_number
-             , sc.week        as week_number
+             , sc.up_time      as up_time_number
+             , sc.week         as week_number
              , sc.week
-             , sc.course_sum  as total_sum
-             , co.`name`      as course_name
-             , su.user_id     as teacher
-             , su.name        as teacher_name
-             , co.type        as type
-             , sc.up_time_two as up_time_two_number
+             , sc.course_sum   as total_sum
+             , co.`name`       as course_name
+             , su.user_id      as teacher
+             , su.name         as teacher_name
+             , co.type         as type
+             , sc.up_time_two  as up_time_two_number
              , sc.up_time_two
-             , scpgau.unit_id as scpgau_unit_id
-             , scpgau.scpg_id      as scpgau_id
+             , scpgau.unit_id  as scpgau_unit_id
+             , scpgau.scpg_id  as scpgau_id
+             , scpg.release_state
+        ,sc.classroom_id
+        ,c.`between` as number
+             , cb.id           as between_id
+             , cb.between_type as between_name
+             , floor
+             , cr.id           as roof_id
+             , cr.roof_name
+             , cr.roof_number
              ,
-        scpg.release_state,
         <include refid="state_time"/>
 
 
@@ -116,6 +133,9 @@
                      LEFT JOIN course co ON co.id = sc.course_id
                      LEFT JOIN sys_user su ON su.user_id = sc.teacher
                      left join second_course_plan_group_and_unit scpgau on scpgau.scpg_id = scpg.id
+                     left join classroom c on c.id = sc.classroom_id
+                     left join classroom_between cb on cb.id = c.between_type_id
+                     left join classroom_roof cr on cr.id = c.roof_type_id
 
         where su.type = 2
           and scpgau.scpg_id = #{id,jdbcType=INTEGER}
@@ -168,9 +188,9 @@
              , sc.up_time_two as up_time_two_number
              , sc.up_time_two
              , scpgau.unit_id as scpgau_unit_id
-             , scpgau.scpg_id      as scpgau_id
+             , scpgau.scpg_id as scpgau_id
              , scpg.release_state
-                ,
+             ,
         <include refid="state_time"/>
         from second_course_plan_group scpg
                      LEFT JOIN second_course sc ON scpg.id = sc.plan_group_id

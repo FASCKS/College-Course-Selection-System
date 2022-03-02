@@ -7,7 +7,6 @@ import com.pxx.collegecourseselectionsystem.common.utils.SpringSecurityUtil;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.LongValue;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -21,8 +20,9 @@ import java.util.Set;
 public class MyTenantLineHandler implements TenantLineHandler {
     @Autowired
     private RedisUtil redisUtil;
-    @Value("${tables}")
-    private List<String> tables;
+
+    @Autowired
+    private MyPropertiesConfig myPropertiesConfig;
 
     @Override
     public Expression getTenantId() {
@@ -50,7 +50,7 @@ public class MyTenantLineHandler implements TenantLineHandler {
      */
     @Override
     public boolean ignoreTable(String tableName) {
-        return tables.contains(tableName);
+        return myPropertiesConfig.getTables().contains(tableName);
     }
 }
 

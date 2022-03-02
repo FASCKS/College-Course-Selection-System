@@ -58,9 +58,9 @@ public class SecondCoursePlanController {
     @Autowired
     private SysUserService sysUserService;
     @Value("${rabbitmq.course.kill.minute}")
-    private Long RABBITMQ_MINUTE;
+    private  Long RABBITMQ_MINUTE;
     @Value("${redis.course.kill.minute}")
-    private Long REDIS_MINUTE;
+    private  Long REDIS_MINUTE;
 
     private final String courseSum = Global.KILL_SECOND_COURSE + "sum:";
 
@@ -68,8 +68,8 @@ public class SecondCoursePlanController {
     private final Long MINUTE = 60L * SECOND;
     private final Long HOUR = 60L * 60L * MINUTE;
     private final Long DAY = 24L * HOUR;
-    public final Long REDIS_EXPIRED = 60L * REDIS_MINUTE;
-    public final Long RABBITMQ_EXPIRED = MINUTE * RABBITMQ_MINUTE;
+    public final Long REDIS_EXPIRED = 60L * 3;
+    public final Long RABBITMQ_EXPIRED = MINUTE * 1;
 
     @ApiImplicitParam(name = "id", value = "分组id")
     @ApiOperation("管理员计划列表")
