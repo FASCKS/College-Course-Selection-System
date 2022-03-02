@@ -145,7 +145,7 @@ public class SecondCourseController {
         //判断库存
         Integer courseSum = (Integer) redisUtil.get(Global.KILL_SECOND_COURSE + "sum:" + secondCourseId);
         if (courseSum == null || courseSum <= 0) {
-            return R.error("课程无空余");
+            return R.error("课程无空余").put("data",courseSum);
         }
         //判断是否课程冲突
         SecondCourseDto secondCourseDto = redisUtil.get(Global.KILL_SECOND_COURSE + "entity:" + secondCourseId + "_" + planGroupId);
