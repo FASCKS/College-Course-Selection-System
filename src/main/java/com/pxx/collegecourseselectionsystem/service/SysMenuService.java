@@ -15,7 +15,7 @@ public interface SysMenuService extends IService<SysMenuEntity>{
      * 返回所有菜单
      * @return
      */
-    List<Tree<Integer>> findMenuByType(Integer ...type);
+    List<Tree<Integer>> findMenuByType(String roleIds,Integer ...type);
 
     /**
      * 返回菜单和权限

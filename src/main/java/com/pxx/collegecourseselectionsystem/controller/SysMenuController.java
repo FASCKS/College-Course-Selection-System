@@ -2,6 +2,8 @@ package com.pxx.collegecourseselectionsystem.controller;
 
 import cn.hutool.core.lang.tree.Tree;
 import com.pxx.collegecourseselectionsystem.common.utils.R;
+import com.pxx.collegecourseselectionsystem.common.utils.RedisUtil;
+import com.pxx.collegecourseselectionsystem.common.utils.SpringSecurityUtil;
 import com.pxx.collegecourseselectionsystem.entity.SysMenuEntity;
 import com.pxx.collegecourseselectionsystem.service.SysMenuService;
 import io.swagger.annotations.Api;
@@ -22,6 +24,8 @@ import java.util.List;
 public class SysMenuController {
     @Autowired
     private SysMenuService sysMenuService;
+    @Autowired
+    private RedisUtil redisUtil;
 
     /**
      * 返回菜单
@@ -31,7 +35,8 @@ public class SysMenuController {
     @ApiOperation("返回所有菜单")
     @GetMapping("/list")
     public R list() {
-        List<Tree<Integer>> list = sysMenuService.findMenuByType(0, 1);
+        String userRoleIds = SpringSecurityUtil.getEntity().getUserRoleIds();
+        List<Tree<Integer>> list = sysMenuService.findMenuByType(userRoleIds, 0, 1);
         return R.ok().put("data", list);
     }
 
@@ -42,7 +47,7 @@ public class SysMenuController {
     @GetMapping("/get/menu")
     public R getMenuByUrl(@RequestParam("url") @NotBlank String url) {
         List<Tree<Integer>> menuByUrl = sysMenuService.findMenuByUrl(url);
-        return R.ok().put("data",menuByUrl);
+        return R.ok().put("data", menuByUrl);
     }
 
     /**
@@ -74,6 +79,7 @@ public class SysMenuController {
 
         return R.ok().put("data", save);
     }
+
     /**
      * 菜单详情
      */
@@ -82,9 +88,10 @@ public class SysMenuController {
     @GetMapping("/insert/{menuId}")
     public R info(@PathVariable("menuId") @NotNull Integer menuId) {
         SysMenuEntity sysMenuEntity = sysMenuService.getById(menuId);
-        return R.ok().put("data",sysMenuEntity);
+        return R.ok().put("data", sysMenuEntity);
 
     }
+
     /**
      * 菜单编辑
      */

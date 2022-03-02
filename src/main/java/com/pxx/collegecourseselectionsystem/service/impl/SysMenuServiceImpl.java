@@ -12,6 +12,7 @@ import com.pxx.collegecourseselectionsystem.service.SysMenuService;
 import com.pxx.collegecourseselectionsystem.service.SysRoleMenuService;
 import com.pxx.collegecourseselectionsystem.vo.course.MenuTreeNode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,9 +32,9 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenuEntity
      *
      * @return
      */
-//    @Cacheable(value = "menu_details", key = "'_menu'", unless = "#result == null")
+    @Cacheable(value = "menu_details", key = "#roleIds+'menu'", unless = "#result == null")
     @Override
-    public List<Tree<Integer>> findMenuByType(Integer... type) {
+    public List<Tree<Integer>> findMenuByType(String roleIds, Integer... type) {
         List<SysMenuEntity> sysMenuEntities = sysMenuMapper.findMenuByType(type);
         return createMenu(sysMenuEntities, 0);
     }
@@ -103,7 +104,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenuEntity
         boolean removeBatchByIds = this.removeBatchByIds(menuIds);
 
         //删除角色菜单表关联的菜单
-        if (!menuIds.isEmpty()){
+        if (!menuIds.isEmpty()) {
             sysRoleMenuService.deleteByMenuId(menuIds);
         }
 
@@ -127,7 +128,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenuEntity
         }
     }
 
-//    @Cacheable(value = "menu_details", key = "'url_'+#url", unless = "#result == null")
+    //    @Cacheable(value = "menu_details", key = "'url_'+#url", unless = "#result == null")
     @Override
     public List<Tree<Integer>> findMenuByUrl(String url) {
         SysMenuEntity sysMenuEntity = baseMapper.findMenuByUrl(url);

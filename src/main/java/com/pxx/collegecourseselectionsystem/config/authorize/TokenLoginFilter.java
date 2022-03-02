@@ -122,7 +122,7 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
         //缓存用户当前的 access_token
         redisMap.put("refresh_token", refreshToken);
         //缓存当前实体
-        user.setRoleEntityList(null);
+//        user.setRoleEntityList(null);
         user.setMenuEntityList(null);
         user.setPassword(null);
         redisMap.put("entity", user);

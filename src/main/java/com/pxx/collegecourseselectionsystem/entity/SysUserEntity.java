@@ -200,7 +200,7 @@ public class SysUserEntity implements UserDetails {
      * 用户角色名称合集
      */
     @ApiModelProperty(value = "用户角色名称合集",hidden = true)
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+//    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @TableField(exist = false)
     private List<SysRoleEntity> roleEntityList;
     /**
@@ -332,6 +332,18 @@ public class SysUserEntity implements UserDetails {
     @Override
     public boolean isEnabled() {
         return this.enable > 0;
+    }
+    /**
+     * 获取用户角色id
+     */
+    @JsonIgnore
+    public String getUserRoleIds(){
+        StringBuilder stringBuilder=new StringBuilder();
+        for (SysRoleEntity sysRoleEntity : this.roleEntityList) {
+            stringBuilder.append(sysRoleEntity.getRoleId());
+            stringBuilder.append("_");
+        }
+        return stringBuilder.toString();
     }
 
 }
