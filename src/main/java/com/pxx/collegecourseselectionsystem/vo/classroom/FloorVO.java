@@ -23,5 +23,5 @@ public class FloorVO {
      * 教室集合
      */
     @ApiModelProperty("教室集合")
-    private List<BetweenVO> betweenVOList;
+    private List<BetweenVO> betweenList;
 }

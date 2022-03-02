@@ -21,9 +21,9 @@
         <result column="roof_name" property="roofName"/>
         <result column="roof_uuid" property="uuid"/>
         <result column="roof_number" property="roofNumber"/>
-        <collection property="floorVOList" ofType="com.pxx.collegecourseselectionsystem.vo.classroom.FloorVO">
+        <collection property="floorList" ofType="com.pxx.collegecourseselectionsystem.vo.classroom.FloorVO">
             <id column="floor" property="floor"/>
-            <collection property="betweenVOList"
+            <collection property="betweenList"
                         ofType="com.pxx.collegecourseselectionsystem.vo.classroom.BetweenVO">
 
                 <id column="between_number" property="between"/>

@@ -19,5 +19,5 @@ public class ClassroomRoofDto extends ClassroomRoof {
      * 层
      */
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private List<FloorVO> floorVOList;
+    private List<FloorVO> floorList;
 }
