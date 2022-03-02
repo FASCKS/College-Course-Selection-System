@@ -108,7 +108,7 @@
              , co.`name`       as course_name
              , su.user_id      as teacher
              , su.name         as teacher_name
-             , co.type         as type
+             , ct.name         as type
              , sc.up_time_two  as up_time_two_number
              , sc.up_time_two
              , scpgau.unit_id  as scpgau_unit_id
@@ -129,6 +129,7 @@
         from second_course_plan_group scpg
                      LEFT JOIN second_course sc ON scpg.id = sc.plan_group_id
                      LEFT JOIN course co ON co.id = sc.course_id
+        left join course_type ct on ct.id = co.type
                      LEFT JOIN sys_user su ON su.user_id = sc.teacher
                      left join second_course_plan_group_and_unit scpgau on scpgau.scpg_id = scpg.id
                      left join classroom c on c.id = sc.classroom_id

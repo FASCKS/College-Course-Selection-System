@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.pxx.collegecourseselectionsystem.common.validator.group.Insert;
 import com.pxx.collegecourseselectionsystem.common.validator.group.Update;
-import com.pxx.collegecourseselectionsystem.entity.enums.CourseEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -44,9 +43,9 @@ public class CourseEntity {
      * 课程类型 1公共课 2选修课 3必修课 4人文素质
      */
     @NotNull
-    @ApiModelProperty("课程类型 课程类型 1公共课 2选修课 3必修课 4人文素质")
+    @ApiModelProperty("课程类型id")
     @TableField(value = "`type`")
-    private CourseEnum type;
+    private Integer type;
 
     /**
      * 学分

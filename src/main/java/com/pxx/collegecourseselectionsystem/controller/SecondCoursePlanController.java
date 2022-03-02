@@ -90,7 +90,7 @@ public class SecondCoursePlanController {
             SecondCourseDto secondCourseDto = iterator.next();
             secondCourseDto.setCourseSum(redisUtil.get(courseSum + secondCourseDto.getId()));
             if (courseEnum != null) {
-                String describe = secondCourseDto.getType().getDescribe();
+                String describe = secondCourseDto.getType();
                 String describe1 = courseEnum.getDescribe();
                 if (!describe.contains(describe1)) {
                     iterator.remove();
@@ -132,7 +132,7 @@ public class SecondCoursePlanController {
             redisUtil.set(Global.KILL_SECOND_COURSE + "sum:" + secondCours.getId(), secondCours.getCourseSum(), (endTime - stateTime) / 1000 + REDIS_EXPIRED);
 
         }
-        //给延迟队列发送消息
+        //给延迟队列发送消息//多久之后进行同步
         amqpTemplate.convertAndSend(QueueEnum.QUEUE_ORDER_PLUGIN_CANCEL.getExchange(), QueueEnum.QUEUE_ORDER_PLUGIN_CANCEL.getRouteKey(),
                 planGroupId,
                 message -> {

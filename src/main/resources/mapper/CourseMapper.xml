@@ -29,14 +29,14 @@
         <result column="credit" jdbcType="INTEGER" property="credit"/>
         <result column="number" property="number"/>
         <association property="courseType" javaType="com.pxx.collegecourseselectionsystem.entity.CourseType">
-            <id column="id" property="id"/>
-            <result column="name" property="name"/>
+            <id column="ct_id" property="id"/>
+            <result column="ct_name" property="name"/>
             <result column="online_class" property="onlineClass"/>
             <result column="uuid" property="uuid"/>
         </association>
     </resultMap>
     <select id="findAllCourse" resultMap="findAllCoursetMap">
-        select *
+        select c.id, c.name, type, credit, number,ct.id as ct_id,ct. name as ct_name, uuid, online_class
         from course c
                      left join course_type ct on c.type = ct.id
     </select>

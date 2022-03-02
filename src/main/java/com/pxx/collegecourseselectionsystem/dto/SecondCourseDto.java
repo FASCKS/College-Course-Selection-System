@@ -1,9 +1,7 @@
 package com.pxx.collegecourseselectionsystem.dto;
 
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.pxx.collegecourseselectionsystem.entity.SecondCourse;
-import com.pxx.collegecourseselectionsystem.entity.enums.CourseEnum;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -37,7 +35,7 @@ public class SecondCourseDto extends SecondCourse {
     @NotNull
     @TableField(exist = false)
     @ApiModelProperty("课程类型")
-    private CourseEnum type;
+    private String type;
     @TableField(exist = false)
     @ApiModelProperty("第一节上课时间")
     private Integer upTimeNumber;
@@ -49,12 +47,7 @@ public class SecondCourseDto extends SecondCourse {
     private Integer weekNumber;
     @TableField(exist = false)
     private Integer totalSum;
-    @ApiModelProperty("学生id")
-    @JsonProperty(access = JsonProperty.Access.READ_WRITE)
-    private Long userId;
-    @ApiModelProperty("单位id")
-    @JsonProperty(access = JsonProperty.Access.READ_WRITE)
-    private Integer unitId;
+
     @ApiModelProperty("大楼Id")
     private String roofId;
     @ApiModelProperty("大楼名称")

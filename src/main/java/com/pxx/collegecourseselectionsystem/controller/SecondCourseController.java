@@ -250,7 +250,7 @@ public class SecondCourseController {
             SecondCourseDto secondCourseDto = iterator.next();
             secondCourseDto.setCourseSum(redisUtil.get(Global.KILL_SECOND_COURSE + "sum:" + secondCourseDto.getId()));
             if (courseEnum != null) {
-                String describe = secondCourseDto.getType().getDescribe();
+                String describe = secondCourseDto.getType();
                 String describe1 = courseEnum.getDescribe();
                 if (!describe.contains(describe1)) {
                     iterator.remove();

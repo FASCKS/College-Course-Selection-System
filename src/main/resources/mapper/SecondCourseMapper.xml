@@ -23,7 +23,7 @@
                co.`name`      as course_name,
                co.id          as course_id,
                su.name        as teacher_name,
-               co.type        as type,
+               ct.name        as type,
                cs.up_time,
                su.user_id     as teacher,
                cs.up_time     as up_time_number,
@@ -44,6 +44,7 @@
 
         FROM second_course cs
                      LEFT JOIN course co ON co.id = cs.course_id
+                     left join course_type ct on ct.id = co.id
                      LEFT JOIN sys_user su on su.user_id = cs.teacher
                      left join second_course_plan_group scpg on cs.plan_group_id = scpg.id
                      LEFT JOIN classroom cl ON cl.id = cs.classroom_id

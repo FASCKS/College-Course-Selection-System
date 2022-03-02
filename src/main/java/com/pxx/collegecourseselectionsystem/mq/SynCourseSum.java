@@ -5,6 +5,7 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.json.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.pxx.collegecourseselectionsystem.common.utils.RedisUtil;
+import com.pxx.collegecourseselectionsystem.dto.OrderSecondCourseDto;
 import com.pxx.collegecourseselectionsystem.dto.SecondCourseDto;
 import com.pxx.collegecourseselectionsystem.entity.ClassSchedule;
 import com.pxx.collegecourseselectionsystem.entity.OrderCourse;
@@ -61,28 +62,28 @@ public class SynCourseSum {
 
 
         //获取临时表中的数据添加进课程表中
-        List<SecondCourseDto> orderCourseList = orderCourseService.findAllByPlanGroupId(planGroupId);
+        List<OrderSecondCourseDto> orderSecondCourseDtoList = orderCourseService.findAllByPlanGroupId(planGroupId);
         List<ClassSchedule> classScheduleList = new ArrayList<>();
 
-        for (SecondCourseDto secondCourse : orderCourseList) {
+        for (OrderSecondCourseDto orderSecondCourseDto : orderSecondCourseDtoList) {
             ClassSchedule classSchedule = new ClassSchedule();
 
             classSchedule.setCreateTime(DateUtil.date());
-            classSchedule.setTeacher(secondCourse.getTeacher());
-            classSchedule.setUserId(secondCourse.getUserId());
-            classSchedule.setUpTime(secondCourse.getUpTime().getCode());
-            classSchedule.setWeek(secondCourse.getWeek());
-            classSchedule.setCourseId(secondCourse.getCourseId());
-            classSchedule.setUnit(secondCourse.getUnitId());
+            classSchedule.setTeacher(orderSecondCourseDto.getTeacher());
+            classSchedule.setUserId(orderSecondCourseDto.getUserId());
+            classSchedule.setUpTime(orderSecondCourseDto.getUpTime().getCode());
+            classSchedule.setWeek(orderSecondCourseDto.getWeek());
+            classSchedule.setCourseId(orderSecondCourseDto.getCourseId());
+            classSchedule.setUnit(orderSecondCourseDto.getUnitId());
             //关联教室
-            classSchedule.setClassroomId(secondCourse.getClassroomId());
+            classSchedule.setClassroomId(orderSecondCourseDto.getClassroomId());
             classScheduleList.add(classSchedule);
 
             //如果有第二节
-            if (secondCourse.getUpTimeTwo().getCode() != 0) {
+            if (orderSecondCourseDto.getUpTimeTwo().getCode() != 0) {
                 ClassSchedule classScheduleTwo = new ClassSchedule();
                 BeanUtil.copyProperties(classSchedule,classScheduleTwo);
-                classScheduleTwo.setUpTime(secondCourse.getUpTimeTwo().getCode());
+                classScheduleTwo.setUpTime(orderSecondCourseDto.getUpTimeTwo().getCode());
                 classScheduleList.add(classScheduleTwo);
             }
         }

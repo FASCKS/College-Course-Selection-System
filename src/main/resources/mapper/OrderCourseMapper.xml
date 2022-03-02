@@ -20,7 +20,7 @@
         where 1 = 1
     </delete>
 
-    <select id="findAllByPlanGroupId" resultType="com.pxx.collegecourseselectionsystem.dto.SecondCourseDto">
+    <select id="findAllByPlanGroupId" resultType="com.pxx.collegecourseselectionsystem.dto.OrderSecondCourseDto">
         select sc.id, sc.course_id, sc.teacher, sc.course_sum, sc.up_time, sc.up_time_two, sc.week, sc.state, sc.plan_group_id , oc.user_id,su.unit_id
         from order_course oc
                      left join second_course sc on oc.second_course_id = sc.id
