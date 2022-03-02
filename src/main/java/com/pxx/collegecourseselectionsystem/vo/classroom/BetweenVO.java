@@ -16,6 +16,11 @@ import lombok.ToString;
 @ApiModel("教室")
 public class BetweenVO {
     /**
+     * 教室id
+     */
+    @ApiModelProperty("教室id")
+    private Integer betweenId;
+    /**
      * 教室编号
      */
     @ApiModelProperty("教室编号")

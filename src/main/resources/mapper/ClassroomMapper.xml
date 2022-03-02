@@ -25,10 +25,12 @@
             <id column="floor" property="floor"/>
             <collection property="betweenVOList"
                         ofType="com.pxx.collegecourseselectionsystem.vo.classroom.BetweenVO">
+
                 <id column="between_number" property="between"/>
                 <result column="between_name" property="betweenName"/>
                 <result column="between_uuid" property="uuid"/>
                 <result column="quantity" property="quantity"/>
+                <result column="between_id" property="betweenId"/>
             </collection>
         </collection>
     </resultMap>
@@ -45,7 +47,8 @@
                cr.id           as roof_id,
                cr.uuid         as roof_uuid,
                cb.between_type as between_name,
-               cb.uuid         as between_uuid
+               cb.uuid         as between_uuid,
+        cb.id as between_id
         from (select * from classroom_roof limit #{current}, #{size}) cr
                      left join classroom c on c.roof_type_id = cr.id
                      left join classroom_between cb on cb.id = c.between_type_id
