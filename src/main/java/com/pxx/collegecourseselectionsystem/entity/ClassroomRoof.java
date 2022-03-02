@@ -48,5 +48,5 @@ public class ClassroomRoof {
 
     public static final String COL_ID = "id";
     public static final String COL_UUID = "uuid";
-    public static final String COL_NAME_TYPE = "name_type";
+    public static final String COL_ROOF_NAME = "roof_name";
 }

@@ -14,4 +14,18 @@ public interface ClassroomRoofService extends IService<ClassroomRoof>{
          * @return
          */
         boolean removeOneById(Integer id);
+
+        /**
+         * 新增一条
+         * @param classroomRoof
+         * @return
+         */
+        boolean insertOne(ClassroomRoof classroomRoof);
+
+        /**
+         * 编辑
+         * @param classroomRoof
+         * @return
+         */
+        boolean updateOneById(ClassroomRoof classroomRoof);
     }

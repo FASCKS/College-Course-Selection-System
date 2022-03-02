@@ -39,13 +39,13 @@ public class ClassroomRoofController {
     @ApiOperation("大楼新增")
     @PostMapping("/insert")
     public R insert(@RequestBody ClassroomRoof classroomRoof){
-        boolean save = classroomRoofService.save(classroomRoof);
+        boolean save = classroomRoofService.insertOne(classroomRoof);
         return R.ok().put("data",save);
     }
     @ApiOperation("大楼编辑")
     @PostMapping("/update")
     public R update(@RequestBody ClassroomRoof classroomRoof){
-        boolean save = classroomRoofService.updateById(classroomRoof);
+        boolean save = classroomRoofService.updateOneById(classroomRoof);
         return R.ok().put("data",save);
     }
     @ApiOperation("大楼删除")
