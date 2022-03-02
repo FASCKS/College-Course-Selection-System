@@ -106,7 +106,7 @@ public class SecondCourseController {
             //判断库存
             Integer courseSum = redisUtil.get(Global.KILL_SECOND_COURSE + "sum:" + secondCourseId);
             if (courseSum < 0) {
-                return R.error("退课失败");
+                return R.error("退课失败").put("data",courseSum);
             }
             //递增加一
             long decr = redisUtil.incr(Global.KILL_SECOND_COURSE + "sum:" + secondCourseId, 1);
@@ -131,9 +131,9 @@ public class SecondCourseController {
             long lRemove = redisUtil.lRemove(Global.KILL_SECOND_COURSE + "class:temp_schedule:" + userId, 0, simpleClassBook);
 
             if (lRemove == 1) {
-                return R.ok("退课成功");
+                return R.ok("退课成功").put("data",decr);
             }
-            return R.ok("退课失败");
+            return R.ok("退课失败").put("data",decr);
         }
         //判断是否重复抢购
         {
@@ -199,7 +199,7 @@ public class SecondCourseController {
         long decr = redisUtil.decr(Global.KILL_SECOND_COURSE + "sum:" + secondCourseId, 1);
         if (decr < 0) {
             redisUtil.incr(Global.KILL_SECOND_COURSE + "sum:" + secondCourseId, 1);
-            return R.ok("课程已经被抢完了.");
+            return R.ok("课程无空余").put("data",decr);
         }
         //用户抢课成功   redis标记
         redisUtil.set(Global.KILL_SECOND_COURSE + "_" + userId + "_course:" + secondCourseId, secondCourseId, (endTime - startTime) / 1000 + 60 * 5);
@@ -224,7 +224,7 @@ public class SecondCourseController {
         redisUtil.lSet(Global.KILL_SECOND_COURSE + "class:temp_schedule:" + userId, simpleClassBook, (endTime - startTime) / 1000 + 60 * 5);
 
 
-        return R.ok().put("data", true);
+        return R.ok().put("data", decr);
     }
 
     @PreAuthorize("hasAnyAuthority('second:plan:list')")
