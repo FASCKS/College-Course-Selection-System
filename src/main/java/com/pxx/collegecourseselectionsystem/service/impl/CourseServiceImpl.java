@@ -1,6 +1,8 @@
 package com.pxx.collegecourseselectionsystem.service.impl;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.pxx.collegecourseselectionsystem.dto.CourseDto;
 import com.pxx.collegecourseselectionsystem.entity.CourseEntity;
 import com.pxx.collegecourseselectionsystem.mapper.CourseMapper;
 import com.pxx.collegecourseselectionsystem.service.CourseService;
@@ -19,5 +21,11 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, CourseEntity> i
     public Integer CountByType(Integer type) {
 
         return baseMapper.countByType(type);
+    }
+
+    @Override
+    public Page<CourseDto> findAllCourse(Page<CourseEntity> courseEntityPage) {
+
+        return baseMapper.findAllCourse(courseEntityPage);
     }
 }

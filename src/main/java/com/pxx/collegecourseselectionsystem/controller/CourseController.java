@@ -6,6 +6,7 @@ import com.pxx.collegecourseselectionsystem.common.utils.Pagination;
 import com.pxx.collegecourseselectionsystem.common.utils.R;
 import com.pxx.collegecourseselectionsystem.common.validator.group.Insert;
 import com.pxx.collegecourseselectionsystem.common.validator.group.Update;
+import com.pxx.collegecourseselectionsystem.dto.CourseDto;
 import com.pxx.collegecourseselectionsystem.entity.CourseEntity;
 import com.pxx.collegecourseselectionsystem.service.CourseService;
 import io.swagger.annotations.Api;
@@ -31,7 +32,7 @@ public class CourseController {
     @PreAuthorize("hasAnyAuthority('user:course:list')")
     @GetMapping("/list")
     public R list(Pagination pagination) {
-        Page<CourseEntity> courseEntityPage = courseService.page(new Page<>(pagination.getPage(), pagination.getLimit()));
+        Page<CourseDto> courseEntityPage = courseService.findAllCourse(new Page<>(pagination.getPage(), pagination.getLimit()));
         PageUtils pageUtils = new PageUtils(courseEntityPage);
         return R.ok().put("data", pageUtils);
     }

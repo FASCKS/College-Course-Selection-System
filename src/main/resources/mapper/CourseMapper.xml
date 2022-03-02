@@ -1,20 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.pxx.collegecourseselectionsystem.mapper.CourseMapper">
-  <resultMap id="BaseResultMap" type="com.pxx.collegecourseselectionsystem.entity.CourseEntity">
-    <!--@mbg.generated-->
-    <!--@Table course-->
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="type" jdbcType="INTEGER" property="type" />
-    <result column="credit" jdbcType="INTEGER" property="credit" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    <!--@mbg.generated-->
-    id, `name`, `type`, credit
-  </sql>
+    <resultMap id="BaseResultMap" type="com.pxx.collegecourseselectionsystem.entity.CourseEntity">
+        <!--@mbg.generated-->
+        <!--@Table course-->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="type" jdbcType="INTEGER" property="type"/>
+        <result column="credit" jdbcType="INTEGER" property="credit"/>
+        <result column="number" property="number"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id, `name`, `type`, credit,number
+    </sql>
 
-  <select id="countByType" resultType="java.lang.Integer">
-    select count(*) from course c where type=#{type,jdbcType=INTEGER}
+    <select id="countByType" resultType="java.lang.Integer">
+        select count(*)
+        from course c
+        where type = #{type,jdbcType=INTEGER}
+    </select>
+    <resultMap id="findAllCoursetMap" type="com.pxx.collegecourseselectionsystem.dto.CourseDto">
+        <!--@mbg.generated-->
+        <!--@Table course-->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="type" jdbcType="INTEGER" property="type"/>
+        <result column="credit" jdbcType="INTEGER" property="credit"/>
+        <result column="number" property="number"/>
+        <association property="courseType" javaType="com.pxx.collegecourseselectionsystem.entity.CourseType">
+            <id column="id" property="id"/>
+            <result column="name" property="name"/>
+            <result column="online_class" property="onlineClass"/>
+            <result column="uuid" property="uuid"/>
+        </association>
+    </resultMap>
+    <select id="findAllCourse" resultMap="findAllCoursetMap">
+        select *
+        from course c
+                     left join course_type ct on c.type = ct.id
     </select>
 </mapper>
