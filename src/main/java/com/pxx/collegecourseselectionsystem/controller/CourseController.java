@@ -19,9 +19,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.Positive;
 
 /**
- * 课程类型
+ * 课程管理
  */
-@Api(tags = "课程")
+@Api(tags = "课程管理")
 @Validated
 @RestController
 @RequestMapping("/user/course")

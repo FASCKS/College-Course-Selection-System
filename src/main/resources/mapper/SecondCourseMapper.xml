@@ -38,6 +38,7 @@
                cs.plan_group_id,
                cs.up_time_two,
                cs.course_sum        as total_sum,
+               co.online_class      as online_class,
                cr.roof_name,
                cr.roof_number,
                cr.id                as roof_id,

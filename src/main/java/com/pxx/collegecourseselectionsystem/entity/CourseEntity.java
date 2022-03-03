@@ -53,7 +53,7 @@ public class CourseEntity {
     @NotNull
     @ApiModelProperty(value = "学分",example = "2")
     @TableField(value = "credit")
-    private Integer credit;
+    private String credit;
     /**
      * 课程编号
      */

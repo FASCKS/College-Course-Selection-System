@@ -7,7 +7,7 @@
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="type" jdbcType="INTEGER" property="type"/>
-        <result column="credit" jdbcType="INTEGER" property="credit"/>
+        <result column="credit" jdbcType="VARCHAR" property="credit"/>
         <result column="number" property="number"/>
     </resultMap>
     <sql id="Base_Column_List">
@@ -26,7 +26,7 @@
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="type" jdbcType="INTEGER" property="type"/>
-        <result column="credit" jdbcType="INTEGER" property="credit"/>
+        <result column="credit" jdbcType="VARCHAR" property="credit"/>
         <result column="number" property="number"/>
         <result column="online_class" property="onlineClass"/>
         <association property="courseType" javaType="com.pxx.collegecourseselectionsystem.entity.CourseType">

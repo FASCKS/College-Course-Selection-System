@@ -62,4 +62,6 @@ public class SecondCourseDto extends SecondCourse {
     private Integer between;
     @ApiModelProperty("教室名称")
     private String betweenType;
+    @ApiModelProperty("是否网课")
+    private Integer onlineClass;
 }
