@@ -14,4 +14,11 @@ public interface ClassroomBetweenService extends IService<ClassroomBetween>{
          * @return
          */
         boolean removeOneById(Integer id);
+
+        /**
+         * 更新一条
+         * @param classroomBetween
+         * @return
+         */
+        boolean updateOneById(ClassroomBetween classroomBetween);
     }

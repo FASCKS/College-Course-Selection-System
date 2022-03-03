@@ -62,9 +62,15 @@ public class CourseEntity {
     @ApiModelProperty(value = "课程代码",example = "A00001")
     @TableField(value = "number")
     private String number;
+    /**
+     * 0 不是网课 1 是网课
+     */
+    @TableField(value = "`online_class`")
+    @ApiModelProperty(value="0 不是网课 1 是网课")
+    private Integer onlineClass;
 
     public static final String COL_ID = "id";
-
+    public static final String COL_ONLINE_CLASS= "online_class";
     public static final String COL_NAME = "name";
 
     public static final String COL_TYPE = "type";

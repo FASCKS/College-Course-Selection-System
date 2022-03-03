@@ -28,12 +28,6 @@ public class CourseType {
     @TableField(value = "`name`")
     @ApiModelProperty(value="课程类型名字")
     private String name;
-    /**
-     * 0 不是网课 1 是网课
-     */
-    @TableField(value = "`online_class`")
-    @ApiModelProperty(value="0 不是网课 1 是网课")
-    private Integer onlineClass;
 
     /**
      * 唯一标识
@@ -48,5 +42,5 @@ public class CourseType {
     public static final String COL_NAME = "name";
 
     public static final String COL_UUID = "uuid";
-    public static final String COL_ONLINE_CLASS= "online_class";
+
 }

@@ -45,7 +45,7 @@ public class ClassroomBetweenController {
     @ApiOperation("教室类型编辑")
     @PostMapping("/update")
     public R update(@RequestBody ClassroomBetween classroomBetween){
-        boolean save = classroomBetweenService.updateById(classroomBetween);
+        boolean save = classroomBetweenService.updateOneById(classroomBetween);
         return R.ok().put("data",save);
     }
     @ApiOperation("教室类型删除")

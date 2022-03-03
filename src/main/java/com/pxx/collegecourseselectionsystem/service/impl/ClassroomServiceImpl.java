@@ -60,6 +60,7 @@ public class ClassroomServiceImpl extends ServiceImpl<ClassroomMapper, Classroom
     @Override
     public boolean insertOne(Classroom classroom) {
         this.check(classroom);
+        this.parameter(classroom);
 
         int insert = baseMapper.insert(classroom);
 
@@ -87,8 +88,24 @@ public class ClassroomServiceImpl extends ServiceImpl<ClassroomMapper, Classroom
     @Transactional
     public boolean updateOne(Classroom classroom) {
         this.check(classroom);
+        this.parameter(classroom);
         int update = baseMapper.updateById(classroom);
         return update > 0;
+    }
+
+    /**
+     * 添加冗余参数
+     */
+    private void parameter(Classroom classroom) {
+        Integer roofTypeId = classroom.getRoofTypeId();
+        Integer betweenTypeId = classroom.getBetweenTypeId();
+        //添加大楼参数
+        ClassroomRoof classroomRoof = classroomRoofService.getById(roofTypeId);
+        classroom.setRoofName(classroomRoof.getRoofName());
+        classroom.setRoofNumber(classroomRoof.getRoofNumber());
+        //添加教室参数
+        ClassroomBetween classroomBetween = classroomBetweenService.getById(betweenTypeId);
+        classroom.setBetweenName(classroomBetween.getBetweenType());
     }
 
     /**

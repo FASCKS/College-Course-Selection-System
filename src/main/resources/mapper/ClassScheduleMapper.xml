@@ -40,31 +40,28 @@
         </collection>
     </resultMap>
     <select id="findMyClassSchedule" resultMap="findMyClassScheduleVo">
-        SELECT sun.unit_id     AS unit_id,
-               sun.NAME        AS class_name,
-               su.user_id      AS user_id,
-               su.NAME         AS user_name,
-               co.id           AS course_id,
-               co.`name`       AS course_name,
-               st.NAME         AS teacher_name,
+        SELECT sun.unit_id    AS unit_id,
+               sun.NAME       AS class_name,
+               su.user_id     AS user_id,
+               su.NAME        AS user_name,
+               co.id          AS course_id,
+               co.`name`      AS course_name,
+               st.NAME        AS teacher_name,
                cs.`week`,
-               cs.`week`       as week_name,
+               cs.`week`      as week_name,
                cs.up_time,
-               cs.up_time      as up_time_name,
-               cr.roof_name    as roof_name,
-               cr.roof_number,
+               cs.up_time     as up_time_name,
+               c.roof_name    as roof_name,
+               c.roof_number  as roof_number,
                c.floor,
                c.`between`,
-               cb.between_type as between_name
+               c.between_name as between_name
         FROM class_schedule cs
                      LEFT JOIN sys_user su ON su.user_id = cs.user_id
                      LEFT JOIN course co ON co.id = cs.course_id
                      LEFT JOIN sys_unit sun ON sun.unit_id = cs.unit
                      LEFT JOIN sys_user st ON st.user_id = cs.teacher
                      left join classroom c on cs.classroom_id = c.id
-                     left join classroom_roof cr on cr.id = c.roof_type_id
-                     left join classroom_between cb on cb.id = c.between_type_id
-
         <where>
             <if test="userId != null">
                 and su.user_id = #{userId,jdbcType=BIGINT}

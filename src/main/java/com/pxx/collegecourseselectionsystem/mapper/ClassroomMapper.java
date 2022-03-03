@@ -32,5 +32,11 @@ public interface ClassroomMapper extends BaseMapper<Classroom> {
 
     Classroom findOne(@Param("id") Integer id);
 
+    int updateByRoofTypeId(@Param("roofTypeId") Integer roofTypeId,
+                           @Param("roofName") String roofName,
+                           @Param("roofNumber") Integer roofNumber
+    );
 
+
+    int updateByBetweenTypeId(@Param("betweenTypeId") Integer id, @Param("betweenType") String betweenType);
 }

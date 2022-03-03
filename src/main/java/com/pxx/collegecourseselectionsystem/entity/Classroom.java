@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -11,6 +12,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 
 /**
  *  @author Gpxx
@@ -69,6 +71,21 @@ public class Classroom {
     @TableField(value = "`number`")
     @ApiModelProperty(value="容纳人数")
     private Integer number;
+    @Null
+    @JsonProperty(access = JsonProperty.Access.READ_WRITE)
+    @TableField(value = "`roof_name`")
+    @ApiModelProperty(value="大楼名称")
+    private String roofName;
+    @Null
+    @JsonProperty(access = JsonProperty.Access.READ_WRITE)
+    @TableField(value = "`between_name`")
+    @ApiModelProperty(value="教室名称")
+    private String betweenName;
+    @Null
+    @JsonProperty(access = JsonProperty.Access.READ_WRITE)
+    @TableField(value = "`roof_number`")
+    @ApiModelProperty(value="大楼序号")
+    private Integer roofNumber;
 
     public static final String COL_ID = "id";
 

@@ -44,7 +44,7 @@ public class ClassroomRoof {
     @NotBlank
     @TableField(value = "roof_number")
     @ApiModelProperty("编号")
-    private String roofNumber;
+    private Integer roofNumber;
 
     public static final String COL_ID = "id";
     public static final String COL_UUID = "uuid";

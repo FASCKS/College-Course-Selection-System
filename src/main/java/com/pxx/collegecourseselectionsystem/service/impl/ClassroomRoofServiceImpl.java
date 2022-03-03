@@ -4,8 +4,10 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.pxx.collegecourseselectionsystem.common.exception.RRException;
 import com.pxx.collegecourseselectionsystem.entity.ClassroomRoof;
+import com.pxx.collegecourseselectionsystem.mapper.ClassroomMapper;
 import com.pxx.collegecourseselectionsystem.mapper.ClassroomRoofMapper;
 import com.pxx.collegecourseselectionsystem.service.ClassroomRoofService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 public class ClassroomRoofServiceImpl extends ServiceImpl<ClassroomRoofMapper, ClassroomRoof> implements ClassroomRoofService {
+    @Autowired
+    private ClassroomMapper classroomMapper;
 
     /**
      * 删除一条判断是否关联教室
@@ -34,7 +38,8 @@ public class ClassroomRoofServiceImpl extends ServiceImpl<ClassroomRoofMapper, C
      * @param classroomRoof
      * @return
      */
-    @Override@Transactional
+    @Override
+    @Transactional
     public boolean insertOne(ClassroomRoof classroomRoof) {
         this.check(classroomRoof);
         int insert = baseMapper.insert(classroomRoof);
@@ -47,21 +52,28 @@ public class ClassroomRoofServiceImpl extends ServiceImpl<ClassroomRoofMapper, C
      * @param classroomRoof
      * @return
      */
-    @Override@Transactional
+    @Override
+    @Transactional
     public boolean updateOneById(ClassroomRoof classroomRoof) {
         this.check(classroomRoof);
+        this.parameter(classroomRoof);
         int update = baseMapper.updateById(classroomRoof);
-        return update>0;
+        return update > 0;
     }
 
-    private void check(ClassroomRoof classroomRoof){
+    private void parameter(ClassroomRoof classroomRoof) {
+        //更新教室管理中的冗余字段
+        classroomMapper.updateByRoofTypeId(classroomRoof.getId(),classroomRoof.getRoofName(),classroomRoof.getRoofNumber());
+    }
+
+    private void check(ClassroomRoof classroomRoof) {
         //检测名字和编号是否相同
         QueryWrapper<ClassroomRoof> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(ClassroomRoof.COL_ROOF_NAME, classroomRoof.getRoofName().trim())
                 .eq("roof_number", classroomRoof.getRoofNumber());
         Long selectCount = baseMapper.selectCount(queryWrapper);
-        if (selectCount>0){
-            throw new RRException(classroomRoof.getRoofName()+" "+classroomRoof.getRoofNumber()+"已经存在");
+        if (selectCount > 0) {
+            throw new RRException(classroomRoof.getRoofName() + " " + classroomRoof.getRoofNumber() + "已经存在");
         }
     }
 }
