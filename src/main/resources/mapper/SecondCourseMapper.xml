@@ -31,7 +31,6 @@
                cs.week              as week_number,
                cs.week,
                cs.classroom_id      as classroom_id,
-
                scpg.start_time,
                scpg.end_time,
                cs.course_sum,

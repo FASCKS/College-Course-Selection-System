@@ -105,7 +105,6 @@ public class SecondCourse {
     /**
      * 发布状态
      */
-    @Deprecated
     @JsonIgnore
     @TableField(value = "state")
     @ApiModelProperty(value = "发布状态")
@@ -113,6 +112,7 @@ public class SecondCourse {
     /**
      * 教室
      */
+    @NotNull
     @TableField(value = "classroom_id")
     private Integer classroomId;
     /**
