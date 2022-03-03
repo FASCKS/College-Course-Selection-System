@@ -21,10 +21,10 @@
         <result column="class_name" property="className"/>
         <result column="user_name" property="userName"/>
         <collection property="classBook" ofType="com.pxx.collegecourseselectionsystem.vo.course.ClassBook">
-            <result column="course_id" property="courseId"/>
+            <id column="course_id" property="courseId"/>
             <result column="course_name" property="courseName"/>
-            <collection property="classScheduleTimes"
-                        ofType="com.pxx.collegecourseselectionsystem.vo.course.ClassScheduleTime">
+            <result column="online_class" property="onlineClass"/>
+            <collection property="classScheduleTimes" ofType="com.pxx.collegecourseselectionsystem.vo.course.ClassScheduleTime">
                 <result column="course_id" property="courseId"/>
                 <result column="teacher_name" property="teacherName"/>
                 <result column="week" property="week"/>
@@ -46,6 +46,7 @@
                su.NAME        AS user_name,
                co.id          AS course_id,
                co.`name`      AS course_name,
+               co.online_class,
                st.NAME        AS teacher_name,
                cs.`week`,
                cs.`week`      as week_name,

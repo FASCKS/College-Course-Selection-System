@@ -19,6 +19,7 @@ public class ClassScheduleVo {
      * 用户名称
      */
     private String userName;
+
     private List<ClassBook> classBook;
 
 }
