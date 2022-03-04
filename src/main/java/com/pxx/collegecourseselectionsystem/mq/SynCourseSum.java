@@ -1,13 +1,9 @@
 package com.pxx.collegecourseselectionsystem.mq;
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.convert.Convert;
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.json.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.pxx.collegecourseselectionsystem.common.utils.RedisUtil;
-import com.pxx.collegecourseselectionsystem.dto.OrderSecondCourseDto;
-import com.pxx.collegecourseselectionsystem.dto.SecondCourseDto;
 import com.pxx.collegecourseselectionsystem.entity.ClassSchedule;
 import com.pxx.collegecourseselectionsystem.entity.OrderCourse;
 import com.pxx.collegecourseselectionsystem.entity.SecondCourse;
@@ -21,7 +17,6 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -45,51 +40,23 @@ public class SynCourseSum {
     /**
      * 同步redis数据
      *
-     * @param secondCourseId
+     * @param
      */
     @RabbitListener(queues = "mall.order.cancel.plugin")
     @RabbitHandler
     public void handle(Integer planGroupId) {
-        List<SecondCourseDto> secondCourseDtoList = redisUtil.get(Global.KILL_SECOND_COURSE + "all:" + planGroupId);
-        List<SecondCourse> secondCourseList = new ArrayList<>(secondCourseDtoList.size());
-        for (SecondCourseDto secondCourseDto : secondCourseDtoList) {
-            //更新库存
-            secondCourseDto.setCourseSum(redisUtil.get(Global.KILL_SECOND_COURSE + "sum:" + secondCourseDto.getId()));
-            SecondCourse secondCourse = new SecondCourse();
-            BeanUtil.copyProperties(secondCourseDto, secondCourse);
-            secondCourseList.add(secondCourse);
-        }
-        boolean updateBatchById = secondCourseService.updateBatchById(secondCourseList);
 
-
-        //获取临时表中的数据添加进课程表中
-        List<OrderSecondCourseDto> orderSecondCourseDtoList = orderCourseService.findAllByPlanGroupId(planGroupId);
-        List<ClassSchedule> classScheduleList = new ArrayList<>();
-
-        for (OrderSecondCourseDto orderSecondCourseDto : orderSecondCourseDtoList) {
-            ClassSchedule classSchedule = new ClassSchedule();
-
-            classSchedule.setCreateTime(DateUtil.date());
-            classSchedule.setTeacher(orderSecondCourseDto.getTeacher());
-            classSchedule.setUserId(orderSecondCourseDto.getUserId());
-            classSchedule.setUpTime(orderSecondCourseDto.getUpTime().getCode());
-            classSchedule.setWeek(orderSecondCourseDto.getWeek());
-            classSchedule.setCourseId(orderSecondCourseDto.getCourseId());
-            classSchedule.setUnit(orderSecondCourseDto.getUnitId());
-            //关联教室
-            classSchedule.setClassroomId(orderSecondCourseDto.getClassroomId());
-            classScheduleList.add(classSchedule);
-
-            //如果有第二节
-            if (orderSecondCourseDto.getUpTimeTwo().getCode() != 0) {
-                ClassSchedule classScheduleTwo = new ClassSchedule();
-                BeanUtil.copyProperties(classSchedule,classScheduleTwo);
-                classScheduleTwo.setUpTime(orderSecondCourseDto.getUpTimeTwo().getCode());
-                classScheduleList.add(classScheduleTwo);
-            }
-        }
+        List<ClassSchedule> allByPlanGroupId = orderCourseService.findAllByPlanGroupId(planGroupId);
         //添加至课程表
-        boolean saveBatch = classScheduleService.saveBatch(classScheduleList);
+        boolean saveBatch = classScheduleService.saveBatch(allByPlanGroupId);
+        //redis同步库存
+        List<SecondCourse> secondCourseList = secondCourseService.findAllByPlanGroupId(planGroupId);
+        for (SecondCourse secondCourse : secondCourseList) {
+            Integer sum = redisUtil.get(Global.KILL_SECOND_COURSE + "sum:" + secondCourse.getId());
+            secondCourse.setCourseSum(sum);
+        }
+
+        boolean updateBatchById = secondCourseService.updateBatchById(secondCourseList);
 
         //删除该组临时课表订单
         QueryWrapper<OrderCourse> orderCourseQueryWrapper = new QueryWrapper<>();
@@ -129,7 +96,7 @@ public class SynCourseSum {
     @RabbitListener(queues = "course.kill.cancel.del.mysql")
     @RabbitHandler
     public void delHandle(JSONObject jsonObject) {
-        Long userId =  Convert.toLong(jsonObject.get("userID"));
+        Long userId = Convert.toLong(jsonObject.get("userID"));
         Integer secondCourseId = (Integer) jsonObject.get("secondCourseId");
         Integer planGroupId = (Integer) jsonObject.get("planGroupId");
         QueryWrapper<OrderCourse> orderCourseQueryWrapper = new QueryWrapper<>();

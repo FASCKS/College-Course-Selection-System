@@ -2,6 +2,7 @@ package com.pxx.collegecourseselectionsystem.service.impl;
 
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.pxx.collegecourseselectionsystem.common.exception.RRException;
 import com.pxx.collegecourseselectionsystem.dto.SecondCourseDto;
@@ -41,7 +42,6 @@ public class SecondCourseServiceImpl extends ServiceImpl<SecondCourseMapper, Sec
     /**
      * 检查课程是否在时间之内
      *
-     * @param secondCourseId
      * @return
      */
     @Override
@@ -130,6 +130,19 @@ public class SecondCourseServiceImpl extends ServiceImpl<SecondCourseMapper, Sec
     @Override
     public Integer findCountByUserId(Collection<Long> list) {
         return baseMapper.findCountByUserId(list);
+    }
+
+    /**
+     * 通过组获取所有
+     *
+     * @param planGroupId
+     * @return
+     */
+    @Override
+    public List<SecondCourse> findAllByPlanGroupId(Integer planGroupId) {
+        QueryWrapper<SecondCourse> secondCourseQueryWrapper=new QueryWrapper<>();
+        secondCourseQueryWrapper.eq("plan_group_id",planGroupId);
+        return baseMapper.selectList(secondCourseQueryWrapper);
     }
 }
 

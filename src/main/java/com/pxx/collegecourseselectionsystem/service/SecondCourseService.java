@@ -51,5 +51,12 @@ public interface SecondCourseService extends IService<SecondCourse> {
      * @return
      */
     Integer findCountByUserId(Collection<Long> list);
+
+    /**
+     * 通过组获取所有
+     * @param planGroupId
+     * @return
+     */
+    List<SecondCourse> findAllByPlanGroupId(Integer planGroupId);
 }
 

@@ -1,7 +1,7 @@
 package com.pxx.collegecourseselectionsystem.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.pxx.collegecourseselectionsystem.dto.OrderSecondCourseDto;
+import com.pxx.collegecourseselectionsystem.entity.ClassSchedule;
 import com.pxx.collegecourseselectionsystem.entity.OrderCourse;
 import com.pxx.collegecourseselectionsystem.mapper.OrderCourseMapper;
 import com.pxx.collegecourseselectionsystem.service.OrderCourseService;
@@ -35,7 +35,7 @@ public class OrderCourseServiceImpl extends ServiceImpl<OrderCourseMapper, Order
      * @return
      */
     @Override
-    public List<OrderSecondCourseDto> findAllByPlanGroupId(Integer planGroupId) {
+    public List<ClassSchedule> findAllByPlanGroupId(Integer planGroupId) {
         return orderCourseMapper.findAllByPlanGroupId(planGroupId);
     }
 }

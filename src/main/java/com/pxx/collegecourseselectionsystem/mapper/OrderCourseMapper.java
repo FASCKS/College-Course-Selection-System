@@ -2,7 +2,7 @@ package com.pxx.collegecourseselectionsystem.mapper;
 
 import com.baomidou.mybatisplus.annotation.InterceptorIgnore;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.pxx.collegecourseselectionsystem.dto.OrderSecondCourseDto;
+import com.pxx.collegecourseselectionsystem.entity.ClassSchedule;
 import com.pxx.collegecourseselectionsystem.entity.OrderCourse;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -23,5 +23,5 @@ public interface OrderCourseMapper extends BaseMapper<OrderCourse> {
      * @param planGroupId
      * @return
      */
-    List<OrderSecondCourseDto> findAllByPlanGroupId(@Param("planGroupId") Integer planGroupId);
+    List<ClassSchedule> findAllByPlanGroupId(@Param("planGroupId") Integer planGroupId);
 }

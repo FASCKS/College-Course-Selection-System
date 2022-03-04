@@ -11,10 +11,12 @@
         <result column="user_id" jdbcType="BIGINT" property="userId"/>
         <result column="unit" jdbcType="INTEGER" property="unit"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="teacher" property="teacher"/>
+        <result column="classroom_id" property="classroomId"/>
     </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
-        id, course_id, up_time, week, user_id, unit, create_time
+        id, course_id, up_time, week, user_id, unit, create_time,teacher
     </sql>
     <resultMap id="findMyClassScheduleVo" type="com.pxx.collegecourseselectionsystem.vo.course.ClassScheduleVo">
         <id column="user_id" jdbcType="BIGINT" property="userId"/>

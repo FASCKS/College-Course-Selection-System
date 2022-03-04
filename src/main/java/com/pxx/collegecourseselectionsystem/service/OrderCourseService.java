@@ -1,7 +1,7 @@
 package com.pxx.collegecourseselectionsystem.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.pxx.collegecourseselectionsystem.dto.OrderSecondCourseDto;
+import com.pxx.collegecourseselectionsystem.entity.ClassSchedule;
 import com.pxx.collegecourseselectionsystem.entity.OrderCourse;
 
 import java.util.List;
@@ -22,5 +22,5 @@ public interface OrderCourseService extends IService<OrderCourse>{
      * @param planGroupId
      * @return
      */
-        List<OrderSecondCourseDto> findAllByPlanGroupId(Integer planGroupId);
+        List<ClassSchedule> findAllByPlanGroupId(Integer planGroupId);
     }
