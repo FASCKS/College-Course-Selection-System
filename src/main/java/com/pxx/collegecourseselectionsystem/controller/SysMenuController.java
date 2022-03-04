@@ -1,6 +1,7 @@
 package com.pxx.collegecourseselectionsystem.controller;
 
 import cn.hutool.core.lang.tree.Tree;
+import cn.hutool.core.util.StrUtil;
 import com.pxx.collegecourseselectionsystem.common.utils.R;
 import com.pxx.collegecourseselectionsystem.common.utils.SpringSecurityUtil;
 import com.pxx.collegecourseselectionsystem.entity.SysMenuEntity;
@@ -108,7 +109,9 @@ public class SysMenuController {
         }
         //获取菜单关联的角色
        List<Long> longList= sysRoleMenuService.findRoleIdsByMenuId(sysMenuEntity.getMenuId());
-        boolean update = sysMenuService.updateOneById(sysMenuEntity);
+        String roleStr = StrUtil.join("_", longList.iterator());
+
+        boolean update = sysMenuService.updateOneById(sysMenuEntity,roleStr);
         return R.ok().put("data", update);
     }
 

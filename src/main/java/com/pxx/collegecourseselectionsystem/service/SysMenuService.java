@@ -42,5 +42,5 @@ public interface SysMenuService extends IService<SysMenuEntity>{
      * @param sysMenuEntity
      * @return
      */
-    boolean updateOneById(SysMenuEntity sysMenuEntity);
+    boolean updateOneById(SysMenuEntity sysMenuEntity,String roleStr );
 }

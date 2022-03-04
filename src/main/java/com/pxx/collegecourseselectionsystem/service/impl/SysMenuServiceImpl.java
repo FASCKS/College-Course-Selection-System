@@ -12,6 +12,7 @@ import com.pxx.collegecourseselectionsystem.service.SysMenuService;
 import com.pxx.collegecourseselectionsystem.service.SysRoleMenuService;
 import com.pxx.collegecourseselectionsystem.vo.course.MenuTreeNode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -155,7 +156,8 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenuEntity
      */
     @Override
     @Transactional
-    public boolean updateOneById(SysMenuEntity sysMenuEntity) {
+    @CacheEvict(value = "menu_details",key = "#roleStr+'menu'" , allEntries = true)
+    public boolean updateOneById(SysMenuEntity sysMenuEntity,String roleStr ) {
 
         int updateById = baseMapper.updateById(sysMenuEntity);
         return updateById > 0;
