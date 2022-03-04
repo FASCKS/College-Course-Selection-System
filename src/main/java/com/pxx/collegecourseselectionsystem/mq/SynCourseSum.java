@@ -1,6 +1,7 @@
 package com.pxx.collegecourseselectionsystem.mq;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.convert.Convert;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.json.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -93,7 +94,7 @@ public class SynCourseSum {
         //删除该组临时课表订单
         QueryWrapper<OrderCourse> orderCourseQueryWrapper = new QueryWrapper<>();
         orderCourseQueryWrapper.eq("plan_group_id", planGroupId);
-        orderCourseService.deleteAll();
+        orderCourseService.remove(orderCourseQueryWrapper);
 
 
         log.info("redis库存同步mysql---->{},同步课程表----->{}", updateBatchById, saveBatch);
@@ -118,16 +119,8 @@ public class SynCourseSum {
      */
     @RabbitListener(queues = "course.kill.cancel.syn.mysql")
     @RabbitHandler
-    public void sysHandle(JSONObject jsonObject) {
-        Long userId = (Long) jsonObject.get("userID");
-        Integer secondCourseId = (Integer) jsonObject.get("secondCourseId");
-        Integer planGroupId = (Integer) jsonObject.get("planGroupId");
-        OrderCourse orderCourse = new OrderCourse();
-        orderCourse.setUserId(userId);
-        orderCourse.setSecondCourseId(secondCourseId);
-        orderCourse.setPlanGroupId(planGroupId);
-        orderCourseService.save(orderCourse);
-        log.info("同步订单");
+    public void sysHandle(List<OrderCourse> orderCourseList) {
+        orderCourseService.saveBatch(orderCourseList);
     }
 
     /**
@@ -136,7 +129,7 @@ public class SynCourseSum {
     @RabbitListener(queues = "course.kill.cancel.del.mysql")
     @RabbitHandler
     public void delHandle(JSONObject jsonObject) {
-        Long userId = (Long) jsonObject.get("userID");
+        Long userId =  Convert.toLong(jsonObject.get("userID"));
         Integer secondCourseId = (Integer) jsonObject.get("secondCourseId");
         Integer planGroupId = (Integer) jsonObject.get("planGroupId");
         QueryWrapper<OrderCourse> orderCourseQueryWrapper = new QueryWrapper<>();

@@ -1,5 +1,6 @@
 package com.pxx.collegecourseselectionsystem.controller;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
@@ -8,6 +9,7 @@ import com.pxx.collegecourseselectionsystem.common.utils.R;
 import com.pxx.collegecourseselectionsystem.common.utils.RedisUtil;
 import com.pxx.collegecourseselectionsystem.common.utils.SpringSecurityUtil;
 import com.pxx.collegecourseselectionsystem.dto.SecondCourseDto;
+import com.pxx.collegecourseselectionsystem.entity.OrderCourse;
 import com.pxx.collegecourseselectionsystem.entity.SecondCoursePlanGroupEntity;
 import com.pxx.collegecourseselectionsystem.entity.enums.CourseEnum;
 import com.pxx.collegecourseselectionsystem.service.SecondCourseService;
@@ -106,7 +108,7 @@ public class SecondCourseController {
             //判断库存
             Integer courseSum = redisUtil.get(Global.KILL_SECOND_COURSE + "sum:" + secondCourseId);
             if (courseSum < 0) {
-                return R.error("退课失败").put("data",courseSum);
+                return R.error("退课失败").put("data", courseSum);
             }
             //递增加一
             long decr = redisUtil.incr(Global.KILL_SECOND_COURSE + "sum:" + secondCourseId, 1);
@@ -117,11 +119,8 @@ public class SecondCourseController {
             jsonObject.putOpt("secondCourseId", secondCourseId);
             jsonObject.putOpt("userID", userId);
             jsonObject.putOpt("planGroupId", planGroupId);
-            amqpTemplate.convertAndSend("course.kill.syn.mysql", "course.kill.cancel.del.mysql", jsonObject, message -> {
-                //给消息设置延迟毫秒值
-                message.getMessageProperties().setHeader("x-delay", 3000);
-                return message;
-            });
+
+            amqpTemplate.convertAndSend("course.kill.syn.mysql", "course.kill.cancel.del.mysql", jsonObject);
             SecondCourseDto secondCourseDto = redisUtil.get(Global.KILL_SECOND_COURSE + "entity:" + secondCourseId + "_" + planGroupId);
             //删除之前抢课成功缓存在临时课程表中的信息
             Integer up_time = secondCourseDto.getUpTime().getCode();
@@ -131,9 +130,9 @@ public class SecondCourseController {
             long lRemove = redisUtil.lRemove(Global.KILL_SECOND_COURSE + "class:temp_schedule:" + userId, 0, simpleClassBook);
 
             if (lRemove == 1) {
-                return R.ok("退课成功").put("data",decr);
+                return R.ok("退课成功").put("data", decr);
             }
-            return R.ok("退课失败").put("data",decr);
+            return R.ok("退课失败").put("data", decr);
         }
         //判断是否重复抢购
         {
@@ -145,7 +144,7 @@ public class SecondCourseController {
         //判断库存
         Integer courseSum = (Integer) redisUtil.get(Global.KILL_SECOND_COURSE + "sum:" + secondCourseId);
         if (courseSum == null || courseSum <= 0) {
-            return R.error("课程无空余").put("data",courseSum);
+            return R.error("课程无空余").put("data", courseSum);
         }
         //判断是否课程冲突
         SecondCourseDto secondCourseDto = redisUtil.get(Global.KILL_SECOND_COURSE + "entity:" + secondCourseId + "_" + planGroupId);
@@ -186,7 +185,7 @@ public class SecondCourseController {
                                     , secondCourseDto.getWeek().getCode()
                                     , secondCourseDto.getUpTimeNumber()
                                     ,
-                                    secondCourseDto.getUpTimeTwoNumber() == 0 ? "" : " "+secondCourseDto.getUpTimeTwoNumber()
+                                    secondCourseDto.getUpTimeTwoNumber() == 0 ? "" : " " + secondCourseDto.getUpTimeTwoNumber()
 
 
                             ));
@@ -199,20 +198,34 @@ public class SecondCourseController {
         long decr = redisUtil.decr(Global.KILL_SECOND_COURSE + "sum:" + secondCourseId, 1);
         if (decr < 0) {
             redisUtil.incr(Global.KILL_SECOND_COURSE + "sum:" + secondCourseId, 1);
-            return R.ok("课程无空余").put("data",decr);
+            return R.ok("课程无空余").put("data", decr);
         }
         //用户抢课成功   redis标记
         redisUtil.set(Global.KILL_SECOND_COURSE + "_" + userId + "_course:" + secondCourseId, secondCourseId, (endTime - startTime) / 1000 + 60 * 5);
         //异步添加到mysql
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.putOpt("secondCourseId", secondCourseId);
-        jsonObject.putOpt("userID", userId);
-        jsonObject.putOpt("planGroupId", planGroupId);
-        amqpTemplate.convertAndSend("course.kill.syn.mysql", "course.kill.cancel.syn.mysql", jsonObject, message -> {
-            //给消息设置延迟毫秒值
-            message.getMessageProperties().setHeader("x-delay", 3000);
-            return message;
-        });
+        List<OrderCourse> orderCourseList = new ArrayList<>();
+        {
+            OrderCourse orderCourse = new OrderCourse();
+            orderCourse.setSecondCourseId(secondCourseId);
+            orderCourse.setUserId(userId);
+            orderCourse.setPlanGroupId(planGroupId);
+            orderCourse.setCourseId(secondCourseDto.getCourseId());
+            orderCourse.setTeacherId(secondCourseDto.getTeacher());
+            orderCourse.setUpTime(secondCourseDto.getUpTime().getCode());
+            orderCourse.setWeek(secondCourseDto.getWeek().getCode());
+            orderCourse.setClassroomId(secondCourseDto.getClassroomId());
+            orderCourseList.add(orderCourse);
+        }
+        {
+            //如果有第二节课
+            if (secondCourseDto.getUpTimeTwo().getCode() != 0) {
+                OrderCourse orderCourse=new OrderCourse();
+                BeanUtil.copyProperties(orderCourse,orderCourseList.get(0));
+                orderCourseList.add(orderCourse);
+            }
+        }
+        amqpTemplate.convertAndSend("course.kill.syn.mysql", "course.kill.cancel.syn.mysql", orderCourseList);
+
         //将学生抢到的课表信息放到redis中，让前端可以动态查看
         Integer up_time = secondCourseDto.getUpTime().getCode();
         Integer week = secondCourseDto.getWeek().getCode();
