@@ -37,7 +37,7 @@ public interface SecondCourseService extends IService<SecondCourse> {
      * @param secondCourseDto
      * @return
      */
-    boolean insertOne(SecondCourseDto secondCourseDto);
+    boolean insertOne(SecondCourse secondCourseDto);
 
     /**
      * 将临时表中的数据加到课程表

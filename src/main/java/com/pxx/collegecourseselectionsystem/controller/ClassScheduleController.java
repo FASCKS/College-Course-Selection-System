@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +57,7 @@ public class ClassScheduleController {
     @ApiOperation("某个学生的课程表")
     @PreAuthorize("hasAnyAuthority('course:classSchedule:user:course')")
     @GetMapping("/find/course")
-    public R findScheduleByUserId(@RequestParam("userId") Long userId) {
+    public R findScheduleByUserId( @NotNull @RequestParam("userId") Long userId) {
         ClassScheduleVo classScheduleVo = classScheduleService.findClassScheduleByUserId(userId);
         return R.ok().put("data", classScheduleVo);
     }

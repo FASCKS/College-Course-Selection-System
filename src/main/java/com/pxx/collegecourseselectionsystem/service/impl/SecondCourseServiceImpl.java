@@ -86,7 +86,7 @@ public class SecondCourseServiceImpl extends ServiceImpl<SecondCourseMapper, Sec
      * @return
      */
     @Override
-    public boolean insertOne(SecondCourseDto secondCourseDto) {
+    public boolean insertOne(SecondCourse secondCourseDto) {
         SecondCourse secondCourse = secondCourseMapper.findOneByCourseIdAndUpTimeAndWeek(secondCourseDto.getCourseId(), secondCourseDto.getUpTime(), secondCourseDto.getWeek());
         if (secondCourse != null) {
             return false;

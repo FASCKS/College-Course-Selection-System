@@ -1,6 +1,7 @@
 package com.pxx.collegecourseselectionsystem.dto;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.pxx.collegecourseselectionsystem.entity.SecondCoursePlanGroupEntity;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -19,6 +20,7 @@ import java.util.List;
 @ToString
 public class SecondCoursePlanGroupEntityDto extends SecondCoursePlanGroupEntity {
     @TableField(exist = false)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @ApiModelProperty("计划集合")
     private List<SecondCourseDto> secondCourseDtoList;
 

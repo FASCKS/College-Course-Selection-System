@@ -2,10 +2,10 @@ package com.pxx.collegecourseselectionsystem.controller;
 
 import cn.hutool.core.lang.tree.Tree;
 import com.pxx.collegecourseselectionsystem.common.utils.R;
-import com.pxx.collegecourseselectionsystem.common.utils.RedisUtil;
 import com.pxx.collegecourseselectionsystem.common.utils.SpringSecurityUtil;
 import com.pxx.collegecourseselectionsystem.entity.SysMenuEntity;
 import com.pxx.collegecourseselectionsystem.service.SysMenuService;
+import com.pxx.collegecourseselectionsystem.service.SysRoleMenuService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ public class SysMenuController {
     @Autowired
     private SysMenuService sysMenuService;
     @Autowired
-    private RedisUtil redisUtil;
+    private SysRoleMenuService sysRoleMenuService;
 
     /**
      * 返回菜单
@@ -106,7 +106,8 @@ public class SysMenuController {
         if (sysMenuEntity.getType() == 1 || sysMenuEntity.getType() == 0) {
             sysMenuEntity.setPerms(null);
         }
-
+        //获取菜单关联的角色
+       List<Long> longList= sysRoleMenuService.findRoleIdsByMenuId(sysMenuEntity.getMenuId());
         boolean update = sysMenuService.updateOneById(sysMenuEntity);
         return R.ok().put("data", update);
     }

@@ -1,5 +1,6 @@
 package com.pxx.collegecourseselectionsystem.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.pxx.collegecourseselectionsystem.entity.SysRoleMenuEntity;
 import com.pxx.collegecourseselectionsystem.mapper.SysRoleMenuMapper;
@@ -74,5 +75,24 @@ private SysRoleMenuMapper sysRoleMenuMapper;
     public boolean deleteByBatchRoleId(List<Long> roleIds) {
 
         return baseMapper.deleteByBatchRoleId(roleIds);
+    }
+
+    /**
+     * 通过菜单id获取角色id
+     *
+     * @param menuId
+     * @return
+     */
+    @Override
+    public List<Long> findRoleIdsByMenuId(Integer menuId) {
+        QueryWrapper<SysRoleMenuEntity> sq=new QueryWrapper<>();
+        sq.select(SysRoleMenuEntity.COL_ROLE_ID).eq(SysRoleMenuEntity.COL_MENU_ID,menuId);
+        List<Long> roleIds = this.listObjs(sq,(object -> {
+            if (object instanceof Long){
+                return (Long) object;
+            }
+            return null;
+        }));
+        return roleIds;
     }
 }

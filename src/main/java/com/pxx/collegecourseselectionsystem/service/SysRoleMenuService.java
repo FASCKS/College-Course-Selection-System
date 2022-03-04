@@ -41,4 +41,11 @@ public interface SysRoleMenuService extends IService<SysRoleMenuEntity>{
      * @return
      */
     boolean deleteByBatchRoleId(List<Long> roleIds);
+
+    /**
+     * 通过菜单id获取角色id
+     * @param menuId
+     * @return
+     */
+    List<Long> findRoleIdsByMenuId(Integer menuId);
 }

@@ -113,6 +113,7 @@ public class SecondCourse {
      * 教室
      */
     @NotNull
+    @ApiModelProperty(value = "教室id")
     @TableField(value = "classroom_id")
     private Integer classroomId;
     /**

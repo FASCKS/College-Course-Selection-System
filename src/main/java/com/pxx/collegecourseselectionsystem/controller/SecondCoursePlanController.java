@@ -174,21 +174,14 @@ public class SecondCoursePlanController {
     @PreAuthorize("hasAnyAuthority('plan:plan:insert')")
     @ApiOperation("添加抢课课程")
     @PostMapping("/insert")
-    public R insert(@RequestBody @Validated(Insert.class) SecondCourseDto secondCourseDto) {
-        secondCourseDto.setState(0);
+    public R insert(@RequestBody @Validated(Insert.class) SecondCourse secondCourse) {
+        secondCourse.setState(0);
         //判断是否冲突
-        boolean courseCheck = courseCheck(secondCourseDto);
-        if (!courseCheck) {
-            return R.error(StrUtil.format("课程可能在 {}-{}楼 第 {} 层 第 {} 间教室 的 星期 {} 第 {} {} 节课有冲突"
-                    , secondCourseDto.getRoofName()
-                    , secondCourseDto.getRoofNumber()
-                    , secondCourseDto.getFloor()
-                    , secondCourseDto.getBetween()
-                    , secondCourseDto.getWeek().getCode()
-                    , secondCourseDto.getUpTimeNumber()
-                    , secondCourseDto.getUpTimeTwoNumber()));
+        boolean courseCheck = courseCheck(secondCourse);
+        if (!courseCheck){
+            return R.ok("课程冲突");
         }
-        boolean insert = secondCourseService.insertOne(secondCourseDto);
+        boolean insert = secondCourseService.insertOne(secondCourse);
         return R.ok().put("data", insert);
     }
 
@@ -243,7 +236,7 @@ public class SecondCoursePlanController {
     /**
      * 检测是否课程冲突
      */
-    private boolean courseCheck(SecondCourseDto secondCourseDto) {
+    private boolean courseCheck(SecondCourse secondCourseDto) {
 
         QueryWrapper<SecondCourse> sq = new QueryWrapper<>();
         sq.eq(SecondCourseDto.COL_UP_TIME, secondCourseDto.getUpTime())//检查是否上课时间冲突
