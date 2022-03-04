@@ -25,7 +25,8 @@
             <id column="floor" property="floor"/>
             <collection property="betweenList"
                         ofType="com.pxx.collegecourseselectionsystem.vo.classroom.BetweenVO">
-                <id column="between_number" property="between"/>
+                <id column="classroom_id" property="classroomId"/>
+                <result column="between_number" property="between"/>
                 <result column="between_name" property="betweenName"/>
                 <result column="between_uuid" property="uuid"/>
                 <result column="quantity" property="quantity"/>
@@ -35,7 +36,7 @@
     </resultMap>
 
     <select id="findAllClassroom" resultMap="findAllClassroomMap">
-        select c.id,
+        select c.id as classroom_id,
                floor,
                `between`       as between_number,
                roof_type_id,

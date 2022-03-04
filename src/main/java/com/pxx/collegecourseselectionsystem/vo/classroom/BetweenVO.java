@@ -19,6 +19,11 @@ public class BetweenVO {
      * 教室id
      */
     @ApiModelProperty("教室id")
+    private Integer classroomId;
+    /**
+     * 教室类别id
+     */
+    @ApiModelProperty("教室类别id")
     private Integer betweenId;
     /**
      * 教室编号

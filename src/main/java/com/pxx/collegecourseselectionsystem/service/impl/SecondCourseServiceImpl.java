@@ -3,15 +3,18 @@ package com.pxx.collegecourseselectionsystem.service.impl;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.pxx.collegecourseselectionsystem.common.utils.RedisUtil;
+import com.pxx.collegecourseselectionsystem.common.exception.RRException;
 import com.pxx.collegecourseselectionsystem.dto.SecondCourseDto;
 import com.pxx.collegecourseselectionsystem.entity.ClassSchedule;
+import com.pxx.collegecourseselectionsystem.entity.Classroom;
 import com.pxx.collegecourseselectionsystem.entity.SecondCourse;
 import com.pxx.collegecourseselectionsystem.entity.SecondCoursePlanGroupEntity;
 import com.pxx.collegecourseselectionsystem.mapper.SecondCourseMapper;
+import com.pxx.collegecourseselectionsystem.service.ClassroomService;
 import com.pxx.collegecourseselectionsystem.service.SecondCourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.Date;
@@ -27,7 +30,7 @@ public class SecondCourseServiceImpl extends ServiceImpl<SecondCourseMapper, Sec
     @Autowired
     private SecondCourseMapper secondCourseMapper;
     @Autowired
-    private RedisUtil redisUtil;
+    private ClassroomService classroomService;
 
 
     @Override
@@ -85,11 +88,16 @@ public class SecondCourseServiceImpl extends ServiceImpl<SecondCourseMapper, Sec
      * @param secondCourseDto
      * @return
      */
-    @Override
+    @Override@Transactional
     public boolean insertOne(SecondCourse secondCourseDto) {
         SecondCourse secondCourse = secondCourseMapper.findOneByCourseIdAndUpTimeAndWeek(secondCourseDto.getCourseId(), secondCourseDto.getUpTime(), secondCourseDto.getWeek());
         if (secondCourse != null) {
             return false;
+        }
+        //检查是否有这个教室
+        Classroom classroom = classroomService.getById(secondCourseDto.getClassroomId());
+        if (classroom==null){
+            throw new RRException("教室不存在");
         }
         boolean save = this.save(secondCourseDto);
 

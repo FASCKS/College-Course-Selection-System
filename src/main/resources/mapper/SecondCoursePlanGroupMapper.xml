@@ -87,6 +87,7 @@
             <result column="between_name" property="betweenType"/>
             <result column="roof_id" property="roofId"/>
             <result column="classroom_id" property="classroomId"/>
+            <result column="online_class" property="onlineClass"/>
         </collection>
         <collection property="unitIds" ofType="integer">
             <result column="scpgau_unit_id" property="value"/>
@@ -116,6 +117,7 @@
              , scpg.release_state
              , sc.classroom_id
              , c.`between`     as number
+        ,co.online_class
              , cb.id           as between_id
              , cb.between_type as between_name
              , floor

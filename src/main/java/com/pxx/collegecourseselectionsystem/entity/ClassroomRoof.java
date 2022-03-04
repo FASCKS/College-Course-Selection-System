@@ -21,7 +21,7 @@ import javax.validation.constraints.NotBlank;
 @TableName(value = "classroom_roof")
 public class ClassroomRoof {
     @TableId(value = "id", type = IdType.AUTO)
-    @ApiModelProperty(value="")
+    @ApiModelProperty(value="大楼id")
     private Integer id;
 
     /**
