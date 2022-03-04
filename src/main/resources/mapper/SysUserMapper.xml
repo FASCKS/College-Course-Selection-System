@@ -185,4 +185,14 @@
             #{item,jdbcType=INTEGER}
         </foreach>
     </select>
+
+    <select id="findUserByUserIds" resultType="java.lang.String">
+        select number from sys_user
+        <where>
+            user_id in
+            <foreach collection="userId" index="index" separator="," item="item" open="(" close=")" nullable="false">
+                #{item,jdbcType=BIGINT}
+            </foreach>
+        </where>
+    </select>
 </mapper>

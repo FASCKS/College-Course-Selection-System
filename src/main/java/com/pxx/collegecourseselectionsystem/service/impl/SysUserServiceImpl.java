@@ -193,6 +193,19 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
     }
 
     /**
+     * 通过用户
+     * id获取实体
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<String> findUserByUserIds(List<Long> userId) {
+
+        return baseMapper.findUserByUserIds(userId);
+    }
+
+    /**
      * 批量删除(jdbc批量提交)
      *
      * @param list 主键ID或实体列表(主键ID类型必须与实体类型字段保持一致)

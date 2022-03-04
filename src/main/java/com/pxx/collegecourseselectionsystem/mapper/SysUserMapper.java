@@ -63,4 +63,7 @@ public interface SysUserMapper extends BaseMapper<SysUserEntity> {
      * @param unitIds
      */
     Integer CountUserByUnitId(@Param("unitIds") List<Integer> unitIds);
+
+    @InterceptorIgnore(tenantLine = "false")
+    List<String> findUserByUserIds(@Param("userId") List<Long> userId);
 }

@@ -67,7 +67,6 @@ public class SecondCourseController {
     public R goCourse(@Positive @NotNull @PathVariable("id") Integer secondCourseId,
                       @PositiveOrZero @NotNull @PathVariable("state") Integer state,
                       @NotNull @PathVariable("planGroupId") Integer planGroupId) {
-        Long userId = SpringSecurityUtil.getUserId();
         //判断是否已经发布
         {
             boolean hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE + "all:" + planGroupId);
@@ -85,6 +84,7 @@ public class SecondCourseController {
                 return R.error("时间未开始或已经结束");
             }
         }
+        Long userId = SpringSecurityUtil.getUserId();
         //判断学生是否进行跨组选课
         {
             boolean hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE + "group:userId_" + userId);

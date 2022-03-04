@@ -1,8 +1,6 @@
 package com.pxx.collegecourseselectionsystem.controller;
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.convert.Convert;
-import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.pxx.collegecourseselectionsystem.common.utils.R;
@@ -209,26 +207,18 @@ public class SecondCoursePlanController {
     @PreAuthorize("hasAnyAuthority('plan:plan:update')")
     @ApiOperation("编辑抢课课程")
     @PostMapping("/update")
-    public R update(@RequestBody @Validated(Update.class) SecondCourseDto secondCourseDto) {
-        Integer planGroupId = secondCourseDto.getPlanGroupId();
-        boolean hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE + "entity:" + secondCourseDto.getId() + "_" + planGroupId);
+    public R update(@RequestBody @Validated(Update.class) SecondCourse secondCourse) {
+        Integer planGroupId = secondCourse.getPlanGroupId();
+        boolean hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE + "entity:" + secondCourse.getId() + "_" + planGroupId);
         if (hasKey) {
             return R.error("课程正在进行中,无法编辑.");
         }
         //判断是否冲突
-        boolean courseCheck = courseCheck(secondCourseDto);
-        if (!courseCheck) {
-            return R.error(StrUtil.format("课程可能在 {}-{}楼 第 {} 层 第 {} 间教室 的 星期 {} 第 {} {} 节课有冲突"
-                    , secondCourseDto.getRoofName()
-                    , secondCourseDto.getRoofNumber()
-                    , secondCourseDto.getFloor()
-                    , secondCourseDto.getBetween()
-                    , secondCourseDto.getWeek().getCode()
-                    , secondCourseDto.getUpTimeNumber()
-                    , secondCourseDto.getUpTimeTwoNumber()));
+        boolean courseCheck = courseCheck(secondCourse);
+        if (!courseCheck){
+            return R.ok("课程冲突");
         }
-        SecondCourse secondCourse = new SecondCourse();
-        BeanUtil.copyProperties(secondCourseDto, secondCourse);
+
         boolean update = secondCourseService.updateById(secondCourse);
         return R.ok().put("data", update);
     }

@@ -1,11 +1,9 @@
 package com.pxx.collegecourseselectionsystem.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.pxx.collegecourseselectionsystem.common.utils.PageUtils;
-import com.pxx.collegecourseselectionsystem.common.utils.Pagination;
-import com.pxx.collegecourseselectionsystem.common.utils.R;
-import com.pxx.collegecourseselectionsystem.common.utils.SpringSecurityUtil;
+import com.pxx.collegecourseselectionsystem.common.utils.*;
 import com.pxx.collegecourseselectionsystem.common.validator.group.Update;
+import com.pxx.collegecourseselectionsystem.config.RedisKey;
 import com.pxx.collegecourseselectionsystem.dto.SysUserDto;
 import com.pxx.collegecourseselectionsystem.entity.SysUserEntity;
 import com.pxx.collegecourseselectionsystem.service.SysUserService;
@@ -35,6 +33,8 @@ public class SysUserController {
     private SysUserService sysUserService;
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+    @Autowired
+    private RedisUtil redisUtil;
 
     /**
      * 查询所有用户
@@ -43,17 +43,17 @@ public class SysUserController {
      * @return
      */
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "type",value = "账号类型 1 学生 2 老师 3主任 3其它人员",required = true,example = "1"),
-            @ApiImplicitParam(name = "name",value = "人员名字",required = false,example = "张三"),
-            @ApiImplicitParam(name = "unitId",value = "所属部门id",required = false,example = "1"),
+            @ApiImplicitParam(name = "type", value = "账号类型 1 学生 2 老师 3主任 3其它人员", required = true, example = "1"),
+            @ApiImplicitParam(name = "name", value = "人员名字", required = false, example = "张三"),
+            @ApiImplicitParam(name = "unitId", value = "所属部门id", required = false, example = "1"),
     })
     @ApiOperation("分页用户列表")
     @PreAuthorize("hasAnyAuthority('sys:user:list')")
     @GetMapping("/list")
     public R list(Pagination pagination,
                   @NotNull @RequestParam("type") Integer type,
-                   @RequestParam(value = "name",required = false) String name,
-                  @RequestParam(value = "unitId",required = false) Integer unitId) {
+                  @RequestParam(value = "name", required = false) String name,
+                  @RequestParam(value = "unitId", required = false) Integer unitId) {
         PageUtils allUser = sysUserService.findAllUser(
                 new Page<>(pagination.getPage(), pagination.getLimit()),
                 type,
@@ -90,13 +90,13 @@ public class SysUserController {
      * @return
      */
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "userIds", value = "用户id",required = true)
+            @ApiImplicitParam(name = "userIds", value = "用户id", required = true)
     })
     @ApiOperation("用户删除")
     @PreAuthorize("hasAnyAuthority('sys:user:delete')")
     @PostMapping("/delete")
     public R delete(@NotEmpty @RequestBody List<Long> userIds) {
-        if (userIds.contains(Global.SUPER_ADMINISTRATOR_USER_ID)){
+        if (userIds.contains(Global.SUPER_ADMINISTRATOR_USER_ID)) {
             return R.error("不能删除超级管理员");
         }
         boolean removeById = sysUserService.removeBatchByIds(userIds);
@@ -155,14 +155,15 @@ public class SysUserController {
     @ApiOperation("更新密码")
     @PostMapping("/password")
     public R password(
-          @Positive @NotNull(message = "用户名不能为空") @RequestParam("userId") Long userId,
-          @NotEmpty(message = "旧密码不能为空") @RequestParam("password") String password,
-          @NotEmpty(message = "新密码不能为空")  @RequestParam("newPassword") String newPassword) {
+            @Positive @NotNull(message = "用户名不能为空") @RequestParam("userId") Long userId,
+            @NotEmpty(message = "旧密码不能为空") @RequestParam("password") String password,
+            @NotEmpty(message = "新密码不能为空") @RequestParam("newPassword") String newPassword) {
 
         boolean updateById = sysUserService.updateOneUserPassword(userId, password, newPassword);
 
-        return R.ok().put("data",updateById);
+        return R.ok().put("data", updateById);
     }
+
     /**
      * 只能更新自己密码
      */
@@ -171,20 +172,34 @@ public class SysUserController {
     @PostMapping("/my/password")
     public R password(
             @NotEmpty(message = "旧密码不能为空") @RequestParam("password") String password,
-            @NotEmpty(message = "新密码不能为空")  @RequestParam("newPassword") String newPassword) {
+            @NotEmpty(message = "新密码不能为空") @RequestParam("newPassword") String newPassword) {
 
         boolean updateById = sysUserService.updateOneUserPassword(null, password, newPassword);
 
-        return R.ok().put("data",updateById);
+        return R.ok().put("data", updateById);
     }
+
     /**
      * 管理员重置密码
      */
     @PreAuthorize("hasAnyAuthority('sys:user:reset')")
     @ApiOperation("重置密码为固定值")
     @PostMapping("/reset/password")
-    public R resetPassword(@Positive @NotNull(message = "用户名不能为空") @RequestParam("userId") Long userId){
+    public R resetPassword(@Positive @NotNull(message = "用户名不能为空") @RequestParam("userId") Long userId) {
         boolean resetPassword = sysUserService.updateOneUserPassword(userId, null, "123456");
-        return R.ok().put("data",resetPassword);
+        return R.ok().put("data", resetPassword);
+    }
+
+    /**
+     * 踢人下线
+     */
+    @ApiOperation("踢人下线")
+    @PostMapping("/kick")
+    public R kick(@NotNull @RequestBody List<Long> userId) {
+        List<String> sysUserEntityList = sysUserService.findUserByUserIds(userId);
+        for (String s : sysUserEntityList) {
+           redisUtil.del(RedisKey.UserDetail+s);
+        }
+        return R.ok();
     }
 }

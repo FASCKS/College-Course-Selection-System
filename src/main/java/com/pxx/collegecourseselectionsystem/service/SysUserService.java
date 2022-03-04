@@ -61,6 +61,14 @@ public interface SysUserService extends IService<SysUserEntity> {
      * @param unitIds
      */
     Integer CountUserByUnitId(List<Integer> unitIds);
+
+    /**
+     * 通过用户
+     * id获取实体
+     * @param userId
+     * @return
+     */
+    List<String> findUserByUserIds(List<Long> userId);
 }
 
 
