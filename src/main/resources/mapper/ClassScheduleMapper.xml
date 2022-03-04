@@ -39,7 +39,7 @@
             </collection>
         </collection>
     </resultMap>
-    <select id="findMyClassSchedule" resultMap="findMyClassScheduleVo">
+    <select id="findClassScheduleByUserId" resultMap="findMyClassScheduleVo">
         SELECT sun.unit_id    AS unit_id,
                sun.NAME       AS class_name,
                su.user_id     AS user_id,

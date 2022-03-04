@@ -15,6 +15,11 @@ public interface ClassScheduleService extends IService<ClassSchedule> {
      */
     ClassScheduleVo findMyClassSchedule();
     /**
+     * 查询学生的课程表
+     * @return
+     */
+    ClassScheduleVo findClassScheduleByUserId(Long userId);
+    /**
      * 查询所有课表
      */
     List<SimpleClassScheduleVo> findSimpleMyClassSchedule();

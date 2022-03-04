@@ -8,6 +8,10 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.util.Date;
 
 @ApiModel(value = "class_schedule")
@@ -23,6 +27,7 @@ public class ClassSchedule {
     /**
      * 课程id
      */
+    @NotNull
     @TableField(value = "course_id")
     @ApiModelProperty(value = "课程id")
     private Integer courseId;
@@ -30,6 +35,10 @@ public class ClassSchedule {
     /**
      * 上课时间 第几节    总共   按大学课表算
      */
+    @Min(1)
+    @Max(11)
+    @Positive
+    @NotNull
     @TableField(value = "up_time")
     @ApiModelProperty(value = "上课时间 第几节    总共   按大学课表算")
     private Integer upTime;
@@ -37,6 +46,10 @@ public class ClassSchedule {
     /**
      * 星期几
      */
+    @Min(1)
+    @Max(7)
+    @Positive
+    @NotNull
     @TableField(value = "week")
     @ApiModelProperty(value = "星期几")
     private CourseWeekEnum week;
@@ -44,6 +57,7 @@ public class ClassSchedule {
     /**
      * 学生id
      */
+    @NotNull
     @TableField(value = "user_id")
     @ApiModelProperty(value = "学生id")
     private Long userId;
@@ -61,10 +75,11 @@ public class ClassSchedule {
     @TableField(value = "create_time", fill = FieldFill.INSERT)
     @ApiModelProperty(value = "创建时间")
     private Date createTime;
-
+    @NotNull
     @TableField(value = "teacher")
     @ApiModelProperty("老师id")
     private Long teacher;
+    @NotNull
     @TableField(value = "classroom_id")
     @ApiModelProperty("教室id")
     private Integer classroomId;

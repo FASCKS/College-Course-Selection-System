@@ -22,9 +22,22 @@ public class ClassScheduleServiceImpl extends ServiceImpl<ClassScheduleMapper, C
     @Override
     public ClassScheduleVo findMyClassSchedule() {
         Long userId = SpringSecurityUtil.getUserId();
-        ClassScheduleVo classScheduleVo=baseMapper.findMyClassSchedule(userId);
+        ClassScheduleVo classScheduleVo=baseMapper.findClassScheduleByUserId(userId);
         return classScheduleVo;
 
+
+    }
+
+    /**
+     * 查询学生的课程表
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public ClassScheduleVo findClassScheduleByUserId(Long userId) {
+        ClassScheduleVo classScheduleVo=baseMapper.findClassScheduleByUserId(userId);
+        return classScheduleVo;
 
     }
 

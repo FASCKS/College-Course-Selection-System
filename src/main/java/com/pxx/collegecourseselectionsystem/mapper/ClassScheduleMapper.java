@@ -10,11 +10,15 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
-@Mapper@InterceptorIgnore(tenantLine = "1")
+@Mapper
+@InterceptorIgnore(tenantLine = "1")
 public interface ClassScheduleMapper extends BaseMapper<ClassSchedule> {
-    ClassScheduleVo findMyClassSchedule(@Param("userId") Long userId);
+    ClassScheduleVo findClassScheduleByUserId(@Param("userId") Long userId);
 
     List<SimpleClassScheduleVo> findSimpleMyClassSchedule();
-@Deprecated
+
+    @Deprecated
     SimpleClassScheduleVo findMySimpleMyClassSchedule(Long userId);
+
+
 }

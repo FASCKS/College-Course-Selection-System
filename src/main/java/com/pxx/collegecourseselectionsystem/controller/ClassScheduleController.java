@@ -2,11 +2,13 @@ package com.pxx.collegecourseselectionsystem.controller;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.convert.Convert;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.poi.excel.ExcelUtil;
 import cn.hutool.poi.excel.ExcelWriter;
 import com.pxx.collegecourseselectionsystem.common.utils.R;
-import com.pxx.collegecourseselectionsystem.service.ClassScheduleService;
+import com.pxx.collegecourseselectionsystem.entity.*;
+import com.pxx.collegecourseselectionsystem.service.*;
 import com.pxx.collegecourseselectionsystem.vo.course.ClassBook;
 import com.pxx.collegecourseselectionsystem.vo.course.ClassScheduleTime;
 import com.pxx.collegecourseselectionsystem.vo.course.ClassScheduleVo;
@@ -14,25 +16,35 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.NotEmpty;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 课程表
  */
+@Validated
 @Api(tags = "课程表", value = "课程表")
 @RestController
 @RequestMapping("course/classSchedule")
 public class ClassScheduleController {
     @Autowired
     private ClassScheduleService classScheduleService;
+    @Autowired
+    private CourseService courseService;
+    @Autowired
+    private SysUserService sysUserService;
+    @Autowired
+    private SysUnitService sysUnitService;
+    @Autowired
+    private ClassroomService classroomService;
 
     @ApiOperation("学生自己的课程表")
     @PreAuthorize("hasAnyAuthority('course:classSchedule:user:course')")
@@ -41,6 +53,81 @@ public class ClassScheduleController {
         ClassScheduleVo classScheduleVo = classScheduleService.findMyClassSchedule();
         return R.ok().put("data", classScheduleVo);
     }
+    @ApiOperation("某个学生的课程表")
+    @PreAuthorize("hasAnyAuthority('course:classSchedule:user:course')")
+    @GetMapping("/find/course")
+    public R findScheduleByUserId(@RequestParam("userId") Long userId) {
+        ClassScheduleVo classScheduleVo = classScheduleService.findClassScheduleByUserId(userId);
+        return R.ok().put("data", classScheduleVo);
+    }
+
+    @ApiOperation("初始化课程设置")
+    @PreAuthorize("hasAnyAuthority('course:classSchedule:initialization')")
+    @PostMapping("/initialization")
+    public R initialization(@RequestBody @Validated @NotEmpty List<ClassSchedule> classScheduleList) {
+        //获取所有课程
+        List<CourseEntity> courseEntityList = courseService.list();
+        //获取所有课程
+        List<SysUserEntity> sysUserEntityList = sysUserService.list();
+        //所有部门
+        List<SysUnitEntity> sysUnitEntityList = sysUnitService.list();
+        //所有教室
+        List<Classroom> classroomList = classroomService.list();
+        //符合条件的课程id
+        List<ClassSchedule> classSchedules = classScheduleList.stream()
+                //过滤不存在的课程
+                .filter(classSchedule -> {
+                            for (CourseEntity courseEntity : courseEntityList) {
+                                boolean equals = courseEntity.getId().equals(classSchedule.getCourseId());
+                                return equals;
+                            }
+                            return false;
+                        }
+                )
+                //过滤不存在的学生
+                .filter(classSchedule -> {
+                    for (SysUserEntity sysUserEntity : sysUserEntityList) {
+                        boolean equals = sysUserEntity.getUserId().equals(classSchedule.getUserId());
+                        return equals;
+                    }
+                    return false;
+                })
+                //过滤不存在的老师
+                .filter(classSchedule -> {
+                    for (SysUserEntity sysUserEntity : sysUserEntityList) {
+                        if (sysUserEntity.getType() == 2) {
+                            boolean equals = sysUserEntity.getUserId().equals(classSchedule.getTeacher());
+                            return equals;
+                        }
+                    }
+                    return false;
+                })
+                //过滤不存在的部门
+                .filter(classSchedule -> {
+                    for (SysUnitEntity sysUnitEntity : sysUnitEntityList) {
+                        boolean equals = sysUnitEntity.getUnitId().equals(classSchedule.getUnit());
+                        return equals;
+                    }
+                    return false;
+                })
+                //过滤所有教室
+                .filter(classSchedule -> {
+                    for (Classroom classroom : classroomList) {
+                        boolean equals = classroom.getId().equals(classroom.getId());
+                        return equals;
+                    }
+                    return false;
+                }).map(classSchedule -> {
+                    classSchedule.setCreateTime(DateUtil.date());
+                    return classSchedule;
+                }).collect(Collectors.toList());
+
+        boolean saveBatch = classScheduleService.saveBatch(classSchedules);
+
+
+        return R.ok().put("data",saveBatch);
+    }
+
 
     @ApiOperation("导出课程表 Excel 表格")
     @PreAuthorize("hasAnyAuthority('course:classSchedule:get:user:course')")
