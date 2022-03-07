@@ -56,7 +56,7 @@ public class ClassScheduleController {
     }
 
     @ApiOperation("某个学生的课程表")
-    @PreAuthorize("hasAnyAuthority('course:classSchedule:user:course')")
+    @PreAuthorize("hasAnyAuthority('course:classSchedule:find:course')")
     @GetMapping("/find/course")
     public R findScheduleByUserId(@NotNull @RequestParam("userId") Long userId) {
         ClassScheduleVo classScheduleVo = classScheduleService.findClassScheduleByUserId(userId);

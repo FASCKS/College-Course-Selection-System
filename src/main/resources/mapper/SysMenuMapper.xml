@@ -62,11 +62,13 @@
     </select>
 
     <select id="findMenuById" resultMap="BaseResultMap">
-        select * from sys_menu
-        where sys_menu.menu_id in (
+        select * from sys_menu sm left join sys_role_menu srm on sm.menu_id = srm.menu_id
+        left join sys_user_role sur on srm.role_id = sur.role_id
+        where sm.menu_id in (
         <foreach collection="menuIds" item="item" index="index" separator=",">
             #{item}
         </foreach>
         )
+        and sur.user_id=#{userId,jdbcType=BIGINT}
     </select>
 </mapper>

@@ -5,6 +5,7 @@ import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.pxx.collegecourseselectionsystem.common.exception.RRException;
+import com.pxx.collegecourseselectionsystem.common.utils.SpringSecurityUtil;
 import com.pxx.collegecourseselectionsystem.dto.SysMenuDto;
 import com.pxx.collegecourseselectionsystem.entity.SysMenuEntity;
 import com.pxx.collegecourseselectionsystem.mapper.SysMenuMapper;
@@ -129,9 +130,9 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenuEntity
         }
     }
 
-    //    @Cacheable(value = "menu_details", key = "'url_'+#url", unless = "#result == null")
+    @Cacheable(value = "menu_details", key = "'url:'+#url+':'+#roleStr", unless = "#result == null")
     @Override
-    public List<Tree<Integer>> findMenuByUrl(String url) {
+    public List<Tree<Integer>> findMenuByUrl(String url,String roleStr) {
         SysMenuEntity sysMenuEntity = baseMapper.findMenuByUrl(url);
         if (sysMenuEntity == null) {
             throw new RRException("没有url为 " + url + " 的菜单");
@@ -140,8 +141,8 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenuEntity
         List<Integer> menuIds = new ArrayList<>();
         menuIds.add(menuId);
         getSonDtId(this.list(), menuId, menuIds);
-
-        List<SysMenuEntity> sysMenuEntityList = baseMapper.findMenuById(menuIds);
+        Long userId = SpringSecurityUtil.getUserId();
+        List<SysMenuEntity> sysMenuEntityList = baseMapper.findMenuById(menuIds,userId);
         List<Tree<Integer>> menuTree = createMenu(sysMenuEntityList, sysMenuEntity.getParentId());
 
 

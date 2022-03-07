@@ -42,12 +42,13 @@ public class SysMenuController {
     }
 
     /**
-     * 通过url返回菜单
+     * 通过url返回菜单 查询当前用户拥有的权限
      */
     @ApiOperation("通过url返回菜单")
     @GetMapping("/get/menu")
     public R getMenuByUrl(@RequestParam("url") @NotBlank String url) {
-        List<Tree<Integer>> menuByUrl = sysMenuService.findMenuByUrl(url);
+        String userRoleIds = SpringSecurityUtil.getEntity().getUserRoleIds();
+        List<Tree<Integer>> menuByUrl = sysMenuService.findMenuByUrl(url,userRoleIds);
         return R.ok().put("data", menuByUrl);
     }
 

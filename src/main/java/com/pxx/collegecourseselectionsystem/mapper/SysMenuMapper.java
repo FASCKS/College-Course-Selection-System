@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+
 @InterceptorIgnore(tenantLine = "1")
 @Mapper
 public interface SysMenuMapper extends BaseMapper<SysMenuEntity> {
@@ -35,5 +36,5 @@ public interface SysMenuMapper extends BaseMapper<SysMenuEntity> {
      */
     SysMenuEntity findMenuByUrl(@Param("url") String url);
 
-    List<SysMenuEntity> findMenuById(@Param("menuIds") List<Integer> menuIds);
+    List<SysMenuEntity> findMenuById(@Param("menuIds") List<Integer> menuIds, @Param("userId") Long userId);
 }

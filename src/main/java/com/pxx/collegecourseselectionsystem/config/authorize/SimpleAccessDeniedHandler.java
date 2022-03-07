@@ -39,6 +39,6 @@ public class SimpleAccessDeniedHandler implements AccessDeniedHandler {
         sysLogEntity.setTime(0L);
         sysLogEntity.setOperation("非法访问");
         sysLogService.save(sysLogEntity);
-        ResponseUtil.write(response, R.error(403, StrUtil.format("用户 {} 没有权限, {} ,请联系管理员授权", username, accessDeniedException.getMessage())));
+        ResponseUtil.write(response, R.error(4003, StrUtil.format("用户 {} 没有权限, {} ,请联系管理员授权", username, accessDeniedException.getMessage())));
     }
 }
