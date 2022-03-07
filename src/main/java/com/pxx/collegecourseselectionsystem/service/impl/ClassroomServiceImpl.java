@@ -51,6 +51,17 @@ public class ClassroomServiceImpl extends ServiceImpl<ClassroomMapper, Classroom
     }
 
     /**
+     * 所有教室类型 无分页
+     *
+     * @return
+     */
+    @Override
+    public List<ClassroomRoofDto> findAllClassroom() {
+        List<ClassroomRoofDto> allClassroom = baseMapper.findAllClassroom(null,null);
+        return allClassroom;
+    }
+
+    /**
      * 新增个教室
      *
      * @param classroom

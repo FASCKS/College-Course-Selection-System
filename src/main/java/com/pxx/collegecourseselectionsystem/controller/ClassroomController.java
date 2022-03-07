@@ -3,6 +3,7 @@ package com.pxx.collegecourseselectionsystem.controller;
 import com.pxx.collegecourseselectionsystem.common.utils.PageUtils;
 import com.pxx.collegecourseselectionsystem.common.utils.Pagination;
 import com.pxx.collegecourseselectionsystem.common.utils.R;
+import com.pxx.collegecourseselectionsystem.dto.ClassroomRoofDto;
 import com.pxx.collegecourseselectionsystem.entity.Classroom;
 import com.pxx.collegecourseselectionsystem.service.ClassroomService;
 import io.swagger.annotations.Api;
@@ -12,6 +13,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * @author Gpxx
@@ -31,6 +33,13 @@ public class ClassroomController {
         PageUtils classroomBetweenPage = classroomService.findAllClassroom(pagination);
         return R.ok().put("data",classroomBetweenPage);
     }
+    @ApiOperation("教室管理无分页")
+    @GetMapping("/no_list")
+    public R noList(){
+        List<ClassroomRoofDto> allClassroom = classroomService.findAllClassroom();
+        return R.ok().put("data",allClassroom);
+    }
+
     @ApiOperation("教室新增")
     @PostMapping("/insert")
     public R insert(@Validated @RequestBody Classroom classroom){

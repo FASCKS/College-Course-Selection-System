@@ -18,7 +18,7 @@ import java.util.List;
 public interface ClassroomMapper extends BaseMapper<Classroom> {
     Long findAllClassroomCount();
 
-    List<ClassroomRoofDto> findAllClassroom(@Param("current") long current, @Param("size") long size);
+    List<ClassroomRoofDto> findAllClassroom(@Param("current") Long current, @Param("size") Long size);
 
     /**
      * 查询一条

@@ -195,6 +195,7 @@ public class SysUserController {
      * 踢人下线
      */
     @ApiOperation("踢人下线")
+    @PreAuthorize("hasAnyAuthority('sys:user:kick')")
     @PostMapping("/kick")
     public R kick(@NotNull @RequestBody List<Long> userId) {
         List<String> sysUserEntityList = sysUserService.findUserByUserIds(userId);
@@ -207,6 +208,7 @@ public class SysUserController {
      * 通过部门id获取部门下的学生
      */
     @ApiOperation("通过部门id获取部门下的学生id")
+    @PreAuthorize("hasAnyAuthority('sys:user:unit')")
     @PostMapping("/user/unit")
     public R userUnit(@RequestBody @NotEmpty List<Integer> unitIds){
         List<SysUserUnitVo> userByUnitId = sysUserService.findUserIdByUnitId(unitIds);
