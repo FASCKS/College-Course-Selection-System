@@ -43,4 +43,11 @@ public interface SysMenuService extends IService<SysMenuEntity>{
      * @return
      */
     boolean updateOneById(SysMenuEntity sysMenuEntity,String roleStr );
+
+    /**
+     * 通过url获取一条记录
+     * @param url
+     * @return
+     */
+    SysMenuEntity findOneByUrl(String url);
 }

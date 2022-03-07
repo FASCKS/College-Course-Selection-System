@@ -48,7 +48,7 @@ public class SysMenuController {
     @GetMapping("/get/menu")
     public R getMenuByUrl(@RequestParam("url") @NotBlank String url) {
         String userRoleIds = SpringSecurityUtil.getEntity().getUserRoleIds();
-        List<Tree<Integer>> menuByUrl = sysMenuService.findMenuByUrl(url,userRoleIds);
+        List<Tree<Integer>> menuByUrl = sysMenuService.findMenuByUrl(url, userRoleIds);
         return R.ok().put("data", menuByUrl);
     }
 
@@ -108,13 +108,16 @@ public class SysMenuController {
         if (sysMenuEntity.getType() == 1 || sysMenuEntity.getType() == 0) {
             sysMenuEntity.setPerms(null);
         }
-        if (StrUtil.isBlank(sysMenuEntity.getUrl())){
-            return R.error("url不能为null");
+        {
+            SysMenuEntity sysMenu = sysMenuService.findOneByUrl(sysMenuEntity.getUrl());
+            if (sysMenu==null){
+                return R.error("url不存在");
+            }
         }
         //获取菜单关联的角色
-       List<Long> longList= sysRoleMenuService.findRoleIdsByMenuId(sysMenuEntity.getMenuId());
+        List<Long> longList = sysRoleMenuService.findRoleIdsByMenuId(sysMenuEntity.getMenuId());
         String roleStr = StrUtil.join("_", longList.iterator());
-        boolean update = sysMenuService.updateOneById(sysMenuEntity,roleStr);
+        boolean update = sysMenuService.updateOneById(sysMenuEntity, roleStr);
         return R.ok().put("data", update);
     }
 

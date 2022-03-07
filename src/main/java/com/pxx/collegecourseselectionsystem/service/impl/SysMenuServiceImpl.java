@@ -163,4 +163,16 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenuEntity
         int updateById = baseMapper.updateById(sysMenuEntity);
         return updateById > 0;
     }
+
+    /**
+     * 通过url获取一条记录
+     *
+     * @param url
+     * @return
+     */
+    @Override
+    public SysMenuEntity findOneByUrl(String url) {
+
+        return baseMapper.findOneByUrl(url);
+    }
 }
