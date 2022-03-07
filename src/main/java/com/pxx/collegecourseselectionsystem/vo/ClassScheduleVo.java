@@ -1,7 +1,7 @@
-package com.pxx.collegecourseselectionsystem.entity;
+package com.pxx.collegecourseselectionsystem.vo;
 
-import com.baomidou.mybatisplus.annotation.*;
-import io.swagger.annotations.ApiModel;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,15 +13,12 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.util.Date;
 
-@ApiModel(value = "class_schedule")
-@Getter
-@Setter
-@ToString
-@TableName(value = "class_schedule")
-public class ClassSchedule {
-    @TableId(value = "id", type = IdType.AUTO)
-    @ApiModelProperty(value = "课程表id")
-    private Integer id;
+/**
+ * @author Gpxx
+ * @Date 2022/3/7 14:45
+ */
+@Getter@ToString@Setter
+public class ClassScheduleVo {
 
     /**
      * 课程id
@@ -83,16 +80,4 @@ public class ClassSchedule {
     @ApiModelProperty("教室id")
     private Integer classroomId;
     public static final String COL_ID = "id";
-
-    public static final String COL_COURSE_ID = "course_id";
-
-    public static final String COL_UP_TIME = "up_time";
-
-    public static final String COL_WEEK = "week";
-
-    public static final String COL_USER_ID = "user_id";
-
-    public static final String COL_UNIT = "unit";
-
-    public static final String COL_CREATE_TIME = "create_time";
 }

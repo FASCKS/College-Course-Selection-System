@@ -237,7 +237,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
      */
     private void check(Collection<Long> list) {
        Integer userCount= secondCourseService.findCountByUserId(list);
-       if (userCount!=null){
+       if (userCount!=0){
            throw new RRException("该老师被授课课程关联");
        }
     }
