@@ -27,9 +27,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -67,8 +65,8 @@ public class SecondCourseController {
     })
     @GetMapping("/go/course/{id}/{state}/{planGroupId}")
     public R goCourse(@Positive @NotNull @PathVariable("id") Integer secondCourseId,
-                      @PositiveOrZero @NotNull @PathVariable("state") Integer state,
-                      @NotNull @PathVariable("planGroupId") Integer planGroupId) {
+                      @Max(1) @Min(0) @PositiveOrZero @NotNull @PathVariable("state") Integer state,
+                      @NotNull @Positive @PathVariable("planGroupId") Integer planGroupId) {
         //判断是否已经发布
         {
             boolean hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE + "all:" + planGroupId);
