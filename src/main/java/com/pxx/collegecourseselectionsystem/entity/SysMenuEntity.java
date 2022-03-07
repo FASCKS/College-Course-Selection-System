@@ -48,6 +48,7 @@ public class SysMenuEntity {
     /**
      * 菜单URL
      */
+    @NotNull
     @ApiModelProperty("菜单url")
     @TableField(value = "url")
     private String url;

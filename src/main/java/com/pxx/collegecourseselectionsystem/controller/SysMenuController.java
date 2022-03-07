@@ -108,10 +108,12 @@ public class SysMenuController {
         if (sysMenuEntity.getType() == 1 || sysMenuEntity.getType() == 0) {
             sysMenuEntity.setPerms(null);
         }
+        if (StrUtil.isBlank(sysMenuEntity.getUrl())){
+            return R.error("url不能为null");
+        }
         //获取菜单关联的角色
        List<Long> longList= sysRoleMenuService.findRoleIdsByMenuId(sysMenuEntity.getMenuId());
         String roleStr = StrUtil.join("_", longList.iterator());
-
         boolean update = sysMenuService.updateOneById(sysMenuEntity,roleStr);
         return R.ok().put("data", update);
     }

@@ -34,7 +34,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenuEntity
      *
      * @return
      */
-    @Cacheable(value = "menu_details", key = "#roleIds+'menu'", unless = "#result == null")
+//    @Cacheable(value = "menu_details", key = "#roleIds+'menu'", unless = "#result == null")
     @Override
     public List<Tree<Integer>> findMenuByType(String roleIds, Integer... type) {
         List<SysMenuEntity> sysMenuEntities = sysMenuMapper.findMenuByType(type);
@@ -157,7 +157,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenuEntity
      */
     @Override
     @Transactional
-    @CacheEvict(value = "menu_details",key = "#roleStr+'menu'" , allEntries = true)
+    @CacheEvict(value = "menu_details",key = "'url:'+#sysMenuEntity.getUrl()+':'+#roleStr" , allEntries = true)
     public boolean updateOneById(SysMenuEntity sysMenuEntity,String roleStr ) {
 
         int updateById = baseMapper.updateById(sysMenuEntity);
