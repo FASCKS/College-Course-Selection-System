@@ -54,10 +54,11 @@ public class ClassScheduleController {
         ClassScheduleVo classScheduleVo = classScheduleService.findMyClassSchedule();
         return R.ok().put("data", classScheduleVo);
     }
+
     @ApiOperation("某个学生的课程表")
     @PreAuthorize("hasAnyAuthority('course:classSchedule:user:course')")
     @GetMapping("/find/course")
-    public R findScheduleByUserId( @NotNull @RequestParam("userId") Long userId) {
+    public R findScheduleByUserId(@NotNull @RequestParam("userId") Long userId) {
         ClassScheduleVo classScheduleVo = classScheduleService.findClassScheduleByUserId(userId);
         return R.ok().put("data", classScheduleVo);
     }
@@ -96,10 +97,8 @@ public class ClassScheduleController {
                 //过滤不存在的老师
                 .filter(classSchedule -> {
                     for (SysUserEntity sysUserEntity : sysUserEntityList) {
-                        if (sysUserEntity.getType() == 2) {
-                            boolean equals = sysUserEntity.getUserId().equals(classSchedule.getTeacher());
-                            return equals;
-                        }
+                        boolean equals = sysUserEntity.getUserId().equals(classSchedule.getTeacher());
+                        return equals;
                     }
                     return false;
                 })
@@ -126,7 +125,7 @@ public class ClassScheduleController {
         boolean saveBatch = classScheduleService.saveBatch(classSchedules);
 
 
-        return R.ok().put("data",saveBatch);
+        return R.ok().put("data", saveBatch);
     }
 
 

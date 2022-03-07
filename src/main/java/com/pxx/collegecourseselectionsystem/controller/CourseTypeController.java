@@ -9,6 +9,7 @@ import com.pxx.collegecourseselectionsystem.service.CourseTypeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,30 +29,35 @@ public class CourseTypeController {
 
     @ApiOperation("课程类型列表")
     @GetMapping("/list")
+    @PreAuthorize("hasAnyAuthority('course:type:menu')")
     public R list(@Validated Pagination pagination) {
         Page<CourseType> courseTypePage = courseTypeService.page(new Page<>(pagination.getPage(), pagination.getLimit()));
         return R.ok().put("data",new PageUtils(courseTypePage));
     }
     @ApiOperation("课程类型详情")
     @GetMapping("/info")
+    @PreAuthorize("hasAnyAuthority('course:type:info')")
     public R info(@RequestParam("id")@NotNull Integer id) {
         CourseType courseType = courseTypeService.getById(id);
         return R.ok().put("data",courseType);
     }
     @ApiOperation("课程类型新增")
     @PostMapping("/insert")
+    @PreAuthorize("hasAnyAuthority('course:type:insert')")
     public R insert(@RequestBody CourseType courseType){
         boolean save = courseTypeService.save(courseType);
         return R.ok().put("data",save);
     }
     @ApiOperation("课程类型编辑")
     @PostMapping("/update")
+    @PreAuthorize("hasAnyAuthority('course:type:update')")
     public R update(@RequestBody CourseType courseType){
         boolean updateById = courseTypeService.updateById(courseType);
         return R.ok().put("data",updateById);
     }
     @ApiOperation("课程类型删除")
     @PostMapping("/delete")
+    @PreAuthorize("hasAnyAuthority('course:type:delete')")
     public R delete(@RequestParam("id")@NotNull Integer id){
 
      boolean delete=   courseTypeService.deleteOneById(id);
