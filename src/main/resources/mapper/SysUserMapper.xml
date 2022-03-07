@@ -195,4 +195,13 @@
             </foreach>
         </where>
     </select>
+
+    <select id="findUserIdByUnitId" resultType="java.lang.Long">
+        select su.user_id
+        from sys_user su
+        where unit_id in
+        <foreach collection="unitIds" index="index" separator="," item="item" open="(" close=")">
+            #{item,jdbcType=INTEGER}
+        </foreach>
+    </select>
 </mapper>

@@ -16,7 +16,7 @@
     </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
-        id, course_id, up_time, week, user_id, unit, create_time,teacher
+        id, course_id, up_time, week, user_id, unit_id, create_time,teacher
     </sql>
     <resultMap id="findMyClassScheduleVo" type="com.pxx.collegecourseselectionsystem.vo.course.ClassScheduleVo">
         <id column="user_id" jdbcType="BIGINT" property="userId"/>
@@ -62,7 +62,7 @@
         FROM class_schedule cs
                      LEFT JOIN sys_user su ON su.user_id = cs.user_id
                      LEFT JOIN course co ON co.id = cs.course_id
-                     LEFT JOIN sys_unit sun ON sun.unit_id = cs.unit
+                     LEFT JOIN sys_unit sun ON sun.unit_id = cs.unit_id
                      LEFT JOIN sys_user st ON st.user_id = cs.teacher
                      left join classroom c on cs.classroom_id = c.id
         <where>

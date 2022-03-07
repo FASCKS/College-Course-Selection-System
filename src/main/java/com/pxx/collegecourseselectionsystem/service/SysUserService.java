@@ -69,6 +69,13 @@ public interface SysUserService extends IService<SysUserEntity> {
      * @return
      */
     List<String> findUserByUserIds(List<Long> userId);
+
+    /**
+     * 获取学生id通过部门
+     * @param unitIds
+     * @return
+     */
+    List<Long> findUserIdByUnitId(List<Integer> unitIds);
 }
 
 

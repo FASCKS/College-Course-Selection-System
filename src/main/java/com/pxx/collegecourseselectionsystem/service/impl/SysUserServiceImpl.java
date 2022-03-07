@@ -206,6 +206,18 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
     }
 
     /**
+     * 获取学生id通过部门
+     *
+     * @param unitIds
+     * @return
+     */
+    @Override
+    public List<Long> findUserIdByUnitId(List<Integer> unitIds) {
+
+        return baseMapper.findUserIdByUnitId(unitIds);
+    }
+
+    /**
      * 批量删除(jdbc批量提交)
      *
      * @param list 主键ID或实体列表(主键ID类型必须与实体类型字段保持一致)

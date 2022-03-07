@@ -202,4 +202,14 @@ public class SysUserController {
         }
         return R.ok();
     }
+    /**
+     * 通过部门id获取部门下的学生
+     */
+    @ApiOperation("通过部门id获取部门下的学生id")
+    @PostMapping("/user/unit")
+    public R userUnit(@RequestBody @NotEmpty List<Integer> unitIds){
+        List<Long> userByUnitId = sysUserService.findUserIdByUnitId(unitIds);
+        return R.ok().put("data",userByUnitId);
+    }
+
 }

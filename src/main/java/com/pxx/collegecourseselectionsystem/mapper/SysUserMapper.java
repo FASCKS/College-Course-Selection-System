@@ -66,4 +66,12 @@ public interface SysUserMapper extends BaseMapper<SysUserEntity> {
 
     @InterceptorIgnore(tenantLine = "false")
     List<String> findUserByUserIds(@Param("userId") List<Long> userId);
+
+    /**
+     * 获取学生id 通过部门
+     *
+     * @param unitIds
+     * @return
+     */
+    List<Long> findUserIdByUnitId(@Param("unitIds") List<Integer> unitIds);
 }

@@ -21,7 +21,7 @@ import java.util.Date;
 @TableName(value = "class_schedule")
 public class ClassSchedule {
     @TableId(value = "id", type = IdType.AUTO)
-    @ApiModelProperty(value = "")
+    @ApiModelProperty(value = "课程表id")
     private Integer id;
 
     /**
