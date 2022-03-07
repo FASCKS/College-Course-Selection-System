@@ -83,7 +83,7 @@
 
     <select id="findOneByRoofAndBetweenAndFloor" resultMap="BaseResultMap">
         select
-        <include refid="Base_Column_List"/>
+        c.id, `floor`, `between`, roof_type_id, between_type_id, `number`
         from classroom c
                      left join classroom_roof cr on c.roof_type_id = c.id
         <where>
@@ -94,7 +94,7 @@
                 and `floor` = #{floor,jdbcType=INTEGER}
             </if>
             <if test="roof != null">
-                and cr.id = #{roof,jdbcType=INTEGER}
+                 	AND c.roof_type_id  = #{roof,jdbcType=INTEGER}
             </if>
         </where>
     </select>

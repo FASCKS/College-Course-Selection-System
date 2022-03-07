@@ -129,7 +129,7 @@ public class ClassroomServiceImpl extends ServiceImpl<ClassroomMapper, Classroom
             if (classroomRoof == null) {
                 throw new RRException("大楼类型不存在");
             }
-            ClassroomBetween classroomBetween = classroomBetweenService.getById(classroom.getBetween());
+            ClassroomBetween classroomBetween = classroomBetweenService.getById(classroom.getBetweenTypeId());
             if (classroomBetween == null) {
                 throw new RRException("教室类型不存在");
             }
