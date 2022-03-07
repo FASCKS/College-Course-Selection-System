@@ -13,6 +13,7 @@ import com.pxx.collegecourseselectionsystem.entity.*;
 import com.pxx.collegecourseselectionsystem.mapper.SysUserMapper;
 import com.pxx.collegecourseselectionsystem.service.*;
 import com.pxx.collegecourseselectionsystem.util.Global;
+import com.pxx.collegecourseselectionsystem.vo.sys.SysUserUnitVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -212,7 +213,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
      * @return
      */
     @Override
-    public List<Long> findUserIdByUnitId(List<Integer> unitIds) {
+    public List<SysUserUnitVo> findUserIdByUnitId(List<Integer> unitIds) {
 
         return baseMapper.findUserIdByUnitId(unitIds);
     }

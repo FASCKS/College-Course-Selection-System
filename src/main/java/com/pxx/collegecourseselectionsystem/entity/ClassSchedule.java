@@ -65,9 +65,9 @@ public class ClassSchedule {
     /**
      * 所属部门
      */
-    @TableField(value = "unit")
+    @TableField(value = "unit_id")
     @ApiModelProperty(value = "所属部门")
-    private Integer unit;
+    private Integer unitId;
 
     /**
      * 创建时间

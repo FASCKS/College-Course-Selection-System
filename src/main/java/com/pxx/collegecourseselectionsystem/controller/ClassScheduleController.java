@@ -106,7 +106,7 @@ public class ClassScheduleController {
                 //过滤不存在的部门
                 .filter(classSchedule -> {
                     for (SysUnitEntity sysUnitEntity : sysUnitEntityList) {
-                        boolean equals = sysUnitEntity.getUnitId().equals(classSchedule.getUnit());
+                        boolean equals = sysUnitEntity.getUnitId().equals(classSchedule.getUnitId());
                         return equals;
                     }
                     return false;

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.pxx.collegecourseselectionsystem.common.utils.PageUtils;
 import com.pxx.collegecourseselectionsystem.dto.SysUserDto;
 import com.pxx.collegecourseselectionsystem.entity.SysUserEntity;
+import com.pxx.collegecourseselectionsystem.vo.sys.SysUserUnitVo;
 
 import java.util.List;
 
@@ -75,7 +76,7 @@ public interface SysUserService extends IService<SysUserEntity> {
      * @param unitIds
      * @return
      */
-    List<Long> findUserIdByUnitId(List<Integer> unitIds);
+    List<SysUserUnitVo> findUserIdByUnitId(List<Integer> unitIds);
 }
 
 

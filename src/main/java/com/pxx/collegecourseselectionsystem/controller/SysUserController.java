@@ -8,6 +8,7 @@ import com.pxx.collegecourseselectionsystem.dto.SysUserDto;
 import com.pxx.collegecourseselectionsystem.entity.SysUserEntity;
 import com.pxx.collegecourseselectionsystem.service.SysUserService;
 import com.pxx.collegecourseselectionsystem.util.Global;
+import com.pxx.collegecourseselectionsystem.vo.sys.SysUserUnitVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -208,7 +209,7 @@ public class SysUserController {
     @ApiOperation("通过部门id获取部门下的学生id")
     @PostMapping("/user/unit")
     public R userUnit(@RequestBody @NotEmpty List<Integer> unitIds){
-        List<Long> userByUnitId = sysUserService.findUserIdByUnitId(unitIds);
+        List<SysUserUnitVo> userByUnitId = sysUserService.findUserIdByUnitId(unitIds);
         return R.ok().put("data",userByUnitId);
     }
 

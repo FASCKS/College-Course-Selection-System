@@ -9,7 +9,7 @@
         <result column="up_time" jdbcType="INTEGER" property="upTime"/>
         <result column="week" jdbcType="INTEGER" property="week"/>
         <result column="user_id" jdbcType="BIGINT" property="userId"/>
-        <result column="unit" jdbcType="INTEGER" property="unit"/>
+        <result column="unit" jdbcType="INTEGER" property="unitId"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="teacher" property="teacher"/>
         <result column="classroom_id" property="classroomId"/>

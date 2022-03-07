@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.pxx.collegecourseselectionsystem.dto.SysUserDto;
 import com.pxx.collegecourseselectionsystem.entity.SysUserEntity;
+import com.pxx.collegecourseselectionsystem.vo.sys.SysUserUnitVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -73,5 +74,5 @@ public interface SysUserMapper extends BaseMapper<SysUserEntity> {
      * @param unitIds
      * @return
      */
-    List<Long> findUserIdByUnitId(@Param("unitIds") List<Integer> unitIds);
+    List<SysUserUnitVo> findUserIdByUnitId(@Param("unitIds") List<Integer> unitIds);
 }

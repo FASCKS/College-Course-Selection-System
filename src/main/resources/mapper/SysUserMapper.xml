@@ -196,8 +196,8 @@
         </where>
     </select>
 
-    <select id="findUserIdByUnitId" resultType="java.lang.Long">
-        select su.user_id
+    <select id="findUserIdByUnitId" resultType="com.pxx.collegecourseselectionsystem.vo.sys.SysUserUnitVo">
+        select su.user_id,su.unit_id
         from sys_user su
         where unit_id in
         <foreach collection="unitIds" index="index" separator="," item="item" open="(" close=")">
