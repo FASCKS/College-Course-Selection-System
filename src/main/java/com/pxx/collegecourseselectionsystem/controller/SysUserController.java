@@ -2,11 +2,13 @@ package com.pxx.collegecourseselectionsystem.controller;
 
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.lang.Validator;
 import cn.hutool.core.text.StrBuilder;
 import cn.hutool.core.util.IdcardUtil;
 import cn.hutool.poi.excel.ExcelReader;
 import cn.hutool.poi.excel.ExcelUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.pxx.collegecourseselectionsystem.common.exception.RRException;
 import com.pxx.collegecourseselectionsystem.common.utils.*;
 import com.pxx.collegecourseselectionsystem.common.validator.group.Update;
 import com.pxx.collegecourseselectionsystem.config.RedisKey;
@@ -285,12 +287,23 @@ public class SysUserController {
             //开始迭代
             int jumpOver=0;
             for (List<Object> objects : readAll) {
+                //跳过第一行
                 if (jumpOver==0){
                     jumpOver++;
                     continue;
                 }
                 SysUserEntity sysUserEntity = new SysUserEntity();
-
+                //字段验证
+                {
+                    boolean citizenId = Validator.isCitizenId((String) objects.get(2));
+                    if (!citizenId){
+                        throw new RRException("身份证不合法--->"+objects);
+                    }
+                    boolean mobile = Validator.isMobile(Convert.toStr( objects.get(1)));
+                    if (!mobile){
+                        throw new RRException("手机号不合法--->"+objects);
+                    }
+                }
                 //通过部门名字确认部门参数
                 String unitName = Convert.toStr(objects.get(4)).trim();
                 for (SysUnitEntity sysUnitEntity : sysUnitEntities) {
