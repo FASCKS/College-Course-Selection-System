@@ -101,18 +101,18 @@ public class SysMenuController {
     @ApiOperation("菜单编辑")
     @PostMapping("/update")
     public R update(@RequestBody @Validated SysMenuEntity sysMenuEntity) {
+        {
+            SysMenuEntity sysMenu = sysMenuService.findOneByUrl(sysMenuEntity.getUrl());
+            if (sysMenu==null){
+                return R.error("url不存在");
+            }
+        }
         if (sysMenuEntity.getType() == 2) {
             sysMenuEntity.setPerms(sysMenuEntity.getPerms().trim());
             sysMenuEntity.setUrl(null);
         }
         if (sysMenuEntity.getType() == 1 || sysMenuEntity.getType() == 0) {
             sysMenuEntity.setPerms(null);
-        }
-        {
-            SysMenuEntity sysMenu = sysMenuService.findOneByUrl(sysMenuEntity.getUrl());
-            if (sysMenu==null){
-                return R.error("url不存在");
-            }
         }
         //获取菜单关联的角色
         List<Long> longList = sysRoleMenuService.findRoleIdsByMenuId(sysMenuEntity.getMenuId());

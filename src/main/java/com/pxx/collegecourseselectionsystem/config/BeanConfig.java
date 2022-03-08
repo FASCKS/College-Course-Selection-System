@@ -15,6 +15,11 @@ public class BeanConfig {
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+    /**
+     * rabbitmq不能传list的问题
+     * @return
+     */
     @Bean
     public Jackson2JsonMessageConverter jsonMessageConverter() {
 

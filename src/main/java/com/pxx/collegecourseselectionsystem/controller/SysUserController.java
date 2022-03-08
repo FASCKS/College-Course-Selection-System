@@ -38,7 +38,7 @@ public class SysUserController {
     private RedisUtil redisUtil;
 
     /**
-     * 查询所有用户
+     * 查询所有学生
      *
      * @param pagination 分页对象
      * @return
@@ -49,7 +49,12 @@ public class SysUserController {
             @ApiImplicitParam(name = "unitId", value = "所属部门id", required = false, example = "1"),
     })
     @ApiOperation("分页用户列表")
-    @PreAuthorize("hasAnyAuthority('sys:user:list')")
+    @PreAuthorize("(" +
+            "hasAnyAuthority('sys:student:list') and #type==1) " +
+            "or" +
+            " (hasAnyAuthority('sys:teacher:list') and #type==2) " +
+            "or " +
+            "(hasAnyAuthority('sys:director:list') and #type==3)")
     @GetMapping("/list")
     public R list(Pagination pagination,
                   @NotNull @RequestParam("type") Integer type,
@@ -69,8 +74,13 @@ public class SysUserController {
      * @param sysUserEntity 用户实体
      * @return true 成功 false 失败
      */
+    @PreAuthorize("(" +
+            "hasAnyAuthority('sys:student:insert') and #sysUserEntity.getType()==1) " +
+            "or" +
+            " (hasAnyAuthority('sys:teacher:insert') and #sysUserEntity.getType()==2) " +
+            "or " +
+            "(hasAnyAuthority('sys:director:insert') and #sysUserEntity.getType()==3)")
     @ApiOperation("用户新增")
-    @PreAuthorize("hasAnyAuthority('sys:user:insert')")
     @PostMapping("/insert")
     public R insertUser(@Validated @RequestBody SysUserDto sysUserEntity) {
         String password = sysUserEntity.getPassword();
@@ -90,13 +100,19 @@ public class SysUserController {
      * @param userIds 多个用户id
      * @return
      */
+    @PreAuthorize("(" +
+            "hasAnyAuthority('sys:student:delete') and #type==1) " +
+            "or" +
+            " (hasAnyAuthority('sys:teacher:delete') and #type==2) " +
+            "or " +
+            "(hasAnyAuthority('sys:director:delete') and #type==3)")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "userIds", value = "用户id", required = true)
+            @ApiImplicitParam(name = "userIds", value = "用户id", required = true),
+            @ApiImplicitParam(name = "type", value = "账号类型", dataTypeClass = Integer.class, required = true, paramType = "path")
     })
     @ApiOperation("用户删除")
-    @PreAuthorize("hasAnyAuthority('sys:user:delete')")
-    @PostMapping("/delete")
-    public R delete(@NotEmpty @RequestBody List<Long> userIds) {
+    @PostMapping("/delete/{type}")
+    public R delete(@NotEmpty @RequestBody List<Long> userIds, @NotNull @PathVariable("type") Integer type) {
         if (userIds.contains(Global.SUPER_ADMINISTRATOR_USER_ID)) {
             return R.error("不能删除超级管理员");
         }
@@ -111,7 +127,12 @@ public class SysUserController {
      * @return
      */
     @ApiOperation("用户编辑")
-    @PreAuthorize("hasAnyAuthority('sys:user:update')")
+    @PreAuthorize("(" +
+            "hasAnyAuthority('sys:student:update') and #sysUserEntity.getType()==1) " +
+            "or" +
+            " (hasAnyAuthority('sys:teacher:update') and #sysUserEntity.getType()==2) " +
+            "or " +
+            "(hasAnyAuthority('sys:director:update') and #sysUserEntity.getType()==3)")
     @PostMapping("/update")
     public R update(@RequestBody @Validated(Update.class) SysUserDto sysUserEntity) {
         sysUserEntity.setPassword(null);
@@ -126,11 +147,19 @@ public class SysUserController {
      * @param userId 用户id
      * @return
      */
-    @ApiImplicitParam(name = "userId", value = "用户id", dataTypeClass = Long.class, required = true, paramType = "path")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userId", value = "用户id", dataTypeClass = Long.class, required = true, paramType = "path"),
+            @ApiImplicitParam(name = "type", value = "账号类型", dataTypeClass = Integer.class, required = true, paramType = "path")
+    })
     @ApiOperation("用户详情")
-    @PreAuthorize("hasAnyAuthority('sys:user:info','sys:user:update')")
-    @PostMapping("/info/{userId}")
-    public R info(@PathVariable("userId") @Positive Long userId) {
+    @PreAuthorize("(" +
+            "hasAnyAuthority('sys:student:info') and #type==1) " +
+            "or" +
+            " (hasAnyAuthority('sys:teacher:info') and #type==2) " +
+            "or " +
+            "(hasAnyAuthority('sys:director:info') and #type==3)")
+    @PostMapping("/info/{userId}/{type}")
+    public R info(@PathVariable("userId") @Positive Long userId ,@PathVariable("type") Integer type) {
         SysUserDto sysUserEntity = sysUserService.findOneByUserId(userId);
         return R.ok().put("data", sysUserEntity);
     }
