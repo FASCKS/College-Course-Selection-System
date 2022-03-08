@@ -7,6 +7,7 @@ import com.pxx.collegecourseselectionsystem.dto.SysUserDto;
 import com.pxx.collegecourseselectionsystem.entity.SysUserEntity;
 import com.pxx.collegecourseselectionsystem.vo.sys.SysUserUnitVo;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface SysUserService extends IService<SysUserEntity> {
@@ -77,6 +78,7 @@ public interface SysUserService extends IService<SysUserEntity> {
      * @return
      */
     List<SysUserUnitVo> findUserIdByUnitId(List<Integer> unitIds);
+     boolean saveBatch(Collection<SysUserEntity> entityList,Long roleId) ;
 }
 
 

@@ -22,6 +22,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -240,6 +241,25 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
        if (userCount!=0){
            throw new RRException("该老师被授课课程关联");
        }
+    }
+
+    /**
+     * 插入（批量）
+     *
+     * @param entityList 实体对象集合
+     */
+    @Override@Transactional
+    public boolean saveBatch(Collection<SysUserEntity> entityList,Long roleId) {
+        boolean saveBatchUser = super.saveBatch(entityList);
+        List<SysUserRoleEntity>sysUserRoleEntities=new ArrayList<>(entityList.size());
+        for (SysUserEntity sysUserEntity : entityList) {
+            SysUserRoleEntity sysUserRole=new SysUserRoleEntity();
+            sysUserRole.setUserId(sysUserEntity.getUserId());
+            sysUserRole.setRoleId(roleId);
+            sysUserRoleEntities.add(sysUserRole);
+        }
+        boolean saveBatchUserRole = sysUserRoleService.saveBatch(sysUserRoleEntities);
+        return saveBatchUser && saveBatchUserRole;
     }
 
     @Override

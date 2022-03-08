@@ -58,8 +58,8 @@ public class SysUnitEntity {
      * 部门类型
      */
     @NotNull
-    @Min(0)@Max(2)@PositiveOrZero
-    @ApiModelProperty("部门类别 0 学校 1 学院 2 班级 ")
+    @Min(0)@Max(3)@PositiveOrZero
+    @ApiModelProperty("部门类别 0 学校 1 学院 2 专业 3 班级 ")
     @TableField(value = "type")
     private Integer type;
     /**

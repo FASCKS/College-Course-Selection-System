@@ -1,10 +1,16 @@
 package com.pxx.collegecourseselectionsystem.controller;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.Validator;
 import cn.hutool.core.text.StrBuilder;
 import cn.hutool.core.util.IdcardUtil;
+import cn.hutool.http.HttpRequest;
+import cn.hutool.http.HttpResponse;
+import cn.hutool.http.HttpUtil;
+import cn.hutool.json.JSONArray;
+import cn.hutool.json.JSONObject;
 import cn.hutool.poi.excel.ExcelReader;
 import cn.hutool.poi.excel.ExcelUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -260,24 +266,125 @@ public class SysUserController {
     }
 
     /**
+     * 随机信息
+     */
+    @PostMapping("/test/{roleId}")
+    public void test(@RequestParam("name") String unitName,@PathVariable("roleId") Long roleId) {
+        List<SysUnitEntity> sysUnitEntities = sysUnitService.list();
+        Map<Integer, Integer> integerMap = new HashMap<>();
+        List<SysUserEntity> sysUserEntityList = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            HttpRequest body = HttpUtil.createPost("https://api2.suijidaquan.com/api/v2/random-id-card").body("{\"count\": \"25\", \"method\": \"random_id_card\"}\n");
+            HttpResponse execute = body.execute();
+            JSONObject jsonObject = new JSONObject(execute.body());
+            JSONArray jsonArray = (JSONArray) jsonObject.get("data");
+            //获得当前年级段 19
+            String year = DateUtil.format(new Date(), "yyyy").substring(2);
+            StrBuilder number = StrBuilder.create();
+            for (Object o : jsonArray) {
+                String id_card = BeanUtil.getProperty(o, "id_card");
+                String name = BeanUtil.getProperty(o, "f");
+                String province = BeanUtil.getProperty(o, "province");
+                String shi = BeanUtil.getProperty(o, "shi");
+                String xian = BeanUtil.getProperty(o, "xian");
+                String adds = province + shi + xian;
+                String phone = Convert.toStr(BeanUtil.getProperty(o, "phone")).substring(4);
+                SysUserEntity sysUserEntity = new SysUserEntity();
+
+                //通过部门名字确认部门参数
+                for (SysUnitEntity sysUnitEntity : sysUnitEntities) {
+                    //班级名称比较
+                    boolean equals = sysUnitEntity.getName().equals(unitName);
+                    if (equals) {
+                        //获取专业编号
+                        for (SysUnitEntity sysUnit : sysUnitEntities) {
+                            //判断找到这个班级上面的专业
+                            //专业名称比较
+                            boolean pidEquales = sysUnit.getUnitId().equals(sysUnitEntity.getPid());
+                            if (pidEquales) {
+                                Integer sum = integerMap.computeIfAbsent(sysUnitEntity.getUnitId(), k -> 1);
+                                //保存年份
+                                number.append(year);
+                                //保存专业编号
+                                number.append(sysUnit.getCode());
+                                //保存班级编号
+                                number.append(sysUnitEntity.getCode());
+                                //保存序号
+                                if (sum < 10) {
+                                    number.append("0").append(sum);
+                                } else {
+                                    number.append(sum);
+                                }
+                                //递增操作
+                                integerMap.put(sysUnitEntity.getUnitId(), ++sum);
+                                //设置账号
+                                sysUserEntity.setNumber(number.toString());
+                                //设置部门编号
+                                sysUserEntity.setUnitId(sysUnitEntity.getUnitId());
+                                number.reset();
+                                //读取名字
+                                sysUserEntity.setName(name);
+                                //读取手机号
+                                sysUserEntity.setTel(phone);
+                                //读取身份证
+                                String identity = Convert.toStr(id_card);
+                                sysUserEntity.setIdentity(identity);
+                                //读取地址
+                                String address = Convert.toStr(adds);
+                                sysUserEntity.setAddress(address);
+                                //性别从身份证中读取
+                                int genderByIdCard = IdcardUtil.getGenderByIdCard(identity);
+                                if (genderByIdCard == 0) {
+                                    sysUserEntity.setSex(SexEnum.Female);
+                                } else {
+                                    sysUserEntity.setSex(SexEnum.MAN);
+                                }
+                                //读取锁定状态
+                                Integer state = Convert.toInt(1);
+                                sysUserEntity.setState(state);
+                                //默认初始化参数
+                                sysUserEntity.setEnable(1);
+                                //密码默认身份证后8位
+                                sysUserEntity.setPassword(passwordEncoder.encode(identity.substring(10)));
+                                //默认学生身份
+                                sysUserEntity.setType(1);
+                                //锁定时间
+                                sysUserEntity.setLockTime(new Date());
+                                //年龄从身份证中读取
+                                int age = IdcardUtil.getAgeByIdCard(identity);
+                                sysUserEntity.setAge(age);
+                                sysUserEntityList.add(sysUserEntity);
+                                break;
+                            }
+                        }
+
+                    }
+                }
+
+
+            }
+        }
+        boolean saveBatch = sysUserService.saveBatch(sysUserEntityList,roleId);
+        System.out.println(saveBatch);
+    }
+
+    /**
      * 批量导入
      */
     @ApiOperation("批量导入")
     @PreAuthorize("hasAnyAuthority('sys:user:import')")
-    @PostMapping("/import")
-    public R importUser(@RequestParam("file") MultipartFile multipartFile) {
+    @PostMapping("/import/{roleId}")
+    public R importUser(@RequestParam("file") MultipartFile multipartFile,@PathVariable("roleId") Long roleId) {
         //190320129
-
         //获得当前年级段 19
         String year = DateUtil.format(new Date(), "yyyy").substring(2);
         //获得当前专业编号 032
         //班级 01
         //计数器 29
-        Map<Integer,Integer> integerMap=new HashMap<>();
+        Map<Integer, Integer> integerMap = new HashMap<>();
         StrBuilder number = StrBuilder.create();
         //保存数据集合
         List<SysUserEntity> sysUserEntityList = new ArrayList<>();
-
         List<SysUnitEntity> sysUnitEntities = sysUnitService.list();
         //数据格式   名字，手机号 ， 身份证 ， 地址 ，部门名称 ， 性别 女 男 保密,锁定标记 1正常 0关闭
         try {
@@ -285,10 +392,10 @@ public class SysUserController {
             //读取Excel中所有行和列，都用列表表示
             List<List<Object>> readAll = reader.read();
             //开始迭代
-            int jumpOver=0;
+            int jumpOver = 0;
             for (List<Object> objects : readAll) {
                 //跳过第一行
-                if (jumpOver==0){
+                if (jumpOver == 0) {
                     jumpOver++;
                     continue;
                 }
@@ -296,24 +403,24 @@ public class SysUserController {
                 //字段验证
                 {
                     boolean citizenId = Validator.isCitizenId((String) objects.get(2));
-                    if (!citizenId){
-                        throw new RRException("身份证不合法--->"+objects);
+                    if (!citizenId) {
+                        throw new RRException("身份证不合法--->" + objects);
                     }
-                    boolean mobile = Validator.isMobile(Convert.toStr( objects.get(1)));
-                    if (!mobile){
-                        throw new RRException("手机号不合法--->"+objects);
+                    boolean mobile = Validator.isMobile(Convert.toStr(objects.get(1)));
+                    if (!mobile) {
+                        throw new RRException("手机号不合法--->" + objects);
                     }
                     String unitName = Convert.toStr(objects.get(4)).trim();
                     //校验部门名字是否存在
-                    boolean isEquals=false;
+                    boolean isEquals = false;
                     for (SysUnitEntity sysUnitEntity : sysUnitEntities) {
                         boolean equals = sysUnitEntity.getName().equals(unitName);
-                        if (equals){
-                            isEquals=true;
+                        if (equals) {
+                            isEquals = true;
                             break;
                         }
                     }
-                    if (!isEquals){
+                    if (!isEquals) {
                         throw new RRException("部门名称不存在");
                     }
                 }
@@ -343,7 +450,7 @@ public class SysUserController {
                                     number.append(sum);
                                 }
                                 //递增操作
-                                integerMap.put(sysUnitEntity.getUnitId(),++sum);
+                                integerMap.put(sysUnitEntity.getUnitId(), ++sum);
                                 //设置账号
                                 sysUserEntity.setNumber(number.toString());
                                 //设置部门编号
@@ -391,12 +498,12 @@ public class SysUserController {
                 }
 
             }
+            boolean saveBatch = sysUserService.saveBatch(sysUserEntityList,roleId);
 
-            System.out.println(sysUserEntityList);
+            return R.ok("保存用户数据成功").put("data", saveBatch);
         } catch (IOException e) {
             return R.error("导入用户失败");
         }
-        return R.ok();
     }
 
 }
