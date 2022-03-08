@@ -303,6 +303,19 @@ public class SysUserController {
                     if (!mobile){
                         throw new RRException("手机号不合法--->"+objects);
                     }
+                    String unitName = Convert.toStr(objects.get(4)).trim();
+                    //校验部门名字是否存在
+                    boolean isEquals=false;
+                    for (SysUnitEntity sysUnitEntity : sysUnitEntities) {
+                        boolean equals = sysUnitEntity.getName().equals(unitName);
+                        if (equals){
+                            isEquals=true;
+                            break;
+                        }
+                    }
+                    if (!isEquals){
+                        throw new RRException("部门名称不存在");
+                    }
                 }
                 //通过部门名字确认部门参数
                 String unitName = Convert.toStr(objects.get(4)).trim();
