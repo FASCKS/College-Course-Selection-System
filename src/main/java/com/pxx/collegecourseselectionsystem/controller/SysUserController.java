@@ -1,5 +1,7 @@
 package com.pxx.collegecourseselectionsystem.controller;
 
+import cn.hutool.poi.excel.ExcelReader;
+import cn.hutool.poi.excel.ExcelUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.pxx.collegecourseselectionsystem.common.utils.*;
 import com.pxx.collegecourseselectionsystem.common.validator.group.Update;
@@ -18,10 +20,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -236,12 +240,30 @@ public class SysUserController {
     /**
      * 通过部门id获取部门下的学生
      */
-    @ApiOperation("通过部门id获取部门下的学生id")
+    @ApiOperation("学生所属部门")
     @PreAuthorize("hasAnyAuthority('sys:user:unit')")
     @PostMapping("/user/unit")
     public R userUnit(@RequestBody @NotEmpty List<Integer> unitIds){
         List<SysUserUnitVo> userByUnitId = sysUserService.findUserIdByUnitId(unitIds);
         return R.ok().put("data",userByUnitId);
+    }
+    /**
+     * 批量导入
+     */
+    @ApiOperation("批量导入")
+    @PreAuthorize("hasAnyAuthority('sys:user:import')")
+    @PostMapping("/import")
+    public R importUser(MultipartFile multipartFile){
+        //190320129
+        try {
+            ExcelReader reader = ExcelUtil.getReader(multipartFile.getInputStream());
+
+
+
+        } catch (IOException e) {
+            return R.error("导入用户失败");
+        }
+        return R.ok();
     }
 
 }

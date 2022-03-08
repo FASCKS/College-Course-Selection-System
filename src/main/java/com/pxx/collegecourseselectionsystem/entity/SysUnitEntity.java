@@ -55,6 +55,12 @@ public class SysUnitEntity {
     @TableField(value = "code")
     private String code;
     /**
+     * 部门类型
+     */
+    @ApiModelProperty("部门类别 0 学校 1 学院 2 班级 ")
+    @TableField(value = "type")
+    private Integer type;
+    /**
      * 子部门
      */
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)

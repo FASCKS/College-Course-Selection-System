@@ -2,11 +2,11 @@ package com.pxx.collegecourseselectionsystem.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.tree.Tree;
-import cn.hutool.core.lang.tree.TreeNode;
 import cn.hutool.core.lang.tree.TreeUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.pxx.collegecourseselectionsystem.common.exception.RRException;
+import com.pxx.collegecourseselectionsystem.dto.unit.UnitNode;
 import com.pxx.collegecourseselectionsystem.entity.SysUnitEntity;
 import com.pxx.collegecourseselectionsystem.mapper.SysUnitMapper;
 import com.pxx.collegecourseselectionsystem.service.SysUnitService;
@@ -33,16 +33,26 @@ private SysUserService sysUserService;
     @Override
     public List<Tree<Integer>> findAllUnit() {
         List<SysUnitEntity> sysUnitEntities = baseMapper.findAllByUnitId();
-        List<TreeNode<Integer>> nodeList = CollUtil.newArrayList();
+        List<UnitNode<Integer>> nodeList = CollUtil.newArrayList();
         for (SysUnitEntity sysUnitEntity : sysUnitEntities) {
-            nodeList.add(new TreeNode<Integer>(sysUnitEntity.getUnitId(),
+            nodeList.add(new UnitNode<Integer>(sysUnitEntity.getUnitId(),
                     sysUnitEntity.getPid(),
-                    sysUnitEntity.getName(), 1));
+                    sysUnitEntity.getName(),
+                    1,
+                    sysUnitEntity.getCode(),
+                    sysUnitEntity.getType()));
         }
         //获取最上层节点
         Integer unitIdUp = this.getUnitIdUp(sysUnitEntities);
 
-        List<Tree<Integer>> buildTree = TreeUtil.build(nodeList, unitIdUp);
+        List<Tree<Integer>> buildTree = TreeUtil.build(nodeList, unitIdUp,(treeNode,tree)->{
+           tree.setId(treeNode.getId());
+           tree.setParentId(treeNode.getParentId());
+           tree.setWeight(treeNode.getWeight());
+           tree.setName(treeNode.getName());
+            tree.putExtra("code",treeNode.getCode());
+            tree.putExtra("type",treeNode.getType());
+        });
 
         return buildTree;
     }
