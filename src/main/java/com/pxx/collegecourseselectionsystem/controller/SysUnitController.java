@@ -14,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.util.List;
 
@@ -62,7 +63,7 @@ public class SysUnitController {
     @PostMapping("/delete")
     @Operation(summary = "部门删除")
     @PreAuthorize("hasAnyAuthority('sys:unit:delete')")
-    public R delete(@RequestParam("unitId") @Positive Integer unitId) {
+    public R delete(@RequestParam("unitId") @NotNull @Positive Integer unitId) {
         //删除当前部门和子部门
         boolean removeById = sysUnitService.deleteOneById(unitId);
         return R.ok().put("data", removeById);

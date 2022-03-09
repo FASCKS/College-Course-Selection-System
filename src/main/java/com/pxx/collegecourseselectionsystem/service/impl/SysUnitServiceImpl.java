@@ -99,10 +99,11 @@ private SysUserService sysUserService;
         List<SysUnitEntity> sysUnitEntities = this.list();
         List<Integer> ids = new ArrayList<>();
         getSonDtId(sysUnitEntities, unitId, ids);
+        boolean removeById = this.removeById(unitId);
         if (!ids.isEmpty()) {
             boolean removeByIds = this.removeByIds(ids);
         }
-        boolean removeById = this.removeById(unitId);
+
 
         check(ids);
         return true;
@@ -114,10 +115,13 @@ private SysUserService sysUserService;
     private void check(List<Integer>  unitIds){
         //检查是否有用户
         {
-            Integer integer = sysUserService.CountUserByUnitId(unitIds);
-            if (integer != null) {
-                throw new RRException("部门下关联"+integer+"个用户");
+            if (!unitIds.isEmpty()){
+                Integer integer = sysUserService.CountUserByUnitId(unitIds);
+                if (integer != null) {
+                    throw new RRException("部门下关联"+integer+"个用户");
+                }
             }
+
         }
     }
     @Override
