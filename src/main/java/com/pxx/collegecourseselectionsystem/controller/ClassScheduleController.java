@@ -6,8 +6,8 @@ import cn.hutool.core.io.IoUtil;
 import cn.hutool.poi.excel.ExcelUtil;
 import cn.hutool.poi.excel.ExcelWriter;
 import com.pxx.collegecourseselectionsystem.common.utils.R;
-import com.pxx.collegecourseselectionsystem.entity.*;
-import com.pxx.collegecourseselectionsystem.service.*;
+import com.pxx.collegecourseselectionsystem.entity.ClassSchedule;
+import com.pxx.collegecourseselectionsystem.service.ClassScheduleService;
 import com.pxx.collegecourseselectionsystem.vo.course.ClassBook;
 import com.pxx.collegecourseselectionsystem.vo.course.ClassScheduleTime;
 import com.pxx.collegecourseselectionsystem.vo.course.ClassScheduleVo;
@@ -25,8 +25,8 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * 课程表
@@ -39,14 +39,7 @@ import java.util.stream.Collectors;
 public class ClassScheduleController {
     @Autowired
     private ClassScheduleService classScheduleService;
-    @Autowired
-    private CourseService courseService;
-    @Autowired
-    private SysUserService sysUserService;
-    @Autowired
-    private SysUnitService sysUnitService;
-    @Autowired
-    private ClassroomService classroomService;
+
 
     @ApiOperation("学生自己的课程表")
     @PreAuthorize("hasAnyAuthority('course:classSchedule:user:course')")
@@ -68,70 +61,11 @@ public class ClassScheduleController {
     @PreAuthorize("hasAnyAuthority('course:classSchedule:initialization')")
     @PostMapping("/initialization")
     public R initialization(@RequestBody @Validated @NotEmpty List<ClassSchedule> classScheduleList) {
-        //获取所有课程
-        List<CourseEntity> courseEntityList = courseService.list();
-        //获取所有课程
-        List<SysUserEntity> sysUserEntityList = sysUserService.list();
-        //所有部门
-        List<SysUnitEntity> sysUnitEntityList = sysUnitService.list();
-        //所有教室
-        List<Classroom> classroomList = classroomService.list();
-        //符合条件的课程id
-        List<ClassSchedule> classSchedules = classScheduleList.stream()
-                //过滤不存在的课程
-                .filter(classSchedule -> {
-                            for (CourseEntity courseEntity : courseEntityList) {
-                                boolean equals = courseEntity.getId().equals(classSchedule.getCourseId());
-                                if (equals){
-                                    return true;
-                                }
-                            }
-                            return false;
-                        }
-                )
-                //过滤不存在的学生
-                .filter(classSchedule -> {
-                    for (SysUserEntity sysUserEntity : sysUserEntityList) {
-                        boolean equals = sysUserEntity.getUserId().equals(classSchedule.getUserId());
-                        if (equals){
-                            return true;
-                        }
-                    }
-                    return false;
-                })
-                //过滤不存在的老师
-                .filter(classSchedule -> {
-                    for (SysUserEntity sysUserEntity : sysUserEntityList) {
-                        boolean equals = sysUserEntity.getUserId().equals(classSchedule.getTeacher());
-                        if (equals){
-                            return true;
-                        }
-                    }
-                    return false;
-                })
-                //过滤不存在的部门
-                .filter(classSchedule -> {
-                    for (SysUnitEntity sysUnitEntity : sysUnitEntityList) {
-                        boolean equals = sysUnitEntity.getUnitId().equals(classSchedule.getUnitId());
-                        if (equals){
-                            return true;
-                        }
-                    }
-                    return false;
-                })
-                //过滤所有教室
-                .filter(classSchedule -> {
-                    for (Classroom classroom : classroomList) {
-                        boolean equals = classroom.getId().equals(classroom.getId());
-                        if (equals){
-                            return true;
-                        }
-                    }
-                    return false;
-                }).collect(Collectors.toList());
+        for (ClassSchedule classSchedule : classScheduleList) {
+            classSchedule.setCreateTime(new Date());
+        }
 
-
-        boolean saveBatch = classScheduleService.saveBatch(classSchedules);
+        boolean saveBatch = classScheduleService.saveBatch(classScheduleList);
 
 
         return R.ok().put("data", saveBatch);

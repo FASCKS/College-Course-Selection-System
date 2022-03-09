@@ -71,7 +71,8 @@ public class ClassSchedule {
     /**
      * 创建时间
      */
-    @TableField(value = "create_time", fill = FieldFill.INSERT)
+    @TableField(value = "create_time", fill = FieldFill.INSERT
+    )
     @ApiModelProperty(value = "创建时间")
     private Date createTime;
     @NotNull
@@ -95,4 +96,32 @@ public class ClassSchedule {
     public static final String COL_UNIT = "unit";
 
     public static final String COL_CREATE_TIME = "create_time";
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ClassSchedule)) return false;
+
+        ClassSchedule that = (ClassSchedule) o;
+
+        if (!getCourseId().equals(that.getCourseId())) return false;
+        if (!getUpTime().equals(that.getUpTime())) return false;
+        if (!getWeek().equals(that.getWeek())) return false;
+        if (!getUserId().equals(that.getUserId())) return false;
+        if (!getUnitId().equals(that.getUnitId())) return false;
+        if (!getTeacher().equals(that.getTeacher())) return false;
+        return getClassroomId().equals(that.getClassroomId());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getCourseId().hashCode();
+        result = 31 * result + getUpTime().hashCode();
+        result = 31 * result + getWeek().hashCode();
+        result = 31 * result + getUserId().hashCode();
+        result = 31 * result + getUnitId().hashCode();
+        result = 31 * result + getTeacher().hashCode();
+        result = 31 * result + getClassroomId().hashCode();
+        return result;
+    }
 }

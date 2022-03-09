@@ -57,7 +57,7 @@ public class SysUnitEntity {
     /**
      * 权重
      */
-    @NotBlank
+    @NotNull
     @ApiModelProperty("排序")
     @TableField(value = "weight")
     private Integer weight;
