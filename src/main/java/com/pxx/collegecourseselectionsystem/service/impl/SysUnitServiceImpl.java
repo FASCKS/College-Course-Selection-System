@@ -38,7 +38,7 @@ private SysUserService sysUserService;
             nodeList.add(new UnitNode<Integer>(sysUnitEntity.getUnitId(),
                     sysUnitEntity.getPid(),
                     sysUnitEntity.getName(),
-                    1,
+                    sysUnitEntity.getWeight(),
                     sysUnitEntity.getCode(),
                     sysUnitEntity.getType()));
         }

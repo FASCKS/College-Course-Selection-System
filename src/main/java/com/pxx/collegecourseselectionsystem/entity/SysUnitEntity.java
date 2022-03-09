@@ -51,9 +51,16 @@ public class SysUnitEntity {
      * 部门代码
      */
     @NotBlank
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @ApiModelProperty("代码 班级为两位数  专业为 三位数  ")
     @TableField(value = "code")
     private String code;
+    /**
+     * 权重
+     */
+    @NotBlank
+    @ApiModelProperty("排序")
+    @TableField(value = "weight")
+    private Integer weight;
     /**
      * 部门类型
      */

@@ -2,7 +2,6 @@ package com.pxx.collegecourseselectionsystem.controller;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.convert.Convert;
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.poi.excel.ExcelUtil;
 import cn.hutool.poi.excel.ExcelWriter;
@@ -14,6 +13,7 @@ import com.pxx.collegecourseselectionsystem.vo.course.ClassScheduleTime;
 import com.pxx.collegecourseselectionsystem.vo.course.ClassScheduleVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -31,6 +31,7 @@ import java.util.stream.Collectors;
 /**
  * 课程表
  */
+@Slf4j
 @Validated
 @Api(tags = "课程表", value = "课程表")
 @RestController
@@ -81,7 +82,9 @@ public class ClassScheduleController {
                 .filter(classSchedule -> {
                             for (CourseEntity courseEntity : courseEntityList) {
                                 boolean equals = courseEntity.getId().equals(classSchedule.getCourseId());
-                                return equals;
+                                if (equals){
+                                    return true;
+                                }
                             }
                             return false;
                         }
@@ -90,7 +93,9 @@ public class ClassScheduleController {
                 .filter(classSchedule -> {
                     for (SysUserEntity sysUserEntity : sysUserEntityList) {
                         boolean equals = sysUserEntity.getUserId().equals(classSchedule.getUserId());
-                        return equals;
+                        if (equals){
+                            return true;
+                        }
                     }
                     return false;
                 })
@@ -98,7 +103,9 @@ public class ClassScheduleController {
                 .filter(classSchedule -> {
                     for (SysUserEntity sysUserEntity : sysUserEntityList) {
                         boolean equals = sysUserEntity.getUserId().equals(classSchedule.getTeacher());
-                        return equals;
+                        if (equals){
+                            return true;
+                        }
                     }
                     return false;
                 })
@@ -106,7 +113,9 @@ public class ClassScheduleController {
                 .filter(classSchedule -> {
                     for (SysUnitEntity sysUnitEntity : sysUnitEntityList) {
                         boolean equals = sysUnitEntity.getUnitId().equals(classSchedule.getUnitId());
-                        return equals;
+                        if (equals){
+                            return true;
+                        }
                     }
                     return false;
                 })
@@ -114,13 +123,13 @@ public class ClassScheduleController {
                 .filter(classSchedule -> {
                     for (Classroom classroom : classroomList) {
                         boolean equals = classroom.getId().equals(classroom.getId());
-                        return equals;
+                        if (equals){
+                            return true;
+                        }
                     }
                     return false;
-                }).map(classSchedule -> {
-                    classSchedule.setCreateTime(DateUtil.date());
-                    return classSchedule;
                 }).collect(Collectors.toList());
+
 
         boolean saveBatch = classScheduleService.saveBatch(classSchedules);
 
