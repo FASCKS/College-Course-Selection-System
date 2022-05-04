@@ -130,7 +130,7 @@ public class SecondCoursePlanGroupController {
     public R delete(@RequestParam("id") Integer planGroupId) {
         boolean hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE + "plan_group:" + planGroupId);
         if (hasKey) {
-            return R.ok("计划正在进行中,无法删除。");
+            return R.error("计划正在进行中,无法删除。");
         }
 
         boolean removeById = secondCoursePlanGroupService.removeOneById(planGroupId);

@@ -87,7 +87,9 @@ public class SynCourseSum {
     @RabbitListener(queues = "course.kill.cancel.syn.mysql")
     @RabbitHandler
     public void sysHandle(List<OrderCourse> orderCourseList) {
-        orderCourseService.saveBatch(orderCourseList);
+       if (!orderCourseList.isEmpty()){
+           orderCourseService.saveBatch(orderCourseList);
+       }
     }
 
     /**

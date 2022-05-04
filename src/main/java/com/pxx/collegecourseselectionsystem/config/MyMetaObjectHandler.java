@@ -28,7 +28,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         this.setFieldValByName(updatedBy, getUserName(), metaObject);
         this.setFieldValByName(updateTime, new Date(), metaObject);
         this.setFieldValByName(createTime, new Date(), metaObject);
-//        this.setFieldValByName(unitId, getUnitId(), metaObject);
+        this.setFieldValByName(unitId, getUnitId(), metaObject);
         this.setFieldValByName(uuid, getUuid(), metaObject);
     }
 

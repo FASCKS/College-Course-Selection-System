@@ -13,7 +13,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 import java.util.Date;
@@ -54,7 +53,7 @@ public class SecondCoursePlanGroupEntity {
      * 开始时间
      */
     @NotNull
-    @FutureOrPresent
+//    @FutureOrPresent
     @JsonFormat(pattern = DatePattern.NORM_DATETIME_PATTERN,timezone = "GMT+8")
     @TableField(value = "start_time")
     @ApiModelProperty(value="开始时间")
@@ -64,7 +63,7 @@ public class SecondCoursePlanGroupEntity {
      * 结束时间
      */
     @NotNull
-    @FutureOrPresent
+//    @FutureOrPresent
     @JsonFormat(pattern = DatePattern.NORM_DATETIME_PATTERN,timezone = "GMT+8")
     @TableField(value = "end_time")
     @ApiModelProperty(value="结束时间")

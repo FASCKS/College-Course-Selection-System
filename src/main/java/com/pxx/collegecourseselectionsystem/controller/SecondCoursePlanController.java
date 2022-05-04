@@ -1,8 +1,6 @@
 package com.pxx.collegecourseselectionsystem.controller;
 
 import cn.hutool.core.convert.Convert;
-import cn.hutool.core.date.DateTime;
-import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.pxx.collegecourseselectionsystem.common.utils.R;
@@ -126,12 +124,14 @@ public class SecondCoursePlanController {
         Long endTime = Convert.toLong(secondCoursePlanGroupEntity.getEndTime());
         Long stateTime = Convert.toLong(secondCoursePlanGroupEntity.getStartTime());
         //判断时间是否已经超过结束时间
+/*
         {
             DateTime myDate = DateUtil.date();
             if (myDate.compareTo(secondCoursePlanGroupEntity.getStartTime()) >= 0) {
                 return R.error("抢课已经结束,无需发布");
             }
         }
+*/
 
         redisUtil.set(Global.KILL_SECOND_COURSE + "plan_group:" + planGroupId, secondCoursePlanGroupEntity, (endTime - stateTime) / 1000 + REDIS_EXPIRED);
         for (SecondCourseDto secondCours : allSecondCourse) {
