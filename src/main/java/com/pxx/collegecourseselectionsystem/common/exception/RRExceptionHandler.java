@@ -173,7 +173,6 @@ public class RRExceptionHandler {
             sb.append(objectError.getDefaultMessage());
             sb.append(" , ");
         });
-//        String message = allErrors.stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.joining(";"));
         return R.error(sb.substring(0, sb.length() - 3));
     }
 

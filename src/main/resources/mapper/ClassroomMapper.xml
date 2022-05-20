@@ -83,7 +83,7 @@
 
     <select id="findOneByRoofAndBetweenAndFloor" resultMap="BaseResultMap">
         select
-        c.id, `floor`, `between`, roof_type_id, between_type_id, `number`
+        DISTINCTROW c.id, `floor`, `between`, roof_type_id, between_type_id, `number`
         from classroom c
                      left join classroom_roof cr on c.roof_type_id = c.id
         <where>
