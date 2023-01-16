@@ -1,9 +1,6 @@
 package com.pxx.collegecourseselectionsystem.controller;
 
-import com.pxx.collegecourseselectionsystem.common.utils.PageUtils;
-import com.pxx.collegecourseselectionsystem.common.utils.Pagination;
-import com.pxx.collegecourseselectionsystem.common.utils.R;
-import com.pxx.collegecourseselectionsystem.common.utils.RedisUtil;
+import com.pxx.collegecourseselectionsystem.common.utils.*;
 import com.pxx.collegecourseselectionsystem.common.validator.group.Insert;
 import com.pxx.collegecourseselectionsystem.common.validator.group.Update;
 import com.pxx.collegecourseselectionsystem.dto.SecondCourseDto;
@@ -14,6 +11,7 @@ import com.pxx.collegecourseselectionsystem.util.Global;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -27,6 +25,7 @@ import java.util.Date;
  * @Date 2022/2/14 10:26
  */
 @Api(tags = "抢课计划分组")
+@Slf4j
 @Validated
 @RestController
 @RequestMapping("/plan/group")
@@ -57,6 +56,7 @@ public class SecondCoursePlanGroupController {
     public R update(@RequestBody @Validated(Update.class) SecondCoursePlanGroupEntityDto secondCoursePlanGroupEntity) {
         boolean hasKey = redisUtil.hasKey(Global.KILL_SECOND_COURSE + "plan_group:" + secondCoursePlanGroupEntity.getId());
         if (hasKey) {
+            log.info("{} 尝试编译一个正在进行中的计划", SpringSecurityUtil.getUsername());
             return R.ok("计划正在进行中,无法编辑.");
         }
         Integer state = secondCoursePlanGroupService.getOneByState(secondCoursePlanGroupEntity.getId());
